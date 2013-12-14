@@ -24,10 +24,9 @@ keys_process_row:
 	ld a,(de)
 	ld c,(hl)
 	xor c
-	rrc c
 keys_process_row_loop:
-	rlc c
-	rlca       ; does not affect sign register
+	rrc c
+	rrca       ; does not affect sign register
 	call c,keys_process_row_press
 	inc ix
 	djnz keys_process_row_loop
@@ -78,14 +77,14 @@ keys_process_row_release_note:
 	ret
 
 keys_note_mapping:
-	db 58, 56, 54, -1, 51, 49, -1, 63  ; row 0: 7 6 5 4 3 2 1 0
-	db 75, 67, 65, 68, 66, -1, 61, -1  ; row 1: ; ] [ \ = - 9 8
-	db 67, -1, -1, 76, 74, 72, -1, -1  ; row 2: B A DEAD / . , ` '
-	db 70, 60, 68, 66, -1, 52, 63, 64  ; row 3: J I H G F E D C
-	db 53, 48, 64, 62, 69, 71, 73, -1  ; row 4: R Q P O N M L K
-	db 60, 57, 62, 50, 65, 59, 55, 61  ; row 4: Z Y X W V U T S
-	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: F3 F2 F1 CODE CAPS GRAPH CTRL SHIFT
-	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: RET SELECT BS STOP TAB ESC F5 F4
-	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: → ↓ ↑ ← DEL INS HOME SPACE
-	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: NUM4 NUM3 NUM2 NUM1 NUM0 NUM/ NUM+ NUM*
-	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: NUM. NUM, NUM- NUM9 NUM8 NUM7 NUM6 NUM5
+	db 63, -1, 49, 51, -1, 54, 56, 58  ; row 0: 0 1 2 3 4 5 6 7
+	db -1, 61, -1, 66, 68, 65, 67, 75  ; row 1: 8 9 - = \ [ ] ;
+	db -1, -1, 72, 74, 76, -1, -1, 67  ; row 2: ' ` , . / DEAD A B
+	db 64, 63, 52, -1, 66, 68, 60, 70  ; row 3: C D E F G H I J
+	db -1, 73, 71, 69, 62, 64, 48, 53  ; row 4: K L M N O P Q R
+	db 61, 55, 59, 65, 50, 62, 57, 60  ; row 4: S T U V W X Y Z
+	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: SHIFT CTRL GRAPH CAPS CODE F1 F2 F3
+	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: F4 F5 ESC TAB STOP BS SELECT RET
+	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: SPACE HOME INS DEL ← ↑ ↓ →
+	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: NUM* NUM+ NUM/ NUM0 NUM1 NUM2 NUM3 NUM4
+	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: NUM5 NUM6 NUM7 NUM8 NUM9 NUM- NUM, NUM.
