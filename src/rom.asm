@@ -15,17 +15,6 @@
 	INCLUDE "keys.asm"
 	INCLUDE "psg.asm"
 	INCLUDE "scc.asm"
-
-RAM_Init:
-	ld hl,RAM_dataStart
-	ld de,RAM_dataStartAddress
-	ld bc,RAM_dataSize
-	ldir
-	ret
-
-RAM_dataStart:
-	include "ram.symbol"
-	incbin "ram.bin"
-RAM_dataSize: equ $ - RAM_dataStart
+	INCLUDE "ram.asm"
 
 	ds 0C000H - $
