@@ -26,7 +26,7 @@ keys_process_row:
 	xor c
 keys_process_row_loop:
 	rrc c
-	rrca       ; does not affect sign register
+	rrca       ; preserves sign flag
 	call c,keys_process_row_press
 	inc ix
 	djnz keys_process_row_loop
