@@ -4,22 +4,24 @@ ROM_BANK_1_CHANGE: equ 7000H
 ROM_BANK_2_CHANGE: equ 9000H
 ROM_BANK_3_CHANGE: equ 0B000H
 
-SCC_WAVE_1: equ 9800H
-SCC_WAVE_2: equ 9820H
-SCC_WAVE_3: equ 9840H
-SCC_WAVE_4_5: equ 9860H
-SCC_FREQUENCY_1: equ 9880H
-SCC_FREQUENCY_2: equ 9882H
-SCC_FREQUENCY_3: equ 9884H
-SCC_FREQUENCY_4: equ 9886H
-SCC_FREQUENCY_5: equ 9888H
-SCC_LEVEL_1: equ 988AH
-SCC_LEVEL_2: equ 988BH
-SCC_LEVEL_3: equ 988CH
-SCC_LEVEL_4: equ 988DH
-SCC_LEVEL_5: equ 988EH
-SCC_MIXER: equ 988FH
-SCC_DEFORMATION: equ 98E0H
+SCC_BASE: equ 9800H
+SCC_BASE_MSB: equ SCC_BASE / 100H
+SCC_WAVE_1: equ 00H
+SCC_WAVE_2: equ 20H
+SCC_WAVE_3: equ 40H
+SCC_WAVE_4_5: equ 60H
+SCC_FREQUENCY_1: equ 80H
+SCC_FREQUENCY_2: equ 82H
+SCC_FREQUENCY_3: equ 84H
+SCC_FREQUENCY_4: equ 86H
+SCC_FREQUENCY_5: equ 88H
+SCC_LEVEL_1: equ 8AH
+SCC_LEVEL_2: equ 8BH
+SCC_LEVEL_3: equ 8CH
+SCC_LEVEL_4: equ 8DH
+SCC_LEVEL_5: equ 8EH
+SCC_MIXER: equ 8FH
+SCC_DEFORMATION: equ 0E0H
 
 SCC_Init:
 	in a,(PPI_PORT_A)
@@ -59,19 +61,18 @@ SCCTone_NoteOn:
 	rrca
 	rrca
 
+	ld h,SCC_BASE_MSB
 	ld l,(ix + SCCTone_frequency)
-	ld h,(ix + SCCTone_frequency + 1)
 	ld (hl),e
 	inc hl
 	ld (hl),d
 
 	ld l,(ix + SCCTone_level)
-	ld h,(ix + SCCTone_level + 1)
 	ld (hl),a
 
 	ld a,(SCC_mixerCopy)
 	or (ix + SCCTone_mixerOrMask)
-	ld (SCC_MIXER),a
+	ld (SCC_BASE + SCC_MIXER),a
 	ld (SCC_mixerCopy),a
 	ret
 
@@ -79,7 +80,7 @@ SCCTone_NoteOn:
 SCCTone_NoteOff:
 	ld a,(SCC_mixerCopy)
 	and (ix + SCCTone_mixerAndMask)
-	ld (SCC_MIXER),a
+	ld (SCC_BASE + SCC_MIXER),a
 	ld (SCC_mixerCopy),a
 	ret
 
@@ -100,7 +101,7 @@ SCCTone_ProgramChange:
 ; hl = wave address
 SCCTone_LoadWave:
 	ld e,(ix + SCCTone_wave)
-	ld d,(ix + SCCTone_wave + 1)
+	ld d,SCC_BASE_MSB
 	ld bc,32
 	ldir
 	ret
@@ -112,34 +113,34 @@ SCCTone_LoadWave:
 SCC_tone1:
 SCCTone:
 SCCTone_wave: equ $ - SCCTone
-	dw SCC_WAVE_1
+	db SCC_WAVE_1
 SCCTone_frequency: equ $ - SCCTone
-	dw SCC_FREQUENCY_1
+	db SCC_FREQUENCY_1
 SCCTone_level: equ $ - SCCTone
-	dw SCC_LEVEL_1
+	db SCC_LEVEL_1
 SCCTone_mixerOrMask: equ $ - SCCTone
 	db 00000001B
 SCCTone_mixerAndMask: equ $ - SCCTone
 	db 11111110B
 
 SCC_tone2:
-	dw SCC_WAVE_2
-	dw SCC_FREQUENCY_2
-	dw SCC_LEVEL_2
+	db SCC_WAVE_2
+	db SCC_FREQUENCY_2
+	db SCC_LEVEL_2
 	db 00000010B
 	db 11111101B
 
 SCC_tone3:
-	dw SCC_WAVE_3
-	dw SCC_FREQUENCY_3
-	dw SCC_LEVEL_3
+	db SCC_WAVE_3
+	db SCC_FREQUENCY_3
+	db SCC_LEVEL_3
 	db 00000100B
 	db 11111011B
 
 SCC_tone4:
-	dw SCC_WAVE_4_5
-	dw SCC_FREQUENCY_4
-	dw SCC_LEVEL_4
+	db SCC_WAVE_4_5
+	db SCC_FREQUENCY_4
+	db SCC_LEVEL_4
 	db 00001000B
 	db 11110111B
 

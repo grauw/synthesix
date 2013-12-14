@@ -1,6 +1,5 @@
 /.project
 /.externalToolBuilders/
 
-/ram.bin
-/ram.symbol
-/synthe6.rom
+/gen/
+/bin/
