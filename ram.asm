@@ -11,3 +11,6 @@ Keys_lastScan:
 
 Keys_velocity:
 	dw 7F00H
+
+SCC_mixerCopy:
+	db 0

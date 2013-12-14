@@ -13,12 +13,12 @@ SCC_FREQUENCY_2: equ 9882H
 SCC_FREQUENCY_3: equ 9884H
 SCC_FREQUENCY_4: equ 9886H
 SCC_FREQUENCY_5: equ 9888H
-SCC_VOLUME_1: equ 988AH
-SCC_VOLUME_2: equ 988BH
-SCC_VOLUME_3: equ 988CH
-SCC_VOLUME_4: equ 988DH
-SCC_VOLUME_5: equ 988EH
-SCC_ON_OFF: equ 988FH
+SCC_LEVEL_1: equ 988AH
+SCC_LEVEL_2: equ 988BH
+SCC_LEVEL_3: equ 988CH
+SCC_LEVEL_4: equ 988DH
+SCC_LEVEL_5: equ 988EH
+SCC_MIXER: equ 988FH
 SCC_DEFORMATION: equ 98E0H
 
 SCC_Init:
@@ -41,10 +41,10 @@ SCC_Init_noSubslot:
 	ld (ROM_BANK_2_CHANGE),a
 	ret
 
+; ix = this
 ; a = note number (0-127)
 ; b = velocity (0-127)
-; c = channel (0-4)
-SCC_NoteOn:
+SCCTone_NoteOn:
 	; de = frequency
 	ld h,PSG_frequencyTable / 100H
 	ld l,a
@@ -59,20 +59,33 @@ SCC_NoteOn:
 	rrca
 	rrca
 
-	ld hl,SCC_ON_OFF
-	ld (SCC_FREQUENCY_1),de
-	ld (SCC_VOLUME_1),a
-	ld (hl),1
+	ld l,(ix + SCCTone_frequency)
+	ld h,(ix + SCCTone_frequency + 1)
+	ld (hl),e
+	inc hl
+	ld (hl),d
+
+	ld l,(ix + SCCTone_level)
+	ld h,(ix + SCCTone_level + 1)
+	ld (hl),a
+
+	ld a,(SCC_mixerCopy)
+	or (ix + SCCTone_mixerOrMask)
+	ld (SCC_MIXER),a
+	ld (SCC_mixerCopy),a
 	ret
 
-; c = channel (0-4)
-SCC_NoteOff:
-	ld hl,SCC_ON_OFF
-	ld (hl),0
+; ix = this
+SCCTone_NoteOff:
+	ld a,(SCC_mixerCopy)
+	and (ix + SCCTone_mixerAndMask)
+	ld (SCC_MIXER),a
+	ld (SCC_mixerCopy),a
 	ret
 
+; ix = this
 ; a = program number (0-127)
-SCC_ProgramChange:
+SCCTone_ProgramChange:
 	sla a
 	ld h,SCC_presetPrograms / 100H
 	ld l,a
@@ -80,11 +93,14 @@ SCC_ProgramChange:
 	inc hl
 	ld h,(hl)
 	ld l,a
-	call SCC_LoadWave
+	call SCCTone_LoadWave
 	ret
 
-SCC_LoadWave:
-	ld de,SCC_WAVE_1
+; ix = this
+; hl = wave address
+SCCTone_LoadWave:
+	ld e,(ix + SCCTone_wave)
+	ld d,(ix + SCCTone_wave + 1)
 	ld bc,32
 	ldir
 	ret
@@ -92,6 +108,40 @@ SCC_LoadWave:
 ;
 ;
 ;
+
+SCC_tone1:
+SCCTone:
+SCCTone_wave: equ $ - SCCTone
+	dw SCC_WAVE_1
+SCCTone_frequency: equ $ - SCCTone
+	dw SCC_FREQUENCY_1
+SCCTone_level: equ $ - SCCTone
+	dw SCC_LEVEL_1
+SCCTone_mixerOrMask: equ $ - SCCTone
+	db 00000001B
+SCCTone_mixerAndMask: equ $ - SCCTone
+	db 11111110B
+
+SCC_tone2:
+	dw SCC_WAVE_2
+	dw SCC_FREQUENCY_2
+	dw SCC_LEVEL_2
+	db 00000010B
+	db 11111101B
+
+SCC_tone3:
+	dw SCC_WAVE_3
+	dw SCC_FREQUENCY_3
+	dw SCC_LEVEL_3
+	db 00000100B
+	db 11111011B
+
+SCC_tone4:
+	dw SCC_WAVE_4_5
+	dw SCC_FREQUENCY_4
+	dw SCC_LEVEL_4
+	db 00001000B
+	db 11110111B
 
 	ds -$ & 0FFH  ; align 100H
 SCC_presetPrograms:
