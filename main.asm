@@ -11,7 +11,7 @@ main:
 	call psg_note_on
 
 	call scc_init
-	ld hl,square_wave
+	ld hl,saw_wave
 	call scc_load_waveform
 	ld a,69
 	ld bc,7F00H

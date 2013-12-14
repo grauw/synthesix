@@ -94,7 +94,7 @@ scc_load_waveform:
 
 	ALIGN 100H
 scc_preset_programs:
-	dw square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave
+	dw square_wave, saw_wave, sine_wave, square_wave, square_wave, square_wave, square_wave, square_wave
 	dw square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave
 	dw square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave
 	dw square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave
@@ -114,6 +114,14 @@ scc_preset_programs:
 square_wave:
 	db 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH
 	db 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H
+
+saw_wave:
+	db 04H, 0CH, 14H, 1CH, 25H, 2DH, 35H, 3DH, 45H, 4EH, 56H, 5EH, 66H, 6FH, 77H, 7FH
+	db 80H, 88H, 90H, 99H, 0A1H, 0A9H, 0B1H, 0BAH, 0C2H, 0CAH, 0D2H, 0DAH, 0E3H, 0EBH, 0F3H, 0FBH
+
+sine_wave:
+	db 19H, 31H, 47H, 5AH, 6AH, 76H, 7DH, 7FH, 7DH, 76H, 6AH, 5AH, 47H, 31H, 19H, 00H
+	db 0E7H, 0CFH, 0B9H, 0A6H, 96H, 8AH, 83H, 80H, 83H, 8AH, 96H, 0A6H, 0B9H, 0CFH, 0E7H, 00H
 
 init_wave:
 	ds 32, 0
