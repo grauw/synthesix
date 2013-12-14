@@ -8,3 +8,6 @@ ram_data_start_address:
 
 keys_last_scan:
 	ds 11,0
+
+keys_velocity:
+	dw 7F00H

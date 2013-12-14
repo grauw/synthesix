@@ -8,13 +8,13 @@ keys_scan:
 	ld de,NEWKEY
 	ld hl,keys_last_scan
 	ld ix,keys_note_mapping
-	REPT 6  ; just the first 6 rows...
+	REPT 11  ; just the first 6 rows...
 	call keys_process_row
 	ENDM
 keys_scan_update_last:
 	ld hl,NEWKEY
 	ld de,keys_last_scan
-	REPT 6
+	REPT 11
 	ldi
 	ENDM
 	ret
@@ -40,8 +40,13 @@ keys_process_row_press:
 	ld a,(ix)
 	and a
 	jp p,keys_process_row_press_note
+	cp -2
+	jp z,keys_process_row_press_increase_velocity
+	cp -3
+	jp z,keys_process_row_press_decrease_velocity
 	pop af
 	ret
+
 keys_process_row_release:
 	push af
 	ld a,(ix)
@@ -49,12 +54,13 @@ keys_process_row_release:
 	jp p,keys_process_row_release_note
 	pop af
 	ret
+
 keys_process_row_press_note:
 	push bc
 	push de
 	push hl
 	push ix
-	ld bc,7F00H
+	ld bc,(keys_velocity)
 	call scc_note_on
 	pop ix
 	pop hl
@@ -62,6 +68,7 @@ keys_process_row_press_note:
 	pop bc
 	pop af
 	ret
+
 keys_process_row_release_note:
 	push bc
 	push de
@@ -76,6 +83,22 @@ keys_process_row_release_note:
 	pop af
 	ret
 
+keys_process_row_press_increase_velocity:
+	ld a,(keys_velocity + 1)
+	add a,8
+	and 7FH
+	ld (keys_velocity + 1),a
+	pop af
+	ret
+
+keys_process_row_press_decrease_velocity:
+	ld a,(keys_velocity + 1)
+	sub 8
+	and 7FH
+	ld (keys_velocity + 1),a
+	pop af
+	ret
+
 keys_note_mapping:
 	db 63, -1, 49, 51, -1, 54, 56, 58  ; row 0: 0 1 2 3 4 5 6 7
 	db -1, 61, -1, 66, 68, 65, 67, 75  ; row 1: 8 9 - = \ [ ] ;
@@ -85,6 +108,6 @@ keys_note_mapping:
 	db 61, 55, 59, 65, 50, 62, 57, 60  ; row 4: S T U V W X Y Z
 	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: SHIFT CTRL GRAPH CAPS CODE F1 F2 F3
 	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: F4 F5 ESC TAB STOP BS SELECT RET
-	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: SPACE HOME INS DEL ← ↑ ↓ →
+	db -1, -1, -1, -1, -1, -2, -3, -1  ; row 4: SPACE HOME INS DEL ← ↑ ↓ →
 	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: NUM* NUM+ NUM/ NUM0 NUM1 NUM2 NUM3 NUM4
 	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: NUM5 NUM6 NUM7 NUM8 NUM9 NUM- NUM, NUM.
