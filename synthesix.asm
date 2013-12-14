@@ -1,31 +1,23 @@
-;
-; Synthesix
-;
-; MIDI synthesizer for MSX
-;
+Synthesix_Main:
+	call INITXT
+	ld hl,Synthesix_helloMessage
+	call Utils_Print
 
-	org 4000H
+	call RAM_Init
+	call Keys_Init
+	call PSG_Init
+	call SCC_Init
 
-	db "AB"
-	dw Synthesix_Main
-	dw 0, 0, 0, 0, 0, 0
+	ld hl,SCC_sawWave
+	call SCC_LoadWaveform
 
-	INCLUDE "utils.asm"
-	INCLUDE "main.asm"
-	INCLUDE "keys.asm"
-	INCLUDE "psg.asm"
-	INCLUDE "scc.asm"
-
-RAM_Init:
-	ld hl,RAM_dataStart
-	ld de,RAM_dataStartAddress
-	ld bc,RAM_dataSize
-	ldir
+	call Synthesix_MainLoop
 	ret
 
-RAM_dataStart:
-	include "ram.symbol"
-	incbin "ram.bin"
-RAM_dataSize: equ $ - RAM_dataStart
+Synthesix_MainLoop:
+	halt
+	call Keys_Scan
+	jp Synthesix_MainLoop
 
-	ds 0C000H - $
+Synthesix_helloMessage:
+	db "Synthesix\r\n\nMIDI synthesizer for MSX\r\n", 0
