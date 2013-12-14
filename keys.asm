@@ -1,67 +1,67 @@
-keys_init:
+Keys_Init:
 	ld a,0
 	ld (CLIKSW),a  ; disable key click
-	call keys_scan_update_last
+	call Keys_Scan_updateLast
 	ret
 
-keys_scan:
+Keys_Scan:
 	ld de,NEWKEY
-	ld hl,keys_last_scan
-	ld ix,keys_note_mapping
+	ld hl,Keys_lastScan
+	ld ix,Keys_noteMapping
 	REPT 11  ; just the first 6 rows...
-	call keys_process_row
+	call Keys_ProcessRow
 	ENDM
-keys_scan_update_last:
+Keys_Scan_updateLast:
 	ld hl,NEWKEY
-	ld de,keys_last_scan
+	ld de,Keys_lastScan
 	REPT 11
 	ldi
 	ENDM
 	ret
 
-keys_process_row:
+Keys_ProcessRow:
 	ld b,8
 	ld a,(de)
 	ld c,(hl)
 	xor c
-keys_process_row_loop:
+Keys_ProcessRow_loop:
 	rrc c
 	rrca       ; preserves sign flag
-	call c,keys_process_row_press
+	call c,Keys_ProcessRowPress
 	inc ix
-	djnz keys_process_row_loop
+	djnz Keys_ProcessRow_loop
 	inc de
 	inc hl
 	ret
 
-keys_process_row_press:
-	jp p,keys_process_row_release
+Keys_ProcessRowPress:
+	jp p,Keys_ProcessRowRelease
 	push af
 	ld a,(ix)
 	and a
-	jp p,keys_process_row_press_note
+	jp p,Keys_ProcessRowPress_note
 	cp -2
-	jp z,keys_process_row_press_increase_velocity
+	jp z,Keys_ProcessRowPress_increaseVelocity
 	cp -3
-	jp z,keys_process_row_press_decrease_velocity
+	jp z,Keys_ProcessRowPress_decreaseVelocity
 	pop af
 	ret
 
-keys_process_row_release:
+Keys_ProcessRowRelease:
 	push af
 	ld a,(ix)
 	and a
-	jp p,keys_process_row_release_note
+	jp p,Keys_ProcessRowRelease_note
 	pop af
 	ret
 
-keys_process_row_press_note:
+Keys_ProcessRowPress_note:
 	push bc
 	push de
 	push hl
 	push ix
-	ld bc,(keys_velocity)
-	call scc_note_on
+	ld bc,(Keys_velocity)
+	call SCC_NoteOn
 	pop ix
 	pop hl
 	pop de
@@ -69,13 +69,13 @@ keys_process_row_press_note:
 	pop af
 	ret
 
-keys_process_row_release_note:
+Keys_ProcessRowRelease_note:
 	push bc
 	push de
 	push hl
 	push ix
 	ld bc,4000H
-	call scc_note_off
+	call SCC_NoteOff
 	pop ix
 	pop hl
 	pop de
@@ -83,23 +83,23 @@ keys_process_row_release_note:
 	pop af
 	ret
 
-keys_process_row_press_increase_velocity:
-	ld a,(keys_velocity + 1)
+Keys_ProcessRowPress_increaseVelocity:
+	ld a,(Keys_velocity + 1)
 	add a,8
 	and 7FH
-	ld (keys_velocity + 1),a
+	ld (Keys_velocity + 1),a
 	pop af
 	ret
 
-keys_process_row_press_decrease_velocity:
-	ld a,(keys_velocity + 1)
+Keys_ProcessRowPress_decreaseVelocity:
+	ld a,(Keys_velocity + 1)
 	sub 8
 	and 7FH
-	ld (keys_velocity + 1),a
+	ld (Keys_velocity + 1),a
 	pop af
 	ret
 
-keys_note_mapping:
+Keys_noteMapping:
 	db 63, -1, 49, 51, -1, 54, 56, 58  ; row 0: 0 1 2 3 4 5 6 7
 	db -1, 61, -1, 66, 68, 65, 67, 75  ; row 1: 8 9 - = \ [ ] ;
 	db -1, -1, 72, 74, 76, -1, -1, 67  ; row 2: ' ` , . / DEAD A B

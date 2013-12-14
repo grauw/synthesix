@@ -21,19 +21,19 @@ SCC_VOLUME_5: equ 988EH
 SCC_ON_OFF: equ 988FH
 SCC_DEFORMATION: equ 98E0H
 
-scc_init:
+SCC_Init:
 	in a,(PPI_PORT_A)
 	and 00001100B
 	rrca
 	rrca
 	ld hl,EXPTBL + 1
 	or (hl)
-	jp p,scc_init_no_subslot
+	jp p,SCC_Init_noSubslot
 	ld b,a
 	ld a,(SLTTBL + 1)
 	and 00001100B
 	or b
-scc_init_no_subslot:
+SCC_Init_noSubslot:
 	ld h,80H
 	call ENASLT
 	ei
@@ -44,9 +44,9 @@ scc_init_no_subslot:
 ; a = note number (0-127)
 ; b = velocity (0-127)
 ; c = channel (0-4)
-scc_note_on:
+SCC_NoteOn:
 	; de = frequency
-	ld h,psg_frequency_table / 100H
+	ld h,PSG_frequencyTable / 100H
 	ld l,a
 	sla l
 	ld e,(hl)
@@ -66,24 +66,24 @@ scc_note_on:
 	ret
 
 ; c = channel (0-4)
-scc_note_off:
+SCC_NoteOff:
 	ld hl,SCC_ON_OFF
 	ld (hl),0
 	ret
 
 ; a = program number (0-127)
-scc_program_change:
+SCC_ProgramChange:
 	sla a
-	ld h,scc_preset_programs / 100H
+	ld h,SCC_presetPrograms / 100H
 	ld l,a
 	ld a,(hl)
 	inc hl
 	ld h,(hl)
 	ld l,a
-	call scc_load_waveform
+	call SCC_LoadWaveform
 	ret
 
-scc_load_waveform:
+SCC_LoadWaveform:
 	ld de,SCC_WAVEFORM_1
 	ld bc,32
 	ldir
@@ -94,35 +94,35 @@ scc_load_waveform:
 ;
 
 	ALIGN 100H
-scc_preset_programs:
-	dw square_wave, saw_wave, sine_wave, square_wave, square_wave, square_wave, square_wave, square_wave
-	dw square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave
-	dw square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave
-	dw square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave
-	dw square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave
-	dw square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave
-	dw square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave
-	dw square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave
-	dw square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave
-	dw square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave
-	dw square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave
-	dw square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave
-	dw square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave
-	dw square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave
-	dw square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave
-	dw square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, square_wave, init_wave
+SCC_presetPrograms:
+	dw SCC_squareWave, SCC_sawWave, SCC_sineWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
+	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
+	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
+	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
+	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
+	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
+	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
+	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
+	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
+	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
+	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
+	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
+	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
+	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
+	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
+	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_initWave
 
-square_wave:
+SCC_squareWave:
 	db 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH
 	db 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H
 
-saw_wave:
+SCC_sawWave:
 	db 04H, 0CH, 14H, 1CH, 25H, 2DH, 35H, 3DH, 45H, 4EH, 56H, 5EH, 66H, 6FH, 77H, 7FH
 	db 80H, 88H, 90H, 99H, 0A1H, 0A9H, 0B1H, 0BAH, 0C2H, 0CAH, 0D2H, 0DAH, 0E3H, 0EBH, 0F3H, 0FBH
 
-sine_wave:
+SCC_sineWave:
 	db 19H, 31H, 47H, 5AH, 6AH, 76H, 7DH, 7FH, 7DH, 76H, 6AH, 5AH, 47H, 31H, 19H, 00H
 	db 0E7H, 0CFH, 0B9H, 0A6H, 96H, 8AH, 83H, 80H, 83H, 8AH, 96H, 0A6H, 0B9H, 0CFH, 0E7H, 00H
 
-init_wave:
+SCC_initWave:
 	ds 32, 0

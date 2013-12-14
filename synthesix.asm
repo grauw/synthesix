@@ -7,7 +7,7 @@
 	org 4000H
 
 	db "AB"
-	dw main
+	dw Synthesix_Main
 	dw 0, 0, 0, 0, 0, 0
 
 	INCLUDE "utils.asm"

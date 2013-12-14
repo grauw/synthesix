@@ -1,32 +1,32 @@
-main:
+Synthesix_Main:
 	call INITXT
-	ld hl,hello_message
-	call print
+	ld hl,Synthesix_helloMessage
+	call Utils_Print
 
-	call ram_init
-	call keys_init
-	call psg_init
-	call scc_init
+	call RAM_Init
+	call Keys_Init
+	call PSG_Init
+	call SCC_Init
 
-	ld hl,saw_wave
-	call scc_load_waveform
+	ld hl,SCC_sawWave
+	call SCC_LoadWaveform
 
-main_loop:
+Synthesix_MainLoop:
 	halt
-	call keys_scan
-	jp main_loop
+	call Keys_Scan
+	jp Synthesix_MainLoop
 
-ram_init:
-	ld hl,ram_data_start
-	ld de,ram_data_start_address
-	ld bc,ram_data_size
+RAM_Init:
+	ld hl,RAM_dataStart
+	ld de,RAM_dataStartAddress
+	ld bc,RAM_dataSize
 	ldir
 	ret
 
-hello_message:
+Synthesix_helloMessage:
 	db "Synthesix\r\n\nMIDI synthesizer for MSX\r\n", 0
 
-ram_data_start:
+RAM_dataStart:
 	include "ram.symbol"
 	incbin "ram.bin"
-ram_data_size: equ $ - ram_data_start
+RAM_dataSize: equ $ - RAM_dataStart

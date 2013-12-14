@@ -14,44 +14,44 @@ ALIGN: MACRO boundary
 	ds boundary - 1 - ($ - 1) % boundary
 	ENDM
 
-println:
-	call print
-	ld hl,crlf
-	call print
+Utils_PrintLn:
+	call Utils_Print
+	ld hl,Utils_crlf
+	call Utils_Print
 	ret
 
-print:
+Utils_Print:
 	ld a,(hl)
 	and a
 	ret z
 	call CHPUT
 	inc hl
-	jp print
+	jp Utils_Print
 
-print_hex_hl:
+Utils_PrintHexHL:
 	push hl
 	ld a,h
-	call print_hex_a
+	call Utils_PrintHexA
 	pop hl
 	ld a,l
-	call print_hex_a
+	call Utils_PrintHexA
 	ret
 
-print_hex_a:
+Utils_PrintHexA:
 	push af
 	and 0F0H
 	rrca
 	rrca
 	rrca
 	rrca
-	call print_hex
+	call Utils_PrintHex
 	pop af
 	and 0FH
-	call print_hex
+	call Utils_PrintHex
 	ret
 
-print_hex:
-	ld hl,hex_numbers
+Utils_PrintHex:
+	ld hl,Utils_hexNumbers
 	ld b,0
 	ld c,a
 	add hl,bc
@@ -59,23 +59,23 @@ print_hex:
 	call CHPUT
 	ret
 
-stop:
+Utils_Stop:
 	halt
-	jp stop
+	jp Utils_Stop
 
-throw_exception:
-	ld hl,exception_message
-	call print
+Utils_ThrowException:
+	ld hl,Utils_exceptionMessage
+	call Utils_Print
 	pop hl
-	call print_hex_hl
-	jp stop
+	call Utils_PrintHexHL
+	jp Utils_Stop
 
-exception_message:
+Utils_exceptionMessage:
 	db "An exception occurred on address: ", 0
 
-hex_numbers:
+Utils_hexNumbers:
 	db "0123456789ABCDEF"
 
-crlf:
+Utils_crlf:
 	db "\r\n", 0
 

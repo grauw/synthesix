@@ -4,10 +4,10 @@
 ;
 
 	org 0C000H
-ram_data_start_address:
+RAM_dataStartAddress:
 
-keys_last_scan:
+Keys_lastScan:
 	ds 11,0
 
-keys_velocity:
+Keys_velocity:
 	dw 7F00H
