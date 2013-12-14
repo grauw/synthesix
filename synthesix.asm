@@ -9,7 +9,7 @@ Synthesix_Main:
 	call SCC_Init
 
 	ld hl,SCC_sawWave
-	call SCC_LoadWaveform
+	call SCC_LoadWave
 
 	call Synthesix_MainLoop
 	ret

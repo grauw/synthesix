@@ -4,10 +4,10 @@ ROM_BANK_1_CHANGE: equ 7000H
 ROM_BANK_2_CHANGE: equ 9000H
 ROM_BANK_3_CHANGE: equ 0B000H
 
-SCC_WAVEFORM_1: equ 9800H
-SCC_WAVEFORM_2: equ 9820H
-SCC_WAVEFORM_3: equ 9840H
-SCC_WAVEFORM_4_5: equ 9860H
+SCC_WAVE_1: equ 9800H
+SCC_WAVE_2: equ 9820H
+SCC_WAVE_3: equ 9840H
+SCC_WAVE_4_5: equ 9860H
 SCC_FREQUENCY_1: equ 9880H
 SCC_FREQUENCY_2: equ 9882H
 SCC_FREQUENCY_3: equ 9884H
@@ -80,11 +80,11 @@ SCC_ProgramChange:
 	inc hl
 	ld h,(hl)
 	ld l,a
-	call SCC_LoadWaveform
+	call SCC_LoadWave
 	ret
 
-SCC_LoadWaveform:
-	ld de,SCC_WAVEFORM_1
+SCC_LoadWave:
+	ld de,SCC_WAVE_1
 	ld bc,32
 	ldir
 	ret
