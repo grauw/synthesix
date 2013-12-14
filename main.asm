@@ -19,17 +19,5 @@ Synthesix_MainLoop:
 	call Keys_Scan
 	jp Synthesix_MainLoop
 
-RAM_Init:
-	ld hl,RAM_dataStart
-	ld de,RAM_dataStartAddress
-	ld bc,RAM_dataSize
-	ldir
-	ret
-
 Synthesix_helloMessage:
 	db "Synthesix\r\n\nMIDI synthesizer for MSX\r\n", 0
-
-RAM_dataStart:
-	include "ram.symbol"
-	incbin "ram.bin"
-RAM_dataSize: equ $ - RAM_dataStart
