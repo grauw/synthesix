@@ -60,6 +60,7 @@ Utils_PrintHex:
 	ret
 
 Utils_Stop:
+	di
 	halt
 	jp Utils_Stop
 
