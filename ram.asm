@@ -6,5 +6,5 @@
 	org 0C000H
 ram_data_start_address:
 
-scc_slots:
-	ds 16,0
+keys_last_scan:
+	ds 11,0

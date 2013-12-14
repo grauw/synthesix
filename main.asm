@@ -4,26 +4,17 @@ main:
 	call print
 
 	call ram_init
-
+	call keys_init
 	call psg_init
-	ld a,69
-	ld bc,7F00H
-	call psg_note_on
-
 	call scc_init
+
 	ld hl,saw_wave
 	call scc_load_waveform
-	ld a,69
-	ld bc,7F00H
-	call scc_note_on
 
-	ld hl,done_message
-	call println
-
-	ld hl,0
-	add hl,sp
-	call print_hex_hl
-	jp stop
+main_loop:
+	halt
+	call keys_scan
+	jp main_loop
 
 ram_init:
 	ld hl,ram_data_start
@@ -34,9 +25,6 @@ ram_init:
 
 hello_message:
 	db "Synthesix\r\n\nMIDI synthesizer for MSX\r\n", 0
-
-done_message:
-	db "Done.", 0
 
 ram_data_start:
 	include "ram.symbol"

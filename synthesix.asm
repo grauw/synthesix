@@ -12,6 +12,7 @@
 
 	INCLUDE "utils.asm"
 	INCLUDE "main.asm"
+	INCLUDE "keys.asm"
 	INCLUDE "psg.asm"
 	INCLUDE "scc.asm"
 
