@@ -36,6 +36,7 @@ scc_init:
 scc_init_no_subslot:
 	ld h,80H
 	call ENASLT
+	ei
 	ld a,3FH
 	ld (ROM_BANK_2_CHANGE),a
 	ret
