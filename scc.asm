@@ -93,7 +93,7 @@ SCC_LoadWave:
 ;
 ;
 
-	ALIGN 100H
+	ds -$ & 0FFH  ; align 100H
 SCC_presetPrograms:
 	dw SCC_squareWave, SCC_sawWave, SCC_sineWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
 	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave

@@ -91,11 +91,11 @@ PSG_initValues:
 	db 0BH, 00H          ; envelope frequency
 	db 0B8H              ; envelope shape
 
-	ALIGN 100H
+	ds -$ & 0FFH  ; align 100H
 PSG_frequencyTable:
 	INCLUDE "psgftable.asm"
 
-	ALIGN 100H
+	ds -$ & 0FFH  ; align 100H
 PSG_volumeTable:
 	db  0,  1,  3,  4,  5,  6,  6,  7,  7,  7,  8,  8,  8,  8,  9,  9
 	db  9,  9,  9,  9, 10, 10, 10, 10, 10, 10, 10, 10, 11, 11, 11, 11

@@ -9,11 +9,6 @@ EXPTBL: equ 0FCC1H
 SLTTBL: equ 0FCC5H
 PPI_PORT_A: equ 0A8H
 
-
-ALIGN: MACRO boundary
-	ds boundary - 1 - ($ - 1) % boundary
-	ENDM
-
 Utils_PrintLn:
 	call Utils_Print
 	ld hl,Utils_crlf
