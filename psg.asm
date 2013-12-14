@@ -59,10 +59,9 @@ psg_note_on:
 	; volume
 	ld a,PSG_AMPLITUDE_CONTROL
 	out (PSG_REGISTER_SELECT),a
-	ld a,b
-	rrca
-	rrca
-	rrca
+	ld h,psg_volume_table / 100H
+	ld l,b
+	ld a,(hl)
 	out (PSG_WRITE),a
 
 	; note on
@@ -95,3 +94,14 @@ psg_init_values:
 	ALIGN 100H
 psg_frequency_table:
 	INCLUDE "psgftable.asm"
+
+	ALIGN 100H
+psg_volume_table:
+	db  0,  1,  3,  4,  5,  6,  6,  7,  7,  7,  8,  8,  8,  8,  9,  9
+	db  9,  9,  9,  9, 10, 10, 10, 10, 10, 10, 10, 10, 11, 11, 11, 11
+	db 11, 11, 11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 12, 12, 12, 12
+	db 12, 12, 12, 12, 12, 12, 12, 13, 13, 13, 13, 13, 13, 13, 13, 13
+	db 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 14, 14, 14
+	db 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14
+	db 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 15, 15, 15
+	db 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15
