@@ -1,39 +1,44 @@
-;
-; Synthesix
-;
-; MIDI synthesizer for MSX
-;
-
-	org 4000H
-
-	db "AB"
-	dw main
-	ds 12
-
-helloString:
-	db "Hello world!", 0
-
 main:
-	ld hl,helloString
-	
-main_loop:
-	ld a,(hl)
-	call CHPUT
-	inc hl
-	and a
-	jp nz,main_loop
-	
-halt_loop:
-	halt
-	jp halt_loop
-	
-	
-	
-	
-	
-	
-	
-	
-	ds 0C000H - $
-	
-CHPUT equ 0A2H
+	call INITXT
+	ld hl,hello_message
+	call print
+
+	call ram_init
+
+	call psg_init
+	ld a,69
+	ld bc,7F00H
+	call psg_note_on
+
+	call scc_init
+	ld hl,square_wave
+	call scc_load_waveform
+	ld a,69
+	ld bc,7F00H
+	call scc_note_on
+
+	ld hl,done_message
+	call println
+
+	ld hl,0
+	add hl,sp
+	call print_hex_hl
+	jp stop
+
+ram_init:
+	ld hl,ram_data_start
+	ld de,ram_data_start_address
+	ld bc,ram_data_size
+	ldir
+	ret
+
+hello_message:
+	db "Synthesix\r\n\nMIDI synthesizer for MSX\r\n", 0
+
+done_message:
+	db "Done.", 0
+
+ram_data_start:
+	include "ram.symbol"
+	incbin "ram.bin"
+ram_data_size: equ $ - ram_data_start
