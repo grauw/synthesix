@@ -11,6 +11,9 @@ Synthesix_Main:
 	ld hl,SCC_sawWave
 	call SCC_LoadWaveform
 
+	call Synthesix_MainLoop
+	ret
+
 Synthesix_MainLoop:
 	halt
 	call Keys_Scan
