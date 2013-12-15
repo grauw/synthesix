@@ -13,6 +13,7 @@
 	INCLUDE "Utils.asm"
 	INCLUDE "Synthesix.asm"
 	INCLUDE "Keys.asm"
+	INCLUDE "Channel.asm"
 	INCLUDE "PSG.asm"
 	INCLUDE "SCC.asm"
 	INCLUDE "RAM.asm"
