@@ -10,10 +10,6 @@ Synthesix_Main:
 
 	call Math_UnitTest
 
-	ld hl,SCC_sawWave
-	ld ix,SCC_voice1
-	call SCCVoice_LoadWave
-
 	call Synthesix_MainLoop
 	ret
 

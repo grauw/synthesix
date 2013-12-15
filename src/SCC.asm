@@ -41,6 +41,19 @@ SCC_Init_noSubslot:
 	ei
 	ld a,3FH
 	ld (ROM_BANK_2_CHANGE),a
+
+	ld hl,SCC_sawWave
+	ld ix,SCC_voice1
+	call SCCVoice_LoadWave
+	ld hl,SCC_sawWave
+	ld ix,SCC_voice2
+	call SCCVoice_LoadWave
+	ld hl,SCC_sawWave
+	ld ix,SCC_voice3
+	call SCCVoice_LoadWave
+	ld hl,SCC_sawWave
+	ld ix,SCC_voice4
+	call SCCVoice_LoadWave
 	ret
 
 ; ix = this
