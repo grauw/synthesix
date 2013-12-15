@@ -10,7 +10,11 @@ Channel_NoteOn:
 	ret z
 	push hl
 	ex (sp),ix
+	push af
+	push bc
 	call VoicePool_NoteOn
+	pop bc
+	pop af
 	pop ix
 	ENDM
 	ret
@@ -27,7 +31,11 @@ Channel_NoteOff:
 	ret z
 	push hl
 	ex (sp),ix
+	push af
+	push bc
 	call VoicePool_NoteOff
+	pop bc
+	pop af
 	pop ix
 	ENDM
 	ret
