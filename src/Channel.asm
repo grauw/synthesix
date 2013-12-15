@@ -2,9 +2,9 @@
 ; a = note number (0-127)
 ; b = velocity (0-127)
 Channel_NoteOn:
-	IRP ?offset, 0, 2
-	ld l,(ix + Channel_voicePools + ?offset)
-	ld h,(ix + Channel_voicePools + ?offset + 1)
+	IRP ?pool, 0, 1
+	ld l,(ix + Channel_voicePools + ?pool * 2)
+	ld h,(ix + Channel_voicePools + ?pool * 2 + 1)
 	inc h
 	dec h
 	ret z
@@ -19,9 +19,9 @@ Channel_NoteOn:
 ; a = note number (0-127)
 ; b = velocity (0-127)
 Channel_NoteOff:
-	IRP ?offset, 0, 2
-	ld l,(ix + Channel_voicePools + ?offset)
-	ld h,(ix + Channel_voicePools + ?offset + 1)
+	IRP ?pool, 0, 1
+	ld l,(ix + Channel_voicePools + ?pool * 2)
+	ld h,(ix + Channel_voicePools + ?pool * 2 + 1)
 	inc h
 	dec h
 	ret z
@@ -32,7 +32,8 @@ Channel_NoteOff:
 	ENDM
 	ret
 
+; max 2 voice pools
 Channel_channel1:
 Channel:
 Channel_voicePools: equ $ - Channel
-	dw VoicePool_voicePool1, 0  ; max 2 voice pools
+	dw VoicePool_voicePool1, 0
