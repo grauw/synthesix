@@ -60,11 +60,31 @@ Utils_Stop:
 	jp Utils_Stop
 
 Utils_ThrowException:
+	pop de
+	call Utils_PrintExceptionMessage
+	jp Utils_Stop
+
+; hl = message
+Utils_ThrowExceptionWithMessage:
+	pop de
+	push hl
+	call Utils_PrintExceptionMessage
+	pop hl
+	call Utils_PrintLn
+	jp Utils_Stop
+
+; de = address
+Utils_PrintExceptionMessage:
+	push de
 	ld hl,Utils_exceptionMessage
 	call Utils_Print
 	pop hl
 	call Utils_PrintHexHL
-	jp Utils_Stop
+	ld hl,Utils_crlf
+	call Utils_Print
+	ret
+
+
 
 Utils_exceptionMessage:
 	db "An exception occurred on address: ", 0
