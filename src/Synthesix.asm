@@ -8,6 +8,8 @@ Synthesix_Main:
 	call PSG_Init
 	call SCC_Init
 
+	call Math_UnitTest
+
 	ld hl,SCC_sawWave
 	ld ix,SCC_voice1
 	call SCCVoice_LoadWave
