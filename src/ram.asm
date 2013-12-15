@@ -24,6 +24,18 @@ Keys_velocity:
 SCC_mixerCopy:
 	db 0
 
+; The initial ROM banks
+; Stored as words that include the bank select register address
+; Example: ld hl,(ROM_bank3) / ld (hl),l
+ROM_bank1:
+	dw 5000H
+ROM_bank2:
+	dw 7001H
+ROM_bank3:
+	dw 9002H
+ROM_bank4:
+	dw 0B003H
+
 ;=================================================================
 RAM_dataSize: equ $ - RAM_dataStartAddress
 	org RAM_dataStart + RAM_dataSize
