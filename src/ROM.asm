@@ -10,11 +10,11 @@
 	dw Synthesix_Main
 	dw 0, 0, 0, 0, 0, 0
 
-	INCLUDE "utils.asm"
-	INCLUDE "synthesix.asm"
-	INCLUDE "keys.asm"
-	INCLUDE "psg.asm"
-	INCLUDE "scc.asm"
-	INCLUDE "ram.asm"
+	INCLUDE "Utils.asm"
+	INCLUDE "Synthesix.asm"
+	INCLUDE "Keys.asm"
+	INCLUDE "PSG.asm"
+	INCLUDE "SCC.asm"
+	INCLUDE "RAM.asm"
 
 	ds 0C000H - $
