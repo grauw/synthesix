@@ -41,23 +41,23 @@ PSG_Dump_loop:
 ; ix = this
 ; a = note number (0-127)
 ; b = velocity (0-127)
-PSGTone_NoteOn:
+PSGVoice_NoteOn:
 	; frequency
 	ld h,PSG_frequencyTable / 100H
 	ld l,a
 	sla l
-	ld a,(ix + PSGTone_frequencyLSB)
+	ld a,(ix + PSGVoice_frequencyLSB)
 	out (PSG_REGISTER_SELECT),a
 	ld a,(hl)
 	inc hl
 	out (PSG_WRITE),a
-	ld a,(ix + PSGTone_frequencyMSB)
+	ld a,(ix + PSGVoice_frequencyMSB)
 	out (PSG_REGISTER_SELECT),a
 	ld a,(hl)
 	out (PSG_WRITE),a
 
 	; volume
-	ld a,(ix + PSGTone_level)
+	ld a,(ix + PSGVoice_level)
 	out (PSG_REGISTER_SELECT),a
 	ld h,PSG_volumeTable / 100H
 	ld l,b
@@ -68,16 +68,16 @@ PSGTone_NoteOn:
 	ld a,PSG_MIXER_CONTROL
 	out (PSG_REGISTER_SELECT),a
 	in a,(PSG_READ)
-	and (ix + PSGTone_mixerAndMask)
+	and (ix + PSGVoice_mixerAndMask)
 	out (PSG_WRITE),a
 	ret
 
 ; ix = this
-PSGTone_NoteOff:
+PSGVoice_NoteOff:
 	ld a,PSG_MIXER_CONTROL
 	out (PSG_REGISTER_SELECT),a
 	in a,(PSG_READ)
-	or (ix + PSGTone_mixerOrMask)
+	or (ix + PSGVoice_mixerOrMask)
 	out (PSG_WRITE),a
 	ret
 
@@ -85,27 +85,27 @@ PSGTone_NoteOff:
 ;
 ;
 
-PSG_tone1:
-PSGTone:
-PSGTone_frequencyLSB: equ $ - PSGTone
+PSG_voice1:
+PSGVoice:
+PSGVoice_frequencyLSB: equ $ - PSGVoice
 	db PSG_TONE_GENERATOR_CONTROL + 0
-PSGTone_frequencyMSB: equ $ - PSGTone
+PSGVoice_frequencyMSB: equ $ - PSGVoice
 	db PSG_TONE_GENERATOR_CONTROL + 1
-PSGTone_level: equ $ - PSGTone
+PSGVoice_level: equ $ - PSGVoice
 	db PSG_AMPLITUDE_CONTROL + 0
-PSGTone_mixerOrMask:equ $ - PSGTone
+PSGVoice_mixerOrMask:equ $ - PSGVoice
 	db 00000001B
-PSGTone_mixerAndMask:equ $ - PSGTone
+PSGVoice_mixerAndMask:equ $ - PSGVoice
 	db 11111110B
 
-PSG_tone2:
+PSG_voice2:
 	db PSG_TONE_GENERATOR_CONTROL + 2
 	db PSG_TONE_GENERATOR_CONTROL + 3
 	db PSG_AMPLITUDE_CONTROL + 1
 	db 00000010B
 	db 11111101B
 
-PSG_tone3:
+PSG_voice3:
 	db PSG_TONE_GENERATOR_CONTROL + 4
 	db PSG_TONE_GENERATOR_CONTROL + 5
 	db PSG_AMPLITUDE_CONTROL + 2

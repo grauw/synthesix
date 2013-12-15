@@ -46,7 +46,7 @@ SCC_Init_noSubslot:
 ; ix = this
 ; a = note number (0-127)
 ; b = velocity (0-127)
-SCCTone_NoteOn:
+SCCVoice_NoteOn:
 	; de = frequency
 	ld h,PSG_frequencyTable / 100H
 	ld l,a
@@ -62,31 +62,31 @@ SCCTone_NoteOn:
 	rrca
 
 	ld h,SCC_BASE_MSB
-	ld l,(ix + SCCTone_frequency)
+	ld l,(ix + SCCVoice_frequency)
 	ld (hl),e
 	inc hl
 	ld (hl),d
 
-	ld l,(ix + SCCTone_level)
+	ld l,(ix + SCCVoice_level)
 	ld (hl),a
 
 	ld a,(SCC_mixerCopy)
-	or (ix + SCCTone_mixerOrMask)
+	or (ix + SCCVoice_mixerOrMask)
 	ld (SCC_BASE + SCC_MIXER),a
 	ld (SCC_mixerCopy),a
 	ret
 
 ; ix = this
-SCCTone_NoteOff:
+SCCVoice_NoteOff:
 	ld a,(SCC_mixerCopy)
-	and (ix + SCCTone_mixerAndMask)
+	and (ix + SCCVoice_mixerAndMask)
 	ld (SCC_BASE + SCC_MIXER),a
 	ld (SCC_mixerCopy),a
 	ret
 
 ; ix = this
 ; a = program number (0-127)
-SCCTone_ProgramChange:
+SCCVoice_ProgramChange:
 	sla a
 	ld h,SCC_presetPrograms / 100H
 	ld l,a
@@ -94,13 +94,13 @@ SCCTone_ProgramChange:
 	inc hl
 	ld h,(hl)
 	ld l,a
-	call SCCTone_LoadWave
+	call SCCVoice_LoadWave
 	ret
 
 ; ix = this
 ; hl = wave address
-SCCTone_LoadWave:
-	ld e,(ix + SCCTone_wave)
+SCCVoice_LoadWave:
+	ld e,(ix + SCCVoice_wave)
 	ld d,SCC_BASE_MSB
 	ld bc,32
 	ldir
@@ -110,34 +110,34 @@ SCCTone_LoadWave:
 ;
 ;
 
-SCC_tone1:
-SCCTone:
-SCCTone_wave: equ $ - SCCTone
+SCC_voice1:
+SCCVoice:
+SCCVoice_wave: equ $ - SCCVoice
 	db SCC_WAVE_1
-SCCTone_frequency: equ $ - SCCTone
+SCCVoice_frequency: equ $ - SCCVoice
 	db SCC_FREQUENCY_1
-SCCTone_level: equ $ - SCCTone
+SCCVoice_level: equ $ - SCCVoice
 	db SCC_LEVEL_1
-SCCTone_mixerOrMask: equ $ - SCCTone
+SCCVoice_mixerOrMask: equ $ - SCCVoice
 	db 00000001B
-SCCTone_mixerAndMask: equ $ - SCCTone
+SCCVoice_mixerAndMask: equ $ - SCCVoice
 	db 11111110B
 
-SCC_tone2:
+SCC_voice2:
 	db SCC_WAVE_2
 	db SCC_FREQUENCY_2
 	db SCC_LEVEL_2
 	db 00000010B
 	db 11111101B
 
-SCC_tone3:
+SCC_voice3:
 	db SCC_WAVE_3
 	db SCC_FREQUENCY_3
 	db SCC_LEVEL_3
 	db 00000100B
 	db 11111011B
 
-SCC_tone4:
+SCC_voice4:
 	db SCC_WAVE_4_5
 	db SCC_FREQUENCY_4
 	db SCC_LEVEL_4

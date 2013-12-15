@@ -61,8 +61,8 @@ Keys_ProcessRowPress_note:
 	push hl
 	push ix
 	ld bc,(Keys_velocity)
-	ld ix,SCC_tone1
-	call SCCTone_NoteOn
+	ld ix,SCC_voice1
+	call SCCVoice_NoteOn
 	pop ix
 	pop hl
 	pop de
@@ -76,8 +76,8 @@ Keys_ProcessRowRelease_note:
 	push hl
 	push ix
 	ld bc,4000H
-	ld ix,SCC_tone1
-	call SCCTone_NoteOff
+	ld ix,SCC_voice1
+	call SCCVoice_NoteOff
 	pop ix
 	pop hl
 	pop de

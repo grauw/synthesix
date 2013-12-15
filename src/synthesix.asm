@@ -9,8 +9,8 @@ Synthesix_Main:
 	call SCC_Init
 
 	ld hl,SCC_sawWave
-	ld ix,SCC_tone1
-	call SCCTone_LoadWave
+	ld ix,SCC_voice1
+	call SCCVoice_LoadWave
 
 	call Synthesix_MainLoop
 	ret
