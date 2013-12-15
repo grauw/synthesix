@@ -15,6 +15,7 @@
 	INCLUDE "Math.asm"
 	INCLUDE "Keys.asm"
 	INCLUDE "Channel.asm"
+	INCLUDE "VoicePool.asm"
 	INCLUDE "PSG.asm"
 	INCLUDE "SCC.asm"
 	INCLUDE "RAM.asm"
