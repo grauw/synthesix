@@ -85,19 +85,6 @@ SCCVoice_NoteOff:
 	ret
 
 ; ix = this
-; a = program number (0-127)
-SCCVoice_ProgramChange:
-	sla a
-	ld h,SCC_presetPrograms / 100H
-	ld l,a
-	ld a,(hl)
-	inc hl
-	ld h,(hl)
-	ld l,a
-	call SCCVoice_LoadWave
-	ret
-
-; ix = this
 ; hl = wave address
 SCCVoice_LoadWave:
 	ld e,(ix + SCCVoice_wave)
@@ -143,25 +130,6 @@ SCC_voice4:
 	db SCC_LEVEL_4
 	db 00001000B
 	db 11110111B
-
-	ds -$ & 0FFH  ; align 100H
-SCC_presetPrograms:
-	dw SCC_squareWave, SCC_sawWave, SCC_sineWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
-	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
-	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
-	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
-	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
-	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
-	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
-	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
-	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
-	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
-	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
-	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
-	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
-	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
-	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave
-	dw SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_squareWave, SCC_initWave
 
 SCC_squareWave:
 	db 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH
