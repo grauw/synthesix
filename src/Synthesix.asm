@@ -20,7 +20,21 @@ Synthesix_Main:
 Synthesix_MainLoop:
 	halt
 	call Keys_Scan
+	call Synthesix_UpdateLiveIndicator
 	jp Synthesix_MainLoop
+
+Synthesix_UpdateLiveIndicator:
+	ld hl,Synthesix_liveIndicator1
+	ld a,(JIFFY)
+	bit 5,a
+	jp z,Utils_Print
+	ld hl,Synthesix_liveIndicator2
+	jp Utils_Print
 
 Synthesix_helloMessage:
 	db "Synthesix\r\n\nMIDI synthesizer for MSX\r\n", 0
+
+Synthesix_liveIndicator1:
+	db "_\r",0
+Synthesix_liveIndicator2:
+	db " \r",0
