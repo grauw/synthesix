@@ -1,3 +1,12 @@
+;
+; A voice pool
+;
+; Pools voices for polyphonic playback.
+; When a note is played it binds a voice to it until it is
+; released. When a voice is bound, it will try the next one.
+; Each sound chip has a separate voice pool implementation.
+;
+
 ; ix = this
 ; a = note number (0-127)
 ; b = velocity (0-127)
