@@ -20,6 +20,7 @@
 	INCLUDE "VoicePool.asm"
 	INCLUDE "PSG.asm"
 	INCLUDE "SCC.asm"
+	INCLUDE "SCCVoice.asm"
 	INCLUDE "RAM.asm"
 
 	ds 0A000H - $  ; must be aligned to 2000H
