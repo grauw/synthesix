@@ -8,7 +8,7 @@
 	dw Channel_size
 Channel:
 Channel_voicePools: equ $ - Channel
-	dw VoicePool_voicePool1, 0  ; max 2 voice pools
+	dw 0, 0  ; max 2 voice pools
 Channel_size: equ $ - Channel
 
 ; ix <- new class
@@ -16,6 +16,13 @@ Channel_New:
 	ld iy,Channel
 	call Class_New
 	ld (Channel_channel1),ix
+	push ix
+	call VoicePool_New
+	push ix
+	pop hl
+	pop ix
+	ld (ix + Channel_voicePools + 0),l
+	ld (ix + Channel_voicePools + 1),h
 	ret
 
 ; ix = this

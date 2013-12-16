@@ -6,6 +6,21 @@
 ; released. When a voice is bound, it will try the next one.
 ; Each sound chip has a separate voice pool implementation.
 ;
+	dw VoicePool_size
+VoicePool:
+VoicePool_mono: equ $ - VoicePool
+	db -1;
+VoicePool_notes: equ $ - VoicePool
+	db -1, -1, -1, -1, -1
+VoicePool_voices: equ $ - VoicePool
+	dw SCC_voice1, SCC_voice2, SCC_voice3, SCC_voice4, 0  ; max 5 voices / pool
+VoicePool_size: equ $ - VoicePool
+
+; ix <- new class
+VoicePool_New:
+	ld iy,VoicePool
+	call Class_New
+	ret
 
 ; ix = this
 ; a = note number (0-127)
