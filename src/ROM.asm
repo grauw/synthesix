@@ -13,6 +13,8 @@
 	INCLUDE "Synthesix.asm"
 	INCLUDE "Utils.asm"
 	INCLUDE "Math.asm"
+	INCLUDE "Heap.asm"
+	INCLUDE "Class.asm"
 	INCLUDE "Keys.asm"
 	INCLUDE "Channel.asm"
 	INCLUDE "VoicePool.asm"

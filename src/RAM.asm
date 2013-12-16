@@ -46,6 +46,13 @@ VoicePool_notes: equ $ - VoicePool
 VoicePool_voices: equ $ - VoicePool
 	dw SCC_voice1, SCC_voice2, SCC_voice3, SCC_voice4, 0
 
+Heap_heapPosition:
+	dw Heap_start
+Heap_heapCapacity:
+	dw 1000H
+Heap_start:
+	; MUST BE THE LAST THING DEFINED HERE
+
 ;=================================================================
 RAM_dataSize: equ $ - RAM_dataStartAddress
 	org RAM_dataStart + RAM_dataSize

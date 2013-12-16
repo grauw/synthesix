@@ -1,0 +1,22 @@
+; bc = number of bytes to allocate
+; de <- allocated memory start address
+; bc <- allocated space
+; Throws out of memory exception
+Heap_Allocate:
+	ld hl,(Heap_heapCapacity)
+	and a
+	sbc hl,bc
+	jr c,Heap_Allocate_throw
+	ld hl,(Heap_heapCapacity)
+	ld de,(Heap_heapPosition)
+	ld h,d
+	ld l,e
+	add hl,bc
+	ld (Heap_heapPosition),hl
+	ret
+Heap_Allocate_throw:
+	ld hl,Heap_outOfHeapException
+	jp Utils_ThrowExceptionWithMessage
+
+Heap_outOfHeapException:
+	db "Out of heap space.",0
