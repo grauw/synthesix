@@ -2,6 +2,7 @@
 ; bc <- allocated space
 ; de <- allocated memory start address
 ; hl <- allocated memory end address
+; Modifies: bc, de, hl
 ; Throws out of memory exception
 Heap_Allocate:
 	ld hl,(Heap_heapCapacity)

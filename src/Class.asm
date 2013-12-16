@@ -1,7 +1,7 @@
 ; iy = class template
-; ix <- new allocated class
-; iy <- class template
-; Modifies: bc, de, hl
+; ix <- newly allocated class
+; de <- newly allocated class end address
+; Modifies: bc, de, hl, ix
 Class_New:
 	ld c,(iy - 2)
 	ld b,(iy - 1)
@@ -14,9 +14,9 @@ Class_New:
 	ret
 
 ; iy = class template
-; ix <- new allocated class
-; iy <- class template
-; Modifies: bc, de, hl
+; ix <- newly allocated class
+; hl <- newly allocated class end address
+; Modifies: bc, de, hl, ix
 Class_NewNoInit:
 	ld c,(iy - 2)
 	ld b,(iy - 1)
@@ -27,9 +27,9 @@ Class_NewNoInit:
 
 ; iy = class template
 ; de = destination address
-; ix <- new allocated class
-; iy <- class template
-; Modifies: bc, de, hl
+; ix <- new class
+; de <- new class end address
+; Modifies: bc, de, hl, ix
 Class_Copy:
 	ld c,(iy - 2)
 	ld b,(iy - 1)
