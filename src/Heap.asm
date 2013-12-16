@@ -1,6 +1,7 @@
 ; bc = number of bytes to allocate
 ; de <- allocated memory start address
 ; bc <- allocated space
+; Modifies: hl
 ; Throws out of memory exception
 Heap_Allocate:
 	ld hl,(Heap_heapCapacity)
