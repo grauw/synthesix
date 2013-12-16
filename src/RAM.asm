@@ -36,6 +36,16 @@ ROM_bank3:
 ROM_bank4:
 	dw 0B003H
 
+; max 5 voices / pool
+VoicePool_voicePool1:
+VoicePool:
+VoicePool_mono: equ $ - VoicePool
+	db -1;
+VoicePool_notes: equ $ - VoicePool
+	db -1, -1, -1, -1, -1
+VoicePool_voices: equ $ - VoicePool
+	dw SCC_voice1, SCC_voice2, SCC_voice3, SCC_voice4, 0
+
 ;=================================================================
 RAM_dataSize: equ $ - RAM_dataStartAddress
 	org RAM_dataStart + RAM_dataSize

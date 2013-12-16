@@ -2,29 +2,45 @@
 ; a = note number (0-127)
 ; b = velocity (0-127)
 VoicePool_NoteOn:
-	ld l,(ix + VoicePool_voices + 0)
-	ld h,(ix + VoicePool_voices + 1)
+	IRP ?voice, 0, 1, 2, 3, 4
+	PROC  ; make LOCAL work
+	LOCAL VoicePool_NoteOn_next
+	bit 7,(ix + VoicePool_notes + ?voice)
+	jr z,VoicePool_NoteOn_next
+	ld l,(ix + VoicePool_voices + ?voice * 2)
+	ld h,(ix + VoicePool_voices + ?voice * 2 + 1)
+	inc h
+	dec h
+	jr z,VoicePool_NoteOn_break
+	ld (ix + VoicePool_notes + ?voice),a
 	push hl
-	ex (sp),ix
-	call SCCVoice_NoteOn
 	pop ix
+	jp SCCVoice_NoteOn
+VoicePool_NoteOn_next:
+	ENDP
+	ENDM
+VoicePool_NoteOn_break:
+	; no free note found
 	ret
 
 ; ix = this
 ; a = note number (0-127)
 ; b = velocity (0-127)
 VoicePool_NoteOff:
-	ld l,(ix + VoicePool_voices + 0)
-	ld h,(ix + VoicePool_voices + 1)
+	IRP ?voice, 0, 1, 2, 3, 4
+	PROC  ; make LOCAL work
+	LOCAL VoicePool_NoteOff_next
+	cp (ix + VoicePool_notes + ?voice)
+	jr nz,VoicePool_NoteOff_next
+	ld l,(ix + VoicePool_voices + ?voice * 2)
+	ld h,(ix + VoicePool_voices + ?voice * 2 + 1)
+	ld a,-1
+	ld (ix + VoicePool_notes + ?voice),a
 	push hl
-	ex (sp),ix
-	call SCCVoice_NoteOff
 	pop ix
+	jp SCCVoice_NoteOff
+VoicePool_NoteOff_next:
+	ENDP
+	ENDM
+	; note not found
 	ret
-
-VoicePool_voicePool1:
-VoicePool:
-VoicePool_mono: equ $ - VoicePool
-	db -1;
-VoicePool_voices: equ $ - VoicePool
-	dw SCC_voice1, 0, 0, 0, 0  ; max 5 voices / pool
