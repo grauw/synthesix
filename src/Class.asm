@@ -5,10 +5,10 @@
 Class_New:
 	ld c,(iy - 2)
 	ld b,(iy - 1)
-	push iy
 	call Heap_Allocate
-	pop hl
 	push de
+	push iy
+	pop hl
 	ldir
 	pop ix
 	ret
