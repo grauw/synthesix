@@ -7,6 +7,7 @@ Synthesix_Main:
 	call Keys_Init
 	call PSG_Init
 	call SCC_Init
+	call Channel_New
 
 	call Math_UnitTest
 

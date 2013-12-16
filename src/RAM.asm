@@ -36,6 +36,9 @@ ROM_bank3:
 ROM_bank4:
 	dw 0B003H
 
+Channel_channel1:
+	dw 0
+
 ; max 5 voices / pool
 VoicePool_voicePool1:
 VoicePool:

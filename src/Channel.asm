@@ -1,3 +1,23 @@
+;
+; A MIDI channel
+;
+; One channel can control multiple timbres.
+; It contains one voice pool per sound chip / patch.
+; All MIDI messages are forwarded to the voice pools.
+;
+	dw Channel_size
+Channel:
+Channel_voicePools: equ $ - Channel
+	dw VoicePool_voicePool1, 0  ; max 2 voice pools
+Channel_size: equ $ - Channel
+
+; ix <- new class
+Channel_New:
+	ld iy,Channel
+	call Class_New
+	ld (Channel_channel1),ix
+	ret
+
 ; ix = this
 ; a = note number (0-127)
 ; b = velocity (0-127)
@@ -39,9 +59,3 @@ Channel_NoteOff:
 	pop ix
 	ENDM
 	ret
-
-; max 2 voice pools
-Channel_channel1:
-Channel:
-Channel_voicePools: equ $ - Channel
-	dw VoicePool_voicePool1, 0
