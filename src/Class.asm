@@ -14,18 +14,6 @@ Class_New:
 	ret
 
 ; iy = class template
-; ix <- newly allocated class
-; hl <- newly allocated class end address
-; Modifies: bc, de, hl, ix
-Class_NewNoInit:
-	ld c,(iy - 2)
-	ld b,(iy - 1)
-	call Heap_Allocate
-	push de
-	pop ix
-	ret
-
-; iy = class template
 ; de = destination address
 ; ix <- new class
 ; de <- new class end address
