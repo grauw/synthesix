@@ -1,5 +1,6 @@
 ; iy = class template
 ; ix <- new allocated class
+; iy <- class template
 Class_New:
 	ld c,(iy - 2)
 	ld b,(iy - 1)
@@ -12,8 +13,20 @@ Class_New:
 	ret
 
 ; iy = class template
+; ix <- new allocated class
+; iy <- class template
+Class_NewNoInit:
+	ld c,(iy - 2)
+	ld b,(iy - 1)
+	call Heap_Allocate
+	push de
+	pop ix
+	ret
+
+; iy = class template
 ; de = destination address
 ; ix <- new allocated class
+; iy <- class template
 Class_Copy:
 	ld c,(iy - 2)
 	ld b,(iy - 1)
