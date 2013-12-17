@@ -17,6 +17,10 @@ Lfo, wave morphing, pwm, etc. Hardware (when available) and software ASDR.
 
 MIDI controller assign to each parameter and effect, through common mapping.
 
+Synthesix can be loaded on an MSX using a Konami Snatcher SCC+ cartridge,
+or compatible devices such as the MegaFlashROM SCC+ or the ESE Mega-SCC+
+(built into One Chip MSX).
+
 Development information
 -----------------------
 
