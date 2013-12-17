@@ -8,6 +8,7 @@
 ;
 	dw SCCVoicePool_size
 SCCVoicePool:
+SCCVoicePool_MAX_VOICES: equ 5
 SCCVoicePool_noteOn: equ $ - VoicePool
 	dw SCCVoicePool_NoteOn
 SCCVoicePool_noteOff: equ $ - VoicePool
@@ -18,6 +19,9 @@ SCCVoicePool_notes: equ $ - SCCVoicePool
 	db -1, -1, -1, -1, -1
 SCCVoicePool_voices: equ $ - SCCVoicePool
 	dw SCC_voice1, SCC_voice2, SCC_voice3, SCC_voice4, 0  ; max 5 voices / pool
+;	REPT SCCVoicePool_MAX_VOICES, ?voice
+;	dw 0
+;	ENDM
 SCCVoicePool_size: equ $ - SCCVoicePool
 
 ; ix <- new class
@@ -30,7 +34,7 @@ SCCVoicePool_New:
 ; a = note number (0-127)
 ; b = velocity (0-127)
 SCCVoicePool_NoteOn:
-	IRP ?voice, 0, 1, 2, 3, 4
+	REPT SCCVoicePool_MAX_VOICES, ?voice
 	PROC  ; make LOCAL work
 	LOCAL SCCVoicePool_NoteOn_next
 	bit 7,(ix + SCCVoicePool_notes + ?voice)
@@ -55,7 +59,7 @@ SCCVoicePool_NoteOn_break:
 ; a = note number (0-127)
 ; b = velocity (0-127)
 SCCVoicePool_NoteOff:
-	IRP ?voice, 0, 1, 2, 3, 4
+	REPT SCCVoicePool_MAX_VOICES, ?voice
 	PROC  ; make LOCAL work
 	LOCAL SCCVoicePool_NoteOff_next
 	cp (ix + SCCVoicePool_notes + ?voice)
