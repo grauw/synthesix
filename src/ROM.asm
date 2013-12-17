@@ -23,6 +23,10 @@
 	INCLUDE "SCCVoice.asm"
 	INCLUDE "RAM.asm"
 
+	IF $ >= 8000H
+		.ERROR 16K exceeded.
+	ENDIF
+
 	ds 0A000H - $  ; must be aligned to 2000H
 Math_multiply7x7Table:
 	INCLUDE "multtable.asm"
