@@ -15,7 +15,6 @@ Channel_size: equ $ - Channel
 Channel_New:
 	ld iy,Channel
 	call Class_New
-	ld (Channel_channel1),ix
 	push ix
 	call VoicePool_New
 	push ix

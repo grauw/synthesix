@@ -10,6 +10,7 @@ Synthesix_Main:
 	call PSG_Init
 	call SCC_Init
 	call Channel_New
+	ld (Synthesix_channel1),ix
 
 	call Math_UnitTest
 

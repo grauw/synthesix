@@ -61,7 +61,7 @@ Keys_ProcessRowPress_note:
 	push hl
 	push ix
 	ld bc,(Keys_velocity)
-	ld ix,(Channel_channel1)
+	ld ix,(Synthesix_channel1)
 	call Channel_NoteOn
 	pop ix
 	pop hl
@@ -76,7 +76,7 @@ Keys_ProcessRowRelease_note:
 	push hl
 	push ix
 	ld bc,4000H
-	ld ix,(Channel_channel1)
+	ld ix,(Synthesix_channel1)
 	call Channel_NoteOff
 	pop ix
 	pop hl
