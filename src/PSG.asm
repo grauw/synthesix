@@ -85,7 +85,6 @@ PSGVoice_NoteOff:
 ;
 ;
 
-PSG_voice1:
 PSGVoice:
 PSGVoice_frequencyLSB: equ $ - PSGVoice
 	db PSG_TONE_GENERATOR_CONTROL + 0
@@ -97,6 +96,8 @@ PSGVoice_mixerOrMask:equ $ - PSGVoice
 	db 00000001B
 PSGVoice_mixerAndMask:equ $ - PSGVoice
 	db 11111110B
+
+PSG_voice1: equ PSGVoice
 
 PSG_voice2:
 	db PSG_TONE_GENERATOR_CONTROL + 2

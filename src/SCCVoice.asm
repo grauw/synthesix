@@ -52,7 +52,6 @@ SCCVoice_LoadWave:
 ;
 ;
 
-SCC_voice1:
 SCCVoice:
 SCCVoice_wave: equ $ - SCCVoice
 	db SCC_WAVE_1
@@ -64,6 +63,8 @@ SCCVoice_mixerOrMask: equ $ - SCCVoice
 	db 00000001B
 SCCVoice_mixerAndMask: equ $ - SCCVoice
 	db 11111110B
+
+SCC_voice1: equ SCCVoice
 
 SCC_voice2:
 	db SCC_WAVE_2
