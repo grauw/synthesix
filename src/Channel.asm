@@ -16,7 +16,7 @@ Channel_New:
 	ld iy,Channel
 	call Class_New
 	push ix
-	call VoicePool_New
+	call SCCVoicePool_New
 	push ix
 	pop hl
 	pop ix

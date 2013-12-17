@@ -18,6 +18,7 @@
 	INCLUDE "Keys.asm"
 	INCLUDE "Channel.asm"
 	INCLUDE "VoicePool.asm"
+	INCLUDE "SCCVoicePool.asm"
 	INCLUDE "PSG.asm"
 	INCLUDE "SCC.asm"
 	INCLUDE "SCCVoice.asm"
