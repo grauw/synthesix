@@ -1,5 +1,7 @@
 ; Multiply two 7-bit numbers where one represents the range 0 .. 1.
-; a = factor 1, l = factor 2
+; a = factor 1
+; l = factor 2
+; a <- product
 Math_Multiply7x7:
 	bit 6,a
 	jr z,Math_Multiply7x7_noInverse
