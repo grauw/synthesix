@@ -75,8 +75,7 @@ Channel_AddVoicePool:
 	PROC
 	LOCAL Channel_AddVoicePool_next
 	ld a,(ix + Channel_voicePools + ?pool * 2 + 1)
-	inc a
-	dec a
+	and a
 	jr nz,Channel_AddVoicePool_next
 	ld (ix + Channel_voicePools + ?pool * 2),l
 	ld (ix + Channel_voicePools + ?pool * 2 + 1),h
