@@ -10,29 +10,46 @@ EXPTBL: equ 0FCC1H
 SLTTBL: equ 0FCC5H
 PPI_PORT_A: equ 0A8H
 
+; hl = string (0-terminated)
+; Modifies: none
 Utils_PrintLn:
+	push hl
 	call Utils_Print
 	ld hl,Utils_crlf
 	call Utils_Print
+	pop hl
 	ret
 
+; hl = string (0-terminated)
+; Modifies: none
 Utils_Print:
+	push af
+	push hl
+Utils_Print_Loop:
 	ld a,(hl)
 	and a
-	ret z
+	jp z,Utils_Print_Done
 	call CHPUT
 	inc hl
-	jp Utils_Print
-
-Utils_PrintHexHL:
-	push hl
-	ld a,h
-	call Utils_PrintHexA
+	jp Utils_Print_Loop
+Utils_Print_Done:
 	pop hl
-	ld a,l
-	call Utils_PrintHexA
+	pop af
 	ret
 
+; hl = value
+; Modifies: none
+Utils_PrintHexHL:
+	push af
+	ld a,h
+	call Utils_PrintHexA
+	ld a,l
+	call Utils_PrintHexA
+	pop af
+	ret
+
+; a = value
+; Modifies: none
 Utils_PrintHexA:
 	push af
 	and 0F0H
@@ -42,17 +59,27 @@ Utils_PrintHexA:
 	rrca
 	call Utils_PrintHex
 	pop af
+	push af
 	and 0FH
 	call Utils_PrintHex
+	pop af
 	ret
 
+; a = value (0 - 15)
+; Modifies: none
 Utils_PrintHex:
+	push af
+	push bc
+	push hl
 	ld hl,Utils_hexNumbers
 	ld b,0
 	ld c,a
 	add hl,bc
 	ld a,(hl)
 	call CHPUT
+	pop hl
+	pop bc
+	pop af
 	ret
 
 Utils_EnableROMInPage2:
