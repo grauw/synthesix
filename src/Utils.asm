@@ -62,12 +62,12 @@ Utils_EnableROMInPage2:
 	rrca
 	ld hl,EXPTBL + 1
 	or (hl)
-	jp p,SCC_Init_noSubslot
+	jp p,Utils_EnableROMInPage2_noSubslot
 	ld b,a
 	ld a,(SLTTBL + 1)
 	and 00001100B
 	or b
-SCC_Init_noSubslot:
+Utils_EnableROMInPage2_noSubslot:
 	ld h,80H
 	call ENASLT
 	ei
