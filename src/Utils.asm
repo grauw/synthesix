@@ -98,6 +98,9 @@ Utils_PrintExceptionMessage:
 	ld hl,Utils_exceptionMessage
 	call Utils_Print
 	pop hl
+	dec hl
+	dec hl
+	dec hl
 	call Utils_PrintHexHL
 	ld hl,Utils_crlf
 	call Utils_Print
