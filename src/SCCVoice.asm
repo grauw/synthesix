@@ -12,6 +12,8 @@ SCCVoice_mixerOrMask: equ $ - SCCVoice
 	db 00000001B
 SCCVoice_mixerAndMask: equ $ - SCCVoice
 	db 11111110B
+SCCVoice_free: equ $ - SCCVoice
+	db 0
 
 ; ix = this
 ; a = note number (0-127)
@@ -61,4 +63,14 @@ SCCVoice_LoadWave:
 	ld d,SCC_BASE_MSB
 	ld bc,32
 	ldir
+	ret
+
+; ix = this
+SCCVoice_Bind:
+	set 7,(ix + SCCVoice_free)
+	ret
+
+; ix = this
+SCCVoice_Free:
+	res 7,(ix + SCCVoice_free)
 	ret

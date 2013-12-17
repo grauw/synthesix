@@ -18,16 +18,28 @@ SCCVoicePool_mono: equ $ - SCCVoicePool
 SCCVoicePool_notes: equ $ - SCCVoicePool
 	db -1, -1, -1, -1, -1
 SCCVoicePool_voices: equ $ - SCCVoicePool
-	dw SCC_voice1, SCC_voice2, SCC_voice3, SCC_voice4, 0  ; max 5 voices / pool
-;	REPT SCCVoicePool_MAX_VOICES, ?voice
-;	dw 0
-;	ENDM
+	REPT SCCVoicePool_MAX_VOICES, ?voice
+	dw 0
+	ENDM
 SCCVoicePool_size: equ $ - SCCVoicePool
 
 ; ix <- new class
 SCCVoicePool_New:
 	ld iy,SCCVoicePool
 	call Class_New
+	ld b,4  ; all voices
+SCCVoicePool_New_Loop:
+	push bc
+	push ix
+	call SCC_GetFreeVoice
+	call SCCVoice_Bind
+	ld hl,SCC_sawWave
+	call SCCVoice_LoadWave
+	ex (sp),ix
+	pop hl
+	call SCCVoicePool_AddVoice
+	pop bc
+	djnz SCCVoicePool_New_Loop
 	ret
 
 ; ix = this
@@ -76,3 +88,20 @@ SCCVoicePool_NoteOff_next:
 	ENDM
 	; note not found
 	ret
+
+; ix = this
+; hl = voice
+SCCVoicePool_AddVoice:
+	REPT SCCVoicePool_MAX_VOICES, ?voice
+	PROC
+	LOCAL SCCVoicePool_AddVoice_next
+	ld a,(ix + SCCVoicePool_voices + ?voice * 2 + 1)
+	and a
+	jr nz,SCCVoicePool_AddVoice_next
+	ld (ix + SCCVoicePool_voices + ?voice * 2),l
+	ld (ix + SCCVoicePool_voices + ?voice * 2 + 1),h
+	ret
+SCCVoicePool_AddVoice_next:
+	ENDP
+	ENDM
+	call Utils_ThrowException

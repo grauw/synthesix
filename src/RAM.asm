@@ -45,6 +45,7 @@ SCC_voice1:
 	db SCC_LEVEL_1
 	db 00000001B
 	db 11111110B
+	db 0
 
 SCC_voice2:
 	db SCC_WAVE_2
@@ -52,6 +53,7 @@ SCC_voice2:
 	db SCC_LEVEL_2
 	db 00000010B
 	db 11111101B
+	db 0
 
 SCC_voice3:
 	db SCC_WAVE_3
@@ -59,6 +61,7 @@ SCC_voice3:
 	db SCC_LEVEL_3
 	db 00000100B
 	db 11111011B
+	db 0
 
 SCC_voice4:
 	db SCC_WAVE_4_5
@@ -66,6 +69,7 @@ SCC_voice4:
 	db SCC_LEVEL_4
 	db 00001000B
 	db 11110111B
+	db 0
 
 ;=================================================================
 ; HEAP MUST BE THE LAST THING DEFINED HERE

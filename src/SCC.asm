@@ -26,25 +26,19 @@ SCC_DEFORMATION: equ 0E0H
 SCC_Init:
 	ld a,3FH
 	ld (ROM_BANK_2_CHANGE),a
-
-	ld hl,SCC_sawWave
-	ld ix,SCC_voice1
-	call SCCVoice_LoadWave
-	ld hl,SCC_sawWave
-	ld ix,SCC_voice2
-	call SCCVoice_LoadWave
-	ld hl,SCC_sawWave
-	ld ix,SCC_voice3
-	call SCCVoice_LoadWave
-	ld hl,SCC_sawWave
-	ld ix,SCC_voice4
-	call SCCVoice_LoadWave
 	ret
 
-;
-;
-;
+SCC_GetFreeVoice:
+	IRP ?voice, SCC_voice1, SCC_voice2, SCC_voice3, SCC_voice4
+	ld ix,?voice
+	bit 7,(ix + SCCVoice_free)
+	ret z
+	ENDM
+	call Utils_ThrowException
 
+;
+;
+;
 SCC_squareWave:
 	db 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH
 	db 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H
