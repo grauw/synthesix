@@ -39,13 +39,14 @@ ROM_bank4:
 Synthesix_channel1:
 	dw 0
 
+;=================================================================
+; HEAP MUST BE THE LAST THING DEFINED HERE
 Heap_heapPosition:
 	dw Heap_start
 Heap_heapCapacity:
 	dw 1000H
 Heap_start:
-	; MUST BE THE LAST THING DEFINED HERE
-
+;
 ;=================================================================
 RAM_dataSize: equ $ - RAM_dataStartAddress
 	org RAM_dataStart + RAM_dataSize
