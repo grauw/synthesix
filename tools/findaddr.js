@@ -24,7 +24,7 @@ fs.readFile(filename, "ascii", function(err, data) {
 		var labelDistance = Infinity;
 		for (var j = 0; j < lines.length; j++) {
 			var labelAndAddress = lines[j].split(" EQU ");
-			if (labelAndAddress.length < 2)
+			if (labelAndAddress.length < 2 || labelAndAddress[0][0] == "0")
 				continue;
 			var distance = address - parseInt(labelAndAddress[1].substr(0, 5), 16);
 			if (distance >= 0 && distance < labelDistance) {
