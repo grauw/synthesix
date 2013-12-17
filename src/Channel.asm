@@ -21,8 +21,7 @@ Channel_New:
 	push ix
 	pop hl
 	pop ix
-	ld (ix + Channel_voicePools + 0),l
-	ld (ix + Channel_voicePools + 1),h
+	call Channel_AddVoicePool
 	ret
 
 ; ix = this
@@ -66,3 +65,21 @@ Channel_NoteOff:
 	pop ix
 	ENDM
 	ret
+
+; ix = this
+; hl = voice pool
+Channel_AddVoicePool:
+	IRP ?pool, 0, 1
+	PROC
+	LOCAL Channel_AddVoicePool_next
+	ld a,(ix + Channel_voicePools + ?pool * 2 + 1)
+	inc a
+	dec a
+	jr nz,Channel_AddVoicePool_next
+	ld (ix + Channel_voicePools + ?pool * 2),l
+	ld (ix + Channel_voicePools + ?pool * 2 + 1),h
+	ret
+Channel_AddVoicePool_next:
+	ENDP
+	ENDM
+	call Utils_ThrowException
