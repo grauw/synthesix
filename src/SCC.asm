@@ -24,21 +24,6 @@ SCC_MIXER: equ 8FH
 SCC_DEFORMATION: equ 0E0H
 
 SCC_Init:
-	in a,(PPI_PORT_A)
-	and 00001100B
-	rrca
-	rrca
-	ld hl,EXPTBL + 1
-	or (hl)
-	jp p,SCC_Init_noSubslot
-	ld b,a
-	ld a,(SLTTBL + 1)
-	and 00001100B
-	or b
-SCC_Init_noSubslot:
-	ld h,80H
-	call ENASLT
-	ei
 	ld a,3FH
 	ld (ROM_BANK_2_CHANGE),a
 

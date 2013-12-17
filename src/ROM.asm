@@ -21,10 +21,15 @@
 	INCLUDE "PSG.asm"
 	INCLUDE "SCC.asm"
 	INCLUDE "SCCVoice.asm"
+
+	IF $ > 8000H
+		.ERROR Code exceeds 8000H.
+	ENDIF
+
 	INCLUDE "RAM.asm"
 
-	IF $ >= 8000H
-		.ERROR 16K exceeded.
+	IF $ > 0A000H
+		.ERROR Data exceeds A000H.
 	ENDIF
 
 	ds 0A000H - $  ; must be aligned to 2000H
