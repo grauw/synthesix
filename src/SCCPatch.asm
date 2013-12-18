@@ -70,17 +70,17 @@ SCCPatch_NoteOn:
 	ld h,(ix + SCCPatch_voices + ?voice * 2 + 1)
 	inc h
 	dec h
-	jr z,SCCPatch_NoteOn_Break
+	jp z,SCCPatch_NoteOn_Break
 	ld (ix + SCCPatch_notes + ?voice),a
 
 	add a,(ix + SCCPatch_pitch)
+	push hl
 	ex af,af'
 	ld a,b
 	ld l,(ix + SCCPatch_level)
 	call Math_Multiply127x127
 	ld b,a
 	ex af,af'
-	push hl
 	pop ix
 	jp SCCVoice_NoteOn
 SCCPatch_NoteOn_Next:
