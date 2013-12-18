@@ -15,8 +15,6 @@ SCCPatch_noteOff: equ $ - SCCPatch
 	dw SCCPatch_NoteOff
 SCCPatch_polyphony: equ $ - SCCPatch
 	db 4
-SCCPatch_mono: equ $ - SCCPatch
-	db -1;
 SCCPatch_notes: equ $ - SCCPatch
 	db -1, -1, -1, -1, -1
 SCCPatch_voices: equ $ - SCCPatch
