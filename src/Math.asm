@@ -30,6 +30,9 @@ Math_Multiply127x127_NoInverse:
 
 ; Multiply a 7-bit integer with a 7-bit number which represents the range 0..1.
 ; Implementation without lookup table. Has a miniscule rounding deviation.
+; Note: Value range is suitable for use of David Heremans’ multiplication code.
+;       http://www.mccw.hetlab.tk/92/Multiplication/en.html (has 512 byte table)
+;       Clock ticks go down to 155 / 165, and factor 2 can passed in b/c/d/e.
 ; a = factor 1
 ; c = factor 2
 ; h <- product
