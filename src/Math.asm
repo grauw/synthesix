@@ -2,6 +2,7 @@
 ; a = factor 1
 ; l = factor 2
 ; a <- product
+; Modifies: hl
 ; Clock ticks: 77 / 98
 Math_Multiply7x7:
 	bit 6,a
