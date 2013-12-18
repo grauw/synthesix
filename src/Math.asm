@@ -28,6 +28,25 @@ Math_Multiply127x127_NoInverse:
 	ld a,(hl)
 	ret
 
+; Multiply a 7-bit integer with a 7-bit number which represents the range 0..1.
+; Implementation without lookup table. Has a miniscule rounding deviation.
+; a = factor 1
+; c = factor 2
+; h <- product
+; Clock ticks: 270 - 355
+; Modifies: af, b, l
+Math_Multiply127x127Alt:
+	bit 6,c
+	jr z,Math_Multiply127x127Alt_Cont
+	inc c
+Math_Multiply127x127Alt_Cont:
+	add a,a
+	call Math_Multiply8x8
+	bit 7,l
+	ret z
+	inc h
+	ret
+
 ; Multiply two 8-bit values
 ; a = factor 1
 ; c = factor 2
