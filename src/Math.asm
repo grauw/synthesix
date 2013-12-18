@@ -5,8 +5,8 @@
 ; Clock ticks: 77 / 98
 Math_Multiply7x7:
 	bit 6,a
-	jr z,Math_Multiply7x7_noInverse
-Math_Multiply7x7_inverse:
+	jr z,Math_Multiply7x7_NoInverse
+Math_Multiply7x7_Inverse:
 	cpl
 	rl l
 	rra
@@ -18,7 +18,7 @@ Math_Multiply7x7_inverse:
 	and 7FH
 	sub (hl)
 	ret
-Math_Multiply7x7_noInverse:
+Math_Multiply7x7_NoInverse:
 	rl l
 	rra
 	rr l

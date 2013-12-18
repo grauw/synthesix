@@ -1,7 +1,7 @@
 Keys_Init:
 	ld a,0
 	ld (CLIKSW),a  ; disable key click
-	call Keys_Scan_updateLast
+	call Keys_Scan_UpdateLast
 	ret
 
 Keys_Scan:
@@ -11,7 +11,7 @@ Keys_Scan:
 	REPT 11  ; just the first 6 rows...
 	call Keys_ProcessRow
 	ENDM
-Keys_Scan_updateLast:
+Keys_Scan_UpdateLast:
 	ld hl,NEWKEY
 	ld de,Keys_lastScan
 	REPT 11
@@ -24,12 +24,12 @@ Keys_ProcessRow:
 	ld a,(de)
 	ld c,(hl)
 	xor c
-Keys_ProcessRow_loop:
+Keys_ProcessRow_Loop:
 	rrc c
 	rrca       ; preserves sign flag
 	call c,Keys_ProcessRowPress
 	inc ix
-	djnz Keys_ProcessRow_loop
+	djnz Keys_ProcessRow_Loop
 	inc de
 	inc hl
 	ret
@@ -39,11 +39,11 @@ Keys_ProcessRowPress:
 	push af
 	ld a,(ix)
 	and a
-	jp p,Keys_ProcessRowPress_note
+	jp p,Keys_ProcessRowPress_Note
 	cp -2
-	jp z,Keys_ProcessRowPress_increaseVelocity
+	jp z,Keys_ProcessRowPress_IncreaseVelocity
 	cp -3
-	jp z,Keys_ProcessRowPress_decreaseVelocity
+	jp z,Keys_ProcessRowPress_DecreaseVelocity
 	pop af
 	ret
 
@@ -51,11 +51,11 @@ Keys_ProcessRowRelease:
 	push af
 	ld a,(ix)
 	and a
-	jp p,Keys_ProcessRowRelease_note
+	jp p,Keys_ProcessRowRelease_Note
 	pop af
 	ret
 
-Keys_ProcessRowPress_note:
+Keys_ProcessRowPress_Note:
 	push bc
 	push de
 	push hl
@@ -70,7 +70,7 @@ Keys_ProcessRowPress_note:
 	pop af
 	ret
 
-Keys_ProcessRowRelease_note:
+Keys_ProcessRowRelease_Note:
 	push bc
 	push de
 	push hl
@@ -85,7 +85,7 @@ Keys_ProcessRowRelease_note:
 	pop af
 	ret
 
-Keys_ProcessRowPress_increaseVelocity:
+Keys_ProcessRowPress_IncreaseVelocity:
 	ld a,(Keys_velocity + 1)
 	add a,8
 	and 7FH
@@ -93,7 +93,7 @@ Keys_ProcessRowPress_increaseVelocity:
 	pop af
 	ret
 
-Keys_ProcessRowPress_decreaseVelocity:
+Keys_ProcessRowPress_DecreaseVelocity:
 	ld a,(Keys_velocity + 1)
 	sub 8
 	and 7FH

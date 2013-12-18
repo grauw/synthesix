@@ -13,19 +13,19 @@ PSG_ENVELOPE_SHAPE_CONTROL: equ 13
 PSG_Init:
 	ld b,14
 	ld hl,PSG_initValues
-PSG_Init_loop:
+PSG_Init_Loop:
 	ld a,14
 	sub b
 	out (PSG_REGISTER_SELECT),a
 	ld a,(hl)
 	out (PSG_WRITE),a
 	inc hl
-	djnz PSG_Init_loop
+	djnz PSG_Init_Loop
 	ret
 
 PSG_Dump:
 	ld b,14
-PSG_Dump_loop:
+PSG_Dump_Loop:
 	ld a,14
 	sub b
 	out (PSG_REGISTER_SELECT),a
@@ -33,7 +33,7 @@ PSG_Dump_loop:
 	call System_PrintHexA
 	ld a," "
 	call System_PrintChar
-	djnz PSG_Dump_loop
+	djnz PSG_Dump_Loop
 	ret
 
 ; ix = this

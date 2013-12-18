@@ -55,22 +55,22 @@ SCCVoicePool_New_Loop:
 SCCVoicePool_NoteOn:
 	REPT SCCVoicePool_MAX_VOICES, ?voice
 	PROC  ; make LOCAL work
-	LOCAL SCCVoicePool_NoteOn_next
+	LOCAL SCCVoicePool_NoteOn_Next
 	bit 7,(ix + SCCVoicePool_notes + ?voice)
-	jr z,SCCVoicePool_NoteOn_next
+	jr z,SCCVoicePool_NoteOn_Next
 	ld l,(ix + SCCVoicePool_voices + ?voice * 2)
 	ld h,(ix + SCCVoicePool_voices + ?voice * 2 + 1)
 	inc h
 	dec h
-	jr z,SCCVoicePool_NoteOn_break
+	jr z,SCCVoicePool_NoteOn_Break
 	ld (ix + SCCVoicePool_notes + ?voice),a
 	push hl
 	pop ix
 	jp SCCVoice_NoteOn
-SCCVoicePool_NoteOn_next:
+SCCVoicePool_NoteOn_Next:
 	ENDP
 	ENDM
-SCCVoicePool_NoteOn_break:
+SCCVoicePool_NoteOn_Break:
 	; no free note found
 	ret
 
@@ -80,9 +80,9 @@ SCCVoicePool_NoteOn_break:
 SCCVoicePool_NoteOff:
 	REPT SCCVoicePool_MAX_VOICES, ?voice
 	PROC  ; make LOCAL work
-	LOCAL SCCVoicePool_NoteOff_next
+	LOCAL SCCVoicePool_NoteOff_Next
 	cp (ix + SCCVoicePool_notes + ?voice)
-	jr nz,SCCVoicePool_NoteOff_next
+	jr nz,SCCVoicePool_NoteOff_Next
 	ld l,(ix + SCCVoicePool_voices + ?voice * 2)
 	ld h,(ix + SCCVoicePool_voices + ?voice * 2 + 1)
 	ld a,-1
@@ -90,7 +90,7 @@ SCCVoicePool_NoteOff:
 	push hl
 	pop ix
 	jp SCCVoice_NoteOff
-SCCVoicePool_NoteOff_next:
+SCCVoicePool_NoteOff_Next:
 	ENDP
 	ENDM
 	; note not found
@@ -101,14 +101,14 @@ SCCVoicePool_NoteOff_next:
 SCCVoicePool_AddVoice:
 	REPT SCCVoicePool_MAX_VOICES, ?voice
 	PROC
-	LOCAL SCCVoicePool_AddVoice_next
+	LOCAL SCCVoicePool_AddVoice_Next
 	ld a,(ix + SCCVoicePool_voices + ?voice * 2 + 1)
 	and a
-	jr nz,SCCVoicePool_AddVoice_next
+	jr nz,SCCVoicePool_AddVoice_Next
 	ld (ix + SCCVoicePool_voices + ?voice * 2),l
 	ld (ix + SCCVoicePool_voices + ?voice * 2 + 1),h
 	ret
-SCCVoicePool_AddVoice_next:
+SCCVoicePool_AddVoice_Next:
 	ENDP
 	ENDM
 	call System_ThrowException

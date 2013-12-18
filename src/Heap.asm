@@ -8,7 +8,7 @@ Heap_Allocate:
 	ld hl,(Heap_heapCapacity)
 	and a
 	sbc hl,bc
-	jr c,Heap_Allocate_throw
+	jr c,Heap_Allocate_Throw
 	ld hl,(Heap_heapCapacity)
 	ld de,(Heap_heapPosition)
 	ld h,d
@@ -16,7 +16,7 @@ Heap_Allocate:
 	add hl,bc
 	ld (Heap_heapPosition),hl
 	ret
-Heap_Allocate_throw:
+Heap_Allocate_Throw:
 	ld hl,Heap_outOfHeapException
 	jp System_ThrowExceptionWithMessage
 
