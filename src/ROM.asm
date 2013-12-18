@@ -34,7 +34,7 @@
 	ENDIF
 
 	ds 0A000H - $  ; must be aligned to 2000H
-Math_multiply7x7Table:
+Math_multiply127x127Table:
 	INCLUDE "multtable.asm"
 
 	ds 0C000H - $

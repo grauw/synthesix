@@ -77,7 +77,7 @@ SCCPatch_NoteOn:
 	ex af,af'
 	ld a,b
 	ld l,(ix + SCCPatch_level)
-	call Math_Multiply7x7
+	call Math_Multiply127x127
 	ld b,a
 	ex af,af'
 	push hl

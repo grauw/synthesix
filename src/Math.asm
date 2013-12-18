@@ -1,29 +1,29 @@
-; Multiply two 7-bit numbers where one represents the range 0 .. 1.
+; Multiply a 7-bit integer with a 7-bit number which represents the range 0..1.
 ; a = factor 1
 ; l = factor 2
 ; a <- product
 ; Modifies: hl
 ; Clock ticks: 77 / 98
-Math_Multiply7x7:
+Math_Multiply127x127:
 	bit 6,a
-	jr z,Math_Multiply7x7_NoInverse
-Math_Multiply7x7_Inverse:
+	jr z,Math_Multiply127x127_NoInverse
+Math_Multiply127x127_Inverse:
 	cpl
 	rl l
 	rra
 	rr l
 	and 00011111B
-	add a,Math_multiply7x7Table / 100H
+	add a,Math_multiply127x127Table / 100H
 	ld h,a
 	ld a,l
 	and 7FH
 	sub (hl)
 	ret
-Math_Multiply7x7_NoInverse:
+Math_Multiply127x127_NoInverse:
 	rl l
 	rra
 	rr l
-	add a,Math_multiply7x7Table / 100H
+	add a,Math_multiply127x127Table / 100H
 	ld h,a
 	ld a,(hl)
 	ret
@@ -80,25 +80,25 @@ Math_Multiply8x16:
 Math_UnitTest:
 	ld a,0
 	ld l,127
-	call Math_Multiply7x7
+	call Math_Multiply127x127
 	cp 0
 	call nz,System_ThrowException
 
 	ld a,127
 	ld l,127
-	call Math_Multiply7x7
+	call Math_Multiply127x127
 	cp 127
 	call nz,System_ThrowException
 
 	ld a,47
 	ld l,101
-	call Math_Multiply7x7
+	call Math_Multiply127x127
 	cp 37
 	call nz,System_ThrowException
 
 	ld a,101
 	ld l,47
-	call Math_Multiply7x7
+	call Math_Multiply127x127
 	cp 37
 	call nz,System_ThrowException
 
