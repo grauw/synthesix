@@ -33,7 +33,7 @@ PSG_Dump_loop:
 	in a,(PSG_READ)
 	call Utils_PrintHexA
 	ld a," "
-	call CHPUT
+	call Utils_Print
 	pop bc
 	djnz PSG_Dump_loop
 	ret

@@ -10,6 +10,10 @@ EXPTBL: equ 0FCC1H
 SLTTBL: equ 0FCC5H
 PPI_PORT_A: equ 0A8H
 
+; a = character
+; Modifies: none
+Utils_Print: equ CHPUT
+
 ; hl = string (0-terminated)
 ; Modifies: none
 Utils_Print:
@@ -19,7 +23,7 @@ Utils_Print_Loop:
 	ld a,(hl)
 	and a
 	jp z,Utils_Print_Done
-	call CHPUT
+	call Utils_Print
 	inc hl
 	jp Utils_Print_Loop
 Utils_Print_Done:
@@ -72,7 +76,7 @@ Utils_PrintHex:
 	jr c,Utils_PrintHex_Done
 	add a,"A" - ":"
 Utils_PrintHex_Done:
-	call CHPUT
+	call Utils_Print
 	pop af
 	ret
 
