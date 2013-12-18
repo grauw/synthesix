@@ -32,7 +32,7 @@ PSG_Dump_loop:
 	in a,(PSG_READ)
 	call Utils_PrintHexA
 	ld a," "
-	call Utils_Print
+	call Utils_PrintChar
 	djnz PSG_Dump_loop
 	ret
 
