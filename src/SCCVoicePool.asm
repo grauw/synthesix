@@ -9,9 +9,9 @@
 	dw SCCVoicePool_size
 SCCVoicePool:
 SCCVoicePool_MAX_VOICES: equ 5
-SCCVoicePool_noteOn: equ $ - VoicePool
+SCCVoicePool_noteOn: equ $ - SCCVoicePool
 	dw SCCVoicePool_NoteOn
-SCCVoicePool_noteOff: equ $ - VoicePool
+SCCVoicePool_noteOff: equ $ - SCCVoicePool
 	dw SCCVoicePool_NoteOff
 SCCVoicePool_mono: equ $ - SCCVoicePool
 	db -1;
