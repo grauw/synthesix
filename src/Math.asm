@@ -33,7 +33,7 @@ Math_Multiply127x127_NoInverse:
 ; a = factor 1
 ; c = factor 2
 ; h <- product
-; Clock ticks: 270 - 355
+; Clock ticks: 270 - 348
 ; Modifies: af, b, l
 Math_Multiply127x127Alt:
 	bit 6,c
@@ -52,14 +52,14 @@ Math_Multiply127x127Alt_Cont:
 ; c = factor 2
 ; hl <- product
 ; Modifies: af, b
-; Clock ticks: 204 - 270
+; Clock ticks: 204 - 263
 Math_Multiply8x8:
 	ld b,0
 	ld l,b
 	add a,a
 	ld h,a
 	jr nc,$ + 3
-	add hl,bc
+	ld l,c
 	REPT 6
 	add hl,hl
 	jr nc,$ + 3
