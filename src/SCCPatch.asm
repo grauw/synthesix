@@ -15,6 +15,8 @@ SCCPatch_noteOff: equ $ - SCCPatch
 	dw SCCPatch_NoteOff
 SCCPatch_polyphony: equ $ - SCCPatch
 	db 4
+SCCPatch_pitch: equ $ - SCCPatch
+	db 0
 SCCPatch_wave: equ $ - SCCPatch
 	db 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH
 	db 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H
@@ -68,6 +70,7 @@ SCCPatch_NoteOn:
 	dec h
 	jr z,SCCPatch_NoteOn_Break
 	ld (ix + SCCPatch_notes + ?voice),a
+	add a,(ix + SCCPatch_pitch)
 	push hl
 	pop ix
 	jp SCCVoice_NoteOn
