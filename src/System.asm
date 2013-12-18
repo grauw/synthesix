@@ -12,130 +12,130 @@ PPI_PORT_A: equ 0A8H
 
 ; a = character
 ; Modifies: none
-Utils_PrintChar: equ CHPUT
+System_PrintChar: equ CHPUT
 
 ; hl = string (0-terminated)
 ; Modifies: none
-Utils_Print:
+System_Print:
 	push af
 	push hl
-Utils_Print_Loop:
+System_Print_Loop:
 	ld a,(hl)
 	and a
-	jp z,Utils_Print_Done
-	call Utils_PrintChar
+	jp z,System_Print_Done
+	call System_PrintChar
 	inc hl
-	jp Utils_Print_Loop
-Utils_Print_Done:
+	jp System_Print_Loop
+System_Print_Done:
 	pop hl
 	pop af
 	ret
 
 ; hl = string (0-terminated)
 ; Modifies: none
-Utils_PrintLn:
+System_PrintLn:
 	push hl
-	call Utils_Print
-	ld hl,Utils_crlf
-	call Utils_Print
+	call System_Print
+	ld hl,System_crlf
+	call System_Print
 	pop hl
 	ret
 
 ; hl = value
 ; Modifies: none
-Utils_PrintHexHL:
+System_PrintHexHL:
 	push af
 	ld a,h
-	call Utils_PrintHexA
+	call System_PrintHexA
 	ld a,l
-	call Utils_PrintHexA
+	call System_PrintHexA
 	pop af
 	ret
 
 ; a = value
 ; Modifies: none
-Utils_PrintHexA:
+System_PrintHexA:
 	push af
 	and 0F0H
 	rrca
 	rrca
 	rrca
 	rrca
-	call Utils_PrintHex
+	call System_PrintHex
 	pop af
-	call Utils_PrintHex
+	call System_PrintHex
 	ret
 
 ; a = value (0 - 15)
 ; Modifies: none
-Utils_PrintHex:
+System_PrintHex:
 	push af
 	and 0FH
 	add a,"0"
 	cp ":"
-	jr c,Utils_PrintHex_Done
+	jr c,System_PrintHex_Done
 	add a,"A" - ":"
-Utils_PrintHex_Done:
-	call Utils_PrintChar
+System_PrintHex_Done:
+	call System_PrintChar
 	pop af
 	ret
 
-Utils_EnableROMInPage2:
+System_EnableROMInPage2:
 	in a,(PPI_PORT_A)
 	and 00001100B
 	rrca
 	rrca
 	ld hl,EXPTBL + 1
 	or (hl)
-	jp p,Utils_EnableROMInPage2_noSubslot
+	jp p,System_EnableROMInPage2_noSubslot
 	ld b,a
 	ld a,(SLTTBL + 1)
 	and 00001100B
 	or b
-Utils_EnableROMInPage2_noSubslot:
+System_EnableROMInPage2_noSubslot:
 	ld h,80H
 	call ENASLT
 	ei
 	ret
 
-Utils_Stop:
+System_Stop:
 	di
 	halt
-	jp Utils_Stop
+	jp System_Stop
 
-Utils_ThrowException:
+System_ThrowException:
 	pop de
-	call Utils_PrintExceptionMessage
-	jp Utils_Stop
+	call System_PrintExceptionMessage
+	jp System_Stop
 
 ; hl = message
-Utils_ThrowExceptionWithMessage:
+System_ThrowExceptionWithMessage:
 	pop de
 	push hl
-	call Utils_PrintExceptionMessage
+	call System_PrintExceptionMessage
 	pop hl
-	call Utils_PrintLn
-	jp Utils_Stop
+	call System_PrintLn
+	jp System_Stop
 
 ; de = address
-Utils_PrintExceptionMessage:
+System_PrintExceptionMessage:
 	push de
-	ld hl,Utils_exceptionMessage
-	call Utils_Print
+	ld hl,System_exceptionMessage
+	call System_Print
 	pop hl
 	dec hl
 	dec hl
 	dec hl
-	call Utils_PrintHexHL
-	ld hl,Utils_crlf
-	call Utils_Print
+	call System_PrintHexHL
+	ld hl,System_crlf
+	call System_Print
 	ret
 
 
 
-Utils_exceptionMessage:
+System_exceptionMessage:
 	db "An exception occurred on address: ", 0
 
-Utils_crlf:
+System_crlf:
 	db "\r\n", 0
 

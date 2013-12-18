@@ -83,4 +83,4 @@ Channel_AddVoicePool:
 Channel_AddVoicePool_next:
 	ENDP
 	ENDM
-	call Utils_ThrowException
+	call System_ThrowException

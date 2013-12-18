@@ -81,25 +81,25 @@ Math_UnitTest:
 	ld l,127
 	call Math_Multiply7x7
 	cp 0
-	call nz,Utils_ThrowException
+	call nz,System_ThrowException
 
 	ld a,127
 	ld l,127
 	call Math_Multiply7x7
 	cp 127
-	call nz,Utils_ThrowException
+	call nz,System_ThrowException
 
 	ld a,47
 	ld l,101
 	call Math_Multiply7x7
 	cp 37
-	call nz,Utils_ThrowException
+	call nz,System_ThrowException
 
 	ld a,101
 	ld l,47
 	call Math_Multiply7x7
 	cp 37
-	call nz,Utils_ThrowException
+	call nz,System_ThrowException
 
 	ld a,101
 	ld c,150
@@ -107,7 +107,7 @@ Math_UnitTest:
 	and a
 	ld bc,15150
 	sbc hl,bc
-	call nz,Utils_ThrowException
+	call nz,System_ThrowException
 
 	ld a,10
 	ld bc,5555
@@ -115,5 +115,5 @@ Math_UnitTest:
 	and a
 	ld bc,55550
 	sbc hl,bc
-	call nz,Utils_ThrowException
+	call nz,System_ThrowException
 	ret

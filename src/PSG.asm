@@ -30,9 +30,9 @@ PSG_Dump_loop:
 	sub b
 	out (PSG_REGISTER_SELECT),a
 	in a,(PSG_READ)
-	call Utils_PrintHexA
+	call System_PrintHexA
 	ld a," "
-	call Utils_PrintChar
+	call System_PrintChar
 	djnz PSG_Dump_loop
 	ret
 

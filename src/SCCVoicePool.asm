@@ -111,4 +111,4 @@ SCCVoicePool_AddVoice:
 SCCVoicePool_AddVoice_next:
 	ENDP
 	ENDM
-	call Utils_ThrowException
+	call System_ThrowException

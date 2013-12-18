@@ -34,7 +34,7 @@ SCC_GetFreeVoice:
 	bit 7,(ix + SCCVoice_free)
 	ret z
 	ENDM
-	call Utils_ThrowException
+	call System_ThrowException
 
 ;
 ;

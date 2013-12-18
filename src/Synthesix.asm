@@ -1,9 +1,9 @@
 Synthesix_Main:
 	call INITXT
 	ld hl,Synthesix_helloMessage
-	call Utils_Print
+	call System_Print
 
-	call Utils_EnableROMInPage2
+	call System_EnableROMInPage2
 	call RAM_Init
 
 	call Keys_Init
@@ -27,9 +27,9 @@ Synthesix_UpdateLiveIndicator:
 	ld hl,Synthesix_liveIndicator1
 	ld a,(JIFFY)
 	bit 5,a
-	jp z,Utils_Print
+	jp z,System_Print
 	ld hl,Synthesix_liveIndicator2
-	jp Utils_Print
+	jp System_Print
 
 Synthesix_helloMessage:
 	db "Synthesix\r\n\nMIDI synthesizer for MSX\r\n", 0

@@ -11,7 +11,7 @@
 	dw 0, 0, 0, 0, 0, 0
 
 	INCLUDE "Synthesix.asm"
-	INCLUDE "Utils.asm"
+	INCLUDE "System.asm"
 	INCLUDE "Math.asm"
 	INCLUDE "Heap.asm"
 	INCLUDE "Class.asm"

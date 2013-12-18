@@ -18,7 +18,7 @@ Heap_Allocate:
 	ret
 Heap_Allocate_throw:
 	ld hl,Heap_outOfHeapException
-	jp Utils_ThrowExceptionWithMessage
+	jp System_ThrowExceptionWithMessage
 
 Heap_outOfHeapException:
 	db "Out of heap space.",0
