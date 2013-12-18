@@ -12,16 +12,6 @@ PPI_PORT_A: equ 0A8H
 
 ; hl = string (0-terminated)
 ; Modifies: none
-Utils_PrintLn:
-	push hl
-	call Utils_Print
-	ld hl,Utils_crlf
-	call Utils_Print
-	pop hl
-	ret
-
-; hl = string (0-terminated)
-; Modifies: none
 Utils_Print:
 	push af
 	push hl
@@ -35,6 +25,16 @@ Utils_Print_Loop:
 Utils_Print_Done:
 	pop hl
 	pop af
+	ret
+
+; hl = string (0-terminated)
+; Modifies: none
+Utils_PrintLn:
+	push hl
+	call Utils_Print
+	ld hl,Utils_crlf
+	call Utils_Print
+	pop hl
 	ret
 
 ; hl = value
