@@ -26,7 +26,6 @@ PSG_Init_loop:
 PSG_Dump:
 	ld b,14
 PSG_Dump_loop:
-	push bc
 	ld a,14
 	sub b
 	out (PSG_REGISTER_SELECT),a
@@ -34,7 +33,6 @@ PSG_Dump_loop:
 	call Utils_PrintHexA
 	ld a," "
 	call Utils_Print
-	pop bc
 	djnz PSG_Dump_loop
 	ret
 
