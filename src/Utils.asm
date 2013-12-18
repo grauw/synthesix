@@ -59,26 +59,20 @@ Utils_PrintHexA:
 	rrca
 	call Utils_PrintHex
 	pop af
-	push af
-	and 0FH
 	call Utils_PrintHex
-	pop af
 	ret
 
 ; a = value (0 - 15)
 ; Modifies: none
 Utils_PrintHex:
 	push af
-	push bc
-	push hl
-	ld hl,Utils_hexNumbers
-	ld b,0
-	ld c,a
-	add hl,bc
-	ld a,(hl)
+	and 0FH
+	add a,"0"
+	cp ":"
+	jr c,Utils_PrintHex_Done
+	add a,"A" - ":"
+Utils_PrintHex_Done:
 	call CHPUT
-	pop hl
-	pop bc
 	pop af
 	ret
 
@@ -137,9 +131,6 @@ Utils_PrintExceptionMessage:
 
 Utils_exceptionMessage:
 	db "An exception occurred on address: ", 0
-
-Utils_hexNumbers:
-	db "0123456789ABCDEF"
 
 Utils_crlf:
 	db "\r\n", 0
