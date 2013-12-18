@@ -13,6 +13,8 @@ SCCVoicePool_noteOn: equ $ - SCCVoicePool
 	dw SCCVoicePool_NoteOn
 SCCVoicePool_noteOff: equ $ - SCCVoicePool
 	dw SCCVoicePool_NoteOff
+SCCVoicePool_polyphony: equ $ - SCCVoicePool
+	db 4
 SCCVoicePool_mono: equ $ - SCCVoicePool
 	db -1;
 SCCVoicePool_notes: equ $ - SCCVoicePool
@@ -27,7 +29,12 @@ SCCVoicePool_size: equ $ - SCCVoicePool
 SCCVoicePool_New:
 	ld iy,SCCVoicePool
 	call Class_New
-	ld b,4  ; all voices
+	jp SCCVoicePool_Constructor
+
+; ix = this
+; ix <- this
+SCCVoicePool_Constructor:
+	ld b,(ix + SCCVoicePool_polyphony)
 SCCVoicePool_New_Loop:
 	push bc
 	push ix
