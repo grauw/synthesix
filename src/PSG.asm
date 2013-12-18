@@ -47,7 +47,7 @@ PSGVoice_NoteOn:
 	ld a,(ix + PSGVoice_frequencyLSB)
 	out (PSG_REGISTER_SELECT),a
 	ld a,(hl)
-	inc hl
+	inc l
 	out (PSG_WRITE),a
 	ld a,(ix + PSGVoice_frequencyMSB)
 	out (PSG_REGISTER_SELECT),a

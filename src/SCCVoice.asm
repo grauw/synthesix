@@ -24,7 +24,7 @@ SCCVoice_NoteOn:
 	ld l,a
 	sla l
 	ld e,(hl)
-	inc hl
+	inc l
 	ld d,(hl)
 
 	; a = volume
@@ -36,7 +36,7 @@ SCCVoice_NoteOn:
 	ld h,SCC_BASE_MSB
 	ld l,(ix + SCCVoice_frequency)
 	ld (hl),e
-	inc hl
+	inc l
 	ld (hl),d
 
 	ld l,(ix + SCCVoice_level)
