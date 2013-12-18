@@ -8,7 +8,7 @@
 	dw Channel_size
 Channel:
 Channel_MAX_VOICE_POOLS: equ 2
-Channel_voicePools: equ $ - Channel
+Channel_patches: equ $ - Channel
 	REPT Channel_MAX_VOICE_POOLS
 	dw 0
 	ENDM
@@ -19,11 +19,11 @@ Channel_New:
 	ld iy,Channel
 	call Class_New
 	push ix
-	call SCCVoicePool_New
+	call SCCPatch_New
 	push ix
 	pop hl
 	pop ix
-	call Channel_AddVoicePool
+	call Channel_AddPatch
 	ret
 
 ; ix = this
@@ -31,8 +31,8 @@ Channel_New:
 ; b = velocity (0-127)
 Channel_NoteOn:
 	REPT Channel_MAX_VOICE_POOLS, ?pool
-	ld l,(ix + Channel_voicePools + ?pool * 2)
-	ld h,(ix + Channel_voicePools + ?pool * 2 + 1)
+	ld l,(ix + Channel_patches + ?pool * 2)
+	ld h,(ix + Channel_patches + ?pool * 2 + 1)
 	inc h
 	dec h
 	ret z
@@ -40,7 +40,7 @@ Channel_NoteOn:
 	ex (sp),ix
 	push af
 	push bc
-	call VoicePool_NoteOn
+	call Patch_NoteOn
 	pop bc
 	pop af
 	pop ix
@@ -52,8 +52,8 @@ Channel_NoteOn:
 ; b = velocity (0-127)
 Channel_NoteOff:
 	REPT Channel_MAX_VOICE_POOLS, ?pool
-	ld l,(ix + Channel_voicePools + ?pool * 2)
-	ld h,(ix + Channel_voicePools + ?pool * 2 + 1)
+	ld l,(ix + Channel_patches + ?pool * 2)
+	ld h,(ix + Channel_patches + ?pool * 2 + 1)
 	inc h
 	dec h
 	ret z
@@ -61,7 +61,7 @@ Channel_NoteOff:
 	ex (sp),ix
 	push af
 	push bc
-	call VoicePool_NoteOff
+	call Patch_NoteOff
 	pop bc
 	pop af
 	pop ix
@@ -70,17 +70,17 @@ Channel_NoteOff:
 
 ; ix = this
 ; hl = voice pool
-Channel_AddVoicePool:
+Channel_AddPatch:
 	REPT Channel_MAX_VOICE_POOLS, ?pool
 	PROC
-	LOCAL Channel_AddVoicePool_Next
-	ld a,(ix + Channel_voicePools + ?pool * 2 + 1)
+	LOCAL Channel_AddPatch_Next
+	ld a,(ix + Channel_patches + ?pool * 2 + 1)
 	and a
-	jr nz,Channel_AddVoicePool_Next
-	ld (ix + Channel_voicePools + ?pool * 2),l
-	ld (ix + Channel_voicePools + ?pool * 2 + 1),h
+	jr nz,Channel_AddPatch_Next
+	ld (ix + Channel_patches + ?pool * 2),l
+	ld (ix + Channel_patches + ?pool * 2 + 1),h
 	ret
-Channel_AddVoicePool_Next:
+Channel_AddPatch_Next:
 	ENDP
 	ENDM
 	call System_ThrowException
