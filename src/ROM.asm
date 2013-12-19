@@ -36,7 +36,6 @@ ROM_CodeBank2: equ 1
 	INCLUDE "PSG.asm"
 	INCLUDE "SCC.asm"
 	INCLUDE "SCCVoice.asm"
-	INCLUDE "SCCWaveTables.asm"
 	PAD 8000H
 
 ROM_RAMInitBank: equ 2
@@ -46,6 +45,11 @@ ROM_RAMInitBank: equ 2
 ROM_MultiplyTableBank: equ 3
 Math_multiply127x127Table:
 	INCLUDE "multtable.asm"
+	PAD 0C000H
+
+ROM_WaveTableBank: equ 4
+	org 0A000H
+	INCLUDE "SCCWaveTables.asm"
 	PAD 0C000H
 
 ROM_SCCBank: equ 3FH

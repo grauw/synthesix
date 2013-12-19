@@ -129,6 +129,9 @@ SCCPatch_LoadWave:
 	add hl,hl
 	ld bc,SCCWaveTable_table1
 	add hl,bc
+
+	ld a,ROM_WaveTableBank
+	ld (ROM_BANK_3_CHANGE),a
 	REPT SCCPatch_MAX_VOICES, ?voice
 	PROC
 	LOCAL SCCPatch_AddVoice_Next
@@ -136,7 +139,7 @@ SCCPatch_LoadWave:
 	ld d,(ix + SCCPatch_voices + ?voice * 2 + 1)
 	inc d
 	dec d
-	ret z
+	jr z,SCCPatch_LoadWave_Done
 	push de
 	ex (sp),ix
 	push hl
@@ -145,6 +148,9 @@ SCCPatch_LoadWave:
 	pop ix
 	ENDP
 	ENDM
+SCCPatch_LoadWave_Done:
+	ld a,ROM_Bank3Default
+	ld (ROM_BANK_3_CHANGE),a
 	ret
 
 ; ix = this
