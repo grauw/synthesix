@@ -22,6 +22,7 @@
 	INCLUDE "PSG.asm"
 	INCLUDE "SCC.asm"
 	INCLUDE "SCCVoice.asm"
+	INCLUDE "SCCWaveTables.asm"
 
 	IF $ > 8000H
 		.ERROR Code exceeds 8000H.

@@ -22,8 +22,7 @@ SCCPatch_level: equ $ - SCCPatch
 SCCPatch_pitch: equ $ - SCCPatch
 	db 0
 SCCPatch_wave: equ $ - SCCPatch
-	db 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH, 7FH
-	db 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H, 80H
+	db 0
 SCCPatch_notes: equ $ - SCCPatch
 	db -1, -1, -1, -1, -1
 SCCPatch_voices: equ $ - SCCPatch
@@ -45,18 +44,15 @@ SCCPatch_Constructor:
 SCCPatch_New_Loop:
 	push bc
 	push ix
-	ld hl,SCCPatch_wave
-	ld c,ixl
-	ld b,ixh
-	add hl,bc
 	call SCC_GetFreeVoice
 	call SCCVoice_Bind
-	call SCCVoice_LoadWave
 	ex (sp),ix
 	pop hl
 	call SCCPatch_AddVoice
 	pop bc
 	djnz SCCPatch_New_Loop
+	ld a,(ix + SCCPatch_wave)
+	call SCCPatch_LoadWave
 	ret
 
 ; ix = this
@@ -118,6 +114,37 @@ SCCPatch_NoteOff_Next:
 ; a = value
 ; b = controller
 SCCPatch_ControlChange:
+	call SCCPatch_LoadWave
+	ret
+
+; ix = this
+; a = wave number
+SCCPatch_LoadWave:
+	ld l,a
+	ld h,0
+	add hl,hl
+	add hl,hl
+	add hl,hl
+	add hl,hl
+	add hl,hl
+	ld bc,SCCWaveTable_table1
+	add hl,bc
+	REPT SCCPatch_MAX_VOICES, ?voice
+	PROC
+	LOCAL SCCPatch_AddVoice_Next
+	ld e,(ix + SCCPatch_voices + ?voice * 2)
+	ld d,(ix + SCCPatch_voices + ?voice * 2 + 1)
+	inc d
+	dec d
+	ret z
+	push de
+	ex (sp),ix
+	push hl
+	call SCCVoice_LoadWave
+	pop hl
+	pop ix
+	ENDP
+	ENDM
 	ret
 
 ; ix = this
