@@ -64,22 +64,22 @@ SCCPatch_NoteOn:
 	LOCAL SCCPatch_NoteOn_Next
 	bit 7,(ix + SCCPatch_notes + ?voice)
 	jr z,SCCPatch_NoteOn_Next
-	ld l,(ix + SCCPatch_voices + ?voice * 2)
-	ld h,(ix + SCCPatch_voices + ?voice * 2 + 1)
-	inc h
-	dec h
+	ld e,(ix + SCCPatch_voices + ?voice * 2)
+	ld d,(ix + SCCPatch_voices + ?voice * 2 + 1)
+	inc d
+	dec d
 	jp z,SCCPatch_NoteOn_Break
 	ld (ix + SCCPatch_notes + ?voice),a
 
 	add a,(ix + SCCPatch_pitch)
-	push hl
 	ex af,af'
 	ld a,b
 	ld l,(ix + SCCPatch_level)
 	call Math_Multiply127x127
 	ld b,a
 	ex af,af'
-	pop ix
+	ld ixl,e
+	ld ixh,d
 	jp SCCVoice_NoteOn
 SCCPatch_NoteOn_Next:
 	ENDP
@@ -97,12 +97,12 @@ SCCPatch_NoteOff:
 	LOCAL SCCPatch_NoteOff_Next
 	cp (ix + SCCPatch_notes + ?voice)
 	jr nz,SCCPatch_NoteOff_Next
-	ld l,(ix + SCCPatch_voices + ?voice * 2)
-	ld h,(ix + SCCPatch_voices + ?voice * 2 + 1)
+	ld e,(ix + SCCPatch_voices + ?voice * 2)
+	ld d,(ix + SCCPatch_voices + ?voice * 2 + 1)
 	ld a,-1
 	ld (ix + SCCPatch_notes + ?voice),a
-	push hl
-	pop ix
+	ld ixl,e
+	ld ixh,d
 	jp SCCVoice_NoteOff
 SCCPatch_NoteOff_Next:
 	ENDP
