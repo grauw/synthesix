@@ -17,9 +17,10 @@ RAM_dataStartAddress:
 
 Keys_lastScan:
 	ds 11,0
-
 Keys_velocity:
 	dw 7F00H
+Keys_modulation:
+	dw 0000H
 
 SCC_mixerCopy:
 	db 0

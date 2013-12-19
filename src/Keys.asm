@@ -44,6 +44,10 @@ Keys_ProcessRowPress:
 	jp z,Keys_ProcessRowPress_IncreaseVelocity
 	cp -3
 	jp z,Keys_ProcessRowPress_DecreaseVelocity
+	cp -4
+	jp z,Keys_ProcessRowPress_IncreaseModulation
+	cp -5
+	jp z,Keys_ProcessRowPress_DecreaseModulation
 	pop af
 	ret
 
@@ -101,6 +105,44 @@ Keys_ProcessRowPress_DecreaseVelocity:
 	pop af
 	ret
 
+Keys_ProcessRowPress_IncreaseModulation:
+	ld a,(Keys_modulation + 1)
+	inc a
+	and 7FH
+	ld (Keys_modulation + 1),a
+	push bc
+	push de
+	push hl
+	push ix
+	ld b,1
+	ld ix,(Synthesix_channel1)
+	call Channel_ControlChange
+	pop ix
+	pop hl
+	pop de
+	pop bc
+	pop af
+	ret
+
+Keys_ProcessRowPress_DecreaseModulation:
+	ld a,(Keys_modulation + 1)
+	dec a
+	and 7FH
+	ld (Keys_modulation + 1),a
+	push bc
+	push de
+	push hl
+	push ix
+	ld b,1
+	ld ix,(Synthesix_channel1)
+	call Channel_ControlChange
+	pop ix
+	pop hl
+	pop de
+	pop bc
+	pop af
+	ret
+
 Keys_noteMapping:
 	db 63, -1, 49, 51, -1, 54, 56, 58  ; row 0: 0 1 2 3 4 5 6 7
 	db -1, 61, -1, 66, 68, 65, 67, 75  ; row 1: 8 9 - = \ [ ] ;
@@ -110,6 +152,6 @@ Keys_noteMapping:
 	db 61, 55, 59, 65, 50, 62, 57, 60  ; row 4: S T U V W X Y Z
 	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: SHIFT CTRL GRAPH CAPS CODE F1 F2 F3
 	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: F4 F5 ESC TAB STOP BS SELECT RET
-	db -1, -1, -1, -1, -1, -2, -3, -1  ; row 4: SPACE HOME INS DEL ← ↑ ↓ →
+	db -1, -1, -1, -1, -5, -2, -3, -4  ; row 4: SPACE HOME INS DEL ← ↑ ↓ →
 	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: NUM* NUM+ NUM/ NUM0 NUM1 NUM2 NUM3 NUM4
 	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: NUM5 NUM6 NUM7 NUM8 NUM9 NUM- NUM, NUM.
