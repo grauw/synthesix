@@ -12,6 +12,8 @@ Patch_noteOn: equ $ - Patch
 	dw 0
 Patch_noteOff: equ $ - Patch
 	dw 0
+Patch_controlChange: equ $ - Patch
+	dw 0
 Patch_mono: equ $ - Patch
 	db -1;
 Patch_notes: equ $ - Patch
@@ -29,5 +31,11 @@ Patch_NoteOn:
 Patch_NoteOff:
 	ld e,(ix + Patch_noteOff + 0)
 	ld d,(ix + Patch_noteOff + 1)
+	ex de,hl
+	jp (hl)
+
+Patch_ControlChange:
+	ld e,(ix + Patch_controlChange + 0)
+	ld d,(ix + Patch_controlChange + 1)
 	ex de,hl
 	jp (hl)

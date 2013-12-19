@@ -69,6 +69,27 @@ Channel_NoteOff:
 	ret
 
 ; ix = this
+; a = value
+; b = controller
+Channel_ControlChange:
+	REPT Channel_MAX_VOICE_POOLS, ?pool
+	ld l,(ix + Channel_patches + ?pool * 2)
+	ld h,(ix + Channel_patches + ?pool * 2 + 1)
+	inc h
+	dec h
+	ret z
+	push hl
+	ex (sp),ix
+	push af
+	push bc
+	call Patch_ControlChange
+	pop bc
+	pop af
+	pop ix
+	ENDM
+	ret
+
+; ix = this
 ; hl = voice pool
 Channel_AddPatch:
 	REPT Channel_MAX_VOICE_POOLS, ?pool

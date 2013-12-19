@@ -13,6 +13,8 @@ SCCPatch_noteOn: equ $ - SCCPatch
 	dw SCCPatch_NoteOn
 SCCPatch_noteOff: equ $ - SCCPatch
 	dw SCCPatch_NoteOff
+SCCPatch_controlChange: equ $ - SCCPatch
+	dw SCCPatch_ControlChange
 SCCPatch_polyphony: equ $ - SCCPatch
 	db 4
 SCCPatch_level: equ $ - SCCPatch
@@ -110,6 +112,12 @@ SCCPatch_NoteOff_Next:
 	ENDP
 	ENDM
 	; note not found
+	ret
+
+; ix = this
+; a = value
+; b = controller
+SCCPatch_ControlChange:
 	ret
 
 ; ix = this
