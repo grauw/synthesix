@@ -1,6 +1,7 @@
 ;
 ; An SCC voice (channel)
 ;
+	dw SCCVoice_size
 SCCVoice:
 SCCVoice_wave: equ $ - SCCVoice
 	db SCC_WAVE_1
@@ -14,6 +15,23 @@ SCCVoice_mixerAndMask: equ $ - SCCVoice
 	db 11111110B
 SCCVoice_free: equ $ - SCCVoice
 	db 0
+SCCVoice_size: equ $ - SCCVoice
+
+; ix = this
+; b = wave register
+; c = frequency register
+; d = level register
+; e = mixer or mask
+; ix <- this
+SCCVoice_Constructor:
+	ld (ix + SCCVoice_wave),b
+	ld (ix + SCCVoice_frequency),c
+	ld (ix + SCCVoice_level),d
+	ld (ix + SCCVoice_mixerOrMask),e
+	ld a,e
+	xor 0FFH
+	ld (ix + SCCVoice_mixerAndMask),a
+	ret
 
 ; ix = this
 ; a = note number (0-127)

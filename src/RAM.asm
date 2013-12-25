@@ -40,37 +40,8 @@ ROM_bank4:
 Synthesix_channel1:
 	dw 0
 
-SCC_voice1:
-	db SCC_WAVE_1
-	db SCC_FREQUENCY_1
-	db SCC_LEVEL_1
-	db 00000001B
-	db 11111110B
-	db 0
-
-SCC_voice2:
-	db SCC_WAVE_2
-	db SCC_FREQUENCY_2
-	db SCC_LEVEL_2
-	db 00000010B
-	db 11111101B
-	db 0
-
-SCC_voice3:
-	db SCC_WAVE_3
-	db SCC_FREQUENCY_3
-	db SCC_LEVEL_3
-	db 00000100B
-	db 11111011B
-	db 0
-
-SCC_voice4:
-	db SCC_WAVE_4_5
-	db SCC_FREQUENCY_4
-	db SCC_LEVEL_4
-	db 00001000B
-	db 11110111B
-	db 0
+SCC_voices:
+	ds SCC_MAX_VOICES * 2
 
 ;
 ;	Workarea definition

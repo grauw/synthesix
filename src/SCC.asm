@@ -18,16 +18,50 @@ SCC_LEVEL_5: equ 8EH
 SCC_MIXER: equ 8FH
 SCC_DEFORMATION: equ 0E0H
 
+SCC_MAX_VOICES: equ 4
+
 SCC_Init:
 	ld a,ROM_SCCBank
 	ld (ROM_BANK_2_CHANGE),a
+
+	ld iy,SCCVoice
+	call Class_New
+	ld (SCC_voices + 0),ix
+	ld b,SCC_WAVE_1
+	ld c,SCC_FREQUENCY_1
+	ld d,SCC_LEVEL_1
+	ld e,00000001B
+	call SCCVoice_Constructor
+
+	call Class_New
+	ld (SCC_voices + 2),ix
+	ld b,SCC_WAVE_2
+	ld c,SCC_FREQUENCY_2
+	ld d,SCC_LEVEL_2
+	ld e,00000010B
+	call SCCVoice_Constructor
+
+	call Class_New
+	ld (SCC_voices + 4),ix
+	ld b,SCC_WAVE_3
+	ld c,SCC_FREQUENCY_3
+	ld d,SCC_LEVEL_3
+	ld e,00000100B
+	call SCCVoice_Constructor
+
+	call Class_New
+	ld (SCC_voices + 6),ix
+	ld b,SCC_WAVE_4_5
+	ld c,SCC_FREQUENCY_4
+	ld d,SCC_LEVEL_4
+	ld e,00001000B
+	call SCCVoice_Constructor
 	ret
 
 SCC_GetFreeVoice:
-	IRP ?voice, SCC_voice1, SCC_voice2, SCC_voice3, SCC_voice4
-	ld ix,?voice
+	REPT SCC_MAX_VOICES, ?voice
+	ld ix,(SCC_voices + ?voice * 2)
 	bit 7,(ix + SCCVoice_free)
 	ret z
 	ENDM
 	call System_ThrowException
-
