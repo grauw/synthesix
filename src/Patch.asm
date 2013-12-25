@@ -23,19 +23,16 @@ Patch_voices: equ $ - Patch
 Patch_size: equ $ - Patch
 
 Patch_NoteOn:
-	ld e,(ix + Patch_noteOn + 0)
-	ld d,(ix + Patch_noteOn + 1)
-	ex de,hl
+	ld l,(ix + Patch_noteOn + 0)
+	ld h,(ix + Patch_noteOn + 1)
 	jp (hl)
 
 Patch_NoteOff:
-	ld e,(ix + Patch_noteOff + 0)
-	ld d,(ix + Patch_noteOff + 1)
-	ex de,hl
+	ld l,(ix + Patch_noteOff + 0)
+	ld h,(ix + Patch_noteOff + 1)
 	jp (hl)
 
 Patch_ControlChange:
-	ld e,(ix + Patch_controlChange + 0)
-	ld d,(ix + Patch_controlChange + 1)
-	ex de,hl
+	ld l,(ix + Patch_controlChange + 0)
+	ld h,(ix + Patch_controlChange + 1)
 	jp (hl)
