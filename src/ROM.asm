@@ -36,6 +36,7 @@ ROM_CodeBank2: equ 1
 	INCLUDE "PSG.asm"
 	INCLUDE "SCC.asm"
 	INCLUDE "SCCVoice.asm"
+	INCLUDE "MIDI.asm"
 	PAD 8000H
 
 ROM_RAMInitBank: equ 2

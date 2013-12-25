@@ -1,6 +1,7 @@
 ; BIOS defines
 ENASLT: equ 24H
 INITXT: equ 6CH
+CHSNS: equ 9CH
 CHPUT: equ 0A2H
 SNSMAT: equ 141H
 CLIKSW: equ 0F3DBH

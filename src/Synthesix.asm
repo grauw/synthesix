@@ -14,6 +14,8 @@ Synthesix_Main:
 
 	call Math_UnitTest
 
+	call setmidi
+
 	call Synthesix_MainLoop
 	ret
 
