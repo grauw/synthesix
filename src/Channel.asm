@@ -31,13 +31,14 @@ Channel_New:
 ; b = velocity (0-127)
 Channel_NoteOn:
 	REPT Channel_MAX_VOICE_POOLS, ?pool
-	ld l,(ix + Channel_patches + ?pool * 2)
-	ld h,(ix + Channel_patches + ?pool * 2 + 1)
-	inc h
-	dec h
+	ld e,(ix + Channel_patches + ?pool * 2)
+	ld d,(ix + Channel_patches + ?pool * 2 + 1)
+	inc d
+	dec d
 	ret z
-	push hl
-	ex (sp),ix
+	push ix
+	ld ixl,e
+	ld ixh,d
 	push af
 	push bc
 	call Patch_NoteOn
