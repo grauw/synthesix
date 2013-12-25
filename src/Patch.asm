@@ -9,11 +9,11 @@
 	dw Patch_size
 Patch:
 Patch_noteOn: equ $ - Patch
-	dw 0
+	dw System_ThrowException
 Patch_noteOff: equ $ - Patch
-	dw 0
+	dw System_ThrowException
 Patch_controlChange: equ $ - Patch
-	dw 0
+	dw System_ThrowException
 Patch_mono: equ $ - Patch
 	db -1;
 Patch_notes: equ $ - Patch
