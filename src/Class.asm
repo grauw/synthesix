@@ -1,5 +1,6 @@
 ; iy = class template
 ; ix <- newly allocated class
+; iy <- class template
 ; de <- newly allocated class end address
 ; Modifies: bc, de, hl, ix
 Class_New:
@@ -16,6 +17,7 @@ Class_New:
 ; iy = class template
 ; de = destination address
 ; ix <- new class
+; iy <- class template
 ; de <- new class end address
 ; Modifies: bc, de, hl, ix
 Class_Copy:
