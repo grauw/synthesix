@@ -4,16 +4,6 @@
 ; MIDI synthesizer for MSX
 ;
 
-ROM_BANK_0_CHANGE: equ 5000H
-ROM_BANK_1_CHANGE: equ 7000H
-ROM_BANK_2_CHANGE: equ 9000H
-ROM_BANK_3_CHANGE: equ 0B000H
-
-ROM_Bank0Default: equ ROM_CodeBank1
-ROM_Bank1Default: equ ROM_CodeBank2
-ROM_Bank2Default: equ ROM_SCCBank
-ROM_Bank3Default: equ ROM_MultiplyTableBank
-
 	INCLUDE "Macros.asm"
 
 ROM_CodeBank1: equ 0
@@ -54,3 +44,13 @@ ROM_WaveTableBank: equ 4
 	PAD 0C000H
 
 ROM_SCCBank: equ 3FH
+
+ROM_BANK_0_CHANGE: equ 5000H
+ROM_BANK_1_CHANGE: equ 7000H
+ROM_BANK_2_CHANGE: equ 9000H
+ROM_BANK_3_CHANGE: equ 0B000H
+
+ROM_Bank0Default: equ ROM_CodeBank1
+ROM_Bank1Default: equ ROM_CodeBank2
+ROM_Bank2Default: equ ROM_SCCBank
+ROM_Bank3Default: equ ROM_MultiplyTableBank
