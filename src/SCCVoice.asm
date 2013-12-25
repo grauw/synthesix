@@ -39,8 +39,8 @@ SCCVoice_Constructor:
 SCCVoice_NoteOn:
 	; de = frequency
 	ld h,PSG_frequencyTable / 100H
+	rlca
 	ld l,a
-	sla l
 	ld e,(hl)
 	inc l
 	ld d,(hl)
