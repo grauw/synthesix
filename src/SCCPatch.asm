@@ -15,6 +15,8 @@ SCCPatch_noteOff: equ $ - SCCPatch
 	dw SCCPatch_NoteOff
 SCCPatch_controlChange: equ $ - SCCPatch
 	dw SCCPatch_ControlChange
+SCCPatch_update: equ $ - SCCPatch
+	dw SCCPatch_Update
 SCCPatch_polyphony: equ $ - SCCPatch
 	db 4
 SCCPatch_level: equ $ - SCCPatch
@@ -114,6 +116,27 @@ SCCPatch_NoteOff_Next:
 ; b = controller
 SCCPatch_ControlChange:
 	call SCCPatch_LoadWave
+	ret
+
+; ix = this
+; b = time delta
+SCCPatch_Update:
+	REPT SCCPatch_MAX_VOICES, ?voice
+	PROC  ; make LOCAL work
+	LOCAL SCCPatch_Update_Next
+	ld e,(ix + SCCPatch_voices + ?voice * 2)
+	ld d,(ix + SCCPatch_voices + ?voice * 2 + 1)
+	inc d
+	dec d
+	jr z,SCCPatch_Update_Next
+	push ix
+	ld ixl,e
+	ld ixh,d
+	call SCCVoice_Update
+	pop ix
+SCCPatch_Update_Next:
+	ENDP
+	ENDM
 	ret
 
 ; ix = this

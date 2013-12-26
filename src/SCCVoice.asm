@@ -13,6 +13,12 @@ SCCVoice_mixerOrMask: equ $ - SCCVoice
 	db 00000001B
 SCCVoice_mixerAndMask: equ $ - SCCVoice
 	db 11111110B
+SCCVoice_velocity: equ $ - SCCVoice
+	db 0
+SCCVoice_attack: equ $ - SCCVoice
+	db 255 / 30  ; inverse speed
+SCCVoice_attackCounter: equ $ - SCCVoice
+	db 0
 SCCVoice_free: equ $ - SCCVoice
 	db 0
 SCCVoice_size: equ $ - SCCVoice
@@ -37,6 +43,8 @@ SCCVoice_Constructor:
 ; a = note number (0-127)
 ; b = velocity (0-127)
 SCCVoice_NoteOn:
+	ld (ix + SCCVoice_velocity),b
+
 	; de = frequency
 	ld h,PSG_frequencyTable / 100H
 	rlca
@@ -45,20 +53,15 @@ SCCVoice_NoteOn:
 	inc l
 	ld d,(hl)
 
-	; a = volume
-	ld a,b
-	rrca
-	rrca
-	rrca
-
 	ld h,SCC_BASE_MSB
 	ld l,(ix + SCCVoice_frequency)
 	ld (hl),e
 	inc l
 	ld (hl),d
 
-	ld l,(ix + SCCVoice_level)
-	ld (hl),a
+	ld (ix + SCCVoice_attackCounter),254
+	ld b,1
+	call SCCVoice_Update
 
 	ld a,(SCC_mixerCopy)
 	or (ix + SCCVoice_mixerOrMask)
@@ -68,10 +71,50 @@ SCCVoice_NoteOn:
 
 ; ix = this
 SCCVoice_NoteOff:
+	ld h,SCC_BASE_MSB
+	ld l,(ix + SCCVoice_level)
+	ld (hl),0
 	ld a,(SCC_mixerCopy)
 	and (ix + SCCVoice_mixerAndMask)
 	ld (SCC_BASE + SCC_MIXER),a
 	ld (SCC_mixerCopy),a
+	ret
+
+; ix = this
+; b = time delta
+SCCVoice_Update:
+	ld a,(ix + SCCVoice_attackCounter)
+	ld h,b
+SCCVoice_Update_Loop:
+	sub (ix + SCCVoice_attack)
+	jr c,SCCVoice_Update_Complete
+	djnz SCCVoice_Update_Loop
+	ld b,h
+	ld (ix + SCCVoice_attackCounter),a
+	rra
+	ld l,a
+	ld a,127
+	sub l
+	call SCCVoice_SetLevel
+	ret
+SCCVoice_Update_Complete:
+	ld b,h
+	ld (ix + SCCVoice_attackCounter),0
+	ld a,127
+	call SCCVoice_SetLevel
+	ret
+
+; ix = this
+; a = volume
+SCCVoice_SetLevel:
+	ld l,(ix + SCCVoice_velocity)
+	call Math_Multiply127x127
+	rrca
+	rrca
+	rrca
+	ld h,SCC_BASE_MSB
+	ld l,(ix + SCCVoice_level)
+	ld (hl),a
 	ret
 
 ; ix = this

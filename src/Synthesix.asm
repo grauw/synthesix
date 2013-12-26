@@ -16,14 +16,29 @@ Synthesix_Main:
 
 	call setmidi
 
+	ld a,(JIFFY)
+	ld (Synthesix_lastJiffy),a
+
 	call Synthesix_MainLoop
 	ret
 
 Synthesix_MainLoop:
 	halt
 	call Keys_Scan
+	call Synthesix_UpdateChannels
 	call Synthesix_UpdateLiveIndicator
 	jp Synthesix_MainLoop
+
+Synthesix_UpdateChannels:
+	ld a,(Synthesix_lastJiffy)
+	ld b,a
+	ld a,(JIFFY)
+	ld (Synthesix_lastJiffy),a
+	sub b
+	ret z
+	ld b,a
+	ld ix,(Synthesix_channel1)
+	jp Channel_Update
 
 Synthesix_UpdateLiveIndicator:
 	ld hl,Synthesix_liveIndicator1

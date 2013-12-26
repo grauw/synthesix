@@ -93,6 +93,25 @@ Channel_ControlChange:
 	ret
 
 ; ix = this
+; b = delta time
+Channel_Update:
+	REPT Channel_MAX_VOICE_POOLS, ?pool
+	ld e,(ix + Channel_patches + ?pool * 2)
+	ld d,(ix + Channel_patches + ?pool * 2 + 1)
+	inc d
+	dec d
+	ret z
+	push ix
+	push bc
+	ld ixl,e
+	ld ixh,d
+	call Patch_Update
+	pop bc
+	pop ix
+	ENDM
+	ret
+
+; ix = this
 ; hl = voice pool
 Channel_AddPatch:
 	REPT Channel_MAX_VOICE_POOLS, ?pool

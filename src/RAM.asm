@@ -37,6 +37,9 @@ ROM_bank3:
 ROM_bank4:
 	dw 0B003H
 
+Synthesix_lastJiffy:
+	db 0
+
 Synthesix_channel1:
 	dw 0
 

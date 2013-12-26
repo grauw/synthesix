@@ -14,6 +14,8 @@ Patch_noteOff: equ $ - Patch
 	dw System_ThrowException
 Patch_controlChange: equ $ - Patch
 	dw System_ThrowException
+Patch_update: equ $ - Patch
+	dw System_ThrowException
 Patch_size: equ $ - Patch
 
 Patch_NoteOn:
@@ -29,4 +31,9 @@ Patch_NoteOff:
 Patch_ControlChange:
 	ld l,(ix + Patch_controlChange + 0)
 	ld h,(ix + Patch_controlChange + 1)
+	jp (hl)
+
+Patch_Update:
+	ld l,(ix + Patch_update + 0)
+	ld h,(ix + Patch_update + 1)
 	jp (hl)
