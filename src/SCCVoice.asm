@@ -59,7 +59,7 @@ SCCVoice_NoteOn:
 	inc l
 	ld (hl),d
 
-	ld (ix + SCCVoice_attackCounter),254
+	ld (ix + SCCVoice_attackCounter),255
 	ld b,1
 	call SCCVoice_Update
 
