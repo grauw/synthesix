@@ -67,7 +67,8 @@ SCCVoice_NoteOn:
 	ld (ix + SCCVoice_envelopeCounter),0
 	ld b,1
 	call SCCVoice_UpdateAttack
-	ld (ix + SCCVoice_envelopeCounter),0
+	ld (ix + SCCVoice_envelopeCounter),0  ; does this sit well with release?
+	; maybe envelope should be a separate class that counts its own jiffy.
 
 	ld a,(SCC_mixerCopy)
 	or (ix + SCCVoice_mixerOrMask)
@@ -77,16 +78,17 @@ SCCVoice_NoteOn:
 
 ; ix = this
 SCCVoice_NoteOff:
-	ld (ix + SCCVoice_envelopePhase),255
+	ld (ix + SCCVoice_envelopePhase),-1
+	ld c,(ix + SCCVoice_envelopeCounter)
 	ld b,1
 	call SCCVoice_UpdateRelease
-	ld (ix + SCCVoice_envelopePhase),255
+	ld (ix + SCCVoice_envelopeCounter),c
 	ret
 
 ; ix = this
 ; b = time delta
 SCCVoice_Update:
-	bit 7,(ix + SCCVoice_envelopePhase)
+	bit 7,(ix + SCCVoice_envelopePhase)  ; to test a third phase: rlc (ix) ; jp po
 	jr nz,SCCVoice_UpdateRelease
 	jp SCCVoice_UpdateAttack
 
