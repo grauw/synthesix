@@ -121,8 +121,7 @@ SCCVoice_UpdateDecay_Loop:
 	ld b,h
 	ld (ix + SCCVoice_envelopeCounter),a
 	rra
-	call SCCVoice_SetLevel
-	ret
+	jp nz,SCCVoice_SetLevel
 SCCVoice_UpdateDecay_Complete:
 	ld b,h
 	ld (ix + SCCVoice_envelopeCounter),0
