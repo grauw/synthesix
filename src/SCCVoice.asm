@@ -67,6 +67,7 @@ SCCVoice_NoteOn:
 	ld (ix + SCCVoice_envelopeCounter),0
 	ld b,1
 	call SCCVoice_UpdateAttack
+	ld (ix + SCCVoice_envelopeCounter),0
 
 	ld a,(SCC_mixerCopy)
 	or (ix + SCCVoice_mixerOrMask)
@@ -79,6 +80,7 @@ SCCVoice_NoteOff:
 	ld (ix + SCCVoice_envelopePhase),255
 	ld b,1
 	call SCCVoice_UpdateRelease
+	ld (ix + SCCVoice_envelopePhase),255
 	ret
 
 ; ix = this
