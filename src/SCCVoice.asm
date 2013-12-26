@@ -59,7 +59,7 @@ SCCVoice_NoteOn:
 	inc l
 	ld (hl),d
 
-	ld (ix + SCCVoice_attackCounter),255
+	ld (ix + SCCVoice_attackCounter),0
 	ld b,1
 	call SCCVoice_Update
 
@@ -86,20 +86,17 @@ SCCVoice_Update:
 	ld a,(ix + SCCVoice_attackCounter)
 	ld h,b
 SCCVoice_Update_Loop:
-	sub (ix + SCCVoice_attack)
+	add a,(ix + SCCVoice_attack)
 	jr c,SCCVoice_Update_Complete
 	djnz SCCVoice_Update_Loop
 	ld b,h
 	ld (ix + SCCVoice_attackCounter),a
 	rra
-	ld l,a
-	ld a,127
-	sub l
 	call SCCVoice_SetLevel
 	ret
 SCCVoice_Update_Complete:
 	ld b,h
-	ld (ix + SCCVoice_attackCounter),0
+	ld (ix + SCCVoice_attackCounter),255
 	ld a,127
 	call SCCVoice_SetLevel
 	ret
