@@ -17,7 +17,7 @@ SCCVoice_velocity: equ $ - SCCVoice
 	db 0
 SCCVoice_attack: equ $ - SCCVoice
 	db 255 / 30  ; inverse speed
-SCCVoice_decay: equ $ - SCCVoice
+SCCVoice_release: equ $ - SCCVoice
 	db 255 / 30  ; inverse speed
 SCCVoice_envelopePhase: equ $ - SCCVoice
 	db 0
@@ -78,14 +78,14 @@ SCCVoice_NoteOn:
 SCCVoice_NoteOff:
 	ld (ix + SCCVoice_envelopePhase),255
 	ld b,1
-	call SCCVoice_UpdateDecay
+	call SCCVoice_UpdateRelease
 	ret
 
 ; ix = this
 ; b = time delta
 SCCVoice_Update:
 	bit 7,(ix + SCCVoice_envelopePhase)
-	jr nz,SCCVoice_UpdateDecay
+	jr nz,SCCVoice_UpdateRelease
 	jp SCCVoice_UpdateAttack
 
 ; ix = this
@@ -111,18 +111,18 @@ SCCVoice_UpdateAttack_Complete:
 
 ; ix = this
 ; b = time delta
-SCCVoice_UpdateDecay:
+SCCVoice_UpdateRelease:
 	ld a,(ix + SCCVoice_envelopeCounter)
 	ld h,b
-SCCVoice_UpdateDecay_Loop:
-	sub (ix + SCCVoice_decay)
-	jr c,SCCVoice_UpdateDecay_Complete
-	djnz SCCVoice_UpdateDecay_Loop
+SCCVoice_UpdateRelease_Loop:
+	sub (ix + SCCVoice_release)
+	jr c,SCCVoice_UpdateRelease_Complete
+	djnz SCCVoice_UpdateRelease_Loop
 	ld b,h
 	ld (ix + SCCVoice_envelopeCounter),a
 	rra
 	jp nz,SCCVoice_SetLevel
-SCCVoice_UpdateDecay_Complete:
+SCCVoice_UpdateRelease_Complete:
 	ld b,h
 	ld (ix + SCCVoice_envelopeCounter),0
 	ld a,(SCC_mixerCopy)
