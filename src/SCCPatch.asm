@@ -99,8 +99,7 @@ SCCPatch_NoteOff:
 	jr nz,SCCPatch_NoteOff_Next
 	ld e,(ix + SCCPatch_voices + ?voice * 2)
 	ld d,(ix + SCCPatch_voices + ?voice * 2 + 1)
-	ld a,-1
-	ld (ix + SCCPatch_notes + ?voice),a
+	ld (ix + SCCPatch_notes + ?voice),-1
 	ld ixl,e
 	ld ixh,d
 	jp SCCVoice_NoteOff
