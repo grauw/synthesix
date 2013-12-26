@@ -17,7 +17,11 @@ SCCVoice_velocity: equ $ - SCCVoice
 	db 0
 SCCVoice_attack: equ $ - SCCVoice
 	db 255 / 30  ; inverse speed
-SCCVoice_attackCounter: equ $ - SCCVoice
+SCCVoice_decay: equ $ - SCCVoice
+	db 255 / 30  ; inverse speed
+SCCVoice_envelopePhase: equ $ - SCCVoice
+	db 0
+SCCVoice_envelopeCounter: equ $ - SCCVoice
 	db 0
 SCCVoice_free: equ $ - SCCVoice
 	db 0
@@ -44,6 +48,7 @@ SCCVoice_Constructor:
 ; b = velocity (0-127)
 SCCVoice_NoteOn:
 	ld (ix + SCCVoice_velocity),b
+	ld (ix + SCCVoice_envelopePhase),0
 
 	; de = frequency
 	ld h,PSG_frequencyTable / 100H
@@ -59,9 +64,9 @@ SCCVoice_NoteOn:
 	inc l
 	ld (hl),d
 
-	ld (ix + SCCVoice_attackCounter),0
+	ld (ix + SCCVoice_envelopeCounter),0
 	ld b,1
-	call SCCVoice_Update
+	call SCCVoice_UpdateAttack
 
 	ld a,(SCC_mixerCopy)
 	or (ix + SCCVoice_mixerOrMask)
@@ -71,31 +76,60 @@ SCCVoice_NoteOn:
 
 ; ix = this
 SCCVoice_NoteOff:
-	ld a,(SCC_mixerCopy)
-	and (ix + SCCVoice_mixerAndMask)
-	ld (SCC_BASE + SCC_MIXER),a
-	ld (SCC_mixerCopy),a
+	ld (ix + SCCVoice_envelopePhase),255
+	ld b,1
+	call SCCVoice_UpdateDecay
 	ret
 
 ; ix = this
 ; b = time delta
 SCCVoice_Update:
-	ld a,(ix + SCCVoice_attackCounter)
+	bit 7,(ix + SCCVoice_envelopePhase)
+	jr nz,SCCVoice_UpdateDecay
+	jp SCCVoice_UpdateAttack
+
+; ix = this
+; b = time delta
+SCCVoice_UpdateAttack:
+	ld a,(ix + SCCVoice_envelopeCounter)
 	ld h,b
-SCCVoice_Update_Loop:
+SCCVoice_UpdateAttack_Loop:
 	add a,(ix + SCCVoice_attack)
-	jr c,SCCVoice_Update_Complete
-	djnz SCCVoice_Update_Loop
+	jr c,SCCVoice_UpdateAttack_Complete
+	djnz SCCVoice_UpdateAttack_Loop
 	ld b,h
-	ld (ix + SCCVoice_attackCounter),a
+	ld (ix + SCCVoice_envelopeCounter),a
 	rra
 	call SCCVoice_SetLevel
 	ret
-SCCVoice_Update_Complete:
+SCCVoice_UpdateAttack_Complete:
 	ld b,h
-	ld (ix + SCCVoice_attackCounter),255
+	ld (ix + SCCVoice_envelopeCounter),255
 	ld a,127
 	call SCCVoice_SetLevel
+	ret
+
+; ix = this
+; b = time delta
+SCCVoice_UpdateDecay:
+	ld a,(ix + SCCVoice_envelopeCounter)
+	ld h,b
+SCCVoice_UpdateDecay_Loop:
+	sub (ix + SCCVoice_decay)
+	jr c,SCCVoice_UpdateDecay_Complete
+	djnz SCCVoice_UpdateDecay_Loop
+	ld b,h
+	ld (ix + SCCVoice_envelopeCounter),a
+	rra
+	call SCCVoice_SetLevel
+	ret
+SCCVoice_UpdateDecay_Complete:
+	ld b,h
+	ld (ix + SCCVoice_envelopeCounter),0
+	ld a,(SCC_mixerCopy)
+	and (ix + SCCVoice_mixerAndMask)
+	ld (SCC_BASE + SCC_MIXER),a
+	ld (SCC_mixerCopy),a
 	ret
 
 ; ix = this
