@@ -71,9 +71,6 @@ SCCVoice_NoteOn:
 
 ; ix = this
 SCCVoice_NoteOff:
-	ld h,SCC_BASE_MSB
-	ld l,(ix + SCCVoice_level)
-	ld (hl),0
 	ld a,(SCC_mixerCopy)
 	and (ix + SCCVoice_mixerAndMask)
 	ld (SCC_BASE + SCC_MIXER),a
