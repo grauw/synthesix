@@ -14,12 +14,6 @@ Patch_noteOff: equ $ - Patch
 	dw System_ThrowException
 Patch_controlChange: equ $ - Patch
 	dw System_ThrowException
-Patch_mono: equ $ - Patch
-	db -1;
-Patch_notes: equ $ - Patch
-	db -1, -1, -1, -1, -1
-Patch_voices: equ $ - Patch
-	dw 0, 0, 0, 0, 0  ; max 5 voices / pool
 Patch_size: equ $ - Patch
 
 Patch_NoteOn:
