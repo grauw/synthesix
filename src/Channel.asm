@@ -37,10 +37,10 @@ Channel_NoteOn:
 	dec d
 	ret z
 	push ix
-	ld ixl,e
-	ld ixh,d
 	push af
 	push bc
+	ld ixl,e
+	ld ixh,d
 	call Patch_NoteOn
 	pop bc
 	pop af
@@ -53,15 +53,16 @@ Channel_NoteOn:
 ; b = velocity (0-127)
 Channel_NoteOff:
 	REPT Channel_MAX_VOICE_POOLS, ?pool
-	ld l,(ix + Channel_patches + ?pool * 2)
-	ld h,(ix + Channel_patches + ?pool * 2 + 1)
-	inc h
-	dec h
+	ld e,(ix + Channel_patches + ?pool * 2)
+	ld d,(ix + Channel_patches + ?pool * 2 + 1)
+	inc d
+	dec d
 	ret z
-	push hl
-	ex (sp),ix
+	push ix
 	push af
 	push bc
+	ld ixl,e
+	ld ixh,d
 	call Patch_NoteOff
 	pop bc
 	pop af
@@ -74,15 +75,16 @@ Channel_NoteOff:
 ; b = controller
 Channel_ControlChange:
 	REPT Channel_MAX_VOICE_POOLS, ?pool
-	ld l,(ix + Channel_patches + ?pool * 2)
-	ld h,(ix + Channel_patches + ?pool * 2 + 1)
-	inc h
-	dec h
+	ld e,(ix + Channel_patches + ?pool * 2)
+	ld d,(ix + Channel_patches + ?pool * 2 + 1)
+	inc d
+	dec d
 	ret z
-	push hl
-	ex (sp),ix
+	push ix
 	push af
 	push bc
+	ld ixl,e
+	ld ixh,d
 	call Patch_ControlChange
 	pop bc
 	pop af
