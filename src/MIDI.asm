@@ -478,7 +478,7 @@ chkmd2:
 ;	Entry :[A]=slot address
 ;	Return:Z flag is set if MIDI ID is found
 ;
-id_string:	db	'MIDI'
+id_string:	db	"MIDI"
 id_address	equ	401ch	;MIDI ID address
 chkid:
 	push	bc
