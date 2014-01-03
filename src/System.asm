@@ -4,6 +4,7 @@ INITXT: equ 6CH
 CHSNS: equ 9CH
 CHPUT: equ 0A2H
 SNSMAT: equ 141H
+LINL40: equ 0F3AEH
 CLIKSW: equ 0F3DBH
 NEWKEY: equ 0FBE5H
 JIFFY: equ 0FC9EH
@@ -12,6 +13,12 @@ SLTTBL: equ 0FCC5H
 PPI_PORT_A: equ 0A8H
 PPI_PORT_B: equ 0A9H
 PPI_PORT_C: equ 0AAH
+
+System_InitScreen0:
+	ld a,80
+	ld (LINL40),a
+	call INITXT
+	ret
 
 ; a = character
 ; Modifies: none

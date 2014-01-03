@@ -1,5 +1,5 @@
 Synthesix_Main:
-	call INITXT
+	call System_InitScreen0
 	ld hl,Synthesix_helloMessage
 	call System_Print
 
