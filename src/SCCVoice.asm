@@ -15,14 +15,8 @@ SCCVoice_mixerAndMask: equ $ - SCCVoice
 	db 11111110B
 SCCVoice_velocity: equ $ - SCCVoice
 	db 0
-SCCVoice_attack: equ $ - SCCVoice
-	db 255 / 30  ; inverse speed
-SCCVoice_release: equ $ - SCCVoice
-	db 255 / 30  ; inverse speed
-SCCVoice_envelopePhase: equ $ - SCCVoice
-	db 0
-SCCVoice_envelopeCounter: equ $ - SCCVoice
-	db 0
+SCCVoice_envelope: equ $ - SCCVoice
+	dw System_ThrowException
 SCCVoice_free: equ $ - SCCVoice
 	db 0
 SCCVoice_size: equ $ - SCCVoice
@@ -41,6 +35,14 @@ SCCVoice_Constructor:
 	ld a,e
 	xor 0FFH
 	ld (ix + SCCVoice_mixerAndMask),a
+	push ix
+	ld iy,AREnvelope
+	call Class_New
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (ix + SCCVoice_envelope + 0),e
+	ld (ix + SCCVoice_envelope + 1),d
 	ret
 
 ; ix = this
@@ -48,7 +50,6 @@ SCCVoice_Constructor:
 ; b = velocity (0-127)
 SCCVoice_NoteOn:
 	ld (ix + SCCVoice_velocity),b
-	ld (ix + SCCVoice_envelopePhase),0
 
 	; de = frequency
 	ld h,PSG_frequencyTable / 100H
@@ -64,66 +65,39 @@ SCCVoice_NoteOn:
 	inc l
 	ld (hl),d
 
-	ld (ix + SCCVoice_envelopeCounter),0
-	ld b,1
-	call SCCVoice_UpdateAttack
-	ld (ix + SCCVoice_envelopeCounter),0  ; does this sit well with release?
-	; maybe envelope should be a separate class that counts its own jiffy.
+	ld e,(ix + SCCVoice_envelope + 0)
+	ld d,(ix + SCCVoice_envelope + 1)
+	push ix
+	ld ixl,e
+	ld ixh,d
+	call AREnvelope_NoteOn
+	pop ix
+	call SCCVoice_SetLevel
 	ret
 
 ; ix = this
 SCCVoice_NoteOff:
-	ld (ix + SCCVoice_envelopePhase),-1
-	ld c,(ix + SCCVoice_envelopeCounter)
-	ld b,1
-	call SCCVoice_UpdateRelease
-	ld (ix + SCCVoice_envelopeCounter),c
+	ld e,(ix + SCCVoice_envelope + 0)
+	ld d,(ix + SCCVoice_envelope + 1)
+	push ix
+	ld ixl,e
+	ld ixh,d
+	call AREnvelope_NoteOff
+	pop ix
+	call SCCVoice_SetLevel
 	ret
 
 ; ix = this
 ; b = time delta
 SCCVoice_Update:
-	bit 7,(ix + SCCVoice_envelopePhase)  ; to test a third phase: rlc (ix) ; jp po
-	jr nz,SCCVoice_UpdateRelease
-	jp SCCVoice_UpdateAttack
-
-; ix = this
-; b = time delta
-SCCVoice_UpdateAttack:
-	ld a,(ix + SCCVoice_envelopeCounter)
-	ld h,b
-SCCVoice_UpdateAttack_Loop:
-	add a,(ix + SCCVoice_attack)
-	jr c,SCCVoice_UpdateAttack_Complete
-	djnz SCCVoice_UpdateAttack_Loop
-	ld b,h
-	ld (ix + SCCVoice_envelopeCounter),a
-	rra
+	ld e,(ix + SCCVoice_envelope + 0)
+	ld d,(ix + SCCVoice_envelope + 1)
+	push ix
+	ld ixl,e
+	ld ixh,d
+	call AREnvelope_Update
+	pop ix
 	call SCCVoice_SetLevel
-	ret
-SCCVoice_UpdateAttack_Complete:
-	ld b,h
-	ld (ix + SCCVoice_envelopeCounter),255
-	ld a,127
-	call SCCVoice_SetLevel
-	ret
-
-; ix = this
-; b = time delta
-SCCVoice_UpdateRelease:
-	ld a,(ix + SCCVoice_envelopeCounter)
-	ld h,b
-SCCVoice_UpdateRelease_Loop:
-	sub (ix + SCCVoice_release)
-	jr c,SCCVoice_UpdateRelease_Complete
-	djnz SCCVoice_UpdateRelease_Loop
-	ld b,h
-	ld (ix + SCCVoice_envelopeCounter),a
-	rra
-	jp nz,SCCVoice_SetLevel
-SCCVoice_UpdateRelease_Complete:
-	ld b,h
-	ld (ix + SCCVoice_envelopeCounter),0
 	ret
 
 ; ix = this

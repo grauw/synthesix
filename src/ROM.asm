@@ -26,6 +26,7 @@ ROM_CodeBank2: equ 1
 	INCLUDE "PSG.asm"
 	INCLUDE "SCC.asm"
 	INCLUDE "SCCVoice.asm"
+	INCLUDE "AREnvelope.asm"
 	INCLUDE "MIDI.asm"
 	PAD 8000H
 
