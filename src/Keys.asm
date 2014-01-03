@@ -48,8 +48,13 @@ Keys_ProcessRow_Next:
 	inc hl
 	ret
 
+; a = key / note identifier
+; f = negative sign: press, positive sign: release
 Keys_ProcessKeyChange:
 	jp p,Keys_ProcessKeyRelease
+;	jp Keys_ProcessKeyPress
+
+; a = key / note identifier
 Keys_ProcessKeyPress:
 	and a
 	jp p,Keys_ProcessKeyPress_Note
@@ -63,6 +68,7 @@ Keys_ProcessKeyPress:
 	jp z,Keys_ProcessKeyPress_DecreaseModulation
 	ret
 
+; a = key / note identifier
 Keys_ProcessKeyRelease:
 	and a
 	jp p,Keys_ProcessKeyRelease_Note
