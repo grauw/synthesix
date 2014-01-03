@@ -1,21 +1,18 @@
 Keys_Init:
 	ld a,0
 	ld (CLIKSW),a  ; disable key click
-	call Keys_Scan_UpdateLast
+	ld hl,NEWKEY
+	ld de,Keys_lastScan
+	ld bc,11
+	ldir
 	ret
 
 Keys_Scan:
 	ld de,NEWKEY
 	ld hl,Keys_lastScan
 	ld ix,Keys_noteMapping
-	REPT 11  ; just the first 6 rows...
-	call Keys_ProcessRow
-	ENDM
-Keys_Scan_UpdateLast:
-	ld hl,NEWKEY
-	ld de,Keys_lastScan
 	REPT 11
-	ldi
+	call Keys_ProcessRow
 	ENDM
 	ret
 
@@ -23,6 +20,7 @@ Keys_ProcessRow:
 	ld b,8
 	ld a,(de)
 	ld c,(hl)
+	ld (hl),a
 	xor c
 Keys_ProcessRow_Loop:
 	rrc c
