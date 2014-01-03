@@ -31,16 +31,26 @@ Keys_ProcessRow:
 Keys_ProcessRow_Loop:
 	rrc c
 	rrca       ; preserves sign flag
-	call c,Keys_ProcessRowPress
+	jp nc,Keys_ProcessRow_Next
+	push af
+	push bc
+	push de
+	push hl
+	ld a,(de)
+	call Keys_ProcessRowChange
+	pop hl
+	pop de
+	pop bc
+	pop af
+Keys_ProcessRow_Next:
 	inc de
 	djnz Keys_ProcessRow_Loop
 	inc hl
 	ret
 
-Keys_ProcessRowPress:
+Keys_ProcessRowChange:
 	jp p,Keys_ProcessRowRelease
-	push af
-	ld a,(de)
+Keys_ProcessRowPress:
 	and a
 	jp p,Keys_ProcessRowPress_Note
 	cp -2
@@ -51,41 +61,23 @@ Keys_ProcessRowPress:
 	jp z,Keys_ProcessRowPress_IncreaseModulation
 	cp -5
 	jp z,Keys_ProcessRowPress_DecreaseModulation
-	pop af
 	ret
 
 Keys_ProcessRowRelease:
-	push af
-	ld a,(de)
 	and a
 	jp p,Keys_ProcessRowRelease_Note
-	pop af
 	ret
 
 Keys_ProcessRowPress_Note:
-	push bc
-	push de
-	push hl
 	ld bc,(Keys_velocity)
 	ld ix,(Synthesix_channel1)
 	call Channel_NoteOn
-	pop hl
-	pop de
-	pop bc
-	pop af
 	ret
 
 Keys_ProcessRowRelease_Note:
-	push bc
-	push de
-	push hl
 	ld bc,4000H
 	ld ix,(Synthesix_channel1)
 	call Channel_NoteOff
-	pop hl
-	pop de
-	pop bc
-	pop af
 	ret
 
 Keys_ProcessRowPress_IncreaseVelocity:
@@ -93,7 +85,6 @@ Keys_ProcessRowPress_IncreaseVelocity:
 	add a,8
 	and 7FH
 	ld (Keys_velocity + 1),a
-	pop af
 	ret
 
 Keys_ProcessRowPress_DecreaseVelocity:
@@ -101,7 +92,6 @@ Keys_ProcessRowPress_DecreaseVelocity:
 	sub 8
 	and 7FH
 	ld (Keys_velocity + 1),a
-	pop af
 	ret
 
 Keys_ProcessRowPress_IncreaseModulation:
@@ -109,16 +99,9 @@ Keys_ProcessRowPress_IncreaseModulation:
 	inc a
 	and 7FH
 	ld (Keys_modulation + 1),a
-	push bc
-	push de
-	push hl
 	ld b,1
 	ld ix,(Synthesix_channel1)
 	call Channel_ControlChange
-	pop hl
-	pop de
-	pop bc
-	pop af
 	ret
 
 Keys_ProcessRowPress_DecreaseModulation:
@@ -126,16 +109,9 @@ Keys_ProcessRowPress_DecreaseModulation:
 	dec a
 	and 7FH
 	ld (Keys_modulation + 1),a
-	push bc
-	push de
-	push hl
 	ld b,1
 	ld ix,(Synthesix_channel1)
 	call Channel_ControlChange
-	pop hl
-	pop de
-	pop bc
-	pop af
 	ret
 
 Keys_noteMapping:
