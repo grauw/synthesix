@@ -9,7 +9,7 @@ Keys_Init:
 
 Keys_Scan:
 	ld hl,Keys_lastScan
-	ld ix,Keys_noteMapping
+	ld de,Keys_noteMapping
 	REPT 11, ?row
 	ld b,?row
 	call Keys_ProcessRow
@@ -32,7 +32,7 @@ Keys_ProcessRow_Loop:
 	rrc c
 	rrca       ; preserves sign flag
 	call c,Keys_ProcessRowPress
-	inc ix
+	inc de
 	djnz Keys_ProcessRow_Loop
 	inc hl
 	ret
@@ -40,7 +40,7 @@ Keys_ProcessRow_Loop:
 Keys_ProcessRowPress:
 	jp p,Keys_ProcessRowRelease
 	push af
-	ld a,(ix)
+	ld a,(de)
 	and a
 	jp p,Keys_ProcessRowPress_Note
 	cp -2
@@ -56,7 +56,7 @@ Keys_ProcessRowPress:
 
 Keys_ProcessRowRelease:
 	push af
-	ld a,(ix)
+	ld a,(de)
 	and a
 	jp p,Keys_ProcessRowRelease_Note
 	pop af
@@ -66,11 +66,9 @@ Keys_ProcessRowPress_Note:
 	push bc
 	push de
 	push hl
-	push ix
 	ld bc,(Keys_velocity)
 	ld ix,(Synthesix_channel1)
 	call Channel_NoteOn
-	pop ix
 	pop hl
 	pop de
 	pop bc
@@ -81,11 +79,9 @@ Keys_ProcessRowRelease_Note:
 	push bc
 	push de
 	push hl
-	push ix
 	ld bc,4000H
 	ld ix,(Synthesix_channel1)
 	call Channel_NoteOff
-	pop ix
 	pop hl
 	pop de
 	pop bc
@@ -116,11 +112,9 @@ Keys_ProcessRowPress_IncreaseModulation:
 	push bc
 	push de
 	push hl
-	push ix
 	ld b,1
 	ld ix,(Synthesix_channel1)
 	call Channel_ControlChange
-	pop ix
 	pop hl
 	pop de
 	pop bc
@@ -135,11 +129,9 @@ Keys_ProcessRowPress_DecreaseModulation:
 	push bc
 	push de
 	push hl
-	push ix
 	ld b,1
 	ld ix,(Synthesix_channel1)
 	call Channel_ControlChange
-	pop ix
 	pop hl
 	pop de
 	pop bc
