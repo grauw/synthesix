@@ -8,27 +8,32 @@ Keys_Init:
 	ret
 
 Keys_Scan:
-	ld de,NEWKEY
 	ld hl,Keys_lastScan
 	ld ix,Keys_noteMapping
-	REPT 11
+	REPT 11, ?row
+	ld b,?row
 	call Keys_ProcessRow
 	ENDM
 	ret
 
 Keys_ProcessRow:
-	ld b,8
-	ld a,(de)
+	di
+	in a,(PPI_PORT_C)
+	and 11110000B
+	or b
+	out (PPI_PORT_C),a
+	ei
+	in a,(PPI_PORT_B)
 	ld c,(hl)
 	ld (hl),a
 	xor c
+	ld b,8
 Keys_ProcessRow_Loop:
 	rrc c
 	rrca       ; preserves sign flag
 	call c,Keys_ProcessRowPress
 	inc ix
 	djnz Keys_ProcessRow_Loop
-	inc de
 	inc hl
 	ret
 
