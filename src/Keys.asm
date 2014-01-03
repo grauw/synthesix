@@ -37,7 +37,7 @@ Keys_ProcessRow_Loop:
 	push de
 	push hl
 	ld a,(de)
-	call Keys_ProcessRowChange
+	call Keys_ProcessKeyChange
 	pop hl
 	pop de
 	pop bc
@@ -48,53 +48,53 @@ Keys_ProcessRow_Next:
 	inc hl
 	ret
 
-Keys_ProcessRowChange:
-	jp p,Keys_ProcessRowRelease
-Keys_ProcessRowPress:
+Keys_ProcessKeyChange:
+	jp p,Keys_ProcessKeyRelease
+Keys_ProcessKeyPress:
 	and a
-	jp p,Keys_ProcessRowPress_Note
+	jp p,Keys_ProcessKeyPress_Note
 	cp -2
-	jp z,Keys_ProcessRowPress_IncreaseVelocity
+	jp z,Keys_ProcessKeyPress_IncreaseVelocity
 	cp -3
-	jp z,Keys_ProcessRowPress_DecreaseVelocity
+	jp z,Keys_ProcessKeyPress_DecreaseVelocity
 	cp -4
-	jp z,Keys_ProcessRowPress_IncreaseModulation
+	jp z,Keys_ProcessKeyPress_IncreaseModulation
 	cp -5
-	jp z,Keys_ProcessRowPress_DecreaseModulation
+	jp z,Keys_ProcessKeyPress_DecreaseModulation
 	ret
 
-Keys_ProcessRowRelease:
+Keys_ProcessKeyRelease:
 	and a
-	jp p,Keys_ProcessRowRelease_Note
+	jp p,Keys_ProcessKeyRelease_Note
 	ret
 
-Keys_ProcessRowPress_Note:
+Keys_ProcessKeyPress_Note:
 	ld bc,(Keys_velocity)
 	ld ix,(Synthesix_channel1)
 	call Channel_NoteOn
 	ret
 
-Keys_ProcessRowRelease_Note:
+Keys_ProcessKeyRelease_Note:
 	ld bc,4000H
 	ld ix,(Synthesix_channel1)
 	call Channel_NoteOff
 	ret
 
-Keys_ProcessRowPress_IncreaseVelocity:
+Keys_ProcessKeyPress_IncreaseVelocity:
 	ld a,(Keys_velocity + 1)
 	add a,8
 	and 7FH
 	ld (Keys_velocity + 1),a
 	ret
 
-Keys_ProcessRowPress_DecreaseVelocity:
+Keys_ProcessKeyPress_DecreaseVelocity:
 	ld a,(Keys_velocity + 1)
 	sub 8
 	and 7FH
 	ld (Keys_velocity + 1),a
 	ret
 
-Keys_ProcessRowPress_IncreaseModulation:
+Keys_ProcessKeyPress_IncreaseModulation:
 	ld a,(Keys_modulation + 1)
 	inc a
 	and 7FH
@@ -104,7 +104,7 @@ Keys_ProcessRowPress_IncreaseModulation:
 	call Channel_ControlChange
 	ret
 
-Keys_ProcessRowPress_DecreaseModulation:
+Keys_ProcessKeyPress_DecreaseModulation:
 	ld a,(Keys_modulation + 1)
 	dec a
 	and 7FH
