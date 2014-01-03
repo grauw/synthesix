@@ -61,21 +61,13 @@ PSGVoice_NoteOn:
 	ld l,b
 	ld a,(hl)
 	out (PSG_WRITE),a
-
-	; note on
-	ld a,PSG_MIXER_CONTROL
-	out (PSG_REGISTER_SELECT),a
-	in a,(PSG_READ)
-	and (ix + PSGVoice_mixerAndMask)
-	out (PSG_WRITE),a
 	ret
 
 ; ix = this
 PSGVoice_NoteOff:
-	ld a,PSG_MIXER_CONTROL
+	ld a,(ix + PSGVoice_level)
 	out (PSG_REGISTER_SELECT),a
-	in a,(PSG_READ)
-	or (ix + PSGVoice_mixerOrMask)
+	xor a
 	out (PSG_WRITE),a
 	ret
 
@@ -90,10 +82,6 @@ PSGVoice_frequencyMSB: equ $ - PSGVoice
 	db PSG_TONE_GENERATOR_CONTROL + 1
 PSGVoice_level: equ $ - PSGVoice
 	db PSG_AMPLITUDE_CONTROL + 0
-PSGVoice_mixerOrMask:equ $ - PSGVoice
-	db 00000001B
-PSGVoice_mixerAndMask:equ $ - PSGVoice
-	db 11111110B
 
 PSG_voice1: equ PSGVoice
 
@@ -101,20 +89,16 @@ PSG_voice2:
 	db PSG_TONE_GENERATOR_CONTROL + 2
 	db PSG_TONE_GENERATOR_CONTROL + 3
 	db PSG_AMPLITUDE_CONTROL + 1
-	db 00000010B
-	db 11111101B
 
 PSG_voice3:
 	db PSG_TONE_GENERATOR_CONTROL + 4
 	db PSG_TONE_GENERATOR_CONTROL + 5
 	db PSG_AMPLITUDE_CONTROL + 2
-	db 00000100B
-	db 11111011B
 
 PSG_initValues:
 	db 0, 0, 0, 0, 0, 0  ; tone frequency (x3)
 	db 0                 ; noise frequency
-	db 10111111B         ; mixer control 1, 0, noise (x3), tone (x3)
+	db 10111000B         ; mixer control 1, 0, noise (x3), tone (x3)
 	db 0, 0, 0           ; level (x3)
 	db 0BH, 00H          ; envelope frequency
 	db 0B8H              ; envelope shape
