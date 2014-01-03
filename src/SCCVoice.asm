@@ -69,11 +69,6 @@ SCCVoice_NoteOn:
 	call SCCVoice_UpdateAttack
 	ld (ix + SCCVoice_envelopeCounter),0  ; does this sit well with release?
 	; maybe envelope should be a separate class that counts its own jiffy.
-
-	ld a,(SCC_mixerCopy)
-	or (ix + SCCVoice_mixerOrMask)
-	ld (SCC_BASE + SCC_MIXER),a
-	ld (SCC_mixerCopy),a
 	ret
 
 ; ix = this
@@ -129,10 +124,6 @@ SCCVoice_UpdateRelease_Loop:
 SCCVoice_UpdateRelease_Complete:
 	ld b,h
 	ld (ix + SCCVoice_envelopeCounter),0
-	ld a,(SCC_mixerCopy)
-	and (ix + SCCVoice_mixerAndMask)
-	ld (SCC_BASE + SCC_MIXER),a
-	ld (SCC_mixerCopy),a
 	ret
 
 ; ix = this
@@ -146,6 +137,19 @@ SCCVoice_SetLevel:
 	ld h,SCC_BASE_MSB
 	ld l,(ix + SCCVoice_level)
 	ld (hl),a
+	jr z,SCCVoice_SetLevel_Off
+	; only needed if the mixer flag resets the phase of the wave...
+SCCVoice_SetLevel_On:
+	ld a,(SCC_mixerCopy)
+	or (ix + SCCVoice_mixerOrMask)
+	ld (SCC_BASE + SCC_MIXER),a
+	ld (SCC_mixerCopy),a
+	ret
+SCCVoice_SetLevel_Off:
+	ld a,(SCC_mixerCopy)
+	and (ix + SCCVoice_mixerAndMask)
+	ld (SCC_BASE + SCC_MIXER),a
+	ld (SCC_mixerCopy),a
 	ret
 
 ; ix = this
