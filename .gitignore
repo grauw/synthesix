@@ -1,5 +1,6 @@
-/.project
-/.externalToolBuilders/
-
 /gen/
 /bin/
+
+/.project
+/.externalToolBuilders/
+.DS_Store
