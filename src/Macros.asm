@@ -4,7 +4,7 @@
 ;
 PAD: MACRO ?address
 	IF $ > ?address
-		.ERROR Alignment exceeds ## ?address
+		ERROR "Alignment exceeds %s"; % ?address
 	ENDIF
 	ds ?address - $
 	ENDM

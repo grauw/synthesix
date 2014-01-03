@@ -115,8 +115,6 @@ Channel_Update:
 ; hl = voice pool
 Channel_AddPatch:
 	REPT Channel_MAX_VOICE_POOLS, ?pool
-	PROC
-	LOCAL Channel_AddPatch_Next
 	ld a,(ix + Channel_patches + ?pool * 2 + 1)
 	and a
 	jr nz,Channel_AddPatch_Next
@@ -124,6 +122,5 @@ Channel_AddPatch:
 	ld (ix + Channel_patches + ?pool * 2 + 1),h
 	ret
 Channel_AddPatch_Next:
-	ENDP
 	ENDM
 	call System_ThrowException

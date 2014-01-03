@@ -30,6 +30,3 @@ Label naming convention:
   * Variables: Class_variableName
   * Methods: Class_MethodName
   * Method-local labels: Class_MethodName_localName
-
-Code needs to be compiled with a modified version of Pasmo, found here:
-<https://bitbucket.org/grauw/pasmo/>

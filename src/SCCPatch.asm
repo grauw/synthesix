@@ -62,8 +62,6 @@ SCCPatch_New_Loop:
 ; b = velocity (0-127)
 SCCPatch_NoteOn:
 	REPT SCCPatch_MAX_VOICES, ?voice
-	PROC  ; make LOCAL work
-	LOCAL SCCPatch_NoteOn_Next
 	bit 7,(ix + SCCPatch_notes + ?voice)
 	jr z,SCCPatch_NoteOn_Next
 	ld e,(ix + SCCPatch_voices + ?voice * 2)
@@ -84,7 +82,6 @@ SCCPatch_NoteOn:
 	ld ixh,d
 	jp SCCVoice_NoteOn
 SCCPatch_NoteOn_Next:
-	ENDP
 	ENDM
 SCCPatch_NoteOn_Break:
 	; no free note found
@@ -95,8 +92,6 @@ SCCPatch_NoteOn_Break:
 ; b = velocity (0-127)
 SCCPatch_NoteOff:
 	REPT SCCPatch_MAX_VOICES, ?voice
-	PROC  ; make LOCAL work
-	LOCAL SCCPatch_NoteOff_Next
 	cp (ix + SCCPatch_notes + ?voice)
 	jr nz,SCCPatch_NoteOff_Next
 	ld e,(ix + SCCPatch_voices + ?voice * 2)
@@ -106,7 +101,6 @@ SCCPatch_NoteOff:
 	ld ixh,d
 	jp SCCVoice_NoteOff
 SCCPatch_NoteOff_Next:
-	ENDP
 	ENDM
 	; note not found
 	ret
@@ -122,8 +116,6 @@ SCCPatch_ControlChange:
 ; b = time delta
 SCCPatch_Update:
 	REPT SCCPatch_MAX_VOICES, ?voice
-	PROC  ; make LOCAL work
-	LOCAL SCCPatch_Update_Next
 	ld e,(ix + SCCPatch_voices + ?voice * 2)
 	ld d,(ix + SCCPatch_voices + ?voice * 2 + 1)
 	inc d
@@ -135,7 +127,6 @@ SCCPatch_Update:
 	call SCCVoice_Update
 	pop ix
 SCCPatch_Update_Next:
-	ENDP
 	ENDM
 	ret
 
@@ -155,8 +146,6 @@ SCCPatch_LoadWave:
 	ld a,ROM_WaveTableBank
 	ld (ROM_BANK_3_CHANGE),a
 	REPT SCCPatch_MAX_VOICES, ?voice
-	PROC
-	LOCAL SCCPatch_AddVoice_Next
 	ld e,(ix + SCCPatch_voices + ?voice * 2)
 	ld d,(ix + SCCPatch_voices + ?voice * 2 + 1)
 	inc d
@@ -168,7 +157,6 @@ SCCPatch_LoadWave:
 	call SCCVoice_LoadWave
 	pop hl
 	pop ix
-	ENDP
 	ENDM
 SCCPatch_LoadWave_Done:
 	ld a,ROM_Bank3Default
@@ -179,8 +167,6 @@ SCCPatch_LoadWave_Done:
 ; hl = voice
 SCCPatch_AddVoice:
 	REPT SCCPatch_MAX_VOICES, ?voice
-	PROC
-	LOCAL SCCPatch_AddVoice_Next
 	ld a,(ix + SCCPatch_voices + ?voice * 2 + 1)
 	and a
 	jr nz,SCCPatch_AddVoice_Next
@@ -188,6 +174,5 @@ SCCPatch_AddVoice:
 	ld (ix + SCCPatch_voices + ?voice * 2 + 1),h
 	ret
 SCCPatch_AddVoice_Next:
-	ENDP
 	ENDM
 	call System_ThrowException
