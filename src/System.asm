@@ -10,6 +10,8 @@ JIFFY: equ 0FC9EH
 EXPTBL: equ 0FCC1H
 SLTTBL: equ 0FCC5H
 PPI_PORT_A: equ 0A8H
+PPI_PORT_B: equ 0A9H
+PPI_PORT_C: equ 0AAH
 
 ; a = character
 ; Modifies: none
