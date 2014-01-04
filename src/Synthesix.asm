@@ -1,11 +1,8 @@
 Synthesix_Main:
-	call System_InitScreen0
-	ld hl,Synthesix_helloMessage
-	call System_Print
-
 	call System_EnableROMInPage2
 	call RAM_Init
 
+	call UI_Init
 	call Keys_Init
 	call PSG_Init
 	call SCC_Init

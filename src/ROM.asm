@@ -16,6 +16,7 @@ ROM_CodeBank2: equ 1
 
 	INCLUDE "Synthesix.asm"
 	INCLUDE "System.asm"
+	INCLUDE "VDP.asm"
 	INCLUDE "Math.asm"
 	INCLUDE "Heap.asm"
 	INCLUDE "Class.asm"
@@ -28,6 +29,7 @@ ROM_CodeBank2: equ 1
 	INCLUDE "SCCVoice.asm"
 	INCLUDE "AREnvelope.asm"
 	INCLUDE "MIDI.asm"
+	INCLUDE "ui/UI.asm"
 	PAD 8000H
 
 ROM_RAMInitBank: equ 2
