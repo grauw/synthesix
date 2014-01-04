@@ -45,9 +45,6 @@ Synthesix_UpdateLiveIndicator:
 	ld hl,Synthesix_liveIndicator2
 	jp System_Print
 
-Synthesix_helloMessage:
-	db "Synthesix\r\n\nMIDI synthesizer for MSX\r\n", 0
-
 Synthesix_liveIndicator1:
 	db "_\r",0
 Synthesix_liveIndicator2:
