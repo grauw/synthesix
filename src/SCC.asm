@@ -68,3 +68,16 @@ SCC_GetFreeVoice:
 	ret z
 	ENDM
 	call System_ThrowException
+
+;
+; Variables in RAM
+;
+	SECTION RAM
+
+SCC_mixerCopy:
+	db 0
+
+SCC_voices:
+	ds SCC_MAX_VOICES * 2
+
+	ENDS

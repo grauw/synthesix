@@ -36,3 +36,16 @@ Synthesix_UpdateChannels:
 	ld b,a
 	ld ix,(Synthesix_channel1)
 	jp Channel_Update
+
+;
+; Variables in RAM
+;
+	SECTION RAM
+
+Synthesix_lastJiffy:
+	db 0
+
+Synthesix_channel1:
+	dw 0
+
+	ENDS

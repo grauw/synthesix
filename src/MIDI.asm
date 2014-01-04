@@ -527,3 +527,18 @@ waitlp:
 	pop	bc
 	pop	af
 	ret
+
+
+;
+;	Workarea definition
+;
+	SECTION RAM
+
+hoksvt:	ds	10		;hook save area
+cmdsv:	ds	1		;8251 command save area
+getp:	ds	2		;pointer for getting MIDI data
+putp:	ds	2		;pointer for putting MIDI data
+mdbuf:	ds	128		;buffer for MIDI IN
+bufend	equ	$		;end of buffer
+
+	ENDS

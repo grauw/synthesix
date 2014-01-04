@@ -132,3 +132,19 @@ Keys_noteMapping:
 	db -1, -1, -1, -1, -5, -2, -3, -4  ; row 4: SPACE HOME INS DEL ← ↑ ↓ →
 	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: NUM* NUM+ NUM/ NUM0 NUM1 NUM2 NUM3 NUM4
 	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: NUM5 NUM6 NUM7 NUM8 NUM9 NUM- NUM, NUM.
+
+;
+; Variables in RAM
+;
+	SECTION RAM
+
+Keys_lastScan:
+	ds 11,0
+
+Keys_velocity:
+	dw 7F00H
+
+Keys_modulation:
+	dw 0000H
+
+	ENDS

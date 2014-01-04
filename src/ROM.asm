@@ -8,7 +8,34 @@
 
 ROM_CodeBank1: equ 0
 ROM_CodeBank2: equ 1
+ROM_RAMInitBank: equ 2
+ROM_MultiplyTableBank: equ 3
+ROM_WaveTableBank: equ 4
+ROM_SCCBank: equ 3FH
+
 	org 4000H
+ROM: ds 4000H
+RAM_sourceAddress:
+	org 0C000H
+RAM_startAddress:
+RAM: ds 2000H
+RAM_endAddress:
+	org 0A000H
+ROM_MULTIPLYTABLE: ds 2000H
+	org 0A000H
+ROM_WAVETABLES: ds 2000H
+
+ROM_BANK_0_CHANGE: equ 5000H
+ROM_BANK_1_CHANGE: equ 7000H
+ROM_BANK_2_CHANGE: equ 9000H
+ROM_BANK_3_CHANGE: equ 0B000H
+
+ROM_Bank0Default: equ ROM_CodeBank1
+ROM_Bank1Default: equ ROM_CodeBank2
+ROM_Bank2Default: equ ROM_SCCBank
+ROM_Bank3Default: equ ROM_MultiplyTableBank
+
+	SECTION ROM
 
 	db "AB"
 	dw Synthesix_Main
@@ -30,30 +57,55 @@ ROM_CodeBank2: equ 1
 	INCLUDE "AREnvelope.asm"
 	INCLUDE "MIDI.asm"
 	INCLUDE "ui/UI.asm"
-	PAD 8000H
 
-ROM_RAMInitBank: equ 2
-	INCLUDE "RAM.asm"
-	PAD 0A000H
+;
+; All RAM data is defined inside the marked section below
+; These values are copied to RAM during program initialisation
+;
 
-ROM_MultiplyTableBank: equ 3
+RAM_Init:
+	ld hl,RAM_sourceAddress
+	ld de,RAM_startAddress
+	ld bc,RAM_endAddress - RAM_startAddress
+	ldir
+	ret
+
+	ENDS
+
+	SECTION RAM
+
+; The initial ROM banks
+; Stored as words that include the bank select register address
+; Example: ld hl,(ROM_bank3) / ld (hl),l
+ROM_bank1:
+	dw 5000H
+ROM_bank2:
+	dw 7001H
+ROM_bank3:
+	dw 9002H
+ROM_bank4:
+	dw 0B003H
+
+;============================================
+; HEAP MUST BE THE LAST THING DEFINED IN RAM
+;============================================
+Heap_heapPosition:
+	dw Heap_start
+Heap_heapCapacity:
+	dw 1000H
+Heap_start:
+
+	ENDS
+
+	SECTION ROM_MULTIPLYTABLE
+
 Math_multiply127x127Table:
 	INCLUDE "multtable.asm"
-	PAD 0C000H
 
-ROM_WaveTableBank: equ 4
-	org 0A000H
+	ENDS
+
+	SECTION ROM_WAVETABLES
+
 	INCLUDE "SCCWaveTables.asm"
-	PAD 0C000H
 
-ROM_SCCBank: equ 3FH
-
-ROM_BANK_0_CHANGE: equ 5000H
-ROM_BANK_1_CHANGE: equ 7000H
-ROM_BANK_2_CHANGE: equ 9000H
-ROM_BANK_3_CHANGE: equ 0B000H
-
-ROM_Bank0Default: equ ROM_CodeBank1
-ROM_Bank1Default: equ ROM_CodeBank2
-ROM_Bank2Default: equ ROM_SCCBank
-ROM_Bank3Default: equ ROM_MultiplyTableBank
+	ENDS
