@@ -23,7 +23,7 @@ Synthesix_MainLoop:
 	halt
 	call Keys_Scan
 	call Synthesix_UpdateChannels
-	call Synthesix_UpdateLiveIndicator
+	call UI_Update
 	jp Synthesix_MainLoop
 
 Synthesix_UpdateChannels:
@@ -36,16 +36,3 @@ Synthesix_UpdateChannels:
 	ld b,a
 	ld ix,(Synthesix_channel1)
 	jp Channel_Update
-
-Synthesix_UpdateLiveIndicator:
-	ld hl,Synthesix_liveIndicator1
-	ld a,(JIFFY)
-	bit 5,a
-	jp z,System_Print
-	ld hl,Synthesix_liveIndicator2
-	jp System_Print
-
-Synthesix_liveIndicator1:
-	db "_\r",0
-Synthesix_liveIndicator2:
-	db " \r",0

@@ -9,6 +9,24 @@ UI_Init:
 	call VDP_Write
 	ret
 
+UI_Update:
+	call UI_UpdateLiveIndicator
+	ret
+
+UI_UpdateLiveIndicator:
+	ld a,0
+	ld hl,47
+	call VDP_SetWriteAddress
+	ld a,(JIFFY)
+	bit 5,a
+	ld a,'x'
+	jr z,UI_UpdateLiveIndicator_Tock
+	ld a,'X'
+UI_UpdateLiveIndicator_Tock:
+	out (VDP_PORT_0),a
+	ret
+
+;
 UI_template:
 	db 24,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23
 	db " S y n t h e s i x "
