@@ -57,52 +57,52 @@ Keys_ProcessKeyChange:
 ; a = key / note identifier
 Keys_ProcessKeyPress:
 	and a
-	jp p,Keys_ProcessKeyPress_Note
+	jp p,Keys_PressNote
 	cp -2
-	jp z,Keys_ProcessKeyPress_IncreaseVelocity
+	jp z,Keys_PressIncreaseVelocity
 	cp -3
-	jp z,Keys_ProcessKeyPress_DecreaseVelocity
+	jp z,Keys_PressDecreaseVelocity
 	cp -4
-	jp z,Keys_ProcessKeyPress_IncreaseModulation
+	jp z,Keys_PressIncreaseModulation
 	cp -5
-	jp z,Keys_ProcessKeyPress_DecreaseModulation
+	jp z,Keys_PressDecreaseModulation
 	cp -99
-	jp z,Keys_ProcessKeyPress_Escape
+	jp z,Keys_PressEscape
 	ret
 
 ; a = key / note identifier
 Keys_ProcessKeyRelease:
 	and a
-	jp p,Keys_ProcessKeyRelease_Note
+	jp p,Keys_ReleaseNote
 	ret
 
-Keys_ProcessKeyPress_Note:
+Keys_PressNote:
 	ld bc,(Keys_velocity)
 	ld ix,(Synthesix_channel1)
 	call Channel_NoteOn
 	ret
 
-Keys_ProcessKeyRelease_Note:
+Keys_ReleaseNote:
 	ld bc,4000H
 	ld ix,(Synthesix_channel1)
 	call Channel_NoteOff
 	ret
 
-Keys_ProcessKeyPress_IncreaseVelocity:
+Keys_PressIncreaseVelocity:
 	ld a,(Keys_velocity + 1)
 	add a,8
 	and 7FH
 	ld (Keys_velocity + 1),a
 	ret
 
-Keys_ProcessKeyPress_DecreaseVelocity:
+Keys_PressDecreaseVelocity:
 	ld a,(Keys_velocity + 1)
 	sub 8
 	and 7FH
 	ld (Keys_velocity + 1),a
 	ret
 
-Keys_ProcessKeyPress_IncreaseModulation:
+Keys_PressIncreaseModulation:
 	ld a,(Keys_modulation + 1)
 	inc a
 	and 7FH
@@ -112,7 +112,7 @@ Keys_ProcessKeyPress_IncreaseModulation:
 	call Channel_ControlChange
 	ret
 
-Keys_ProcessKeyPress_DecreaseModulation:
+Keys_PressDecreaseModulation:
 	ld a,(Keys_modulation + 1)
 	dec a
 	and 7FH
@@ -122,7 +122,7 @@ Keys_ProcessKeyPress_DecreaseModulation:
 	call Channel_ControlChange
 	ret
 
-Keys_ProcessKeyPress_Escape:
+Keys_PressEscape:
 	ld a,-1
 	ld (Keys_escape),a
 	ret
