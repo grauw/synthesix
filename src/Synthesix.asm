@@ -24,7 +24,10 @@ Synthesix_MainLoop:
 	call Keys_Scan
 	call Synthesix_UpdateChannels
 	call UI_Update
-	jp Synthesix_MainLoop
+	ld a,(Keys_escape)
+	and a
+	jp z,Synthesix_MainLoop
+	ret
 
 Synthesix_UpdateChannels:
 	ld a,(Synthesix_lastJiffy)

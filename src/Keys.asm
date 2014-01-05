@@ -66,6 +66,8 @@ Keys_ProcessKeyPress:
 	jp z,Keys_ProcessKeyPress_IncreaseModulation
 	cp -5
 	jp z,Keys_ProcessKeyPress_DecreaseModulation
+	cp -99
+	jp z,Keys_ProcessKeyPress_Escape
 	ret
 
 ; a = key / note identifier
@@ -120,6 +122,11 @@ Keys_ProcessKeyPress_DecreaseModulation:
 	call Channel_ControlChange
 	ret
 
+Keys_ProcessKeyPress_Escape:
+	ld a,-1
+	ld (Keys_escape),a
+	ret
+
 Keys_noteMapping:
 	db 63, -1, 49, 51, -1, 54, 56, 58  ; row 0: 0 1 2 3 4 5 6 7
 	db -1, 61, -1, 66, 68, 65, 67, 75  ; row 1: 8 9 - = \ [ ] ;
@@ -128,7 +135,7 @@ Keys_noteMapping:
 	db -1, 73, 71, 69, 62, 64, 48, 53  ; row 4: K L M N O P Q R
 	db 61, 55, 59, 65, 50, 62, 57, 60  ; row 4: S T U V W X Y Z
 	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: SHIFT CTRL GRAPH CAPS CODE F1 F2 F3
-	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: F4 F5 ESC TAB STOP BS SELECT RET
+	db -1, -1,-99, -1, -1, -1, -1, -1  ; row 4: F4 F5 ESC TAB STOP BS SELECT RET
 	db -1, -1, -1, -1, -5, -2, -3, -4  ; row 4: SPACE HOME INS DEL ← ↑ ↓ →
 	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: NUM* NUM+ NUM/ NUM0 NUM1 NUM2 NUM3 NUM4
 	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: NUM5 NUM6 NUM7 NUM8 NUM9 NUM- NUM, NUM.
@@ -146,5 +153,8 @@ Keys_velocity:
 
 Keys_modulation:
 	dw 0000H
+
+Keys_escape:
+	db 0
 
 	ENDS
