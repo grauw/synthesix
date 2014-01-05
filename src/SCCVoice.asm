@@ -1,10 +1,6 @@
 ;
 ; An SCC voice (channel)
 ;
-; On an SCC, the phase resets when you write the frequency (MSB or LSB).
-; On the ESE-SCC in the One Chip MSX, the phase never resets.
-; OpenMSX and CocoaMSX (BlueMSX) do what a real SCC does.
-;
 	dw SCCVoice_size
 SCCVoice:
 SCCVoice_waveRegister: equ $ - SCCVoice
