@@ -3,6 +3,7 @@ ENASLT: equ 24H
 INITXT: equ 6CH
 CHSNS: equ 9CH
 CHPUT: equ 0A2H
+RSLREG: equ 138H
 SNSMAT: equ 141H
 KILBUF: equ 156H
 LINL40: equ 0F3AEH
@@ -87,21 +88,33 @@ System_PrintHex_Done:
 	ret
 
 System_EnableROMInPage2:
-	in a,(PPI_PORT_A)
-	and 00001100B
-	rrca
-	rrca
-	ld hl,EXPTBL + 1
-	or (hl)
-	jp p,System_EnableROMInPage2_noSubslot
-	ld b,a
-	ld a,(SLTTBL + 1)
-	and 00001100B
-	or b
-System_EnableROMInPage2_noSubslot:
+	call System_GetPage1Slot
 	ld h,80H
 	call ENASLT
 	ei
+	ret
+
+System_GetPage1Slot:
+	call RSLREG
+	and 00001100B
+	rrca
+	rrca
+	ld c,a
+	ld b,0
+	ld hl,EXPTBL
+	add hl,bc
+	ld c,a
+	ld a,(hl)
+	and 80H
+	or c
+	ld c,a
+	inc hl  ; move to SLTTBL
+	inc hl
+	inc hl
+	inc hl
+	ld a,(hl)
+	and 00001100B
+	or c
 	ret
 
 System_Stop:
