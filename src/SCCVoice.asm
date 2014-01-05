@@ -7,11 +7,11 @@
 ;
 	dw SCCVoice_size
 SCCVoice:
-SCCVoice_wave: equ $ - SCCVoice
+SCCVoice_waveRegister: equ $ - SCCVoice
 	db SCC_WAVE_1
-SCCVoice_frequency: equ $ - SCCVoice
+SCCVoice_frequencyRegister: equ $ - SCCVoice
 	db SCC_FREQUENCY_1
-SCCVoice_level: equ $ - SCCVoice
+SCCVoice_levelRegister: equ $ - SCCVoice
 	db SCC_LEVEL_1
 SCCVoice_velocity: equ $ - SCCVoice
 	db 0
@@ -27,9 +27,9 @@ SCCVoice_size: equ $ - SCCVoice
 ; d = level register
 ; ix <- this
 SCCVoice_Constructor:
-	ld (ix + SCCVoice_wave),b
-	ld (ix + SCCVoice_frequency),c
-	ld (ix + SCCVoice_level),d
+	ld (ix + SCCVoice_waveRegister),b
+	ld (ix + SCCVoice_frequencyRegister),c
+	ld (ix + SCCVoice_levelRegister),d
 	push ix
 	ld iy,AREnvelope
 	call Class_New
@@ -55,7 +55,7 @@ SCCVoice_NoteOn:
 	ld d,(hl)
 
 	ld h,SCC_BASE_MSB
-	ld l,(ix + SCCVoice_frequency)
+	ld l,(ix + SCCVoice_frequencyRegister)
 	ld (hl),e
 	inc l
 	ld (hl),d
@@ -105,14 +105,14 @@ SCCVoice_SetLevel:
 	rrca
 	rrca
 	ld h,SCC_BASE_MSB
-	ld l,(ix + SCCVoice_level)
+	ld l,(ix + SCCVoice_levelRegister)
 	ld (hl),a
 	ret
 
 ; ix = this
 ; hl = wave address
 SCCVoice_LoadWave:
-	ld e,(ix + SCCVoice_wave)
+	ld e,(ix + SCCVoice_waveRegister)
 	ld d,SCC_BASE_MSB
 	ld bc,32
 	ldir
