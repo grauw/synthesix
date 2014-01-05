@@ -24,6 +24,16 @@ SCC_Init:
 	ld a,ROM_SCCBank
 	ld (ROM_BANK_2_CHANGE),a
 
+	ld a,0
+	ld (SCC_BASE + SCC_LEVEL_1),a
+	ld (SCC_BASE + SCC_LEVEL_2),a
+	ld (SCC_BASE + SCC_LEVEL_3),a
+	ld (SCC_BASE + SCC_LEVEL_4),a
+	ld (SCC_BASE + SCC_LEVEL_5),a
+	ld a,00011111B
+	ld (SCC_BASE + SCC_MIXER),a
+	ld (SCC_mixerCopy),a
+
 	ld iy,SCCVoice
 	call Class_New
 	ld (SCC_voices + 0),ix
