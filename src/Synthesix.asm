@@ -17,6 +17,8 @@ Synthesix_Main:
 	ld (Synthesix_lastJiffy),a
 
 	call Synthesix_MainLoop
+
+	call KILBUF
 	ret
 
 Synthesix_MainLoop:
