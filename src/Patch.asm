@@ -21,19 +21,19 @@ Patch_size: equ $ - Patch
 Patch_NoteOn:
 	ld l,(ix + Patch_noteOn + 0)
 	ld h,(ix + Patch_noteOn + 1)
-	jp (hl)
+	jp hl
 
 Patch_NoteOff:
 	ld l,(ix + Patch_noteOff + 0)
 	ld h,(ix + Patch_noteOff + 1)
-	jp (hl)
+	jp hl
 
 Patch_ControlChange:
 	ld l,(ix + Patch_controlChange + 0)
 	ld h,(ix + Patch_controlChange + 1)
-	jp (hl)
+	jp hl
 
 Patch_Update:
 	ld l,(ix + Patch_update + 0)
 	ld h,(ix + Patch_update + 1)
-	jp (hl)
+	jp hl
