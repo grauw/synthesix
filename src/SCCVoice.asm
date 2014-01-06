@@ -44,7 +44,7 @@ SCCVoice_NoteOn:
 
 	; de = frequency
 	ld h,PSG_frequencyTable / 100H
-	rlca
+	add a,a
 	ld l,a
 	ld e,(hl)
 	inc l
