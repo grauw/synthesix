@@ -27,6 +27,10 @@ SCCPatch_wave: equ $ - SCCPatch
 	db 0
 SCCPatch_notes: equ $ - SCCPatch
 	db -1, -1, -1, -1, -1
+SCCPatch_nextNote: equ $ - SCCPatch
+	db -1
+SCCPatch_lastNote: equ $ - SCCPatch
+	db -1
 SCCPatch_voices: equ $ - SCCPatch
 	REPT SCCPatch_MAX_VOICES, ?voice
 	dw 0
@@ -61,14 +65,19 @@ SCCPatch_New_Loop:
 ; a = note number (0-127)
 ; b = velocity (0-127)
 SCCPatch_NoteOn:
+	ld c,a
+	ld a,(ix + SCCPatch_nextNote)
+	cp (ix + SCCPatch_lastNote)
+	ret z
 	REPT SCCPatch_MAX_VOICES, ?voice
-	bit 7,(ix + SCCPatch_notes + ?voice)
-	jr z,SCCPatch_NoteOn_Next
+	cp (ix + SCCPatch_notes + ?voice)
+	jr nz,SCCPatch_NoteOn_Next
 	ld e,(ix + SCCPatch_voices + ?voice * 2)
 	ld d,(ix + SCCPatch_voices + ?voice * 2 + 1)
-	inc d
-	dec d
-	jp z,SCCPatch_NoteOn_Break
+	dec a
+	or 80H
+	ld (ix + SCCPatch_nextNote),a
+	ld a,c
 	ld (ix + SCCPatch_notes + ?voice),a
 
 	add a,(ix + SCCPatch_pitch)
@@ -83,8 +92,7 @@ SCCPatch_NoteOn:
 	jp SCCVoice_NoteOn
 SCCPatch_NoteOn_Next:
 	ENDM
-SCCPatch_NoteOn_Break:
-	; no free note found
+	call System_ThrowException
 	ret
 
 ; ix = this
@@ -94,9 +102,13 @@ SCCPatch_NoteOff:
 	REPT SCCPatch_MAX_VOICES, ?voice
 	cp (ix + SCCPatch_notes + ?voice)
 	jr nz,SCCPatch_NoteOff_Next
+	ld a,(ix + SCCPatch_lastNote)
+	ld (ix + SCCPatch_notes + ?voice),a
+	dec a
+	or 80H
+	ld (ix + SCCPatch_lastNote),a
 	ld e,(ix + SCCPatch_voices + ?voice * 2)
 	ld d,(ix + SCCPatch_voices + ?voice * 2 + 1)
-	ld (ix + SCCPatch_notes + ?voice),-1
 	ld ixl,e
 	ld ixh,d
 	jp SCCVoice_NoteOff
@@ -172,6 +184,11 @@ SCCPatch_AddVoice:
 	jr nz,SCCPatch_AddVoice_Next
 	ld (ix + SCCPatch_voices + ?voice * 2),l
 	ld (ix + SCCPatch_voices + ?voice * 2 + 1),h
+	ld a,(ix + SCCPatch_lastNote)
+	ld (ix + SCCPatch_notes + ?voice),a
+	dec a
+	or 80H
+	ld (ix + SCCPatch_lastNote),a
 	ret
 SCCPatch_AddVoice_Next:
 	ENDM
