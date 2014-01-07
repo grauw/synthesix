@@ -113,13 +113,3 @@ SCCVoice_LoadWave:
 	ld bc,32
 	ldir
 	ret
-
-; ix = this
-SCCVoice_Bind:
-	set 7,(ix + SCCVoice_free)
-	ret
-
-; ix = this
-SCCVoice_Free:
-	res 7,(ix + SCCVoice_free)
-	ret

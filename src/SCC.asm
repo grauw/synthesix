@@ -71,10 +71,13 @@ SCC_Init:
 	call SCCVoice_Constructor
 	ret
 
+; ix <- voice
+; Modifies: none
 SCC_GetFreeVoice:
 	REPT SCC_MAX_VOICES, ?voice
 	ld ix,(SCC_voices + ?voice * 2)
 	bit 7,(ix + SCCVoice_free)
+	set 7,(ix + SCCVoice_free)
 	ret z
 	ENDM
 	call System_ThrowException

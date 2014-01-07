@@ -51,7 +51,6 @@ SCCPatch_New_Loop:
 	push bc
 	push ix
 	call SCC_GetFreeVoice
-	call SCCVoice_Bind
 	ex (sp),ix
 	pop hl
 	call SCCPatch_AddVoice
