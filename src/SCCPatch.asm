@@ -72,8 +72,6 @@ SCCPatch_NoteOn:
 	REPT SCCPatch_MAX_VOICES, ?voice
 	cp (ix + SCCPatch_notes + ?voice)
 	jr nz,SCCPatch_NoteOn_Next
-	ld e,(ix + SCCPatch_voices + ?voice * 2)
-	ld d,(ix + SCCPatch_voices + ?voice * 2 + 1)
 	dec a
 	or 80H
 	ld (ix + SCCPatch_nextNote),a
@@ -87,6 +85,8 @@ SCCPatch_NoteOn:
 	call Math_Multiply127x127
 	ld b,a
 	ex af,af'
+	ld e,(ix + SCCPatch_voices + ?voice * 2)
+	ld d,(ix + SCCPatch_voices + ?voice * 2 + 1)
 	ld ixl,e
 	ld ixh,d
 	jp SCCVoice_NoteOn
