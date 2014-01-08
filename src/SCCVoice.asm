@@ -42,19 +42,7 @@ SCCVoice_Constructor:
 SCCVoice_NoteOn:
 	ld (ix + SCCVoice_velocity),b
 
-	; de = frequency
-	ld h,PSG_frequencyTable / 100H
-	add a,a
-	ld l,a
-	ld e,(hl)
-	inc l
-	ld d,(hl)
-
-	ld h,SCC_BASE_MSB
-	ld l,(ix + SCCVoice_frequencyRegister)
-	ld (hl),e
-	inc l
-	ld (hl),d
+	call SCCVoice_SetNote
 
 	ld e,(ix + SCCVoice_envelope + 0)
 	ld d,(ix + SCCVoice_envelope + 1)
@@ -89,6 +77,22 @@ SCCVoice_Update:
 	call AREnvelope_Update
 	pop ix
 	call SCCVoice_SetLevel
+	ret
+
+; ix = this
+; a = note
+SCCVoice_SetNote:
+	ld h,PSG_frequencyTable / 100H
+	add a,a
+	ld l,a
+	ld e,(hl)
+	inc l
+	ld d,(hl)
+	ld h,SCC_BASE_MSB
+	ld l,(ix + SCCVoice_frequencyRegister)
+	ld (hl),e
+	inc l
+	ld (hl),d
 	ret
 
 ; ix = this
