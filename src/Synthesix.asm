@@ -32,8 +32,18 @@ Synthesix_MainLoop:
 	ret
 
 Synthesix_Interrupt:
+	ld a,0F5H
+	out (VDP_PORT_1),a
+	ld a,VDP_REGISTER | 7
+	out (VDP_PORT_1),a
+
 	call Keys_Scan
 	call Synthesix_UpdateChannels
+
+	ld a,0F4H
+	out (VDP_PORT_1),a
+	ld a,VDP_REGISTER | 7
+	out (VDP_PORT_1),a
 
 	call System_OldTimiHook
 	ret
