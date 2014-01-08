@@ -26,7 +26,9 @@ Keys_ProcessRow:
 	in a,(PPI_PORT_B)
 	ld c,(hl)
 	ld (hl),a
+	inc hl
 	xor c
+	jr z,Keys_ProcessRow_NoChange
 	ld b,8
 Keys_ProcessRow_Loop:
 	rrc c
@@ -45,7 +47,13 @@ Keys_ProcessRow_Loop:
 Keys_ProcessRow_Next:
 	inc de
 	djnz Keys_ProcessRow_Loop
-	inc hl
+	ret
+Keys_ProcessRow_NoChange:
+	ld a,e
+	add a,8
+	ld e,a
+	ret nc
+	inc d
 	ret
 
 ; a = key / note identifier
