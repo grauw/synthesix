@@ -9,7 +9,7 @@ SCCVoice_frequencyRegister: equ $ - SCCVoice
 	db SCC_FREQUENCY_1
 SCCVoice_levelRegister: equ $ - SCCVoice
 	db SCC_LEVEL_1
-SCCVoice_velocity: equ $ - SCCVoice
+SCCVoice_level: equ $ - SCCVoice
 	db 0
 SCCVoice_envelope: equ $ - SCCVoice
 	dw System_ThrowException
@@ -38,9 +38,9 @@ SCCVoice_Constructor:
 
 ; ix = this
 ; a = note number (0-127)
-; b = velocity (0-127)
+; b = level (0-127)
 SCCVoice_NoteOn:
-	ld (ix + SCCVoice_velocity),b
+	ld (ix + SCCVoice_level),b
 
 	call SCCVoice_SetNote
 
@@ -96,9 +96,9 @@ SCCVoice_SetNote:
 	ret
 
 ; ix = this
-; a = volume
+; a = level
 SCCVoice_SetLevel:
-	ld l,(ix + SCCVoice_velocity)
+	ld l,(ix + SCCVoice_level)
 	call Math_Multiply127x127
 	rrca
 	rrca
