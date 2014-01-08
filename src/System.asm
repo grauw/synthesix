@@ -12,6 +12,7 @@ NEWKEY: equ 0FBE5H
 JIFFY: equ 0FC9EH
 EXPTBL: equ 0FCC1H
 SLTTBL: equ 0FCC5H
+H.TIMI: equ 0FD9FH
 
 PPI_PORT_A: equ 0A8H
 PPI_PORT_B: equ 0A9H
@@ -150,6 +151,21 @@ System_PrintExceptionMessage:
 	call System_Print
 	ret
 
+; hl hook address
+System_InstallTIMIHook:
+	push hl
+	ld hl,H.TIMI
+	ld de,System_OldTimiHook
+	ldi
+	ldi
+	ldi
+	ldi
+	ldi
+	pop hl
+	ld a,0C3H  ; jp
+	ld (H.TIMI),a
+	ld (H.TIMI + 1),hl
+	ret
 
 
 System_exceptionMessage:
@@ -158,3 +174,9 @@ System_exceptionMessage:
 System_crlf:
 	db "\r\n", 0
 
+	SECTION RAM
+
+System_OldTimiHook:
+	ds 5
+
+	ENDS

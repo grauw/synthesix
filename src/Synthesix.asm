@@ -13,6 +13,9 @@ Synthesix_Main:
 
 	call setmidi
 
+	ld hl,Synthesix_Interrupt
+	call System_InstallTIMIHook
+
 	ld a,(JIFFY)
 	ld (Synthesix_lastJiffy),a
 
@@ -22,13 +25,17 @@ Synthesix_Main:
 	ret
 
 Synthesix_MainLoop:
-	halt
-	call Keys_Scan
-	call Synthesix_UpdateChannels
 	call UI_Update
 	ld a,(Keys_escape)
 	and a
 	jp z,Synthesix_MainLoop
+	ret
+
+Synthesix_Interrupt:
+	call Keys_Scan
+	call Synthesix_UpdateChannels
+
+	call System_OldTimiHook
 	ret
 
 Synthesix_UpdateChannels:
