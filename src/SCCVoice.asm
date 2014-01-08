@@ -81,7 +81,6 @@ SCCVoice_NoteOff:
 ; ix = this
 ; b = time delta
 SCCVoice_Update:
-;	ret
 	ld e,(ix + SCCVoice_envelope + 0)
 	ld d,(ix + SCCVoice_envelope + 1)
 	push ix
