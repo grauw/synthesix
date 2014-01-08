@@ -110,7 +110,7 @@ SCCVoice_SetLevel:
 
 ; ix = this
 ; hl = wave address
-SCCVoice_LoadWave:
+SCCVoice_SetWave:
 	ld e,(ix + SCCVoice_waveRegister)
 	ld d,SCC_BASE_MSB
 	ld bc,32

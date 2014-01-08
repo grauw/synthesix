@@ -57,7 +57,7 @@ SCCPatch_New_Loop:
 	pop bc
 	djnz SCCPatch_New_Loop
 	ld a,(ix + SCCPatch_wave)
-	call SCCPatch_LoadWave
+	call SCCPatch_SetWave
 	ret
 
 ; ix = this
@@ -120,7 +120,7 @@ SCCPatch_NoteOff_Next:
 ; a = value
 ; b = controller
 SCCPatch_ControlChange:
-	call SCCPatch_LoadWave
+	call SCCPatch_SetWave
 	ret
 
 ; ix = this
@@ -143,7 +143,7 @@ SCCPatch_Update_Next:
 
 ; ix = this
 ; a = wave number
-SCCPatch_LoadWave:
+SCCPatch_SetWave:
 	ld l,a
 	ld h,0
 	add hl,hl
@@ -161,15 +161,15 @@ SCCPatch_LoadWave:
 	ld d,(ix + SCCPatch_voices + ?voice * 2 + 1)
 	inc d
 	dec d
-	jr z,SCCPatch_LoadWave_Done
+	jr z,SCCPatch_SetWave_Done
 	push de
 	ex (sp),ix
 	push hl
-	call SCCVoice_LoadWave
+	call SCCVoice_SetWave
 	pop hl
 	pop ix
 	ENDM
-SCCPatch_LoadWave_Done:
+SCCPatch_SetWave_Done:
 	ld a,ROM_Bank3Default
 	ld (ROM_BANK_3_CHANGE),a
 	ret
