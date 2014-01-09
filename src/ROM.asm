@@ -55,7 +55,7 @@ ROM_Bank3Default: equ ROM_MultiplyTableBank
 	INCLUDE "SCC.asm"
 	INCLUDE "SCCVoice.asm"
 	INCLUDE "AREnvelope.asm"
-	INCLUDE "MIDI.asm"
+	INCLUDE "MSXMIDI.asm"
 	INCLUDE "ui/UI.asm"
 
 ;
