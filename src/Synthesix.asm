@@ -33,28 +33,22 @@ Synthesix_MainLoop:
 	ret
 
 Synthesix_Interrupt:
-	call System_OldTimiHook
-	ld a,(Synthesix_inInterrupt)
-	and a
-	ret nz
-	dec a
-	ld (Synthesix_inInterrupt),a
 	ld a,0F5H
+	di
 	out (VDP_PORT_1),a
 	ld a,VDP_REGISTER | 7
-	out (VDP_PORT_1),a
 	ei
+	out (VDP_PORT_1),a
 
 	call Keys_Scan
 	call Synthesix_UpdateChannels
 
-	di
 	ld a,0F4H
+	di
 	out (VDP_PORT_1),a
 	ld a,VDP_REGISTER | 7
+	ei
 	out (VDP_PORT_1),a
-	xor a
-	ld (Synthesix_inInterrupt),a
 	ret
 
 Synthesix_UpdateChannels:
@@ -78,8 +72,5 @@ Synthesix_lastJiffy:
 
 Synthesix_channel1:
 	dw 0
-
-Synthesix_inInterrupt:
-	db 0
 
 	ENDS

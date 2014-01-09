@@ -153,24 +153,24 @@ System_PrintExceptionMessage:
 
 ; hl = handler address
 System_InstallTIMIHook:
-	push hl
+	ld (System_NewTIMIHook_address),hl
 	ld hl,H.TIMI
-	ld de,System_OldTimiHook
+	ld de,System_OldTIMIHook
 	di
 	ldi
 	ldi
 	ldi
 	ldi
 	ldi
-	pop hl
 	ld a,0C3H  ; jp
 	ld (H.TIMI),a
+	ld hl,System_TIMIHookWrapper
 	ld (H.TIMI + 1),hl
 	ei
 	ret
 
 System_RestoreTIMIHook:
-	ld hl,System_OldTimiHook
+	ld hl,System_OldTIMIHook
 	ld de,H.TIMI
 	di
 	ldi
@@ -179,6 +179,22 @@ System_RestoreTIMIHook:
 	ldi
 	ldi
 	ei
+	ret
+
+System_TIMIHookWrapper:
+	call System_OldTIMIHook
+	ld a,(System_inInterrupt)
+	and a
+	ret nz
+	dec a
+	ld (System_inInterrupt),a
+	ei
+
+	call System_NewTIMIHook
+
+	di
+	xor a
+	ld (System_inInterrupt),a
 	ret
 
 
@@ -190,7 +206,14 @@ System_crlf:
 
 	SECTION RAM
 
-System_OldTimiHook:
+System_OldTIMIHook:
 	ds 5
+
+System_NewTIMIHook:
+	jp System_ThrowException
+System_NewTIMIHook_address: equ $ - 2
+
+System_inInterrupt:
+	db 0
 
 	ENDS
