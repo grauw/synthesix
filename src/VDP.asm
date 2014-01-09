@@ -21,8 +21,19 @@ VDP_Enable212Lines:
 	ld a,(VDP_MIRROR_8 + 9)
 	or 10000000B
 	ld (VDP_MIRROR_8 + 9),a
+	ld b,9
+	call VDP_SetRegister
+	ret
+
+; a = value
+; b = register
+; Modifies: af
+VDP_SetRegister:
+	di
 	out (VDP_PORT_1),a
-	ld a,VDP_REGISTER | 9
+	ld a,b
+	or VDP_REGISTER
+	ei
 	out (VDP_PORT_1),a
 	ret
 

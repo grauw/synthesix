@@ -34,21 +34,15 @@ Synthesix_MainLoop:
 
 Synthesix_Interrupt:
 	ld a,0F5H
-	di
-	out (VDP_PORT_1),a
-	ld a,VDP_REGISTER | 7
-	ei
-	out (VDP_PORT_1),a
+	ld b,7
+	call VDP_SetRegister
 
 	call Keys_Scan
 	call Synthesix_UpdateChannels
 
 	ld a,0F4H
-	di
-	out (VDP_PORT_1),a
-	ld a,VDP_REGISTER | 7
-	ei
-	out (VDP_PORT_1),a
+	ld b,7
+	call VDP_SetRegister
 	ret
 
 Synthesix_UpdateChannels:
