@@ -21,6 +21,7 @@ Synthesix_Main:
 
 	call Synthesix_MainLoop
 
+	call System_RestoreTIMIHook
 	call KILBUF
 	ret
 

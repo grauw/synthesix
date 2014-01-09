@@ -151,11 +151,12 @@ System_PrintExceptionMessage:
 	call System_Print
 	ret
 
-; hl hook address
+; hl = handler address
 System_InstallTIMIHook:
 	push hl
 	ld hl,H.TIMI
 	ld de,System_OldTimiHook
+	di
 	ldi
 	ldi
 	ldi
@@ -165,6 +166,19 @@ System_InstallTIMIHook:
 	ld a,0C3H  ; jp
 	ld (H.TIMI),a
 	ld (H.TIMI + 1),hl
+	ei
+	ret
+
+System_RestoreTIMIHook:
+	ld hl,System_OldTimiHook
+	ld de,H.TIMI
+	di
+	ldi
+	ldi
+	ldi
+	ldi
+	ldi
+	ei
 	ret
 
 
