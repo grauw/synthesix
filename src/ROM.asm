@@ -73,6 +73,19 @@ RAM_Init:
 
 	ENDS
 
+	SECTION ROM_MULTIPLYTABLE
+
+Math_multiply127x127Table:
+	INCLUDE "multtable.asm"
+
+	ENDS
+
+	SECTION ROM_WAVETABLES
+
+	INCLUDE "SCCWaveTables.asm"
+
+	ENDS
+
 	SECTION RAM
 
 ; The initial ROM banks
@@ -91,18 +104,5 @@ ROM_bank4:
 ; HEAP MUST BE THE LAST THING DEFINED IN RAM
 ;============================================
 Heap_start:
-
-	ENDS
-
-	SECTION ROM_MULTIPLYTABLE
-
-Math_multiply127x127Table:
-	INCLUDE "multtable.asm"
-
-	ENDS
-
-	SECTION ROM_WAVETABLES
-
-	INCLUDE "SCCWaveTables.asm"
 
 	ENDS
