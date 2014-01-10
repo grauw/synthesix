@@ -38,6 +38,7 @@ Synthesix_Interrupt:
 	call VDP_SetRegister
 
 	call Keys_Scan
+	call MidiIn_ProcessMessages
 	call Synthesix_UpdateChannels
 
 	ld a,0F4H

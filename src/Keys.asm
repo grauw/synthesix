@@ -88,15 +88,15 @@ Keys_PressNote:
 	ld b,a
 	ld a,(Keys_velocity)
 	ld c,a
-	ld ix,(Channel_channels + 0)
-	call Channel_NoteOn
+	ld a,0
+	call MidiIn_NoteOn
 	ret
 
 Keys_ReleaseNote:
 	ld b,a
 	ld c,40H
-	ld ix,(Channel_channels + 0)
-	call Channel_NoteOff
+	ld a,0
+	call MidiIn_NoteOff
 	ret
 
 Keys_PressIncreaseVelocity:
@@ -120,8 +120,8 @@ Keys_PressIncreaseModulation:
 	ld (Keys_modulation),a
 	ld b,1
 	ld c,a
-	ld ix,(Channel_channels + 0)
-	call Channel_ControlChange
+	ld a,0
+	call MidiIn_ControlChange
 	ret
 
 Keys_PressDecreaseModulation:
@@ -131,8 +131,8 @@ Keys_PressDecreaseModulation:
 	ld (Keys_modulation),a
 	ld b,1
 	ld c,a
-	ld ix,(Channel_channels + 0)
-	call Channel_ControlChange
+	ld a,0
+	call MidiIn_ControlChange
 	ret
 
 Keys_PressEscape:

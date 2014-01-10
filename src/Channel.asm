@@ -140,6 +140,7 @@ Channel_AddPatch_Next:
 ;
 	SECTION RAM
 
+	ALIGN_FIT8 20H
 Channel_channels:
 	ds 16 * 2
 
