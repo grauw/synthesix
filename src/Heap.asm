@@ -22,3 +22,13 @@ Heap_Allocate_Throw:
 
 Heap_outOfHeapException:
 	db "Out of heap space.",0
+
+;
+	SECTION RAM
+
+Heap_heapPosition:
+	dw Heap_start
+Heap_heapCapacity:
+	dw 1000H
+
+	ENDS

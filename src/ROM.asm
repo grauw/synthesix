@@ -90,10 +90,6 @@ ROM_bank4:
 ;============================================
 ; HEAP MUST BE THE LAST THING DEFINED IN RAM
 ;============================================
-Heap_heapPosition:
-	dw Heap_start
-Heap_heapCapacity:
-	dw 1000H
 Heap_start:
 
 	ENDS
