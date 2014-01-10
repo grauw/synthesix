@@ -60,6 +60,9 @@ SCCPatch_New_Loop:
 	call SCCPatch_SetWave
 	ret
 
+; TODO if no notes are available, pick the one most recently played
+;      (or, at least retrigger the missed one once another is released)
+;
 ; ix = this
 ; b = note number (0-127)
 ; c = velocity (0-127)
