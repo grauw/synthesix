@@ -1,21 +1,24 @@
 ;
 ; An SCC voice (channel)
 ;
-	dw SCCVoice_size
-SCCVoice:
-SCCVoice_waveRegister: equ $ - SCCVoice
-	db SCC_WAVE_1
-SCCVoice_frequencyRegister: equ $ - SCCVoice
-	db SCC_FREQUENCY_1
-SCCVoice_levelRegister: equ $ - SCCVoice
-	db SCC_LEVEL_1
-SCCVoice_level: equ $ - SCCVoice
-	db 0
-SCCVoice_envelope: equ $ - SCCVoice
-	dw System_ThrowException
-SCCVoice_free: equ $ - SCCVoice
-	db 0
-SCCVoice_size: equ $ - SCCVoice
+SCCVoice: MACRO
+	waveRegister:
+		db SCC_WAVE_1
+	frequencyRegister:
+		db SCC_FREQUENCY_1
+	levelRegister:
+		db SCC_LEVEL_1
+	level:
+		db 0
+	envelope:
+		dw System_ThrowException
+	free:
+		db 0
+	size:
+	ENDM
+
+	dw SCCVoice.size
+SCCVoice_class: SCCVoice
 
 ; ix = this
 ; b = wave register
@@ -23,30 +26,30 @@ SCCVoice_size: equ $ - SCCVoice
 ; d = level register
 ; ix <- this
 SCCVoice_Constructor:
-	ld (ix + SCCVoice_waveRegister),b
-	ld (ix + SCCVoice_frequencyRegister),c
-	ld (ix + SCCVoice_levelRegister),d
+	ld (ix + SCCVoice.waveRegister),b
+	ld (ix + SCCVoice.frequencyRegister),c
+	ld (ix + SCCVoice.levelRegister),d
 	push ix
 	ld iy,AREnvelope_class
 	call Class_New
 	ld e,ixl
 	ld d,ixh
 	pop ix
-	ld (ix + SCCVoice_envelope + 0),e
-	ld (ix + SCCVoice_envelope + 1),d
+	ld (ix + SCCVoice.envelope + 0),e
+	ld (ix + SCCVoice.envelope + 1),d
 	ret
 
 ; ix = this
 ; b = note number (0-127)
 ; c = level (0-127)
 SCCVoice_NoteOn:
-	ld (ix + SCCVoice_level),c
+	ld (ix + SCCVoice.level),c
 
 	ld a,b
 	call SCCVoice_SetNote
 
-	ld e,(ix + SCCVoice_envelope + 0)
-	ld d,(ix + SCCVoice_envelope + 1)
+	ld e,(ix + SCCVoice.envelope + 0)
+	ld d,(ix + SCCVoice.envelope + 1)
 	push ix
 	ld ixl,e
 	ld ixh,d
@@ -57,8 +60,8 @@ SCCVoice_NoteOn:
 
 ; ix = this
 SCCVoice_NoteOff:
-	ld e,(ix + SCCVoice_envelope + 0)
-	ld d,(ix + SCCVoice_envelope + 1)
+	ld e,(ix + SCCVoice.envelope + 0)
+	ld d,(ix + SCCVoice.envelope + 1)
 	push ix
 	ld ixl,e
 	ld ixh,d
@@ -70,8 +73,8 @@ SCCVoice_NoteOff:
 ; ix = this
 ; b = time delta
 SCCVoice_Update:
-	ld e,(ix + SCCVoice_envelope + 0)
-	ld d,(ix + SCCVoice_envelope + 1)
+	ld e,(ix + SCCVoice.envelope + 0)
+	ld d,(ix + SCCVoice.envelope + 1)
 	push ix
 	ld ixl,e
 	ld ixh,d
@@ -90,7 +93,7 @@ SCCVoice_SetNote:
 	inc l
 	ld d,(hl)
 	ld h,SCC_BASE_MSB
-	ld l,(ix + SCCVoice_frequencyRegister)
+	ld l,(ix + SCCVoice.frequencyRegister)
 	ld (hl),e
 	inc l
 	ld (hl),d
@@ -99,20 +102,20 @@ SCCVoice_SetNote:
 ; ix = this
 ; a = level
 SCCVoice_SetLevel:
-	ld l,(ix + SCCVoice_level)
+	ld l,(ix + SCCVoice.level)
 	call Math_Multiply127x127
 	rrca
 	rrca
 	rrca
 	ld h,SCC_BASE_MSB
-	ld l,(ix + SCCVoice_levelRegister)
+	ld l,(ix + SCCVoice.levelRegister)
 	ld (hl),a
 	ret
 
 ; ix = this
 ; hl = wave address
 SCCVoice_SetWave:
-	ld e,(ix + SCCVoice_waveRegister)
+	ld e,(ix + SCCVoice.waveRegister)
 	ld d,SCC_BASE_MSB
 	ld bc,32
 	ldir

@@ -34,7 +34,7 @@ SCC_Init:
 	ld (SCC_BASE + SCC_MIXER),a
 	ld (SCC_mixerCopy),a
 
-	ld iy,SCCVoice
+	ld iy,SCCVoice_class
 	call Class_New
 	ld (SCC_voices + 0),ix
 	ld b,SCC_WAVE_1
@@ -43,7 +43,7 @@ SCC_Init:
 	ld e,00000001B
 	call SCCVoice_Constructor
 
-	ld iy,SCCVoice
+	ld iy,SCCVoice_class
 	call Class_New
 	ld (SCC_voices + 2),ix
 	ld b,SCC_WAVE_2
@@ -52,7 +52,7 @@ SCC_Init:
 	ld e,00000010B
 	call SCCVoice_Constructor
 
-	ld iy,SCCVoice
+	ld iy,SCCVoice_class
 	call Class_New
 	ld (SCC_voices + 4),ix
 	ld b,SCC_WAVE_3
@@ -61,7 +61,7 @@ SCC_Init:
 	ld e,00000100B
 	call SCCVoice_Constructor
 
-	ld iy,SCCVoice
+	ld iy,SCCVoice_class
 	call Class_New
 	ld (SCC_voices + 6),ix
 	ld b,SCC_WAVE_4_5
@@ -76,8 +76,8 @@ SCC_Init:
 SCC_GetFreeVoice:
 	REPT SCC_MAX_VOICES, ?voice
 	ld ix,(SCC_voices + ?voice * 2)
-	bit 7,(ix + SCCVoice_free)
-	set 7,(ix + SCCVoice_free)
+	bit 7,(ix + SCCVoice.free)
+	set 7,(ix + SCCVoice.free)
 	ret z
 	ENDM
 	call System_ThrowException
