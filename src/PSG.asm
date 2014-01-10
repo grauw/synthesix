@@ -1,4 +1,3 @@
-; Konami SCC mapper
 PSG_REGISTER_SELECT: equ 0A0H
 PSG_WRITE: equ 0A1H
 PSG_READ: equ 0A2H
