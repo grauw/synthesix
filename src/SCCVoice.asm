@@ -27,7 +27,7 @@ SCCVoice_Constructor:
 	ld (ix + SCCVoice_frequencyRegister),c
 	ld (ix + SCCVoice_levelRegister),d
 	push ix
-	ld iy,AREnvelope
+	ld iy,AREnvelope_class
 	call Class_New
 	ld e,ixl
 	ld d,ixh
