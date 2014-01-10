@@ -195,17 +195,8 @@ call_channel: MACRO ?length, ?method
 	inc l
 	ENDIF
 	ld (MidiIn_bufferTail),hl
-	rrca
-	rrca
-	rrca
-	add a,Channel_channels & 0FFH
-	ld l,a
-	ld h,Channel_channels >> 8
-	ld a,(hl)
 	ld ixl,a
-	inc l
-	ld a,(hl)
-	ld ixh,a
+	ld ixh,Channel_channels >> 8
 	IF ?length = 2
 	ld a,b
 	ELSE

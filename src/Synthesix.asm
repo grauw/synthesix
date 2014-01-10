@@ -6,8 +6,8 @@ Synthesix_Main:
 	call Keys_Init
 	call PSG_Init
 	call SCC_Init
-	call Channel_New
-	ld (Channel_channels + 0),ix
+	ld ix,Channel_channels.0
+	call Channel_Constructor
 
 	call Math_UnitTest
 
@@ -54,7 +54,7 @@ Synthesix_UpdateChannels:
 	sub b
 	ret z
 	ld b,a
-	ld ix,(Channel_channels + 0)
+	ld ix,Channel_channels.0
 	jp Channel_Update
 
 ;
