@@ -86,13 +86,13 @@ Keys_ProcessKeyRelease:
 
 Keys_PressNote:
 	ld bc,(Keys_velocity)
-	ld ix,(Synthesix_channel1)
+	ld ix,(Channel_channels + 0)
 	call Channel_NoteOn
 	ret
 
 Keys_ReleaseNote:
 	ld bc,4000H
-	ld ix,(Synthesix_channel1)
+	ld ix,(Channel_channels + 0)
 	call Channel_NoteOff
 	ret
 
@@ -116,7 +116,7 @@ Keys_PressIncreaseModulation:
 	and 7FH
 	ld (Keys_modulation + 1),a
 	ld b,1
-	ld ix,(Synthesix_channel1)
+	ld ix,(Channel_channels + 0)
 	call Channel_ControlChange
 	ret
 
@@ -126,7 +126,7 @@ Keys_PressDecreaseModulation:
 	and 7FH
 	ld (Keys_modulation + 1),a
 	ld b,1
-	ld ix,(Synthesix_channel1)
+	ld ix,(Channel_channels + 0)
 	call Channel_ControlChange
 	ret
 

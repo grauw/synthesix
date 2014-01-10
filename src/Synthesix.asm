@@ -7,7 +7,7 @@ Synthesix_Main:
 	call PSG_Init
 	call SCC_Init
 	call Channel_New
-	ld (Synthesix_channel1),ix
+	ld (Channel_channels + 0),ix
 
 	call Math_UnitTest
 
@@ -53,7 +53,7 @@ Synthesix_UpdateChannels:
 	sub b
 	ret z
 	ld b,a
-	ld ix,(Synthesix_channel1)
+	ld ix,(Channel_channels + 0)
 	jp Channel_Update
 
 ;
@@ -63,8 +63,5 @@ Synthesix_UpdateChannels:
 
 Synthesix_lastJiffy:
 	db 0
-
-Synthesix_channel1:
-	dw 0
 
 	ENDS

@@ -124,3 +124,11 @@ Channel_AddPatch:
 Channel_AddPatch_Next:
 	ENDM
 	call System_ThrowException
+
+;
+	SECTION RAM
+
+Channel_channels:
+	ds 16 * 2
+
+	ENDS
