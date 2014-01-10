@@ -92,6 +92,18 @@ Channel_ControlChange:
 	ENDM
 	ret
 
+Channel_PolyPressure:
+	ret
+
+Channel_ProgramChange:
+	ret
+
+Channel_ChannelPressure:
+	ret
+
+Channel_PitchBend:
+	ret
+
 ; ix = this
 ; b = delta time
 Channel_Update:
