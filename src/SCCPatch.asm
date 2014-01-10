@@ -61,10 +61,9 @@ SCCPatch_New_Loop:
 	ret
 
 ; ix = this
-; a = note number (0-127)
-; b = velocity (0-127)
+; b = note number (0-127)
+; c = velocity (0-127)
 SCCPatch_NoteOn:
-	ld c,a
 	ld a,(ix + SCCPatch_nextNote)
 	cp (ix + SCCPatch_lastNote)
 	ret z
@@ -74,15 +73,15 @@ SCCPatch_NoteOn:
 	dec a
 	or 80H
 	ld (ix + SCCPatch_nextNote),a
-	ld a,c
+	ld a,b
 	ld (ix + SCCPatch_notes + ?voice),a
 
 	add a,(ix + SCCPatch_pitch)
 	ex af,af'
-	ld a,b
+	ld a,c
 	ld l,(ix + SCCPatch_level)
 	call Math_Multiply127x127
-	ld b,a
+	ld c,a
 	ex af,af'
 	ld e,(ix + SCCPatch_voices + ?voice * 2)
 	ld d,(ix + SCCPatch_voices + ?voice * 2 + 1)
@@ -95,9 +94,10 @@ SCCPatch_NoteOn_Next:
 	ret
 
 ; ix = this
-; a = note number (0-127)
-; b = velocity (0-127)
+; b = note number (0-127)
+; c = velocity (0-127)
 SCCPatch_NoteOff:
+	ld a,b
 	REPT SCCPatch_MAX_VOICES, ?voice
 	cp (ix + SCCPatch_notes + ?voice)
 	jr nz,SCCPatch_NoteOff_Next
@@ -117,9 +117,10 @@ SCCPatch_NoteOff_Next:
 	ret
 
 ; ix = this
-; a = value
 ; b = controller
+; c = value
 SCCPatch_ControlChange:
+	ld a,c
 	call SCCPatch_SetWave
 	ret
 

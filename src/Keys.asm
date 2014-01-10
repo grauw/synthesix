@@ -85,47 +85,52 @@ Keys_ProcessKeyRelease:
 	ret
 
 Keys_PressNote:
-	ld bc,(Keys_velocity)
+	ld b,a
+	ld a,(Keys_velocity)
+	ld c,a
 	ld ix,(Channel_channels + 0)
 	call Channel_NoteOn
 	ret
 
 Keys_ReleaseNote:
-	ld bc,4000H
+	ld b,a
+	ld c,40H
 	ld ix,(Channel_channels + 0)
 	call Channel_NoteOff
 	ret
 
 Keys_PressIncreaseVelocity:
-	ld a,(Keys_velocity + 1)
+	ld a,(Keys_velocity)
 	add a,8
 	and 7FH
-	ld (Keys_velocity + 1),a
+	ld (Keys_velocity),a
 	ret
 
 Keys_PressDecreaseVelocity:
-	ld a,(Keys_velocity + 1)
+	ld a,(Keys_velocity)
 	sub 8
 	and 7FH
-	ld (Keys_velocity + 1),a
+	ld (Keys_velocity),a
 	ret
 
 Keys_PressIncreaseModulation:
-	ld a,(Keys_modulation + 1)
+	ld a,(Keys_modulation)
 	inc a
 	and 7FH
-	ld (Keys_modulation + 1),a
+	ld (Keys_modulation),a
 	ld b,1
+	ld c,a
 	ld ix,(Channel_channels + 0)
 	call Channel_ControlChange
 	ret
 
 Keys_PressDecreaseModulation:
-	ld a,(Keys_modulation + 1)
+	ld a,(Keys_modulation)
 	dec a
 	and 7FH
-	ld (Keys_modulation + 1),a
+	ld (Keys_modulation),a
 	ld b,1
+	ld c,a
 	ld ix,(Channel_channels + 0)
 	call Channel_ControlChange
 	ret
@@ -157,10 +162,10 @@ Keys_lastScan:
 	ds 11,0
 
 Keys_velocity:
-	dw 7F00H
+	db 7FH
 
 Keys_modulation:
-	dw 0000H
+	db 00H
 
 Keys_escape:
 	db 0

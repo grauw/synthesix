@@ -37,11 +37,12 @@ SCCVoice_Constructor:
 	ret
 
 ; ix = this
-; a = note number (0-127)
-; b = level (0-127)
+; b = note number (0-127)
+; c = level (0-127)
 SCCVoice_NoteOn:
-	ld (ix + SCCVoice_level),b
+	ld (ix + SCCVoice_level),c
 
+	ld a,b
 	call SCCVoice_SetNote
 
 	ld e,(ix + SCCVoice_envelope + 0)

@@ -37,12 +37,12 @@ PSG_Dump_Loop:
 	ret
 
 ; ix = this
-; a = note number (0-127)
-; b = velocity (0-127)
+; b = note number (0-127)
+; c = velocity (0-127)
 PSGVoice_NoteOn:
 	; frequency
 	ld h,PSG_frequencyTable / 100H
-	ld l,a
+	ld l,b
 	sla l
 	ld a,(ix + PSGVoice_frequencyLSB)
 	out (PSG_REGISTER_SELECT),a
@@ -58,7 +58,7 @@ PSGVoice_NoteOn:
 	ld a,(ix + PSGVoice_level)
 	out (PSG_REGISTER_SELECT),a
 	ld h,PSG_volumeTable / 100H
-	ld l,b
+	ld l,c
 	ld a,(hl)
 	out (PSG_WRITE),a
 	ret

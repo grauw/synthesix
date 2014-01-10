@@ -27,8 +27,8 @@ Channel_New:
 	ret
 
 ; ix = this
-; a = note number (0-127)
-; b = velocity (0-127)
+; b = note number (0-127)
+; c = velocity (0-127)
 Channel_NoteOn:
 	REPT Channel_MAX_VOICE_POOLS, ?pool
 	ld e,(ix + Channel_patches + ?pool * 2)
@@ -49,8 +49,8 @@ Channel_NoteOn:
 	ret
 
 ; ix = this
-; a = note number (0-127)
-; b = velocity (0-127)
+; b = note number (0-127)
+; c = velocity (0-127)
 Channel_NoteOff:
 	REPT Channel_MAX_VOICE_POOLS, ?pool
 	ld e,(ix + Channel_patches + ?pool * 2)
@@ -71,8 +71,8 @@ Channel_NoteOff:
 	ret
 
 ; ix = this
-; a = value
 ; b = controller
+; c = value
 Channel_ControlChange:
 	REPT Channel_MAX_VOICE_POOLS, ?pool
 	ld e,(ix + Channel_patches + ?pool * 2)
