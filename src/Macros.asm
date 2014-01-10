@@ -9,6 +9,9 @@ PAD: MACRO ?address
 	ds ?address - $
 	ENDM
 
+;
+; Pads up to the next multiple of the specified address.
+;
 ALIGN: MACRO ?boundary
 	ds ?boundary - 1 - ($ + ?boundary - 1) % ?boundary
 	ENDM
