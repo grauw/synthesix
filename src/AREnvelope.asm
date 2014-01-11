@@ -17,6 +17,7 @@ AREnvelope: MACRO
 AREnvelope_class: AREnvelope
 
 ; ix = this
+; a <- value
 AREnvelope_NoteOn:
 	ld (ix + AREnvelope.counter),0
 	ld b,1
@@ -26,6 +27,7 @@ AREnvelope_NoteOn:
 	ret
 
 ; ix = this
+; a <- value
 AREnvelope_NoteOff:
 	ld c,(ix + AREnvelope.counter)
 	ld b,1
