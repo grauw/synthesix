@@ -54,10 +54,10 @@ ROM_Bank3Default: equ ROM_MultiplyTableBank
 	INCLUDE "PSG.asm"
 	INCLUDE "SCC.asm"
 	INCLUDE "SCCVoice.asm"
-	INCLUDE "AREnvelope.asm"
-	INCLUDE "TriangleLFO.asm"
 	INCLUDE "MidiIn.asm"
 	INCLUDE "MSXMIDI.asm"
+	INCLUDE "modulation/AREnvelope.asm"
+	INCLUDE "modulation/TriangleLFO.asm"
 	INCLUDE "ui/UI.asm"
 
 ;
