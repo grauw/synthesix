@@ -39,52 +39,36 @@ AREnvelope_NoteOff:
 	ret
 
 ; iy = this
-; b = time delta
 ; a <- value
-; b <- time delta
 AREnvelope_Update:
 	bit 7,(iy + AREnvelope.phase)  ; to test a third phase: rlc (iy) ; jp po
 	jr nz,AREnvelope_UpdateRelease
 	jp AREnvelope_UpdateAttack
 
 ; iy = this
-; b = time delta
 ; a <- value
-; b <- time delta
 AREnvelope_UpdateAttack:
 	ld a,(iy + AREnvelope.counter)
-	ld h,b
-AREnvelope_UpdateAttack_Loop:
 	add a,(iy + AREnvelope.attack)
 	jr c,AREnvelope_UpdateAttack_Complete
-	djnz AREnvelope_UpdateAttack_Loop
-	ld b,h
 	ld (iy + AREnvelope.counter),a
 	rra
 	ret
 AREnvelope_UpdateAttack_Complete:
-	ld b,h
 	ld (iy + AREnvelope.counter),255
 	ld a,127
 	ret
 
 ; iy = this
-; b = time delta
 ; a <- value
-; b <- time delta
 AREnvelope_UpdateRelease:
 	ld a,(iy + AREnvelope.counter)
-	ld h,b
-AREnvelope_UpdateRelease_Loop:
 	sub (iy + AREnvelope.release)
 	jr c,AREnvelope_UpdateRelease_Complete
-	djnz AREnvelope_UpdateRelease_Loop
-	ld b,h
 	ld (iy + AREnvelope.counter),a
 	rra
 	ret
 AREnvelope_UpdateRelease_Complete:
-	ld b,h
 	ld (iy + AREnvelope.counter),0
 	xor a
 	ret

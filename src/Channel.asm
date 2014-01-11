@@ -114,7 +114,6 @@ Channel_PitchBend:
 	ret
 
 ; ix = this
-; b = delta time
 Channel_Update:
 	REPT Channel.MAX_VOICE_POOLS, ?pool
 	ld e,(ix + Channel.patches + ?pool * 2)
@@ -123,11 +122,9 @@ Channel_Update:
 	dec d
 	ret z
 	push ix
-	push bc
 	ld ixl,e
 	ld ixh,d
 	call Patch_Update
-	pop bc
 	pop ix
 	ENDM
 	ret

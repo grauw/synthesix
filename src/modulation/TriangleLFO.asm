@@ -34,16 +34,10 @@ TriangleLFO_NoteOff:
 	ret
 
 ; iy = this
-; b = time delta
 ; a <- value
-; b <- time delta
 TriangleLFO_Update:
 	ld a,(iy + TriangleLFO.counter)
-	ld h,b
-TriangleLFO_Update_Loop:
 	add a,(iy + TriangleLFO.speed)
-	djnz TriangleLFO_Update_Loop
-	ld b,h
 	ld (iy + TriangleLFO.counter),a
 TriangleLFO_Update_Return:
 	and a

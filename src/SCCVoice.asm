@@ -67,7 +67,6 @@ SCCVoice_NoteOff:
 	ret
 
 ; ix = this
-; b = time delta
 SCCVoice_Update:
 	ld e,(ix + SCCVoice.modulation + 0)
 	ld d,(ix + SCCVoice.modulation + 1)

@@ -133,7 +133,6 @@ SCCPatch_ControlChange:
 	ret
 
 ; ix = this
-; b = time delta
 SCCPatch_Update:
 	REPT SCCPatch.MAX_VOICES, ?voice
 	ld e,(ix + SCCPatch.voices + ?voice * 2)

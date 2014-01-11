@@ -53,7 +53,6 @@ Synthesix_UpdateChannels:
 	ld (Synthesix_lastJiffy),a
 	sub b
 	ret z
-	ld b,a
 	ld ix,Channel_channels.0
 	jp Channel_Update
 
