@@ -10,7 +10,7 @@ SCCVoice: MACRO
 		db SCC_LEVEL_1
 	level:
 		db 0
-	envelope:
+	modulation:
 		dw System_ThrowException
 	free:
 		db 0
@@ -35,8 +35,8 @@ SCCVoice_Constructor:
 	ld e,ixl
 	ld d,ixh
 	pop ix
-	ld (ix + SCCVoice.envelope + 0),e
-	ld (ix + SCCVoice.envelope + 1),d
+	ld (ix + SCCVoice.modulation + 0),e
+	ld (ix + SCCVoice.modulation + 1),d
 	ret
 
 ; ix = this
@@ -48,24 +48,24 @@ SCCVoice_NoteOn:
 	ld a,b
 	call SCCVoice_SetNote
 
-	ld e,(ix + SCCVoice.envelope + 0)
-	ld d,(ix + SCCVoice.envelope + 1)
+	ld e,(ix + SCCVoice.modulation + 0)
+	ld d,(ix + SCCVoice.modulation + 1)
 	push ix
 	ld ixl,e
 	ld ixh,d
-	call AREnvelope_NoteOn
+	call Modulation_NoteOn
 	pop ix
 	call SCCVoice_SetLevel
 	ret
 
 ; ix = this
 SCCVoice_NoteOff:
-	ld e,(ix + SCCVoice.envelope + 0)
-	ld d,(ix + SCCVoice.envelope + 1)
+	ld e,(ix + SCCVoice.modulation + 0)
+	ld d,(ix + SCCVoice.modulation + 1)
 	push ix
 	ld ixl,e
 	ld ixh,d
-	call AREnvelope_NoteOff
+	call Modulation_NoteOff
 	pop ix
 	call SCCVoice_SetLevel
 	ret
@@ -73,12 +73,12 @@ SCCVoice_NoteOff:
 ; ix = this
 ; b = time delta
 SCCVoice_Update:
-	ld e,(ix + SCCVoice.envelope + 0)
-	ld d,(ix + SCCVoice.envelope + 1)
+	ld e,(ix + SCCVoice.modulation + 0)
+	ld d,(ix + SCCVoice.modulation + 1)
 	push ix
 	ld ixl,e
 	ld ixh,d
-	call AREnvelope_Update
+	call Modulation_Update
 	pop ix
 	call SCCVoice_SetLevel
 	ret

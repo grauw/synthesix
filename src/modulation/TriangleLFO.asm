@@ -2,6 +2,8 @@
 ; An AR envelope
 ;
 TriangleLFO: MACRO
+	super:
+		Modulation TriangleLFO_NoteOn, TriangleLFO_NoteOff, TriangleLFO_Update
 	speed:
 		db 30
 	keyTrigger:

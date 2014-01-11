@@ -56,6 +56,7 @@ ROM_Bank3Default: equ ROM_MultiplyTableBank
 	INCLUDE "SCCVoice.asm"
 	INCLUDE "MidiIn.asm"
 	INCLUDE "MSXMIDI.asm"
+	INCLUDE "modulation/Modulation.asm"
 	INCLUDE "modulation/AREnvelope.asm"
 	INCLUDE "modulation/TriangleLFO.asm"
 	INCLUDE "ui/UI.asm"

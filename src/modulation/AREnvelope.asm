@@ -2,6 +2,8 @@
 ; An AR envelope
 ;
 AREnvelope: MACRO
+	super:
+		Modulation AREnvelope_NoteOn, AREnvelope_NoteOff, AREnvelope_Update
 	attack:
 		db 255 / 30  ; inverse speed
 	release:
