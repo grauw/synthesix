@@ -36,7 +36,7 @@ AREnvelope_NoteOff:
 
 ; ix = this
 ; b = time delta
-; a <- envelope value
+; a <- value
 ; b <- time delta
 AREnvelope_Update:
 	bit 7,(ix + AREnvelope.phase)  ; to test a third phase: rlc (ix) ; jp po
@@ -45,7 +45,7 @@ AREnvelope_Update:
 
 ; ix = this
 ; b = time delta
-; a <- envelope value
+; a <- value
 ; b <- time delta
 AREnvelope_UpdateAttack:
 	ld a,(ix + AREnvelope.counter)
@@ -66,7 +66,7 @@ AREnvelope_UpdateAttack_Complete:
 
 ; ix = this
 ; b = time delta
-; a <- envelope value
+; a <- value
 ; b <- time delta
 AREnvelope_UpdateRelease:
 	ld a,(ix + AREnvelope.counter)
