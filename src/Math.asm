@@ -41,6 +41,30 @@ Math_Multiply127x127Signed:
 	cpl
 	ret
 
+; Multiply a (signed) with l (fractional) and add to de
+; a = multiplicand (signed 1’s complement)
+; l = multiplier
+; de = value
+; de <- value + product
+; Modifies: af, hl
+Math_Multiply127x127SignedAndAdd:
+	call Math_Multiply127x127Signed
+	and a
+	jp m,Subtract
+	add a,e
+	ld e,a
+	ret nc
+	inc d
+	ret
+Subtract:
+	inc e
+	add a,e
+	ld e,a
+	ret c
+	dec d
+	ret
+	ENDP
+
 ; Multiply a 7-bit integer with a 7-bit number which represents the range 0..1.
 ; Implementation without lookup table. Has a miniscule rounding deviation.
 ; Note: Value range is suitable for use of David Heremans’ multiplication code.

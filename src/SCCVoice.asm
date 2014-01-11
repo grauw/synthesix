@@ -122,13 +122,9 @@ SCCVoice_SetNote: PROC
 	sub e
 	neg
 	srl a
-	ld l,b
-	call Math_Multiply127x127
-	add a,e
-	ld e,a
-	ld a,d
-	adc a,0
-	ld d,a
+	ld l,a
+	ld a,b
+	call Math_Multiply127x127SignedAndAdd
 	ld a,(ix + SCCVoice.frequency)
 	cp e
 	jr nz,FrequencyChanged
