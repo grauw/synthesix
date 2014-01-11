@@ -18,21 +18,25 @@ Patch: MACRO ?noteOn, ?noteOff, ?controlChange, ?update
 	size:
 	ENDM
 
+; ix = this
 Patch_NoteOn:
 	ld l,(ix + Patch.noteOn + 0)
 	ld h,(ix + Patch.noteOn + 1)
 	jp hl
 
+; ix = this
 Patch_NoteOff:
 	ld l,(ix + Patch.noteOff + 0)
 	ld h,(ix + Patch.noteOff + 1)
 	jp hl
 
+; ix = this
 Patch_ControlChange:
 	ld l,(ix + Patch.controlChange + 0)
 	ld h,(ix + Patch.controlChange + 1)
 	jp hl
 
+; ix = this
 Patch_Update:
 	ld l,(ix + Patch.update + 0)
 	ld h,(ix + Patch.update + 1)
