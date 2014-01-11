@@ -8,7 +8,7 @@ SCCVoice: MACRO
 		db SCC_FREQUENCY_1
 	levelRegister:
 		db SCC_LEVEL_1
-	level:
+	velocity:
 		db 0
 	modulation:
 		dw System_ThrowException
@@ -41,9 +41,9 @@ SCCVoice_Constructor:
 
 ; ix = this
 ; b = note number (0-127)
-; c = level (0-127)
+; c = velocity (0-127)
 SCCVoice_NoteOn:
-	ld (ix + SCCVoice.level),c
+	ld (ix + SCCVoice.velocity),c
 
 	ld a,b
 	call SCCVoice_SetNote
@@ -95,7 +95,7 @@ SCCVoice_SetNote:
 ; ix = this
 ; a = level
 SCCVoice_SetLevel:
-	ld l,(ix + SCCVoice.level)
+	ld l,(ix + SCCVoice.velocity)
 	call Math_Multiply127x127
 	rrca
 	rrca
