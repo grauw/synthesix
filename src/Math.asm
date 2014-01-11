@@ -1,6 +1,6 @@
 ; Multiply a 7-bit integer with a 7-bit number which represents the range 0..1.
-; a = factor 1
-; l = factor 2
+; a = multiplicand
+; l = multiplier
 ; a <- product
 ; Modifies: hl
 ; Clock ticks: 77 / 98
@@ -25,6 +25,20 @@ Math_Multiply127x127_Inverse:
 	ld a,l
 	and 7FH
 	sub (hl)
+	ret
+
+; Multiply an 8-bit signed integer with a 7-bit fractional number which
+; represents the range 0..1.
+; a = multiplicand (signed 1’s complement)
+; l = multiplier
+; a <- product (signed 1’s complement)
+; Modifies: hl
+Math_Multiply127x127Signed:
+	bit 7,a
+	jp z,Math_Multiply127x127
+	cpl
+	call Math_Multiply127x127
+	cpl
 	ret
 
 ; Multiply a 7-bit integer with a 7-bit number which represents the range 0..1.
@@ -121,6 +135,24 @@ Math_UnitTest:
 	ld l,47
 	call Math_Multiply127x127
 	cp 37
+	call nz,System_ThrowException
+
+	ld a,47
+	ld l,101
+	call Math_Multiply127x127Signed
+	cp 37
+	call nz,System_ThrowException
+
+	ld a,-47
+	ld l,101
+	call Math_Multiply127x127Signed
+	cp -38
+	call nz,System_ThrowException
+
+	ld a,-102
+	ld l,47
+	call Math_Multiply127x127Signed
+	cp -38
 	call nz,System_ThrowException
 
 	ld a,101
