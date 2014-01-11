@@ -8,9 +8,13 @@ SCCVoice: MACRO
 		db SCC_FREQUENCY_1
 	levelRegister:
 		db SCC_LEVEL_1
+	note:
+		db 0
 	velocity:
 		db 0
 	modulation:
+		dw System_ThrowException
+	pitchModulation:
 		dw System_ThrowException
 	free:
 		db 0
@@ -37,15 +41,30 @@ SCCVoice_Constructor:
 	pop ix
 	ld (ix + SCCVoice.modulation + 0),e
 	ld (ix + SCCVoice.modulation + 1),d
+	push ix
+	ld iy,TriangleLFO_class
+	call Class_New
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (ix + SCCVoice.pitchModulation + 0),e
+	ld (ix + SCCVoice.pitchModulation + 1),d
 	ret
 
 ; ix = this
 ; b = note number (0-127)
 ; c = velocity (0-127)
 SCCVoice_NoteOn:
+	ld (ix + SCCVoice.note),b
 	ld (ix + SCCVoice.velocity),c
 
-	ld a,b
+	ld e,(ix + SCCVoice.pitchModulation + 0)
+	ld d,(ix + SCCVoice.pitchModulation + 1)
+	ld iyl,e
+	ld iyh,d
+	call Modulation_NoteOn
+	ld b,a
+	ld a,(ix + SCCVoice.note)
 	call SCCVoice_SetNote
 
 	ld e,(ix + SCCVoice.modulation + 0)
@@ -58,6 +77,15 @@ SCCVoice_NoteOn:
 
 ; ix = this
 SCCVoice_NoteOff:
+	ld e,(ix + SCCVoice.pitchModulation + 0)
+	ld d,(ix + SCCVoice.pitchModulation + 1)
+	ld iyl,e
+	ld iyh,d
+	call Modulation_NoteOff
+	ld b,a
+	ld a,(ix + SCCVoice.note)
+	call SCCVoice_SetNote
+
 	ld e,(ix + SCCVoice.modulation + 0)
 	ld d,(ix + SCCVoice.modulation + 1)
 	ld iyl,e
@@ -68,6 +96,15 @@ SCCVoice_NoteOff:
 
 ; ix = this
 SCCVoice_Update:
+	ld e,(ix + SCCVoice.pitchModulation + 0)
+	ld d,(ix + SCCVoice.pitchModulation + 1)
+	ld iyl,e
+	ld iyh,d
+	call Modulation_Update
+	ld b,a
+	ld a,(ix + SCCVoice.note)
+	call SCCVoice_SetNote
+
 	ld e,(ix + SCCVoice.modulation + 0)
 	ld d,(ix + SCCVoice.modulation + 1)
 	ld iyl,e
@@ -78,6 +115,7 @@ SCCVoice_Update:
 
 ; ix = this
 ; a = note
+; b = detune
 SCCVoice_SetNote:
 	ld h,PSG_frequencyTable / 100H
 	add a,a
@@ -85,6 +123,18 @@ SCCVoice_SetNote:
 	ld e,(hl)
 	inc l
 	ld d,(hl)
+	inc l
+	ld a,(hl)
+	sub e
+	neg
+	srl a
+	ld l,b
+	call Math_Multiply127x127
+	add a,e
+	ld e,a
+	ld a,d
+	adc a,0
+	ld d,a
 	ld h,SCC_BASE_MSB
 	ld l,(ix + SCCVoice.frequencyRegister)
 	ld (hl),e
