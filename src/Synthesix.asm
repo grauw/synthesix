@@ -16,9 +16,6 @@ Synthesix_Main:
 	ld hl,Synthesix_Interrupt
 	call System_InstallTIMIHook
 
-	ld a,(JIFFY)
-	ld (Synthesix_lastJiffy),a
-
 	call Synthesix_MainLoop
 
 	call System_RestoreTIMIHook
@@ -47,21 +44,6 @@ Synthesix_Interrupt:
 	ret
 
 Synthesix_UpdateChannels:
-	ld a,(Synthesix_lastJiffy)
-	ld b,a
-	ld a,(JIFFY)
-	ld (Synthesix_lastJiffy),a
-	sub b
-	ret z
 	ld ix,Channel_channels.0
-	jp Channel_Update
-
-;
-; Variables in RAM
-;
-	SECTION RAM
-
-Synthesix_lastJiffy:
-	db 0
-
-	ENDS
+	call Channel_Update
+	ret
