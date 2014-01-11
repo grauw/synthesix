@@ -1,24 +1,25 @@
 ;
 ; Base class for all UI components
 ;
-UINode:
-UINode_update: equ $ - UINode
-	dw System_ThrowException
-UINode_buffer: equ $ - UINode
-	dw 0
+UINode: MACRO ?update
+	update:
+		dw ?update
+	buffer:
+		dw 0
+	ENDM
 
 ; ix = this
 ; iy = parent
 ; c = x coordinate
 ; b = y coordinate
-; hl <- UINode_buffer = buffer
+; hl <- UINode.buffer = buffer
 ; Modifies: af, bc, de
 UINode_SetBuffer:
-	ld e,(iy + UINode_buffer)
-	ld d,(iy + UINode_buffer + 1)
+	ld e,(iy + UINode.buffer)
+	ld d,(iy + UINode.buffer + 1)
 	call UINode_GetBufferPosition_DE
-	ld (ix + UINode_buffer),l
-	ld (ix + UINode_buffer + 1),h
+	ld (ix + UINode.buffer),l
+	ld (ix + UINode.buffer + 1),h
 	ret
 
 ; ix = this
@@ -27,8 +28,8 @@ UINode_SetBuffer:
 ; hl <- buffer
 ; Modifies: af, bc, de
 UINode_GetBufferPosition:
-	ld e,(ix + UINode_buffer)
-	ld d,(ix + UINode_buffer + 1)
+	ld e,(ix + UINode.buffer)
+	ld d,(ix + UINode.buffer + 1)
 	call UINode_GetBufferPosition_DE
 	ret
 
@@ -55,8 +56,8 @@ UINode_GetBufferPosition_DE:
 
 ; ix = this
 UINode_Update:
-	ld l,(ix + UINode_update + 0)
-	ld h,(ix + UINode_update + 1)
+	ld l,(ix + UINode.update + 0)
+	ld h,(ix + UINode.update + 1)
 	jp hl
 
 UINode_GetCoordinate

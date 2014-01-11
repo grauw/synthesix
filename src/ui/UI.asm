@@ -9,7 +9,7 @@
 UI_Init:
 	call VDP_InitScreen0
 	call VDP_Enable212Lines
-	ld iy,UISynthesix
+	ld iy,UISynthesix_class
 	call Class_New
 	ld (UI_root),ix
 	call UISynthesix_Constructor

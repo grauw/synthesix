@@ -1,13 +1,14 @@
 ;
 ; A simple text label
 ;
-	dw UIText_size
-UIText:
-UIText_update: equ $ - UIText
-	dw UIText_Update
-UIText_buffer: equ $ - UIText
-	dw 0
-UIText_size: equ $ - UIText
+UIText: MACRO
+	super:
+		UINode UIText_Update
+	size:
+	ENDM
+
+	dw UIText.size
+UIText_class: UIText
 
 ; ix = parent
 ; c = x coordinate
@@ -18,7 +19,7 @@ UIText_New:
 	push ix
 	push hl
 	push bc
-	ld iy,UIText
+	ld iy,UIText_class
 	call Class_New
 	pop bc
 	pop hl

@@ -1,30 +1,30 @@
 ;
 ;
 ;
-	dw UISynthesix_size
-UISynthesix:
-UISynthesix_update: equ $ - UISynthesix
-	dw UISynthesix_Update
-UISynthesix_buffer: equ $ - UISynthesix
-	dw 0
-UISynthesix_title: equ $ - UISynthesix
-	dw 0
-UISynthesix_size: equ $ - UISynthesix
+UISynthesix: MACRO
+	super: UINode UISynthesix_Update
+	title:
+		dw 0
+	size:
+	ENDM
+
+	dw UISynthesix.size
+UISynthesix_class: UISynthesix
 
 ; ix = this
 UISynthesix_Constructor:
 	ld bc,UISynthesix_template_size
 	call Heap_Allocate
-	ld (ix + UISynthesix_buffer),e
-	ld (ix + UISynthesix_buffer + 1),d
+	ld (ix + UISynthesix.super.buffer),e
+	ld (ix + UISynthesix.super.buffer + 1),d
 	ld hl,UISynthesix_template
 	ldir
 
 	ld bc,001EH
 	ld hl,UISynthesix_titleText
 	call UIText_New_DE
-	ld (ix + UISynthesix_title),e
-	ld (ix + UISynthesix_title + 1),d
+	ld (ix + UISynthesix.title),e
+	ld (ix + UISynthesix.title + 1),d
 	ret
 
 UISynthesix_Update:
@@ -46,8 +46,8 @@ UISynthesix_Draw:
 	ld a,0
 	ld hl,0
 	call VDP_SetWriteAddress
-	ld l,(ix + UISynthesix_buffer)
-	ld h,(ix + UISynthesix_buffer + 1)
+	ld l,(ix + UISynthesix.super.buffer)
+	ld h,(ix + UISynthesix.super.buffer + 1)
 	ld bc,UISynthesix_template_size
 	call VDP_Write
 	ret
