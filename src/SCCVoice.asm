@@ -16,6 +16,10 @@ SCCVoice: MACRO
 		dw System_ThrowException
 	pitchModulation:
 		dw System_ThrowException
+	noteFrequency:
+		dw 0
+	noteFrequency50cent:
+		db 0
 	frequency:
 		dw 0
 	free:
@@ -57,8 +61,10 @@ SCCVoice_Constructor:
 ; b = note number (0-127)
 ; c = velocity (0-127)
 SCCVoice_NoteOn:
-	ld (ix + SCCVoice.note),b
 	ld (ix + SCCVoice.velocity),c
+
+	ld a,b
+	call SCCVoice_SetNote
 
 	ld e,(ix + SCCVoice.pitchModulation + 0)
 	ld d,(ix + SCCVoice.pitchModulation + 1)
@@ -95,9 +101,7 @@ SCCVoice_Update:
 	ld iyl,e
 	ld iyh,d
 	call Modulation_Update
-	ld b,a
-	ld a,(ix + SCCVoice.note)
-	call SCCVoice_SetNote
+	call SCCVoice_SetFrequency
 
 	ld e,(ix + SCCVoice.modulation + 0)
 	ld d,(ix + SCCVoice.modulation + 1)
@@ -109,8 +113,8 @@ SCCVoice_Update:
 
 ; ix = this
 ; a = note
-; b = detune
 SCCVoice_SetNote: PROC
+	ld (ix + SCCVoice.note),a
 	ld h,PSG_frequencyTable / 100H
 	add a,a
 	ld l,a
@@ -122,8 +126,18 @@ SCCVoice_SetNote: PROC
 	sub e
 	neg
 	srl a
-	ld l,a
-	ld a,b
+	ld (ix + SCCVoice.noteFrequency),e
+	ld (ix + SCCVoice.noteFrequency + 1),d
+	ld (ix + SCCVoice.noteFrequency50cent),a
+	ret
+	ENDP
+
+; ix = this
+; a = detune
+SCCVoice_SetFrequency: PROC
+	ld e,(ix + SCCVoice.noteFrequency)
+	ld d,(ix + SCCVoice.noteFrequency + 1)
+	ld l,(ix + SCCVoice.noteFrequency50cent)
 	call Math_Multiply127x127SignedAndAdd
 	ld a,(ix + SCCVoice.frequency)
 	cp e
