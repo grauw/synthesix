@@ -6,7 +6,14 @@
 ; Clock ticks: 77 / 98
 Math_Multiply127x127:
 	bit 6,a
-	jr z,Math_Multiply127x127_NoInverse
+	jr nz,Math_Multiply127x127_Inverse
+	rl l
+	rra
+	rr l
+	add a,Math_multiply127x127Table / 100H
+	ld h,a
+	ld a,(hl)
+	ret
 Math_Multiply127x127_Inverse:
 	cpl
 	rl l
@@ -18,14 +25,6 @@ Math_Multiply127x127_Inverse:
 	ld a,l
 	and 7FH
 	sub (hl)
-	ret
-Math_Multiply127x127_NoInverse:
-	rl l
-	rra
-	rr l
-	add a,Math_multiply127x127Table / 100H
-	ld h,a
-	ld a,(hl)
 	ret
 
 ; Multiply a 7-bit integer with a 7-bit number which represents the range 0..1.
