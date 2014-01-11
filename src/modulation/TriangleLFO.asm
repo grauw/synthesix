@@ -17,21 +17,15 @@ TriangleLFO: MACRO
 TriangleLFO_class: TriangleLFO
 
 ; iy = this
-; a <- value
 TriangleLFO_NoteOn:
 	ld a,(iy + TriangleLFO.keyTrigger)
 	and a
 	ret z
 	ld (iy + TriangleLFO.counter),0
-	ld a,(iy + TriangleLFO.speed)
-	call TriangleLFO_Update_Return
 	ret
 
 ; iy = this
-; a <- value
 TriangleLFO_NoteOff:
-	ld a,(iy + TriangleLFO.counter)
-	call TriangleLFO_Update_Return
 	ret
 
 ; iy = this

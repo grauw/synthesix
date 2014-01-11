@@ -19,23 +19,15 @@ AREnvelope: MACRO
 AREnvelope_class: AREnvelope
 
 ; iy = this
-; a <- value
 AREnvelope_NoteOn:
 	ld (iy + AREnvelope.phase),0
 	ld (iy + AREnvelope.counter),0
-	ld a,(iy + AREnvelope.attack)
-	rra
 	ret
 
 ; iy = this
-; a <- value
 AREnvelope_NoteOff:
 	ld (iy + AREnvelope.phase),-1
 	ld a,(iy + AREnvelope.counter)
-	sub (iy + AREnvelope.release)
-	rra
-	ret nc
-	xor a
 	ret
 
 ; iy = this

@@ -65,16 +65,12 @@ SCCVoice_NoteOn:
 	ld iyl,e
 	ld iyh,d
 	call Modulation_NoteOn
-	ld b,a
-	ld a,(ix + SCCVoice.note)
-	call SCCVoice_SetNote
 
 	ld e,(ix + SCCVoice.modulation + 0)
 	ld d,(ix + SCCVoice.modulation + 1)
 	ld iyl,e
 	ld iyh,d
 	call Modulation_NoteOn
-	call SCCVoice_SetLevel
 	ret
 
 ; ix = this
@@ -84,16 +80,12 @@ SCCVoice_NoteOff:
 	ld iyl,e
 	ld iyh,d
 	call Modulation_NoteOff
-	ld b,a
-	ld a,(ix + SCCVoice.note)
-	call SCCVoice_SetNote
 
 	ld e,(ix + SCCVoice.modulation + 0)
 	ld d,(ix + SCCVoice.modulation + 1)
 	ld iyl,e
 	ld iyh,d
 	call Modulation_NoteOff
-	call SCCVoice_SetLevel
 	ret
 
 ; ix = this
