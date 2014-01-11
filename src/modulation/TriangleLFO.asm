@@ -16,35 +16,35 @@ TriangleLFO: MACRO
 	dw TriangleLFO.size
 TriangleLFO_class: TriangleLFO
 
-; ix = this
+; iy = this
 ; a <- value
 TriangleLFO_NoteOn:
-	ld a,(ix + TriangleLFO.keyTrigger)
+	ld a,(iy + TriangleLFO.keyTrigger)
 	and a
 	ret z
-	ld (ix + TriangleLFO.counter),0
-	ld a,(ix + TriangleLFO.speed)
+	ld (iy + TriangleLFO.counter),0
+	ld a,(iy + TriangleLFO.speed)
 	call TriangleLFO_Update_Return
 	ret
 
-; ix = this
+; iy = this
 ; a <- value
 TriangleLFO_NoteOff:
 	call TriangleLFO_Update
 	ret
 
-; ix = this
+; iy = this
 ; b = time delta
 ; a <- value
 ; b <- time delta
 TriangleLFO_Update:
-	ld a,(ix + TriangleLFO.counter)
+	ld a,(iy + TriangleLFO.counter)
 	ld h,b
 TriangleLFO_Update_Loop:
-	add a,(ix + TriangleLFO.speed)
+	add a,(iy + TriangleLFO.speed)
 	djnz TriangleLFO_Update_Loop
 	ld b,h
-	ld (ix + TriangleLFO.counter),a
+	ld (iy + TriangleLFO.counter),a
 TriangleLFO_Update_Return:
 	and a
 	ret p

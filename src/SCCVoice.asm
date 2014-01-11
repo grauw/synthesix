@@ -50,11 +50,9 @@ SCCVoice_NoteOn:
 
 	ld e,(ix + SCCVoice.modulation + 0)
 	ld d,(ix + SCCVoice.modulation + 1)
-	push ix
-	ld ixl,e
-	ld ixh,d
+	ld iyl,e
+	ld iyh,d
 	call Modulation_NoteOn
-	pop ix
 	call SCCVoice_SetLevel
 	ret
 
@@ -62,11 +60,9 @@ SCCVoice_NoteOn:
 SCCVoice_NoteOff:
 	ld e,(ix + SCCVoice.modulation + 0)
 	ld d,(ix + SCCVoice.modulation + 1)
-	push ix
-	ld ixl,e
-	ld ixh,d
+	ld iyl,e
+	ld iyh,d
 	call Modulation_NoteOff
-	pop ix
 	call SCCVoice_SetLevel
 	ret
 
@@ -75,11 +71,9 @@ SCCVoice_NoteOff:
 SCCVoice_Update:
 	ld e,(ix + SCCVoice.modulation + 0)
 	ld d,(ix + SCCVoice.modulation + 1)
-	push ix
-	ld ixl,e
-	ld ixh,d
+	ld iyl,e
+	ld iyh,d
 	call Modulation_Update
-	pop ix
 	call SCCVoice_SetLevel
 	ret
 

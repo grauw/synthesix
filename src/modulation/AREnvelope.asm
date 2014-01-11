@@ -18,73 +18,73 @@ AREnvelope: MACRO
 	dw AREnvelope.size
 AREnvelope_class: AREnvelope
 
-; ix = this
+; iy = this
 ; a <- value
 AREnvelope_NoteOn:
-	ld (ix + AREnvelope.phase),0
-	ld (ix + AREnvelope.counter),0
-	ld a,(ix + AREnvelope.attack)
+	ld (iy + AREnvelope.phase),0
+	ld (iy + AREnvelope.counter),0
+	ld a,(iy + AREnvelope.attack)
 	rra
 	ret
 
-; ix = this
+; iy = this
 ; a <- value
 AREnvelope_NoteOff:
-	ld (ix + AREnvelope.phase),-1
-	ld a,(ix + AREnvelope.counter)
-	sub (ix + AREnvelope.release)
+	ld (iy + AREnvelope.phase),-1
+	ld a,(iy + AREnvelope.counter)
+	sub (iy + AREnvelope.release)
 	rra
 	ret nc
 	xor a
 	ret
 
-; ix = this
+; iy = this
 ; b = time delta
 ; a <- value
 ; b <- time delta
 AREnvelope_Update:
-	bit 7,(ix + AREnvelope.phase)  ; to test a third phase: rlc (ix) ; jp po
+	bit 7,(iy + AREnvelope.phase)  ; to test a third phase: rlc (iy) ; jp po
 	jr nz,AREnvelope_UpdateRelease
 	jp AREnvelope_UpdateAttack
 
-; ix = this
+; iy = this
 ; b = time delta
 ; a <- value
 ; b <- time delta
 AREnvelope_UpdateAttack:
-	ld a,(ix + AREnvelope.counter)
+	ld a,(iy + AREnvelope.counter)
 	ld h,b
 AREnvelope_UpdateAttack_Loop:
-	add a,(ix + AREnvelope.attack)
+	add a,(iy + AREnvelope.attack)
 	jr c,AREnvelope_UpdateAttack_Complete
 	djnz AREnvelope_UpdateAttack_Loop
 	ld b,h
-	ld (ix + AREnvelope.counter),a
+	ld (iy + AREnvelope.counter),a
 	rra
 	ret
 AREnvelope_UpdateAttack_Complete:
 	ld b,h
-	ld (ix + AREnvelope.counter),255
+	ld (iy + AREnvelope.counter),255
 	ld a,127
 	ret
 
-; ix = this
+; iy = this
 ; b = time delta
 ; a <- value
 ; b <- time delta
 AREnvelope_UpdateRelease:
-	ld a,(ix + AREnvelope.counter)
+	ld a,(iy + AREnvelope.counter)
 	ld h,b
 AREnvelope_UpdateRelease_Loop:
-	sub (ix + AREnvelope.release)
+	sub (iy + AREnvelope.release)
 	jr c,AREnvelope_UpdateRelease_Complete
 	djnz AREnvelope_UpdateRelease_Loop
 	ld b,h
-	ld (ix + AREnvelope.counter),a
+	ld (iy + AREnvelope.counter),a
 	rra
 	ret
 AREnvelope_UpdateRelease_Complete:
 	ld b,h
-	ld (ix + AREnvelope.counter),0
+	ld (iy + AREnvelope.counter),0
 	xor a
 	ret

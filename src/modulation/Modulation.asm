@@ -11,20 +11,20 @@ Modulation: MACRO ?noteOn, ?noteOff, ?update
 	size:
 	ENDM
 
-; ix = this
+; iy = this
 Modulation_NoteOn:
-	ld l,(ix + Modulation.noteOn + 0)
-	ld h,(ix + Modulation.noteOn + 1)
+	ld l,(iy + Modulation.noteOn + 0)
+	ld h,(iy + Modulation.noteOn + 1)
 	jp hl
 
 ; ix = this
 Modulation_NoteOff:
-	ld l,(ix + Modulation.noteOff + 0)
-	ld h,(ix + Modulation.noteOff + 1)
+	ld l,(iy + Modulation.noteOff + 0)
+	ld h,(iy + Modulation.noteOff + 1)
 	jp hl
 
 ; ix = this
 Modulation_Update:
-	ld l,(ix + Modulation.update + 0)
-	ld h,(ix + Modulation.update + 1)
+	ld l,(iy + Modulation.update + 0)
+	ld h,(iy + Modulation.update + 1)
 	jp hl
