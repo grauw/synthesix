@@ -6,34 +6,34 @@
 ; released. When a voice is bound, it will try the next one.
 ; Each sound chip has a separate voice pool implementation.
 ;
-	dw Patch_size
-Patch:
-Patch_noteOn: equ $ - Patch
-	dw System_ThrowException
-Patch_noteOff: equ $ - Patch
-	dw System_ThrowException
-Patch_controlChange: equ $ - Patch
-	dw System_ThrowException
-Patch_update: equ $ - Patch
-	dw System_ThrowException
-Patch_size: equ $ - Patch
+Patch: MACRO ?noteOn, ?noteOff, ?controlChange, ?update
+	noteOn:
+		dw ?noteOn
+	noteOff:
+		dw ?noteOff
+	controlChange:
+		dw ?controlChange
+	update:
+		dw ?update
+	size:
+	ENDM
 
 Patch_NoteOn:
-	ld l,(ix + Patch_noteOn + 0)
-	ld h,(ix + Patch_noteOn + 1)
+	ld l,(ix + Patch.noteOn + 0)
+	ld h,(ix + Patch.noteOn + 1)
 	jp hl
 
 Patch_NoteOff:
-	ld l,(ix + Patch_noteOff + 0)
-	ld h,(ix + Patch_noteOff + 1)
+	ld l,(ix + Patch.noteOff + 0)
+	ld h,(ix + Patch.noteOff + 1)
 	jp hl
 
 Patch_ControlChange:
-	ld l,(ix + Patch_controlChange + 0)
-	ld h,(ix + Patch_controlChange + 1)
+	ld l,(ix + Patch.controlChange + 0)
+	ld h,(ix + Patch.controlChange + 1)
 	jp hl
 
 Patch_Update:
-	ld l,(ix + Patch_update + 0)
-	ld h,(ix + Patch_update + 1)
+	ld l,(ix + Patch.update + 0)
+	ld h,(ix + Patch.update + 1)
 	jp hl
