@@ -30,7 +30,8 @@ TriangleLFO_NoteOn:
 ; iy = this
 ; a <- value
 TriangleLFO_NoteOff:
-	call TriangleLFO_Update
+	ld a,(iy + TriangleLFO.counter)
+	call TriangleLFO_Update_Return
 	ret
 
 ; iy = this
