@@ -16,6 +16,8 @@ SCCVoice: MACRO
 		dw System_ThrowException
 	pitchModulation:
 		dw System_ThrowException
+	frequency:
+		dw 0
 	free:
 		db 0
 	size:
@@ -116,7 +118,7 @@ SCCVoice_Update:
 ; ix = this
 ; a = note
 ; b = detune
-SCCVoice_SetNote:
+SCCVoice_SetNote: PROC
 	ld h,PSG_frequencyTable / 100H
 	add a,a
 	ld l,a
@@ -135,12 +137,22 @@ SCCVoice_SetNote:
 	ld a,d
 	adc a,0
 	ld d,a
+	ld a,(ix + SCCVoice.frequency)
+	cp e
+	jr nz,FrequencyChanged
+	ld a,(ix + SCCVoice.frequency + 1)
+	cp d
+	ret z
+FrequencyChanged:
+	ld (ix + SCCVoice.frequency),e
+	ld (ix + SCCVoice.frequency + 1),d
 	ld h,SCC_BASE_MSB
 	ld l,(ix + SCCVoice.frequencyRegister)
 	ld (hl),e
 	inc l
 	ld (hl),d
 	ret
+	ENDP
 
 ; ix = this
 ; a = level
