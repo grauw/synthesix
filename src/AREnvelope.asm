@@ -19,21 +19,21 @@ AREnvelope_class: AREnvelope
 ; ix = this
 ; a <- value
 AREnvelope_NoteOn:
-	ld (ix + AREnvelope.counter),0
-	ld b,1
-	call AREnvelope_UpdateAttack
-	ld (ix + AREnvelope.counter),0
 	ld (ix + AREnvelope.phase),0
+	ld (ix + AREnvelope.counter),0
+	ld a,(ix + AREnvelope.attack)
+	rra
 	ret
 
 ; ix = this
 ; a <- value
 AREnvelope_NoteOff:
-	ld c,(ix + AREnvelope.counter)
-	ld b,1
-	call AREnvelope_UpdateRelease
-	ld (ix + AREnvelope.counter),c
 	ld (ix + AREnvelope.phase),-1
+	ld a,(ix + AREnvelope.counter)
+	sub (ix + AREnvelope.release)
+	rra
+	ret nc
+	xor a
 	ret
 
 ; ix = this
@@ -84,5 +84,5 @@ AREnvelope_UpdateRelease_Loop:
 AREnvelope_UpdateRelease_Complete:
 	ld b,h
 	ld (ix + AREnvelope.counter),0
-	ld a,0
+	xor a
 	ret
