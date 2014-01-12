@@ -8,6 +8,8 @@ AREnvelope: MACRO
 		db 255 / 30  ; inverse speed
 	release:
 		db 255 / 30  ; inverse speed
+	sign:
+		db 0
 	phase:
 		db 0
 	counter:
@@ -45,10 +47,16 @@ AREnvelope_UpdateAttack:
 	jr c,AREnvelope_UpdateAttack_Complete
 	ld (iy + AREnvelope.counter),a
 	rra
+	bit 0,(iy + AREnvelope.sign)
+	ret z
+	cpl
 	ret
 AREnvelope_UpdateAttack_Complete:
 	ld (iy + AREnvelope.counter),255
 	ld a,127
+	bit 0,(iy + AREnvelope.sign)
+	ret z
+	cpl
 	ret
 
 ; iy = this
@@ -59,8 +67,14 @@ AREnvelope_UpdateRelease:
 	jr c,AREnvelope_UpdateRelease_Complete
 	ld (iy + AREnvelope.counter),a
 	rra
+	bit 0,(iy + AREnvelope.sign)
+	ret z
+	cpl
 	ret
 AREnvelope_UpdateRelease_Complete:
 	ld (iy + AREnvelope.counter),0
 	xor a
+	bit 0,(iy + AREnvelope.sign)
+	ret z
+	cpl
 	ret
