@@ -32,14 +32,14 @@ AREnvelope_NoteOff:
 	ret
 
 ; iy = this
-; a <- value
+; a <- value (one’s complement)
 AREnvelope_Update:
 	bit 7,(iy + AREnvelope.phase)  ; to test a third phase: rlc (iy) ; jp po
 	jr nz,AREnvelope_UpdateRelease
 	jp AREnvelope_UpdateAttack
 
 ; iy = this
-; a <- value
+; a <- value (one’s complement)
 AREnvelope_UpdateAttack:
 	ld a,(iy + AREnvelope.counter)
 	add a,(iy + AREnvelope.attack)
@@ -59,7 +59,7 @@ AREnvelope_UpdateAttack_Complete:
 	ret
 
 ; iy = this
-; a <- value
+; a <- value (one’s complement)
 AREnvelope_UpdateRelease:
 	ld a,(iy + AREnvelope.counter)
 	sub (iy + AREnvelope.release)

@@ -31,14 +31,14 @@ ADEnvelope_NoteOff:
 	ret
 
 ; iy = this
-; a <- value
+; a <- value (one’s complement)
 ADEnvelope_Update:
 	bit 7,(iy + ADEnvelope.phase)  ; to test a third phase: rlc (iy) ; jp po
 	jr nz,ADEnvelope_UpdateDecay
 	jp ADEnvelope_UpdateAttack
 
 ; iy = this
-; a <- value
+; a <- value (one’s complement)
 ADEnvelope_UpdateAttack:
 	ld a,(iy + ADEnvelope.counter)
 	add a,(iy + ADEnvelope.attack)
@@ -54,7 +54,7 @@ ADEnvelope_UpdateAttack_Complete:
 	jp ADEnvelope_UpdateDecay_FromAttack
 
 ; iy = this
-; a <- value
+; a <- value (one’s complement)
 ADEnvelope_UpdateDecay:
 	ld a,(iy + ADEnvelope.counter)
 	add a,(iy + ADEnvelope.decay)
