@@ -29,9 +29,9 @@ Math_Multiply127x127_Inverse:
 
 ; Multiply an 8-bit signed integer with a 7-bit fractional number which
 ; represents the range 0..1.
-; a = multiplicand (signed 1’s complement)
+; a = multiplicand (one’s complement)
 ; l = multiplier
-; a <- product (signed 1’s complement)
+; a <- product (one’s complement)
 ; Modifies: hl
 Math_Multiply127x127Signed:
 	bit 7,a
@@ -41,14 +41,12 @@ Math_Multiply127x127Signed:
 	cpl
 	ret
 
-; Multiply a (signed) with l (fractional) and add to de
-; a = multiplicand (signed 1’s complement)
-; l = multiplier
+; Add the signed value A to DE.
+; a = value (one’s complement)
 ; de = value
 ; de <- value + product
-; Modifies: af, hl
-Math_Multiply127x127SignedAndAdd:
-	call Math_Multiply127x127Signed
+; Modifies: af
+Math_AddSigned: PROC
 	and a
 	jp m,Subtract
 	add a,e

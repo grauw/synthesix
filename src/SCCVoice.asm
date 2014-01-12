@@ -138,7 +138,8 @@ SCCVoice_SetFrequency: PROC
 	ld e,(ix + SCCVoice.noteFrequency)
 	ld d,(ix + SCCVoice.noteFrequency + 1)
 	ld l,(ix + SCCVoice.noteFrequency50cent)
-	call Math_Multiply127x127SignedAndAdd
+	call Math_Multiply127x127Signed
+	call Math_AddSigned
 	ld a,(ix + SCCVoice.frequency)
 	cp e
 	jr nz,FrequencyChanged
