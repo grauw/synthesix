@@ -39,27 +39,28 @@ ADEnvelope_Update:
 
 ; iy = this
 ; a <- value (one’s complement)
-ADEnvelope_UpdateAttack:
+ADEnvelope_UpdateAttack: PROC
 	ld a,(iy + ADEnvelope.counter)
 	add a,(iy + ADEnvelope.attack)
 	ld (iy + ADEnvelope.counter),a
-	jr c,ADEnvelope_UpdateAttack_Complete
+	jr c,Complete
 	rra
 	bit 0,(iy + ADEnvelope.sign)
 	ret z
 	cpl
 	ret
-ADEnvelope_UpdateAttack_Complete:
+Complete:
 	ld (iy + ADEnvelope.phase),-1
-	jp ADEnvelope_UpdateDecay_FromAttack
+	jp ADEnvelope_UpdateDecay.ContinueFromAttack
+	ENDP
 
 ; iy = this
 ; a <- value (one’s complement)
-ADEnvelope_UpdateDecay:
+ADEnvelope_UpdateDecay: PROC
 	ld a,(iy + ADEnvelope.counter)
 	add a,(iy + ADEnvelope.decay)
-	jr c,ADEnvelope_UpdateDecay_Complete
-ADEnvelope_UpdateDecay_FromAttack:
+	jr c,Complete
+ContinueFromAttack:
 	ld (iy + ADEnvelope.counter),a
 	cpl
 	rra
@@ -67,10 +68,11 @@ ADEnvelope_UpdateDecay_FromAttack:
 	ret z
 	cpl
 	ret
-ADEnvelope_UpdateDecay_Complete:
+Complete:
 	ld (iy + ADEnvelope.counter),255
 	xor a
 	bit 0,(iy + ADEnvelope.sign)
 	ret z
 	cpl
 	ret
+	ENDP

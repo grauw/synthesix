@@ -40,40 +40,42 @@ AREnvelope_Update:
 
 ; iy = this
 ; a <- value (one’s complement)
-AREnvelope_UpdateAttack:
+AREnvelope_UpdateAttack: PROC
 	ld a,(iy + AREnvelope.counter)
 	add a,(iy + AREnvelope.attack)
-	jr c,AREnvelope_UpdateAttack_Complete
+	jr c,Complete
 	ld (iy + AREnvelope.counter),a
 	rra
 	bit 0,(iy + AREnvelope.sign)
 	ret z
 	cpl
 	ret
-AREnvelope_UpdateAttack_Complete:
+Complete:
 	ld (iy + AREnvelope.counter),255
 	ld a,127
 	bit 0,(iy + AREnvelope.sign)
 	ret z
 	cpl
 	ret
+	ENDP
 
 ; iy = this
 ; a <- value (one’s complement)
-AREnvelope_UpdateRelease:
+AREnvelope_UpdateRelease: PROC
 	ld a,(iy + AREnvelope.counter)
 	sub (iy + AREnvelope.release)
-	jr c,AREnvelope_UpdateRelease_Complete
+	jr c,Complete
 	ld (iy + AREnvelope.counter),a
 	rra
 	bit 0,(iy + AREnvelope.sign)
 	ret z
 	cpl
 	ret
-AREnvelope_UpdateRelease_Complete:
+Complete:
 	ld (iy + AREnvelope.counter),0
 	xor a
 	bit 0,(iy + AREnvelope.sign)
 	ret z
 	cpl
 	ret
+	ENDP
