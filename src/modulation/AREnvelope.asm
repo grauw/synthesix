@@ -5,9 +5,9 @@ AREnvelope: MACRO
 	super:
 		Modulation AREnvelope_NoteOn, AREnvelope_NoteOff, AREnvelope_Update
 	attack:
-		db 255 / 30  ; inverse speed
+		db 8
 	release:
-		db 255 / 30  ; inverse speed
+		db 8
 	sign:
 		db 0
 	phase:
