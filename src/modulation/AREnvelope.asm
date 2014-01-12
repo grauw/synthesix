@@ -29,7 +29,6 @@ AREnvelope_NoteOn:
 ; iy = this
 AREnvelope_NoteOff:
 	ld (iy + AREnvelope.phase),-1
-	ld a,(iy + AREnvelope.counter)
 	ret
 
 ; iy = this
