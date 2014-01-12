@@ -60,7 +60,7 @@ Keys_ProcessRow_NoChange:
 ; f = negative sign: press, positive sign: release
 Keys_ProcessKeyChange:
 	jp p,Keys_ProcessKeyRelease
-;	jp Keys_ProcessKeyPress
+	jp Keys_ProcessKeyPress
 
 ; a = key / note identifier
 Keys_ProcessKeyPress:
