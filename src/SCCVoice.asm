@@ -133,7 +133,7 @@ SCCVoice_SetNote: PROC
 	ENDP
 
 ; ix = this
-; a = detune
+; a = detune (one’s complement)
 SCCVoice_SetFrequency: PROC
 	ld e,(ix + SCCVoice.noteFrequency)
 	ld d,(ix + SCCVoice.noteFrequency + 1)
@@ -157,8 +157,9 @@ FrequencyChanged:
 	ENDP
 
 ; ix = this
-; a = level
+; a = level (one’s complement)
 SCCVoice_SetLevel:
+	and 7FH
 	ld l,(ix + SCCVoice.velocity)
 	call Math_Multiply127x127
 	rrca
