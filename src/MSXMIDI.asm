@@ -88,13 +88,7 @@ setho2:
 ;	Print message and return to DOS.
 ;
 nomidi:
-	ld	hl,msg0
-	call System_Print
-;	ld	de,msg0
-;	ld	c,9
-;	call	doscal
 	ret
-msg0:	db	cr,lf,"MIDI interface is not found.",0
 
 copy5:
 	ld	bc,5
@@ -186,15 +180,8 @@ inimdp:
 	in	a,(UARTrecv)	;interrupt flag reset
 	xor	a
 	out	(tm_int),a
-	ld hl,msg1
-	call System_Print
-;	ld	de,msg1		;print message
-;	ld	c,9
-;	call	doscal
 	ei
 	jp	main
-
-msg1:	db	cr,lf,"MIDI interface and hooks are set",cr,lf,0
 
 ;
 ;	main routine
@@ -211,26 +198,15 @@ main1:
 	in	a,(UARTstat)
 	and	00010000b	;overrun error ?
 	jr	z,main2		;no
-	push hl
-	ld hl,msg2
-	call System_Print
-	pop hl
-;	ld	de,msg2
-;	ld	c,9
-;	call	doscal		;print '*'
 	ld	a,(cmdsv)	;8251 command
 	or	00010000b	;reset 8251
 	out	(UARTcmd),a	;reset 8251 error flag
 main2:
-;	ld	c,0bh		;console check
-;	call	doscal
-;	or	0		;is there any input ?
-;	jr	z,main1		;no , loop again
 	call CHSNS
-	jr z,main1
+	or	0		;is there any input ?
+	jr	z,main1		;no , loop again
 	jp	rstmidi
 
-msg2:	db	cr,lf,"*",cr,lf,0
 ;
 ;	Get data from buffer
 ;
@@ -256,17 +232,8 @@ getda0:
 	jr	z,getda2	; then not print it
 	cp	80h		;is it data-byte ?
 	jr	c,getda1	;yes , skip
-	push	af		;if it is status-byte ,...
-	push hl
-	ld hl,msg3
-	call System_Print
-	pop hl
-;	ld	de,msg3
-;	ld	c,9
-;	call	doscal		; then delete a line
-	pop	af
 getda1:
-	call	System_PrintHexA		;print it
+;	call	System_PrintHexA		;print it
 getda2:
 	ld	hl,(getp)
 	inc	hl		;increment 'getp' pointer
@@ -281,7 +248,6 @@ getda2:
 getda3:
 	ld	(getp),hl	;save pointer
 	ret
-msg3:	db	esc,"M",0
 
 ;
 ;	Reset MIDI interface and reset hooks
@@ -324,14 +290,7 @@ rstmd1:
 	call	copy5
 rstmd2:
 	ei
-	ld hl,msg4
-	call System_Print
-;	ld	de,msg4		;print message
-;	ld	c,9
-;	call	doscal
 	ret
-
-msg4:	db	cr,lf,"MIDI interface and hooks are reset",cr,lf,0
 
 ;
 ;	Interrupt routin
