@@ -181,7 +181,7 @@ inimdp:
 	xor	a
 	out	(tm_int),a
 	ei
-	jp	main
+	ret
 
 ;
 ;	main routine
@@ -337,17 +337,7 @@ mdtmin:
 ;
 intr_in:
 	in	a,(UARTrecv)	;read MIDI IN data and reset interrupt flag
-	ld	hl,(putp)
-	ld	(hl),a		;save to buffer
-	inc	hl		;increment 'putp'
-	ld	de,bufend	;
-	push	hl
-	sbc	hl,de		;buffer end ?
-	pop	hl
-	jr	nz,mdin2	;no, jump
-	ld	hl,mdbuf
-mdin2:
-	ld	(putp),hl	;set 'putp'
+	call MidiIn_WriteByte
 	ret
 ;
 ;	timer interrupt

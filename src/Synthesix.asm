@@ -12,13 +12,13 @@ Synthesix_Main:
 	call Math_UnitTest
 
 	call setmidi
-
 	ld hl,Synthesix_Interrupt
 	call System_InstallTIMIHook
 
 	call Synthesix_MainLoop
 
 	call System_RestoreTIMIHook
+	call rstmidi
 	call KILBUF
 	ret
 
