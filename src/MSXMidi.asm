@@ -151,7 +151,7 @@ inimdp:
 ;	     |+-----------   No Operation
 ;	     +------------   No Operation
 ;
-	ld (cmdsv),a  ;save command
+	ld (MSXMidi_commandSave),a  ;save command
 	out (MSXMidi_UART_COMMAND),a
 	in a,(MSXMidi_UART_RECEIVE)  ;interrupt flag reset
 	xor a
@@ -174,7 +174,7 @@ main1:
 	in a,(MSXMidi_UART_STATUS)
 	and 00010000b   ;overrun error ?
 	jr z,main2      ;no
-	ld a,(cmdsv)    ;8251 command
+	ld a,(MSXMidi_commandSave)    ;8251 command
 	or 00010000b    ;reset 8251
 	out (MSXMidi_UART_COMMAND),a  ;reset 8251 error flag
 main2:
@@ -322,7 +322,7 @@ intr_in:
 ; timer interrupt
 ;
 intr_time:
-	ld a,(cmdsv)    ;check timer interrupt enable or not.
+	ld a,(MSXMidi_commandSave)    ;check timer interrupt enable or not.
 	and 00000010b   ;enable ?
 	ret z           ;no
 	xor a           ;reset interrupt flag
@@ -457,8 +457,10 @@ MSXMidi_idString:
 ;
 	SECTION RAM
 
+MSXMidi_commandSave:
+	db 0            ;8251 command save area
+
 hoksvt: ds 10       ;hook save area
-cmdsv:  ds 1        ;8251 command save area
 getp:   ds 2        ;pointer for getting MIDI data
 putp:   ds 2        ;pointer for putting MIDI data
 mdbuf:  ds 128      ;buffer for MIDI IN
