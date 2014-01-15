@@ -192,18 +192,18 @@ System_RestoreTIMIHook:
 System_TIMIHookWrapper: PROC
 	push af
 	call System_OldTIMIHook
-	ld a,(System_inInterrupt)
+	ld a,(System_suspendTIMIHook)
 	and a
 	jp nz,Return
 	dec a
-	ld (System_inInterrupt),a
+	ld (System_suspendTIMIHook),a
 	ei
 
 	call System_NewTIMIHook
 
 	di
 	xor a
-	ld (System_inInterrupt),a
+	ld (System_suspendTIMIHook),a
 Return:
 	ld a,255
 	ld (SCNCNT),a  ; skip the expensive key handling bits of the ISR
@@ -227,7 +227,7 @@ System_NewTIMIHook:
 	jp System_ThrowException
 System_NewTIMIHook_address: equ $ - 2
 
-System_inInterrupt:
+System_suspendTIMIHook:
 	db 0
 
 	ENDS
