@@ -188,11 +188,12 @@ System_RestoreTIMIHook:
 	ei
 	ret
 
-System_TIMIHookWrapper:
+System_TIMIHookWrapper: PROC
+	push af
 	call System_OldTIMIHook
 	ld a,(System_inInterrupt)
 	and a
-	ret nz
+	jp nz,Return
 	dec a
 	ld (System_inInterrupt),a
 	ei
@@ -202,7 +203,10 @@ System_TIMIHookWrapper:
 	di
 	xor a
 	ld (System_inInterrupt),a
+Return:
+	pop af
 	ret
+	ENDP
 
 
 System_exceptionMessage:
