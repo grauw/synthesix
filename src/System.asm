@@ -10,6 +10,7 @@ CHPUT: equ 0A2H
 RSLREG: equ 138H
 SNSMAT: equ 141H
 KILBUF: equ 156H
+SCNCNT: equ 0F3F6H
 LINL40: equ 0F3AEH
 CLIKSW: equ 0F3DBH
 NEWKEY: equ 0FBE5H
@@ -204,6 +205,8 @@ System_TIMIHookWrapper: PROC
 	xor a
 	ld (System_inInterrupt),a
 Return:
+	ld a,255
+	ld (SCNCNT),a  ; skip the expensive key handling bits of the ISR
 	pop af
 	ret
 	ENDP
