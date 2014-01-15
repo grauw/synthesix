@@ -161,7 +161,7 @@ System_PrintExceptionMessage:
 
 ; hl = handler address
 System_InstallTIMIHook:
-	ld (System_NewTIMIHook_address),hl
+	ld (System_TIMIHook.address),hl
 	ld hl,H.TIMI
 	ld de,System_OldTIMIHook
 	di
@@ -172,7 +172,7 @@ System_InstallTIMIHook:
 	ldi
 	ld a,0C3H  ; jp
 	ld (H.TIMI),a
-	ld hl,System_TIMIHookWrapper
+	ld hl,System_TIMIHook
 	ld (H.TIMI + 1),hl
 	ei
 	ret
@@ -189,7 +189,8 @@ System_RestoreTIMIHook:
 	ei
 	ret
 
-System_TIMIHookWrapper: PROC
+	SECTION RAM
+System_TIMIHook: PROC
 	push af
 	call System_OldTIMIHook
 	ld a,(System_suspendTIMIHook)
@@ -198,9 +199,8 @@ System_TIMIHookWrapper: PROC
 	dec a
 	ld (System_suspendTIMIHook),a
 	ei
-
-	call System_NewTIMIHook
-
+	call System_ThrowException
+address: equ $ - 2
 	di
 	xor a
 	ld (System_suspendTIMIHook),a
@@ -208,8 +208,10 @@ Return:
 	ld a,255
 	ld (SCNCNT),a  ; skip the expensive key handling bits of the ISR
 	pop af
-	ret
 	ENDP
+System_OldTIMIHook:
+	ds 5
+	ENDS
 
 
 System_exceptionMessage:
@@ -219,13 +221,6 @@ System_crlf:
 	db "\r\n", 0
 
 	SECTION RAM
-
-System_OldTIMIHook:
-	ds 5
-
-System_NewTIMIHook:
-	jp System_ThrowException
-System_NewTIMIHook_address: equ $ - 2
 
 System_suspendTIMIHook:
 	db 0
