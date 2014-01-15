@@ -14,12 +14,6 @@ rdslt		equ	000ch		;read slot
 calslt		equ	001ch		;call slot
 ;doscal		equ	0005h		;dos call
 ;
-;	character code
-;
-lf		equ	0ah		;line feed
-cr		equ	0dh		;carrige return
-esc		equ	1bh		;escape sequence
-;
 ;	MIDI interface I/O
 ;
 setcart		equ	0e2h	;MIDI cartridge setting
