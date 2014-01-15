@@ -93,7 +93,7 @@ inimdp:
 ;
 ; MIDI baud rate generater
 ;
-	ld a,00010110b ;8253 Control Word
+	ld a,00010110B ;8253 Control Word
 ;	     |||||||+-----   Binary Count
 ;	     ||||+++------   Mode 3 :Rate Generater (Square Wave)
 ;	     ||++---------   LSB Read/Load
@@ -105,7 +105,7 @@ inimdp:
 ;
 ; 5msec timer
 ;
-	ld a,10110100b  ;8253 Control Word
+	ld a,10110100B  ;8253 Control Word
 ;	     |||||||+-----   Binary Count
 ;	     ||||+++------   Mode 2 :Rate Generater
 ;	     ||++---------   2bytes Read/Load
@@ -128,12 +128,12 @@ inimdp:
 	call MSXMidi_Wait
 	out (MSXMidi_UART_COMMAND),a
 	call MSXMidi_Wait
-	ld a,40h
+	ld a,40H
 	out (MSXMidi_UART_COMMAND),a
 	call MSXMidi_Wait
 
 	; Set 8251
-	ld a,01001110b  ;8251 MODE Instruction
+	ld a,01001110B  ;8251 MODE Instruction
 ;	     ||||||++-----   Baud Rate :*16  ( 500KHz/16 = 31.25KHz )
 ;	     ||||++-------   Character Length : 8bits
 ;	     ||++---------   Parity Disable
@@ -141,7 +141,7 @@ inimdp:
 ;
 	out (MSXMidi_UART_COMMAND),a
 	call MSXMidi_Wait
-	ld a,00100111b  ;8251 COMMAND Instruction
+	ld a,00100111B  ;8251 COMMAND Instruction
 ;	     |||||||+-----   Transmit : Enable
 ;	     ||||||+------   ~DTR = LOW : 8253timer enable
 ;	     |||||+-------   Receive  : Enable
@@ -172,10 +172,10 @@ main:
 main1:
 	call getdat     ;get MIDI IN data
 	in a,(MSXMidi_UART_STATUS)
-	and 00010000b   ;overrun error ?
+	and 00010000B   ;overrun error ?
 	jr z,main2      ;no
 	ld a,(MSXMidi_commandSave)    ;8251 command
-	or 00010000b    ;reset 8251
+	or 00010000B    ;reset 8251
 	out (MSXMidi_UART_COMMAND),a  ;reset 8251 error flag
 main2:
 	call CHSNS
@@ -202,11 +202,11 @@ getda0:
 	jr z,getda0     ;no , check again
 	ld a,c
 	out (MSXMidi_UART_SEND),a  ;MIDI OUT
-	cp 0f8h         ;if it is 'f8'(MIDI sync timing clock)
+	cp 0F8H         ;if it is 'f8'(MIDI sync timing clock)
 	jr z,getda2     ; then not print it
-	cp 0feh         ;if it is 'fe'(active sensing)
+	cp 0FEH         ;if it is 'fe'(active sensing)
 	jr z,getda2     ; then not print it
-	cp 80h          ;is it data-byte ?
+	cp 80H          ;is it data-byte ?
 	jr c,getda1     ;yes , skip
 getda1:
 ;	call System_PrintHexA  ;print it
@@ -233,7 +233,7 @@ rstmidi:
 ;       Reset 8251
 ;                RTS = HIGH : MIDI IN disable
 ;                DTR = HIGH : 8253timer disable
-	ld a,00000001b  ;8251 COMMAND Instruction
+	ld a,00000001B  ;8251 COMMAND Instruction
 ;	     |||||||+-----   Transmit : Enable
 ;	     ||||||+------   ~DTR = High
 ;	     |||||+-------   Receive  : Disable
@@ -323,7 +323,7 @@ intr_in:
 ;
 intr_time:
 	ld a,(MSXMidi_commandSave)    ;check timer interrupt enable or not.
-	and 00000010b   ;enable ?
+	and 00000010B   ;enable ?
 	ret z           ;no
 	xor a           ;reset interrupt flag
 	out (MSXMidi_TIMER_INT),a
