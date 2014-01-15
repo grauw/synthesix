@@ -4,18 +4,21 @@
 ; MSX-MIDI uses the 8251 UART and the 8253 timer.
 ; See http://map.grauw.nl/resources/midi/msx-midi.php for documentation.
 ;
-;
-;	MIDI interface I/O
-;
-setcart		equ	0e2h	;MIDI cartridge setting
-UARTsend	equ	0e8h	;8251 data transmit
-UARTrecv	equ	0e8h	;8251 data receive
-UARTcmd		equ	0e9h	;8251 command/mode register
-UARTstat	equ	0e9h	;8251 status
-tm_int		equ	0eah	;timer interrupt flag off
-timer0		equ	0ech	;8253 counter #0
-timer2		equ	0eeh	;8253 counter #2
-tm_cmd		equ	0efh	;8253 command
+MSXMidi_IOSETTING: equ 0E2H
+MSXMidi_UART_SEND: equ 0E8H
+MSXMidi_UART_RECEIVE: equ 0E8H
+MSXMidi_UART_COMMAND: equ 0E9H
+MSXMidi_UART_STATUS: equ 0E9H
+MSXMidi_TIMER_INT: equ 0EAH
+MSXMidi_TIMER_COUNTER0: equ 0ECH
+MSXMidi_TIMER_COUNTER1: equ 0EDH
+MSXMidi_TIMER_COUNTER2: equ 0EEH
+MSXMidi_TIMER_COMMAND: equ 0EFH
+MSXMidi_ID_ADDRESS: equ 401CH
+
+S1990_TIMER_CLEAR: equ 0E6H
+S1990_TIMER_LSB: equ 0E6H
+S1990_TIMER_MSB: equ 0E7H
 
 ;
 ;	Set hooks
@@ -49,7 +52,7 @@ setmidi:
 ;
 setho2:
 	xor	a
-	out	(setcart),a	;set cartridge as same as built-in I/F
+	out	(MSXMidi_IOSETTING),a	;set cartridge as same as built-in I/F
 	ld	hl,H.KEYI	;save hook
 	ld	de,hoksvt	;set address to save area
 	push	hl		;save hook address
@@ -58,7 +61,7 @@ setho2:
 	pop	de		;get hook address
 	call	copy5		;set new hook
 	xor	a
-	out	(setcart),a	;set MIDI cartridge I/O
+	out	(MSXMidi_IOSETTING),a	;set MIDI cartridge I/O
 	jr	inimdp
 ;
 ;	Here when no MIDI interface.
@@ -100,9 +103,9 @@ inimdp:
 ;		  ||++---------   LSB Read/Load
 ;		  ++-----------   Counter #0 for Baud Rate Generater of 8251
 ;
-	out	(tm_cmd),a
+	out	(MSXMidi_TIMER_COMMAND),a
 	ld	a,8		; Set Counter.   4MHz / 8 = 500KHz
-	out	(timer0),a	; Set 8253 Counter (LSB)
+	out	(MSXMidi_TIMER_COUNTER0),a	; Set 8253 Counter (LSB)
 ;
 ;	5msec timer
 ;
@@ -112,24 +115,24 @@ inimdp:
 ;		  ||++---------   2bytes Read/Load
 ;		  ++-----------   Counter #2 for 5msec timer
 ;
-	out	(tm_cmd),a
+	out	(MSXMidi_TIMER_COMMAND),a
 	ld	hl,20000
 	ld	a,l		;
-	out	(timer2),a	; Set 8253 Counter (LSB)
+	out	(MSXMidi_TIMER_COUNTER2),a	; Set 8253 Counter (LSB)
 	ld	a,h
-	out	(timer2),a	; Set 8253 Counter (MSB)
+	out	(MSXMidi_TIMER_COUNTER2),a	; Set 8253 Counter (MSB)
 ;
 ;	Initialize 8251
 ;
 	xor	a		; Reset 8251
-	out	(UARTcmd),a	; Set 0
+	out	(MSXMidi_UART_COMMAND),a	; Set 0
 	call	waits
-	out	(UARTcmd),a	; Set 0
+	out	(MSXMidi_UART_COMMAND),a	; Set 0
 	call	waits
-	out	(UARTcmd),a	; Set 0
+	out	(MSXMidi_UART_COMMAND),a	; Set 0
 	call	waits
 	ld	a,40h
-	out	(UARTcmd),a	; Set 40h
+	out	(MSXMidi_UART_COMMAND),a	; Set 40h
 	call	waits
 ;
 ;	Set 8251
@@ -140,7 +143,7 @@ inimdp:
 ;		  ||++---------   Parity Disable
 ;		  ++-----------   Stop Bit : 1bit
 ;
-	out	(UARTcmd),a
+	out	(MSXMidi_UART_COMMAND),a
 	call	waits
 	ld	a,00100111b	;8251 COMMAND Instruction
 ;		  |||||||+-----   Transmit : Enable
@@ -153,10 +156,10 @@ inimdp:
 ;		  +------------   No Operation
 ;
 	ld	(cmdsv),a	;save command
-	out	(UARTcmd),a
-	in	a,(UARTrecv)	;interrupt flag reset
+	out	(MSXMidi_UART_COMMAND),a
+	in	a,(MSXMidi_UART_RECEIVE)	;interrupt flag reset
 	xor	a
-	out	(tm_int),a
+	out	(MSXMidi_TIMER_INT),a
 	ei
 	ret
 
@@ -172,12 +175,12 @@ main:
 	ld	(getp),hl
 main1:
 	call	getdat		;get MIDI IN data
-	in	a,(UARTstat)
+	in	a,(MSXMidi_UART_STATUS)
 	and	00010000b	;overrun error ?
 	jr	z,main2		;no
 	ld	a,(cmdsv)	;8251 command
 	or	00010000b	;reset 8251
-	out	(UARTcmd),a	;reset 8251 error flag
+	out	(MSXMidi_UART_COMMAND),a	;reset 8251 error flag
 main2:
 	call CHSNS
 	or	0		;is there any input ?
@@ -198,11 +201,11 @@ getdat:
 	ld	a,(hl)		;get data from buffer
 	ld	c,a
 getda0:
-	in	a,(UARTstat)	;get 8251 status
+	in	a,(MSXMidi_UART_STATUS)	;get 8251 status
 	and	1		;can I transmit ?
 	jr	z,getda0	;no , check again
 	ld	a,c
-	out	(UARTsend),a	;MIDI OUT
+	out	(MSXMidi_UART_SEND),a	;MIDI OUT
 	cp	0f8h		;if it is 'f8'(MIDI sync timing clock)
 	jr	z,getda2	; then not print it
 	cp	0feh		;if it is 'fe'(active sensing)
@@ -244,7 +247,7 @@ rstmidi:
 ;		  |+-----------   No Operation
 ;		  +------------   No Operation
 ;
-	out	(UARTcmd),a
+	out	(MSXMidi_UART_COMMAND),a
 
 	call	chkmd2
 	jr	z,rstmd1	;if not built-in , then jump
@@ -277,13 +280,13 @@ rstmd2:
 ;	For MIDI cartridge
 ;
 mdintr:
-	in	a,(UARTstat)	;MIDI IN ?
+	in	a,(MSXMidi_UART_STATUS)	;MIDI IN ?
 	and	00000010B
 	jr	z,mdint1	;no
 	call	intr_in		;yes
 	jr	mdintr		;MIDI IN check again
 mdint1:
-	in	a,(UARTstat)	;8253 timer ?
+	in	a,(MSXMidi_UART_STATUS)	;8253 timer ?
 	and	10000000B
 	call	nz,intr_time	;yes
 	jp	hoksvt
@@ -293,7 +296,7 @@ mdint1:
 ;
 ;	MIDI IN
 midiin:
-	in	a,(UARTstat)	;MIDI IN ?
+	in	a,(MSXMidi_UART_STATUS)	;MIDI IN ?
 	and	00000010B
 	jr	z,midin1	;no
 	call	intr_in		;yes
@@ -304,7 +307,7 @@ midin1:
 
 ;	5msec timer
 mdtmin:
-	in	a,(UARTstat)	;8253 timer ?
+	in	a,(MSXMidi_UART_STATUS)	;8253 timer ?
 	and	10000000B
 	call	nz,intr_time	;yes
 	jp	hoksvt
@@ -313,7 +316,7 @@ mdtmin:
 ;	MIDI IN interrupt
 ;
 intr_in:
-	in	a,(UARTrecv)	;read MIDI IN data and reset interrupt flag
+	in	a,(MSXMidi_UART_RECEIVE)	;read MIDI IN data and reset interrupt flag
 	call MidiIn_WriteByte
 	ret
 ;
@@ -324,7 +327,7 @@ intr_time:
 	and	00000010b	;enable ?
 	ret	z		;no
 	xor	a
-	out	(tm_int),a	;reset interrupt flag
+	out	(MSXMidi_TIMER_INT),a	;reset interrupt flag
 	ret
 
 ;
@@ -401,13 +404,11 @@ chkmd2:
 ;	Entry :[A]=slot address
 ;	Return:Z flag is set if MIDI ID is found
 ;
-id_string:	db	"MIDI"
-id_address	equ	401ch	;MIDI ID address
 chkid:
 	push	bc
-	ld	de,id_string
-	ld	hl,id_address
-	ld	b,4		;length of id_string
+	ld	de,MSXMidi_idString
+	ld	hl,MSXMidi_ID_ADDRESS
+	ld	b,4		;length of MSXMidi_idString
 chkid1:
 	push	af
 	push	bc
@@ -436,21 +437,21 @@ chkid2:
 ;
 ;	Wait routine
 ;
-stimec	equ	0e6h		;system timer clear
-stimeh	equ	0e7h		;system timer High
 waits:
 	push	af
 	push	bc
 	ld	c,1
-	out	(stimec),a	;clear timer
+	out	(S1990_TIMER_CLEAR),a	;clear timer
 waitlp:
-	in	a,(stimeh)	; get counter
+	in	a,(S1990_TIMER_MSB)	; get counter
 	cp	c
 	jr	c,waitlp	; loop
 	pop	bc
 	pop	af
 	ret
 
+MSXMidi_idString:
+	db "MIDI"
 
 ;
 ;	Workarea definition
