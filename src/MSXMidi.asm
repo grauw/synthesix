@@ -25,7 +25,7 @@ S1990_TIMER_MSB: equ 0E7H
 ;
 setmidi:
 	call chkmidi    ;Have I MIDI interface ?
-	jp c,nomidi     ; No
+	ret c           ; No
 	di
 	jr z,setho2     ;MIDI interface is not built in
 ;
@@ -34,18 +34,22 @@ setmidi:
 	ld hl,H.MDTM    ;save hook (8253 timer)
 	ld de,hoksvt    ;set address to save area
 	push hl         ;save hook address
-	call copy5      ;copy old hook
+	ld bc,5
+	ldir            ;copy old hook
 	ld hl,hokmdt    ;set address to new hook data
 	pop de          ;get hook address
-	call copy5      ;set new hook
+	ld bc,5
+	ldir            ;set new hook
 ;
 	ld hl,H.MDIN    ;save hook (MIDI IN)
 	ld de,hoksvt+5  ;set address to save area
 	push hl         ;save hook address
-	call copy5      ;copy old hook
+	ld bc,5
+	ldir            ;copy old hook
 	ld hl,hokmdi    ;set address to new hook data
 	pop de          ;get hook address
-	call copy5      ;set new hook
+	ld bc,5
+	ldir            ;set new hook
 	jr inimdp
 ;
 ; Setting for MIDI cartridge
@@ -56,24 +60,16 @@ setho2:
 	ld hl,H.KEYI    ;save hook
 	ld de,hoksvt    ;set address to save area
 	push hl         ;save hook address
-	call copy5      ;copy old hook
+	ld bc,5
+	ldir            ;copy old hook
 	ld hl,hokmdc    ;set address to new hook data
 	pop de          ;get hook address
-	call copy5      ;set new hook
+	ld bc,5
+	ldir            ;set new hook
 	xor a           ;set MIDI cartridge I/O
 	out (MSXMidi_IOSETTING),a
 	jr inimdp
-;
-; Here when no MIDI interface.
-; Print message and return to DOS.
-;
-nomidi:
-	ret
 
-copy5:
-	ld bc,5
-	ldir
-	ret
 ;
 ;	Hook Definition
 ;
@@ -256,10 +252,12 @@ rstmidi:
 ;
 	ld de,H.MDTM  ;restore hook
 	ld hl,hoksvt  ;save area
-	call copy5
+	ld bc,5
+	ldir
 	ld de,H.MDIN
 	ld hl,hoksvt+5  ;save area
-	call copy5
+	ld bc,5
+	ldir
 	jr rstmd2
 ;
 ; Reset MIDI cartridge
@@ -267,7 +265,8 @@ rstmidi:
 rstmd1:
 	ld de,H.KEYI  ;restore hook
 	ld hl,hoksvt  ;save area
-	call copy5
+	ld bc,5
+	ldir
 rstmd2:
 	ei
 	ret
