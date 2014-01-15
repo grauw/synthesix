@@ -127,7 +127,7 @@ MidiIn_ProcessMessages: PROC
 ProcessStatus_0:
 	ld a,(MidiIn_runningStatus)
 	ex af,af'
-	dec a
+	inc a
 	ex af,af'
 	jp ProcessStatus_1_Running
 ProcessStatus_1:
@@ -174,8 +174,8 @@ ProcessStatus_1111:
 	cp 0F4H << 4
 	jr nc,ProcessStatus_111100
 	ex af,af'
-	cp -1
-	ret nc
+	cp 2
+	ret c
 	ex af,af'
 	ld a,(hl)
 	and a
@@ -188,8 +188,8 @@ ProcessStatus_Skip:
 
 call_channel: MACRO ?length, ?method
 	ex af,af'
-	cp 0FFH - ?length
-	ret nc  ; message incomplete
+	cp ?length
+	ret c  ; message incomplete
 	ex af,af'
 	ld b,(hl)
 	inc l
