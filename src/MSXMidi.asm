@@ -123,14 +123,14 @@ inimdp:
 	; Reset 8251
 	xor a
 	out (MSXMidi_UART_COMMAND),a
-	call waits
+	call MSXMidi_Wait
 	out (MSXMidi_UART_COMMAND),a
-	call waits
+	call MSXMidi_Wait
 	out (MSXMidi_UART_COMMAND),a
-	call waits
+	call MSXMidi_Wait
 	ld a,40h
 	out (MSXMidi_UART_COMMAND),a
-	call waits
+	call MSXMidi_Wait
 
 	; Set 8251
 	ld a,01001110b  ;8251 MODE Instruction
@@ -140,7 +140,7 @@ inimdp:
 ;	     ++-----------   Stop Bit : 1bit
 ;
 	out (MSXMidi_UART_COMMAND),a
-	call waits
+	call MSXMidi_Wait
 	ld a,00100111b  ;8251 COMMAND Instruction
 ;	     |||||||+-----   Transmit : Enable
 ;	     ||||||+------   ~DTR = LOW : 8253timer enable
@@ -433,21 +433,21 @@ chkid2:
 	inc a           ;worng ID
 	ret
 
-;
-; Wait routine
-;
-waits:
+; Wait 1ms between UART command register writes
+; Note that this is unnecessarily long; only a 5 µs wait is required.
+MSXMidi_Wait: PROC
 	push af
 	push bc
 	ld c,1
-	out (S1990_TIMER_CLEAR),a  ;clear timer
-waitlp:
-	in a,(S1990_TIMER_MSB)  ; get counter
+	out (S1990_TIMER_CLEAR),a
+Loop:
+	in a,(S1990_TIMER_MSB)
 	cp c
-	jr c,waitlp  ; loop
+	jr c,Loop
 	pop bc
 	pop af
 	ret
+	ENDP
 
 MSXMidi_idString:
 	db "MIDI"
