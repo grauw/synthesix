@@ -1,18 +1,9 @@
 ;
-;	thru.mac
+; MSX-MIDI driver
 ;
+; MSX-MIDI uses the 8251 UART and the 8253 timer.
+; See http://map.grauw.nl/resources/midi/msx-midi.php for documentation.
 ;
-;	thru.com gets data from MIDI IN port
-;	and send them out to MIDI OUT port.
-;
-;	.z80
-;	cseg
-;
-;	BIOS entry
-;
-rdslt		equ	000ch		;read slot
-calslt		equ	001ch		;call slot
-;doscal		equ	0005h		;dos call
 ;
 ;	MIDI interface I/O
 ;
@@ -25,14 +16,6 @@ tm_int		equ	0eah	;timer interrupt flag off
 timer0		equ	0ech	;8253 counter #0
 timer2		equ	0eeh	;8253 counter #2
 tm_cmd		equ	0efh	;8253 command
-;
-;	hooks
-;
-h.oknorm	equ	0ff75h
-h.mdin		equ	h.oknorm	;Hook for MIDI IN
-h.frqint	equ	0ff93h
-h.mdtm		equ	h.frqint	;Hook for 8253 timer
-h.keyi		equ	0fd9ah		;Hook for 8253 timer
 
 ;
 ;	Set hooks
@@ -45,7 +28,7 @@ setmidi:
 ;
 ;	Setting for built-in MIDI interface
 ;
-	ld	hl,h.mdtm	;save hook (8253 timer)
+	ld	hl,H.MDTM	;save hook (8253 timer)
 	ld	de,hoksvt	;set address to save area
 	push	hl		;save hook address
 	call	copy5		;copy old hook
@@ -53,7 +36,7 @@ setmidi:
 	pop	de		;get hook address
 	call	copy5		;set new hook
 ;
-	ld	hl,h.mdin       ;save hook (MIDI IN)
+	ld	hl,H.MDIN       ;save hook (MIDI IN)
 	ld	de,hoksvt+5	;set address to save area
 	push	hl		;save hook address
 	call	copy5		;copy old hook
@@ -67,7 +50,7 @@ setmidi:
 setho2:
 	xor	a
 	out	(setcart),a	;set cartridge as same as built-in I/F
-	ld	hl,h.keyi	;save hook
+	ld	hl,H.KEYI	;save hook
 	ld	de,hoksvt	;set address to save area
 	push	hl		;save hook address
 	call	copy5		;copy old hook
@@ -268,10 +251,10 @@ rstmidi:
 ;
 ;	Reset built-in MIDI interface
 ;
-	ld	de,h.mdtm	;restore hook
+	ld	de,H.MDTM	;restore hook
 	ld	hl,hoksvt	;save area
 	call	copy5
-	ld	de,h.mdin
+	ld	de,H.MDIN
 	ld	hl,hoksvt+5	;save area
 	call	copy5
 	jr	rstmd2
@@ -279,7 +262,7 @@ rstmidi:
 ;	Reset MIDI cartridge
 ;
 rstmd1:
-	ld	de,h.keyi	;restore hook
+	ld	de,H.KEYI	;restore hook
 	ld	hl,hoksvt	;save area
 	call	copy5
 rstmd2:
@@ -350,13 +333,10 @@ intr_time:
 ;	       : [CF]=0 , [ZF]=1        found MIDI cartridge
 ;	       : [CF]=0 , [ZF]=0        MIDI interface is built in
 ;
-ver_id1		equ	002dh		;MAIN ROM Version ID
-ver_id2		equ	002eh		;MIDI interface ID
-exptbl		equ	0fcc1h		;slot expanded table
 chkmidi:
-	ld	a,(exptbl)
-	ld	hl,ver_id1
-	call	rdslt		;read Main ROM version ID
+	ld	a,(EXPTBL)
+	ld	hl,VERID1
+	call	RDSLT		;read Main ROM version ID
 	cp	3
 	ret	c		;MSX1,MSX2,MSX2+	return
 	call	chkmd2		;read MIDI interface ID
@@ -367,9 +347,9 @@ chkro1:
 	ld	a,4
 	sub	b		;primary slot number
 	ld	c,a		;save
-	ld	hl,exptbl
+	ld	hl,EXPTBL
 	ld	a,c
-	add	a,l		;set exptbl
+	add	a,l		;set EXPTBL
 	ld	l,a
 	ld	a,(hl)
 	and	10000000B	;expanded ?
@@ -409,9 +389,9 @@ chkroz:
 ;	       : [ZF]=0		not built in
 ;
 chkmd2:
-	ld	a,(exptbl)
-	ld	hl,ver_id2
-	call	rdslt		;read MIDI interface ID
+	ld	a,(EXPTBL)
+	ld	hl,VERID2
+	call	RDSLT		;read MIDI interface ID
 	and	1		;set Zflag
 	ret
 
@@ -432,7 +412,7 @@ chkid1:
 	push	af
 	push	bc
 	push	de
-	call	rdslt		;read data
+	call	RDSLT		;read data
 	pop	de
 	pop	bc
 	ld	c,a		;save data
