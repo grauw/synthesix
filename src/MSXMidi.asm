@@ -329,8 +329,11 @@ intr_time:
 	out (MSXMidi_TIMER_INT),a
 	ret
 
+;
 ; Detect MIDI interface
+;
 ; f <- c: not found, nc: found, z: external, nz: internal
+;
 MSXMidi_Detect: PROC
 	ld a,(EXPTBL)
 	ld hl,VERID1
@@ -382,7 +385,9 @@ FoundID:
 	ret
 	ENDP
 
+;
 ; f <- z: built in MIDI found
+;
 MSXMidi_DetectInternal: PROC
 	ld a,(EXPTBL)
 	ld hl,VERID2
@@ -391,9 +396,12 @@ MSXMidi_DetectInternal: PROC
 	ret
 	ENDP
 
+;
 ; Check slot for MIDI ID
+;
 ; a = slot address
 ; f <- z: MIDI ID found
+;
 MSXMidi_DetectInSlot: PROC
 	push bc
 	ld de,MSXMidi_idString
@@ -425,8 +433,10 @@ NotFound:
 	ret
 	ENDP
 
+;
 ; Wait 1ms between UART command register writes
 ; Note that this is unnecessarily long; only a 5 µs wait is required.
+;
 MSXMidi_Wait: PROC
 	push af
 	push bc
