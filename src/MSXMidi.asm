@@ -364,7 +364,7 @@ chkro2:             ;search expanded slot
 	rlc a
 	rlc a           ;1000nn00B
 	or c            ;1000nnmmB = slot address
-	call chkid      ;check MIDI ID
+	call MSXMidi_DetectInSlot
 	pop bc
 	jr z,chkroy     ;found MIDI ID
 	djnz chkro2     ;next expanded slot
@@ -372,7 +372,7 @@ chkro2:             ;search expanded slot
 	jr chkro4       ;next slot
 chkro3:             ;search primary slot
 	ld a,c          ;set slot address
-	call chkid      ;check MIDI ID
+	call MSXMidi_DetectInSlot
 	pop bc
 	jr z,chkroz     ;found MIDI ID
 chkro4:
@@ -397,18 +397,15 @@ chkmd2:
 	and 1           ;set Zflag
 	ret
 
-;
-; Check MIDI ID
-;
-; Entry :[A]=slot address
-; Return:Z flag is set if MIDI ID is found
-;
-chkid:
+; Check slot for MIDI ID
+; a = slot address
+; f <- z: MIDI ID found
+MSXMidi_DetectInSlot: PROC
 	push bc
 	ld de,MSXMidi_idString
 	ld hl,MSXMidi_ID_ADDRESS
 	ld b,4          ;length of MSXMidi_idString
-chkid1:
+Loop:
 	push af
 	push bc
 	push de
@@ -418,20 +415,21 @@ chkid1:
 	ld c,a          ;save data
 	ld a,(de)       ;get char
 	cp c            ;same ?
-	jr nz,chkid2    ;no
+	jr nz,NotFound  ;no
 	pop af          ;restore slot address
 	inc de          ;next char
 	inc hl
-	djnz chkid1     ;check next char
+	djnz Loop       ;check next char
 	pop bc          ;restore environment
 	xor a           ;I found ID
 	ret
-chkid2:
+NotFound:
 	pop af          ;restore slot address
 	pop bc          ;restore environment
 	xor a
 	inc a           ;worng ID
 	ret
+	ENDP
 
 ; Wait 1ms between UART command register writes
 ; Note that this is unnecessarily long; only a 5 µs wait is required.
