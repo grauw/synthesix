@@ -24,7 +24,7 @@ S1990_TIMER_MSB: equ 0E7H
 ; Set hooks
 ;
 setmidi:
-	call chkmidi    ;Have I MIDI interface ?
+	call MSXMidi_Detect
 	ret c           ; No
 	di
 	jr z,setho2     ;MIDI interface is not built in
@@ -245,7 +245,7 @@ rstmidi:
 ;
 	out (MSXMidi_UART_COMMAND),a
 
-	call chkmd2
+	call MSXMidi_DetectInternal
 	jr z,rstmd1  ;if not built-in , then jump
 ;
 ; Reset built-in MIDI interface
@@ -329,22 +329,18 @@ intr_time:
 	out (MSXMidi_TIMER_INT),a
 	ret
 
-;
-; Check MIDI interface
-; Return : [CF]=1                 no MIDI interface
-;        : [CF]=0 , [ZF]=1        found MIDI cartridge
-;        : [CF]=0 , [ZF]=0        MIDI interface is built in
-;
-chkmidi:
+; Detect MIDI interface
+; f <- c: not found, nc: found, z: external, nz: internal
+MSXMidi_Detect: PROC
 	ld a,(EXPTBL)
 	ld hl,VERID1
 	call RDSLT      ;read Main ROM version ID
 	cp 3
 	ret c           ;MSX1,MSX2,MSX2+ return
-	call chkmd2     ;read MIDI interface ID
+	call MSXMidi_DetectInternal
 	ret nz          ;MIDI interface is built in
 	ld b,4
-chkro1:
+PrimaryLoop:
 	push bc         ;save counter
 	ld a,4
 	sub b           ;primary slot number
@@ -355,9 +351,9 @@ chkro1:
 	ld l,a
 	ld a,(hl)
 	and 10000000B   ;expanded ?
-	jr z,chkro3     ;no
+	jr z,SearchPrimary  ;no
 	ld b,4          ;number of expanded slots
-chkro2:             ;search expanded slot
+SecondaryLoop:      ;search expanded slot
 	push bc
 	ld a,00100100B
 	sub b           ;001000nnB
@@ -366,36 +362,34 @@ chkro2:             ;search expanded slot
 	or c            ;1000nnmmB = slot address
 	call MSXMidi_DetectInSlot
 	pop bc
-	jr z,chkroy     ;found MIDI ID
-	djnz chkro2     ;next expanded slot
+	jr z,FoundIDPop  ;found MIDI ID
+	djnz SecondaryLoop  ;next expanded slot
 	pop bc
-	jr chkro4       ;next slot
-chkro3:             ;search primary slot
+	jr NextSlot     ;next slot
+SearchPrimary:      ;search primary slot
 	ld a,c          ;set slot address
 	call MSXMidi_DetectInSlot
 	pop bc
-	jr z,chkroz     ;found MIDI ID
-chkro4:
-	djnz chkro1     ;search next slot
+	jr z,FoundID    ;found MIDI ID
+NextSlot:
+	djnz PrimaryLoop  ;search next slot
 	scf             ;no MIDI ID
 	ret
-chkroy:
+FoundIDPop:
 	pop bc
-chkroz:
+FoundID:
 	xor a           ;set Z flag, reset Cy flag
 	ret
+	ENDP
 
-;
-; Is MIDI interface built in ?
-; Return : [ZF]=1   built in
-;        : [ZF]=0   not built in
-;
-chkmd2:
+; f <- z: built in MIDI found
+MSXMidi_DetectInternal: PROC
 	ld a,(EXPTBL)
 	ld hl,VERID2
 	call RDSLT      ;read MIDI interface ID
 	and 1           ;set Zflag
 	ret
+	ENDP
 
 ; Check slot for MIDI ID
 ; a = slot address
