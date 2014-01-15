@@ -220,9 +220,9 @@ rstmd2:
 	ret
 
 ;
-; Interrupt routin
+; Interrupt handlers
 ;
-
+	SECTION RAM
 ;
 ; For MIDI cartridge
 ;
@@ -276,6 +276,8 @@ intr_time:
 	xor a           ;reset interrupt flag
 	out (MSXMidi_TIMER_INT),a
 	ret
+
+	ENDS
 
 ;
 ; Detect MIDI interface

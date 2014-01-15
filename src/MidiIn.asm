@@ -13,6 +13,7 @@ MidiIn_HasMessage:
 ; a = byte
 ; f <- z: buffer full
 ; Modifies: af, hl
+	SECTION RAM
 MidiIn_WriteByte:
 	ld hl,(MidiIn_bufferHead)
 	ld (hl),a
@@ -21,6 +22,7 @@ MidiIn_WriteByte:
 	ld a,(MidiIn_bufferTail)
 	cp l
 	ret
+	ENDS
 
 ; a <- byte
 ; f <- z: buffer empty
