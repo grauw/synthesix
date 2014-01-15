@@ -126,6 +126,33 @@ System_GetPage1Slot:
 	or c
 	ret
 
+System_GetPage3Slot:
+	call RSLREG
+	and 11000000B
+	rlca
+	rlca
+	ld c,a
+	ld b,0
+	ld hl,EXPTBL
+	add hl,bc
+	ld c,a
+	ld a,(hl)
+	and 80H
+	or c
+	ld c,a
+	inc hl  ; move to SLTTBL
+	inc hl
+	inc hl
+	inc hl
+	ld a,(hl)
+	and 11000000B
+	rrca
+	rrca
+	rrca
+	rrca
+	or c
+	ret
+
 System_Stop:
 	di
 	halt
