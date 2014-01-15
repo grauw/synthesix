@@ -34,6 +34,7 @@ Synthesix_Interrupt:
 	ld b,7
 	call VDP_SetRegister
 
+	call MSXMidi_CheckOverrun
 	call Keys_Scan
 	call MidiIn_ProcessMessages
 	call Synthesix_UpdateChannels

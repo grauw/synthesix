@@ -160,70 +160,18 @@ inimdp:
 	ret
 
 ;
-; main routine
+; Check for overrun, and clear flag if needed.
+; f <- z: no overrun
 ;
-; Get data from buffer and print it.
-; If overrun error, then print '*'.
-;
-main:
-	ld hl,mdbuf  ;set pointer
-	ld (putp),hl
-	ld (getp),hl
-main1:
-	call getdat     ;get MIDI IN data
+MSXMidi_CheckOverrun: PROC
 	in a,(MSXMidi_UART_STATUS)
-	and 00010000B   ;overrun error ?
-	jr z,main2      ;no
-	ld a,(MSXMidi_commandSave)    ;8251 command
-	or 00010000B    ;reset 8251
-	out (MSXMidi_UART_COMMAND),a  ;reset 8251 error flag
-main2:
-	call CHSNS
-	or 0            ;is there any input ?
-	jr z,main1      ;no , loop again
-	jp rstmidi
-
-;
-; Get data from buffer
-;
-getdat:
-	ld hl,(getp)
-	ld de,(putp)
-	scf
-	ccf
-	sbc hl,de       ;no data in buffer ?
-	ret z           ;no data , then ret
-	ld hl,(getp)
-	ld a,(hl)       ;get data from buffer
-	ld c,a
-getda0:
-	in a,(MSXMidi_UART_STATUS)  ;get 8251 status
-	and 1           ;can I transmit ?
-	jr z,getda0     ;no , check again
-	ld a,c
-	out (MSXMidi_UART_SEND),a  ;MIDI OUT
-	cp 0F8H         ;if it is 'f8'(MIDI sync timing clock)
-	jr z,getda2     ; then not print it
-	cp 0FEH         ;if it is 'fe'(active sensing)
-	jr z,getda2     ; then not print it
-	cp 80H          ;is it data-byte ?
-	jr c,getda1     ;yes , skip
-getda1:
-;	call System_PrintHexA  ;print it
-getda2:
-	ld hl,(getp)
-	inc hl          ;increment 'getp' pointer
-	ld de,bufend
-	push hl
-	scf
-	ccf
-	sbc hl,de       ;end of buffer ?
-	pop hl
-	jr nz,getda3    ;no
-	ld hl,mdbuf
-getda3:
-	ld (getp),hl    ;save pointer
+	and 00010000B
+	ret z
+	ld a,(MSXMidi_commandSave)
+	or 00010000B
+	out (MSXMidi_UART_COMMAND),a
 	ret
+	ENDP
 
 ;
 ; Reset MIDI interface and reset hooks
@@ -463,9 +411,5 @@ MSXMidi_commandSave:
 	db 0            ;8251 command save area
 
 hoksvt: ds 10       ;hook save area
-getp:   ds 2        ;pointer for getting MIDI data
-putp:   ds 2        ;pointer for putting MIDI data
-mdbuf:  ds 128      ;buffer for MIDI IN
-bufend: equ $       ;end of buffer
 
 	ENDS
