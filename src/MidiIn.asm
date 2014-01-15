@@ -123,10 +123,19 @@ MidiIn_ProcessMessages: PROC
 	ex af,af'
 	ld a,(hl)
 	add a,a
-	jp nc,ProcessRunningStatus
-	inc l
-	ld (MidiIn_runningStatus),a
+	jp c,ProcessStatus_1
+ProcessStatus_0:
+	ld a,(MidiIn_runningStatus)
+	ex af,af'
+	dec a
+	ex af,af'
+	jp ProcessStatus_1_Running
 ProcessStatus_1:
+	inc l
+	cp 0F4H << 1
+	jr nc,ProcessStatus_1_Running
+	ld (MidiIn_runningStatus),a
+ProcessStatus_1_Running:
 	add a,a
 	jp c,ProcessStatus_11
 ProcessStatus_10:
@@ -162,26 +171,18 @@ ProcessStatus_111:
 ProcessStatus_1110:
 	call_channel 3, Channel_PitchBend
 ProcessStatus_1111:
+	cp 0F4H << 4
+	jr nc,ProcessStatus_111100
 	ex af,af'
-	cp 0FFH
+	cp -1
 	ret nc
+	ex af,af'
 	ld a,(hl)
 	and a
-	jp m,ProcessStatus_1111_NoInc
+	jp m,ProcessStatus_Skip
 	inc l  ; only increase if it is a data byte
-ProcessStatus_1111_NoInc:
-	ld (MidiIn_bufferTail),hl
-	ret
-
-ProcessRunningStatus:
-	ex af,af'
-	dec a
-	ex af,af'
-	ld a,(MidiIn_runningStatus)
-	add a,a
-	cp 0ECH  ;0F6H
-	jp c,ProcessStatus_1
-	inc l  ; if a status which does not have data bytes, skip data byte
+ProcessStatus_111100:
+ProcessStatus_Skip:
 	ld (MidiIn_bufferTail),hl
 	jp MidiIn_ProcessMessages
 
@@ -225,7 +226,7 @@ NotADataByte:
 	SECTION RAM
 
 MidiIn_runningStatus:
-	db 0FEH
+	db 080H << 1
 
 MidiIn_bufferHead:
 	dw MidiIn_buffer
