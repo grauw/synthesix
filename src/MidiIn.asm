@@ -21,7 +21,8 @@ MidiIn_WriteByte:
 	ld (MidiIn_bufferHead),hl
 	ld a,(MidiIn_bufferTail)
 	cp l
-	ret
+	ret nz
+	call System_ThrowException
 	ENDS
 
 ; a <- byte

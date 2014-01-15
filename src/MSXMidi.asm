@@ -170,6 +170,7 @@ MSXMidi_CheckOverrun: PROC
 	ld a,(MSXMidi_commandSave)
 	or 00010000B
 	out (MSXMidi_UART_COMMAND),a
+	call System_ThrowException
 	ret
 	ENDP
 
