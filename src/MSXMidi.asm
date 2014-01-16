@@ -131,35 +131,25 @@ rstmidi:
 	ret
 
 ;
-; Interrupt handlers
+; Interrupt handler
 ;
 	SECTION RAM
-;
-; For MIDI cartridge
-;
 	ALIGN 101H  ; address MSB and LSB must be the same for IM 2
 mdintr:
 	push af
-	in a,(MSXMidi_UART_STATUS)  ;MIDI IN ?
+	in a,(MSXMidi_UART_STATUS)
 	and 00000010B
-	jr z,mdint1     ;no
-	call intr_in    ;yes
+	jr z,mdint1
+	push hl
+	in a,(MSXMidi_UART_RECEIVE)
+	call MidiIn_WriteByte
+	pop hl
 	pop af
 	ei
 	ret
 mdint1:
 	pop af
 	jp 38H
-
-;
-; MIDI IN interrupt
-;
-intr_in:
-	push hl
-	in a,(MSXMidi_UART_RECEIVE)  ;read MIDI IN data and reset interrupt flag
-	call MidiIn_WriteByte
-	pop hl
-	ret
 
 	ENDS
 
