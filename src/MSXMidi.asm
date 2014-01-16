@@ -27,64 +27,12 @@ setmidi:
 	call MSXMidi_Detect
 	ret c           ; No
 	di
-	jr z,setho2     ;MIDI interface is not built in
-;
-; Setting for built-in MIDI interface
-;
-	ld hl,H.MDTM    ;save hook (8253 timer)
-	ld de,hoksvt    ;set address to save area
-	push hl         ;save hook address
-	ld bc,5
-	ldir            ;copy old hook
-	ld hl,hokmdt    ;set address to new hook data
-	pop de          ;get hook address
-	ld bc,5
-	ldir            ;set new hook
-;
-	ld hl,H.MDIN    ;save hook (MIDI IN)
-	ld de,hoksvt+5  ;set address to save area
-	push hl         ;save hook address
-	ld bc,5
-	ldir            ;copy old hook
-	ld hl,hokmdi    ;set address to new hook data
-	pop de          ;get hook address
-	ld bc,5
-	ldir            ;set new hook
-	jr inimdp
-;
-; Setting for MIDI cartridge
-;
-setho2:
-	xor a           ;set cartridge as same as built-in I/F
-	out (MSXMidi_IOSETTING),a
-	ld hl,H.KEYI    ;save hook
-	ld de,hoksvt    ;set address to save area
-	push hl         ;save hook address
-	ld bc,5
-	ldir            ;copy old hook
-	ld hl,hokmdc    ;set address to new hook data
-	pop de          ;get hook address
-	ld bc,5
-	ldir            ;set new hook
+	ld a,IM2Table >> 8
+	ld i,a
+	im 2
 	xor a           ;set MIDI cartridge I/O
 	out (MSXMidi_IOSETTING),a
 	jr inimdp
-
-;
-;	Hook Definition
-;
-hokmdi:  ;hook for MIDI IN
-	jp midiin
-	ret
-	ret
-hokmdt:  ;hook for 8253timer
-	jp mdtmin
-	ret
-	ret
-hokmdc:  ;hook for MIDI cartridge
-	jp mdintr
-	ret
-	ret
 
 ;
 ; Initialize MIDI Interface
@@ -194,29 +142,7 @@ rstmidi:
 ;
 	out (MSXMidi_UART_COMMAND),a
 
-	call MSXMidi_DetectInternal
-	jr z,rstmd1  ;if not built-in , then jump
-;
-; Reset built-in MIDI interface
-;
-	ld de,H.MDTM  ;restore hook
-	ld hl,hoksvt  ;save area
-	ld bc,5
-	ldir
-	ld de,H.MDIN
-	ld hl,hoksvt+5  ;save area
-	ld bc,5
-	ldir
-	jr rstmd2
-;
-; Reset MIDI cartridge
-;
-rstmd1:
-	ld de,H.KEYI  ;restore hook
-	ld hl,hoksvt  ;save area
-	ld bc,5
-	ldir
-rstmd2:
+	im 1
 	ei
 	ret
 
@@ -227,45 +153,36 @@ rstmd2:
 ;
 ; For MIDI cartridge
 ;
+	ALIGN 101H  ; address MSB and LSB must be the same for IM 2
 mdintr:
+	push af
 	in a,(MSXMidi_UART_STATUS)  ;MIDI IN ?
 	and 00000010B
 	jr z,mdint1     ;no
 	call intr_in    ;yes
-	jr mdintr       ;MIDI IN check again
+	pop af
+	ei
+	ret
 mdint1:
 	in a,(MSXMidi_UART_STATUS)  ;8253 timer ?
 	and 10000000B
-	call nz,intr_time  ;yes
-	jp hoksvt
-
-;
-; For built-in MIDI interface
-;
-; MIDI IN
-midiin:
-	in a,(MSXMidi_UART_STATUS)  ;MIDI IN ?
-	and 00000010B
-	jr z,midin1     ;no
-	call intr_in    ;yes
-	jr midiin       ;MIDI IN check again
-midin1:
+	jp z,mdint2
+	call intr_time  ;yes
+	pop af
 	ei
-	jp hoksvt+5
-
-; 5msec timer
-mdtmin:
-	in a,(MSXMidi_UART_STATUS)  ;8253 timer ?
-	and 10000000B
-	call nz,intr_time  ;yes
-	jp hoksvt
+	ret
+mdint2:
+	pop af
+	jp 38H
 
 ;
 ; MIDI IN interrupt
 ;
 intr_in:
+	push hl
 	in a,(MSXMidi_UART_RECEIVE)  ;read MIDI IN data and reset interrupt flag
 	call MidiIn_WriteByte
+	pop hl
 	ret
 ;
 ; timer interrupt
@@ -414,5 +331,9 @@ MSXMidi_commandSave:
 	db 0            ;8251 command save area
 
 hoksvt: ds 10       ;hook save area
+
+	ALIGN 100H
+IM2Table:
+	ds 257,mdintr & 0FFH  ; 257, in case data bus is 0FFH (which it is)
 
 	ENDS
