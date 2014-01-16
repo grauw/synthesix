@@ -73,6 +73,20 @@ inimdp:
 	ret
 
 ;
+; Reset MIDI interface and reset hooks
+;
+rstmidi:
+	di
+	; reset all except for transmission enable
+	ld a,00000001B
+	out (MSXMidi_UART_COMMAND),a
+
+	; restore interrupt to IM 1
+	im 1
+	ei
+	ret
+
+;
 ; Check for overrun, and clear flag if needed.
 ; f <- z: no overrun
 ;
@@ -86,20 +100,6 @@ MSXMidi_CheckOverrun: PROC
 	call System_ThrowException
 	ret
 	ENDP
-
-;
-; Reset MIDI interface and reset hooks
-;
-rstmidi:
-	di
-	; reset all except for transmission enable
-	ld a,00000001B
-	out (MSXMidi_UART_COMMAND),a
-
-	; restore interrupt to IM 1
-	im 1
-	ei
-	ret
 
 ;
 ; Interrupt handler
