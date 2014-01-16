@@ -30,9 +30,10 @@ setmidi:
 	ld a,IM2Table >> 8
 	ld i,a
 	im 2
-	xor a           ;set MIDI cartridge I/O
+	jr nz,inimdp
+	xor a           ; let external MSX-MIDI I/O ports match internal ones
 	out (MSXMidi_IOSETTING),a
-	jr inimdp
+	jr z,inimdp
 
 ;
 ; Initialize MIDI Interface
