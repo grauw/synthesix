@@ -123,18 +123,29 @@ MidiIn_ProcessMessages: PROC
 	ret z  ; no messages
 	ex af,af'
 	ld a,(hl)
+	inc l
 	add a,a
 	jp c,ProcessStatus_1
 ProcessStatus_0:
 	ld a,(MidiIn_runningStatus)
+	cp -1
+	jp z,ProcessStatus_Skip
+	dec l
 	ex af,af'
 	inc a
 	ex af,af'
 	jp ProcessStatus_1_Running
 ProcessStatus_1:
-	inc l
-	cp 0F4H << 1
+	cp 0F0H << 1
+	jr c,ProcessStatus_1_SetRunning
+	cp 0F8H << 1
 	jr nc,ProcessStatus_1_Running
+	push af
+	ld a,-1
+	ld (MidiIn_runningStatus),a
+	pop af
+	jp ProcessStatus_1_Running
+ProcessStatus_1_SetRunning:
 	ld (MidiIn_runningStatus),a
 ProcessStatus_1_Running:
 	add a,a
@@ -227,7 +238,7 @@ NotADataByte:
 	SECTION RAM
 
 MidiIn_runningStatus:
-	db 080H << 1
+	db -1
 
 MidiIn_bufferHead:
 	dw MidiIn_buffer
