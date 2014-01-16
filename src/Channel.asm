@@ -39,6 +39,9 @@ Channel_Constructor:
 ; b = note number (0-127)
 ; c = velocity (0-127)
 Channel_NoteOn:
+	inc c
+	dec c
+	jp z,Channel_NoteOff
 	REPT Channel.MAX_VOICE_POOLS, ?pool
 	ld e,(ix + Channel.patches + ?pool * 2)
 	ld d,(ix + Channel.patches + ?pool * 2 + 1)
