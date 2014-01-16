@@ -159,11 +159,6 @@ mdint1:
 ; f <- c: not found, nc: found, z: external, nz: internal
 ;
 MSXMidi_Detect: PROC
-	ld a,(EXPTBL)
-	ld hl,VERID1
-	call RDSLT      ;read Main ROM version ID
-	cp 3
-	ret c           ;MSX1,MSX2,MSX2+ return
 	call MSXMidi_DetectInternal
 	ret nz          ;MIDI interface is built in
 	ld b,4
