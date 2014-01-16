@@ -42,6 +42,7 @@ ROM_Bank3Default: equ ROM_MultiplyTableBank
 	dw 0, 0, 0, 0, 0, 0
 
 	INCLUDE "Synthesix.asm"
+	INCLUDE "BIOS.asm"
 	INCLUDE "System.asm"
 	INCLUDE "VDP.asm"
 	INCLUDE "Math.asm"

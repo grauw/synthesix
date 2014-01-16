@@ -1,30 +1,6 @@
-; BIOS defines
-RDSLT: equ 0CH
-CALSLT: equ 1CH
-ENASLT: equ 24H
-IDBYT2: equ 2DH
-IDBYT3: equ 2EH
-INITXT: equ 6CH
-CHSNS: equ 9CH
-CHPUT: equ 0A2H
-RSLREG: equ 138H
-SNSMAT: equ 141H
-KILBUF: equ 156H
-SCNCNT: equ 0F3F6H
-LINL40: equ 0F3AEH
-CLIKSW: equ 0F3DBH
-NEWKEY: equ 0FBE5H
-JIFFY: equ 0FC9EH
-EXPTBL: equ 0FCC1H
-SLTTBL: equ 0FCC5H
-H.KEYI: equ 0FD9AH
-H.TIMI: equ 0FD9FH
-H.MDIN: equ 0FF75H
-H.MDTM: equ 0FF93H
-
-PPI_PORT_A: equ 0A8H
-PPI_PORT_B: equ 0A9H
-PPI_PORT_C: equ 0AAH
+;
+; System routines
+;
 
 ; a = character
 ; Modifies: none
