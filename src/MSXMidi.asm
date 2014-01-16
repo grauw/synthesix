@@ -20,25 +20,46 @@ S1990_TIMER_CLEAR: equ 0E6H
 S1990_TIMER_LSB: equ 0E6H
 S1990_TIMER_MSB: equ 0E7H
 
-;
-; Set hooks
-;
-setmidi:
+MSXMidi_Install:
 	call MSXMidi_Detect
-	ret c           ; No
+	ret c
 	di
+	call MSXMidi_SetHook
+	call MSXMidi_Configure
+	ei
+	ret
+
+MSXMidi_Uninstall:
+	di
+	call MSXMidi_RestoreHook
+	call MSXMidi_Reset
+	ei
+	ret
+
+;
+; Set hook
+;
+MSXMidi_SetHook:
 	ld a,IM2Table >> 8
 	ld i,a
 	im 2
-	jr nz,inimdp
+	call MSXMidi_DetectInternal
+	ret nz
 	xor a           ; let external MSX-MIDI I/O ports match internal ones
 	out (MSXMidi_IOSETTING),a
-	jr z,inimdp
+	ret
 
 ;
-; Initialize MIDI Interface
+; Restore hook
 ;
-inimdp:
+MSXMidi_RestoreHook:
+	im 1
+	ret
+
+;
+; Configure MIDI Interface
+;
+MSXMidi_Configure:
 	; 8253 timer 0: 500 KHz for UART
 	ld a,00010110B  ; counter 0, lsb only, mode 3 (square wave), binary
 	out (MSXMidi_TIMER_COMMAND),a
@@ -73,17 +94,11 @@ inimdp:
 	ret
 
 ;
-; Reset MIDI interface and reset hooks
+; Reset MIDI interface
 ;
-rstmidi:
-	di
-	; reset all except for transmission enable
-	ld a,00000001B
+MSXMidi_Reset:
+	ld a,00000001B  ; reset all except for transmission enable
 	out (MSXMidi_UART_COMMAND),a
-
-	; restore interrupt to IM 1
-	im 1
-	ei
 	ret
 
 ;
@@ -106,11 +121,11 @@ MSXMidi_CheckOverrun: PROC
 ;
 	SECTION RAM
 	ALIGN 101H  ; address MSB and LSB must be the same for IM 2
-mdintr:
+MSXMidi_InterruptHandler: PROC
 	push af
 	in a,(MSXMidi_UART_STATUS)
 	and 00000010B
-	jr z,mdint1
+	jr z,NotMSXMidi
 	push hl
 	in a,(MSXMidi_UART_RECEIVE)
 	call MidiIn_WriteByte
@@ -118,10 +133,10 @@ mdintr:
 	pop af
 	ei
 	ret
-mdint1:
+NotMSXMidi:
 	pop af
 	jp 38H
-
+	ENDP
 	ENDS
 
 ;
@@ -176,13 +191,13 @@ FoundID:
 	ENDP
 
 ;
-; f <- z: built in MIDI found
+; f <- nz: built in MIDI found
 ;
 MSXMidi_DetectInternal: PROC
 	ld a,(EXPTBL)
 	ld hl,IDBYT3
-	call RDSLT      ;read MIDI interface ID
-	and 1           ;set Zflag
+	call RDSLT
+	and 1
 	ret
 	ENDP
 
@@ -254,6 +269,7 @@ MSXMidi_commandSave:
 
 	ALIGN 100H
 IM2Table:
-	ds 257,mdintr & 0FFH  ; 257, in case data bus is 0FFH (which it is)
+	; 257, in case data bus is 0FFH (which it is)
+	ds 257,MSXMidi_InterruptHandler & 0FFH
 
 	ENDS

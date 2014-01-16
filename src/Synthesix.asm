@@ -11,14 +11,14 @@ Synthesix_Main:
 
 	call Math_UnitTest
 
-	call setmidi
+	call MSXMidi_Install
 	ld hl,Synthesix_Interrupt
 	call System_InstallTIMIHook
 
 	call Synthesix_MainLoop
 
 	call System_RestoreTIMIHook
-	call rstmidi
+	call MSXMidi_Uninstall
 	call KILBUF
 	ret
 
