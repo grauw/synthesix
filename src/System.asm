@@ -2,8 +2,8 @@
 RDSLT: equ 0CH
 CALSLT: equ 1CH
 ENASLT: equ 24H
-VERID1: equ 2DH
-VERID2: equ 2EH
+IDBYT2: equ 2DH
+IDBYT3: equ 2EH
 INITXT: equ 6CH
 CHSNS: equ 9CH
 CHPUT: equ 0A2H

@@ -209,7 +209,7 @@ FoundID:
 ;
 MSXMidi_DetectInternal: PROC
 	ld a,(EXPTBL)
-	ld hl,VERID2
+	ld hl,IDBYT3
 	call RDSLT      ;read MIDI interface ID
 	and 1           ;set Zflag
 	ret
