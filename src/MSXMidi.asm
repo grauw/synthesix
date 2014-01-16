@@ -52,21 +52,6 @@ inimdp:
 	ld a,8       ; Set Counter.   4MHz / 8 = 500KHz
 	out (MSXMidi_TIMER_COUNTER0),a  ; Set 8253 Counter (LSB)
 ;
-; 5msec timer
-;
-	ld a,10110100B  ;8253 Control Word
-;	     |||||||+-----   Binary Count
-;	     ||||+++------   Mode 2 :Rate Generater
-;	     ||++---------   2bytes Read/Load
-;	     ++-----------   Counter #2 for 5msec timer
-;
-	out (MSXMidi_TIMER_COMMAND),a
-	ld hl,20000
-	ld a,l
-	out (MSXMidi_TIMER_COUNTER2),a  ; Set 8253 Counter (LSB)
-	ld a,h
-	out (MSXMidi_TIMER_COUNTER2),a  ; Set 8253 Counter (MSB)
-;
 ;	Initialize 8251
 ;
 	; Reset 8251
@@ -90,7 +75,7 @@ inimdp:
 ;
 	out (MSXMidi_UART_COMMAND),a
 	call MSXMidi_Wait
-	ld a,00100111B  ;8251 COMMAND Instruction
+	ld a,00100101B  ;8251 COMMAND Instruction
 ;	     |||||||+-----   Transmit : Enable
 ;	     ||||||+------   ~DTR = LOW : 8253timer enable
 ;	     |||||+-------   Receive  : Enable
@@ -103,8 +88,6 @@ inimdp:
 	ld (MSXMidi_commandSave),a  ;save command
 	out (MSXMidi_UART_COMMAND),a
 	in a,(MSXMidi_UART_RECEIVE)  ;interrupt flag reset
-	xor a
-	out (MSXMidi_TIMER_INT),a
 	ei
 	ret
 
@@ -165,14 +148,6 @@ mdintr:
 	ei
 	ret
 mdint1:
-	in a,(MSXMidi_UART_STATUS)  ;8253 timer ?
-	and 10000000B
-	jp z,mdint2
-	call intr_time  ;yes
-	pop af
-	ei
-	ret
-mdint2:
 	pop af
 	jp 38H
 
@@ -184,16 +159,6 @@ intr_in:
 	in a,(MSXMidi_UART_RECEIVE)  ;read MIDI IN data and reset interrupt flag
 	call MidiIn_WriteByte
 	pop hl
-	ret
-;
-; timer interrupt
-;
-intr_time:
-	ld a,(MSXMidi_commandSave)    ;check timer interrupt enable or not.
-	and 00000010B   ;enable ?
-	ret z           ;no
-	xor a           ;reset interrupt flag
-	out (MSXMidi_TIMER_INT),a
 	ret
 
 	ENDS
@@ -330,8 +295,6 @@ MSXMidi_idString:
 
 MSXMidi_commandSave:
 	db 0            ;8251 command save area
-
-hoksvt: ds 10       ;hook save area
 
 	ALIGN 100H
 IM2Table:
