@@ -39,22 +39,13 @@ setmidi:
 ; Initialize MIDI Interface
 ;
 inimdp:
-;
-; MIDI baud rate generater
-;
-	ld a,00010110B ;8253 Control Word
-;	     |||||||+-----   Binary Count
-;	     ||||+++------   Mode 3 :Rate Generater (Square Wave)
-;	     ||++---------   LSB Read/Load
-;	     ++-----------   Counter #0 for Baud Rate Generater of 8251
-;
+	; 8253 timer 0: 500 KHz for UART
+	ld a,00010110B  ; counter 0, lsb only, mode 3 (square wave), binary
 	out (MSXMidi_TIMER_COMMAND),a
-	ld a,8       ; Set Counter.   4MHz / 8 = 500KHz
-	out (MSXMidi_TIMER_COUNTER0),a  ; Set 8253 Counter (LSB)
-;
-;	Initialize 8251
-;
-	; Reset 8251
+	ld a,8          ; 4MHz / 8 = 500KHz
+	out (MSXMidi_TIMER_COUNTER0),a
+
+	; 8251 UART: reset
 	xor a
 	out (MSXMidi_UART_COMMAND),a
 	call MSXMidi_Wait
@@ -66,28 +57,18 @@ inimdp:
 	out (MSXMidi_UART_COMMAND),a
 	call MSXMidi_Wait
 
-	; Set 8251
-	ld a,01001110B  ;8251 MODE Instruction
-;	     ||||||++-----   Baud Rate :*16  ( 500KHz/16 = 31.25KHz )
-;	     ||||++-------   Character Length : 8bits
-;	     ||++---------   Parity Disable
-;	     ++-----------   Stop Bit : 1bit
-;
+	; 8251 UART: set mode
+	ld a,01001110B  ; 1 stop bit, no parity, 8 bits, 16x baud (31250 baud)
 	out (MSXMidi_UART_COMMAND),a
 	call MSXMidi_Wait
-	ld a,00100101B  ;8251 COMMAND Instruction
-;	     |||||||+-----   Transmit : Enable
-;	     ||||||+------   ~DTR = LOW : 8253timer enable
-;	     |||||+-------   Receive  : Enable
-;	     ||||+--------   Send Break Character : Normal
-;	     |||+---------   Error Reset : No Operation
-;	     ||+----------   ~RTS = LOW : MIDI IN enable
-;	     |+-----------   No Operation
-;	     +------------   No Operation
-;
-	ld (MSXMidi_commandSave),a  ;save command
+
+	; 8251 UART: set command
+	ld a,00100101B  ; enable interrupt, rx, timer interrupt, tx
+	ld (MSXMidi_commandSave),a
 	out (MSXMidi_UART_COMMAND),a
-	in a,(MSXMidi_UART_RECEIVE)  ;interrupt flag reset
+
+	; 8251 UART: reset interrupt flag
+	in a,(MSXMidi_UART_RECEIVE)
 	ei
 	ret
 
@@ -111,21 +92,11 @@ MSXMidi_CheckOverrun: PROC
 ;
 rstmidi:
 	di
-;       Reset 8251
-;                RTS = HIGH : MIDI IN disable
-;                DTR = HIGH : 8253timer disable
-	ld a,00000001B  ;8251 COMMAND Instruction
-;	     |||||||+-----   Transmit : Enable
-;	     ||||||+------   ~DTR = High
-;	     |||||+-------   Receive  : Disable
-;	     ||||+--------   Send Break Character : Normal
-;	     |||+---------   Error Reset : No Operation
-;	     ||+----------   ~RTS = High
-;	     |+-----------   No Operation
-;	     +------------   No Operation
-;
+	; reset all except for transmission enable
+	ld a,00000001B
 	out (MSXMidi_UART_COMMAND),a
 
+	; restore interrupt to IM 1
 	im 1
 	ei
 	ret
