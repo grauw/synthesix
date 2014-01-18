@@ -58,6 +58,7 @@ ROM_Bank3Default: equ ROM_MultiplyTableBank
 	INCLUDE "MidiIn.asm"
 	INCLUDE "MSXMIDI.asm"
 	INCLUDE "modulation/Modulation.asm"
+	INCLUDE "modulation/Value.asm"
 	INCLUDE "modulation/ADEnvelope.asm"
 	INCLUDE "modulation/AREnvelope.asm"
 	INCLUDE "modulation/TriangleLFO.asm"
