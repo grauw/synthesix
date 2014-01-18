@@ -31,6 +31,7 @@ Patch_NoteOff:
 	jp hl
 
 ; ix = this
+; iy = controller
 Patch_ControlChange:
 	ld l,(ix + Patch.controlChange + 0)
 	ld h,(ix + Patch.controlChange + 1)

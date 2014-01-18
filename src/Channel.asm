@@ -6,7 +6,9 @@
 ; All MIDI messages are forwarded to the voice pools.
 ;
 Channel: MACRO
-	MAX_VOICE_POOLS: equ 8
+	MAX_VOICE_POOLS: equ 7
+	controllers:
+		dw 0
 	patches:
 		REPT MAX_VOICE_POOLS
 		dw 0
@@ -26,7 +28,12 @@ Channel_New:
 
 ; ix = this
 ; ix <- this
-Channel_Constructor:
+Channel_Constructor: PROC
+	push ix
+	call Channel_CreateControllerArray
+	pop ix
+	ld (ix + Channel.controllers),l
+	ld (ix + Channel.controllers + 1),h
 	push ix
 	call SCCPatch_New
 	push ix
@@ -34,6 +41,31 @@ Channel_Constructor:
 	pop ix
 	call Channel_AddPatch
 	ret
+	ENDP
+
+; hl <- array address
+; Modifies: af, bc, de, hl, ix
+Channel_CreateControllerArray: PROC
+	ld bc,128 * 2
+	call Heap_Allocate
+	push de
+	ld b,128
+Loop:
+	push bc
+	push de
+	call Value_New
+	pop de
+	ld a,ixl
+	ld (de),a
+	inc de
+	ld a,ixh
+	ld (de),a
+	inc de
+	pop bc
+	djnz Loop
+	pop hl
+	ret
+	ENDP
 
 ; ix = this
 ; b = note number (0-127)
@@ -90,6 +122,15 @@ Channel_NoteOff:
 ; b = controller
 ; c = value
 Channel_ControlChange:
+	ld a,b
+	call Channel_GetController
+	ld a,d
+	or e
+	ret z
+	ld iyl,e
+	ld iyh,d
+	ld (iy + Value.value),c
+
 	REPT Channel.MAX_VOICE_POOLS, ?pool
 	ld e,(ix + Channel.patches + ?pool * 2)
 	ld d,(ix + Channel.patches + ?pool * 2 + 1)
@@ -97,13 +138,9 @@ Channel_ControlChange:
 	dec d
 	ret z
 	push ix
-	push af
-	push bc
 	ld ixl,e
 	ld ixh,d
 	call Patch_ControlChange
-	pop bc
-	pop af
 	pop ix
 	ENDM
 	ret
@@ -134,6 +171,25 @@ Channel_Update:
 	call Patch_Update
 	pop ix
 	ENDM
+	ret
+
+; ix = this
+; a = controller number
+; de <- controller (null if not available)
+; Modifies: af, de, hl
+Channel_GetController:
+	ld e,(ix + Channel.controllers)
+	ld d,(ix + Channel.controllers + 1)
+	add a,a
+	ld l,a
+	ld h,0
+	ld a,e
+	or d
+	ret z
+	add hl,de
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
 	ret
 
 ; ix = this

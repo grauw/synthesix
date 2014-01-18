@@ -117,10 +117,9 @@ SCCPatch_NoteOff_Next:
 	ret
 
 ; ix = this
-; b = controller
-; c = value
+; iy = controller
 SCCPatch_ControlChange:
-	ld a,c
+	ld a,(iy + Value.value)
 	call SCCPatch_SetWave
 	ret
 
