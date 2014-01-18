@@ -4,4 +4,4 @@ all:
 	java -jar tools/glass.jar -I gen src/ROM.asm bin/synthe6.rom bin/synthe6.sym
 
 run: all
-	openmsx -cart bin/synthe6.rom -romtype KonamiSCC -machine Panasonic_FS-A1GT
+	openmsx -cart bin/synthe6.rom -romtype KonamiSCC -machine Panasonic_FS-A1GT -script openmsx.tcl
