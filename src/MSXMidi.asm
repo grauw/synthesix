@@ -43,10 +43,6 @@ MSXMidi_SetHook:
 	ld a,IM2Table >> 8
 	ld i,a
 	im 2
-	call MSXMidi_DetectInternal
-	ret nz
-	xor a           ; let external MSX-MIDI I/O ports match internal ones
-	out (MSXMidi_IOSETTING),a
 	ret
 
 ;
@@ -60,6 +56,8 @@ MSXMidi_RestoreHook:
 ; Configure MIDI Interface
 ;
 MSXMidi_Configure:
+	call MSXMidi_ConfigureExternal
+
 	; 8253 timer 0: 500 KHz for UART
 	ld a,00010110B  ; counter 0, lsb only, mode 3 (square wave), binary
 	out (MSXMidi_TIMER_COMMAND),a
@@ -91,6 +89,13 @@ MSXMidi_Configure:
 	; 8251 UART: reset interrupt flag
 	in a,(MSXMidi_UART_RECEIVE)
 	ei
+	ret
+
+MSXMidi_ConfigureExternal:
+	call MSXMidi_DetectInternal
+	ret nz
+	xor a           ; let external MSX-MIDI I/O ports match internal ones
+	out (MSXMidi_IOSETTING),a
 	ret
 
 ;
