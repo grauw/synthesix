@@ -13,9 +13,9 @@ SCCVoice: MACRO
 	velocity:
 		db 0
 	modulation:
-		dw System_ThrowException
+		dw 0
 	pitchModulation:
-		dw System_ThrowException
+		dw 0
 	noteFrequency:
 		dw 0
 	noteFrequency50cent:
