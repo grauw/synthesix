@@ -18,6 +18,12 @@ TriangleLFO: MACRO
 	dw TriangleLFO.size
 TriangleLFO_class: TriangleLFO
 
+; ix <- new class
+TriangleLFO_New:
+	ld iy,TriangleLFO_class
+	call Class_New
+	ret
+
 ; iy = this
 TriangleLFO_NoteOn:
 	ld a,(iy + TriangleLFO.keyTrigger)

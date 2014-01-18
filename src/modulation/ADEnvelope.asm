@@ -20,6 +20,12 @@ ADEnvelope: MACRO
 	dw ADEnvelope.size
 ADEnvelope_class: ADEnvelope
 
+; ix <- new class
+ADEnvelope_New:
+	ld iy,ADEnvelope_class
+	call Class_New
+	ret
+
 ; iy = this
 ADEnvelope_NoteOn:
 	ld (iy + ADEnvelope.phase),0

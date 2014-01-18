@@ -40,16 +40,14 @@ SCCVoice_Constructor:
 	ld (ix + SCCVoice.frequencyRegister),c
 	ld (ix + SCCVoice.levelRegister),d
 	push ix
-	ld iy,AREnvelope_class
-	call Class_New
+	call AREnvelope_New
 	ld e,ixl
 	ld d,ixh
 	pop ix
 	ld (ix + SCCVoice.modulation + 0),e
 	ld (ix + SCCVoice.modulation + 1),d
 	push ix
-	ld iy,TriangleLFO_class
-	call Class_New
+	call TriangleLFO_New
 	ld e,ixl
 	ld d,ixh
 	pop ix

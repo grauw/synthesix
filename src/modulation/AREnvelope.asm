@@ -20,6 +20,12 @@ AREnvelope: MACRO
 	dw AREnvelope.size
 AREnvelope_class: AREnvelope
 
+; ix <- new class
+AREnvelope_New:
+	ld iy,AREnvelope_class
+	call Class_New
+	ret
+
 ; iy = this
 AREnvelope_NoteOn:
 	ld (iy + AREnvelope.phase),0

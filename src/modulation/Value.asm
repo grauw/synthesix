@@ -12,6 +12,12 @@ Value: MACRO
 	dw Value.size
 Value_class: Value
 
+; ix <- new class
+Value_New:
+	ld iy,Value_class
+	call Class_New
+	ret
+
 Value_NoteOn:
 	ret
 
