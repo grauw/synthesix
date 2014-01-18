@@ -171,8 +171,28 @@ SCCVoice_SetLevel:
 	ret
 
 ; ix = this
-; hl = wave address
+; a = wave number
+; Modifies: af, bc, de, hl
 SCCVoice_SetWave:
+	ld l,a
+	ld h,0
+	add hl,hl
+	add hl,hl
+	add hl,hl
+	add hl,hl
+	add hl,hl
+	ld bc,SCCWaveTable_table1
+	add hl,bc
+	ld a,ROM_WaveTableBank
+	ld (ROM_BANK_3_CHANGE),a
+	call SCCVoice_LoadWave
+	ld a,ROM_Bank3Default
+	ld (ROM_BANK_3_CHANGE),a
+	ret
+
+; ix = this
+; hl = wave address
+SCCVoice_LoadWave:
 	ld e,(ix + SCCVoice.waveRegister)
 	ld d,SCC_BASE_MSB
 	ld bc,32

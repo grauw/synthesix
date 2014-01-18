@@ -144,34 +144,21 @@ SCCPatch_Update_Next:
 ; ix = this
 ; a = wave number
 SCCPatch_SetWave:
-	ld l,a
-	ld h,0
-	add hl,hl
-	add hl,hl
-	add hl,hl
-	add hl,hl
-	add hl,hl
-	ld bc,SCCWaveTable_table1
-	add hl,bc
-
-	ld a,ROM_WaveTableBank
-	ld (ROM_BANK_3_CHANGE),a
 	REPT SCCPatch.MAX_VOICES, ?voice
 	ld e,(ix + SCCPatch.voices + ?voice * 2)
 	ld d,(ix + SCCPatch.voices + ?voice * 2 + 1)
 	inc d
 	dec d
-	jr z,SCCPatch_SetWave_Done
+	ret z
 	push de
 	ex (sp),ix
 	push hl
+	push af
 	call SCCVoice_SetWave
+	pop af
 	pop hl
 	pop ix
 	ENDM
-SCCPatch_SetWave_Done:
-	ld a,ROM_Bank3Default
-	ld (ROM_BANK_3_CHANGE),a
 	ret
 
 ; ix = this
