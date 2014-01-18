@@ -10,14 +10,6 @@ SCCPatch: MACRO
 	super:
 		Patch SCCPatch_NoteOn, SCCPatch_NoteOff, SCCPatch_ControlChange, SCCPatch_Update
 	MAX_VOICES: equ 5
-	noteOn:
-		dw SCCPatch_NoteOn
-	noteOff:
-		dw SCCPatch_NoteOff
-	controlChange:
-		dw SCCPatch_ControlChange
-	update:
-		dw SCCPatch_Update
 	polyphony:
 		db 4
 	level:
