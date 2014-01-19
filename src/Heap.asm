@@ -24,6 +24,28 @@ Throw:
 Heap_outOfHeapException:
 	db "Out of heap space.",0
 
+; Allocates, then clears the allocated space.
+; a = clear value
+; Remaining parameters are the same as Allocate
+Heap_AllocateClear: PROC
+	call Heap_Allocate
+	push bc
+	push de
+	push hl
+	ld l,e
+	ld h,d
+	ld (de),a
+	inc de
+	dec bc
+	jr z,Skip
+	ldir
+Skip:
+	pop hl
+	pop de
+	pop bc
+	ret
+	ENDP
+
 ;
 	SECTION RAM
 
