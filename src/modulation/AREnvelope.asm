@@ -2,7 +2,7 @@
 ; An AR envelope
 ;
 AREnvelope: MACRO
-	super: Modulation
+	super: Value 0
 	attack:
 		db 8
 	release:

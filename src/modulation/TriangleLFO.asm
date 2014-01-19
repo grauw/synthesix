@@ -2,7 +2,7 @@
 ; An AR envelope
 ;
 TriangleLFO: MACRO
-	super: Modulation
+	super: Value 0
 	speed:
 		db 64
 	keyTrigger:

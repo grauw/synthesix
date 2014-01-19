@@ -2,7 +2,7 @@
 ; An AR envelope
 ;
 ADEnvelope: MACRO
-	super: Modulation
+	super: Value 0
 	attack:
 		db 128
 	decay:

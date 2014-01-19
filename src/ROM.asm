@@ -60,7 +60,6 @@ ROM_Bank3Default: equ ROM_MultiplyTableBank
 	INCLUDE "Program.asm"
 	INCLUDE "Listeners.asm"
 	INCLUDE "Clock.asm"
-	INCLUDE "modulation/Modulation.asm"
 	INCLUDE "modulation/Value.asm"
 	INCLUDE "modulation/ADEnvelope.asm"
 	INCLUDE "modulation/AREnvelope.asm"
