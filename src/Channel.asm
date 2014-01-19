@@ -207,6 +207,21 @@ Channel_AddPatch_Next:
 	call System_ThrowException
 
 ;
+Channels_Init:
+	REPT 1, ?channel
+	ld ix,Channel_channels + ?channel * Channel.size
+	call Channel_Constructor
+	ENDM
+	ret
+
+Channels_Update:
+	REPT 1, ?channel
+	ld ix,Channel_channels + ?channel * Channel.size
+	call Channel_Update
+	ENDM
+	ret
+
+;
 	SECTION RAM
 
 	ALIGN 100H

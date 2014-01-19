@@ -6,8 +6,7 @@ Synthesix_Main:
 	call Keys_Init
 	call PSG_Init
 	call SCC_Init
-	ld ix,Channel_channels.0
-	call Channel_Constructor
+	call Channels_Init
 
 	call Math_UnitTest
 
@@ -37,14 +36,9 @@ Synthesix_Interrupt:
 	call MSXMidi_CheckOverrun
 	call Keys_Scan
 	call MidiIn_ProcessMessages
-	call Synthesix_UpdateChannels
+	call Channels_Update
 
 	ld a,0F4H
 	ld b,7
 	call VDP_SetRegister
-	ret
-
-Synthesix_UpdateChannels:
-	ld ix,Channel_channels.0
-	call Channel_Update
 	ret
