@@ -22,10 +22,13 @@ Clock_UpdateListeners:
 	jp ix
 
 ; ix = this
+; Remaining parameters are the same as Listeners_AddListener
 Clock_AddListener:
+	push ix
 	ld bc,Clock.listeners
 	add ix,bc
 	call Listeners_AddListener
+	pop ix
 	ret
 
 ;
