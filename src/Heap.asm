@@ -11,8 +11,8 @@ Heap_Allocate:
 	jr c,Heap_Allocate_Throw
 	ld hl,(Heap_heapCapacity)
 	ld de,(Heap_heapPosition)
-	ld h,d
 	ld l,e
+	ld h,d
 	add hl,bc
 	ld (Heap_heapPosition),hl
 	ret
