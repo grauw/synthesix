@@ -1,5 +1,5 @@
 ;
-; An AR envelope
+; An attack-decay envelope
 ;
 ADEnvelope: MACRO
 	super: Value 0

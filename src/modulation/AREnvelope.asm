@@ -1,5 +1,5 @@
 ;
-; An AR envelope
+; An attack-release envelope
 ;
 AREnvelope: MACRO
 	super: Value 0

@@ -1,5 +1,5 @@
 ;
-; An AR envelope
+; A triangle LFO
 ;
 TriangleLFO: MACRO
 	super: Value 0
