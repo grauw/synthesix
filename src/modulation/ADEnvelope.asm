@@ -2,7 +2,7 @@
 ; An AR envelope
 ;
 ADEnvelope: MACRO
-	super: Modulation ADEnvelope_NoteOn, ADEnvelope_NoteOff
+	super: Modulation
 	attack:
 		db 128
 	decay:
@@ -37,14 +37,17 @@ ADEnvelope_Constructor:
 	pop ix
 	ret
 
+; ix = voice
+; de = this
+ADEnvelope_SetKeyTrigger:
+	ld hl,ADEnvelope_NoteOn
+	call SCCVoice_AddNoteOnListener
+	ret
+
 ; iy = this
 ADEnvelope_NoteOn:
 	ld (iy + ADEnvelope.phase),0
 	ld (iy + ADEnvelope.counter),0
-	ret
-
-; iy = this
-ADEnvelope_NoteOff:
 	ret
 
 ; iy = this

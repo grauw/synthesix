@@ -2,7 +2,7 @@
 ; An AR envelope
 ;
 AREnvelope: MACRO
-	super: Modulation AREnvelope_NoteOn, AREnvelope_NoteOff
+	super: Modulation
 	attack:
 		db 8
 	release:
@@ -35,6 +35,15 @@ AREnvelope_Constructor:
 	ld hl,AREnvelope_Update
 	call Clock_AddListener
 	pop ix
+	ret
+
+; ix = voice
+; de = this
+AREnvelope_SetKeyTrigger:
+	ld hl,AREnvelope_NoteOn
+	call SCCVoice_AddNoteOnListener
+	ld hl,AREnvelope_NoteOff
+	call SCCVoice_AddNoteOffListener
 	ret
 
 ; iy = this

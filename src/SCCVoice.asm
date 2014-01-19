@@ -28,6 +28,8 @@ SCCVoice: MACRO
 		db -1
 	free:
 		db 0
+	noteOnListeners: Listeners 4
+	noteOffListeners: Listeners 4
 	size:
 	ENDM
 
@@ -48,6 +50,7 @@ SCCVoice_Constructor:
 	ld e,ixl
 	ld d,ixh
 	pop ix
+	call AREnvelope_SetKeyTrigger
 	ld (ix + SCCVoice.modulation + 0),e
 	ld (ix + SCCVoice.modulation + 1),d
 	push ix
@@ -67,6 +70,26 @@ SCCVoice_Constructor:
 	ret
 
 ; ix = this
+; Remaining parameters are the same as Listeners_AddListener
+SCCVoice_AddNoteOnListener:
+	push ix
+	ld bc,SCCVoice.noteOnListeners
+	add ix,bc
+	call Listeners_AddListener
+	pop ix
+	ret
+
+; ix = this
+; Remaining parameters are the same as Listeners_AddListener
+SCCVoice_AddNoteOffListener:
+	push ix
+	ld bc,SCCVoice.noteOffListeners
+	add ix,bc
+	call Listeners_AddListener
+	pop ix
+	ret
+
+; ix = this
 ; b = note number (0-127)
 ; c = velocity (0-127)
 SCCVoice_NoteOn:
@@ -75,33 +98,15 @@ SCCVoice_NoteOn:
 	ld a,b
 	call SCCVoice_SetNote
 
-	ld e,(ix + SCCVoice.pitchModulation + 0)
-	ld d,(ix + SCCVoice.pitchModulation + 1)
-	ld iyl,e
-	ld iyh,d
-	call Modulation_NoteOn
-
-	ld e,(ix + SCCVoice.modulation + 0)
-	ld d,(ix + SCCVoice.modulation + 1)
-	ld iyl,e
-	ld iyh,d
-	call Modulation_NoteOn
-	ret
+	ld bc,SCCVoice.noteOnListeners.Update
+	add ix,bc
+	jp ix
 
 ; ix = this
 SCCVoice_NoteOff:
-	ld e,(ix + SCCVoice.pitchModulation + 0)
-	ld d,(ix + SCCVoice.pitchModulation + 1)
-	ld iyl,e
-	ld iyh,d
-	call Modulation_NoteOff
-
-	ld e,(ix + SCCVoice.modulation + 0)
-	ld d,(ix + SCCVoice.modulation + 1)
-	ld iyl,e
-	ld iyh,d
-	call Modulation_NoteOff
-	ret
+	ld bc,SCCVoice.noteOffListeners.Update
+	add ix,bc
+	jp ix
 
 ; ix = this
 SCCVoice_Update:

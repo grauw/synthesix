@@ -2,7 +2,7 @@
 ; An AR envelope
 ;
 TriangleLFO: MACRO
-	super: Modulation TriangleLFO_NoteOn, TriangleLFO_NoteOff
+	super: Modulation
 	speed:
 		db 64
 	keyTrigger:
@@ -35,6 +35,13 @@ TriangleLFO_Constructor:
 	pop ix
 	ret
 
+; ix = voice
+; de = this
+TriangleLFO_SetKeyTrigger:
+	ld hl,TriangleLFO_NoteOn
+	call SCCVoice_AddNoteOnListener
+	ret
+
 ; iy = this
 TriangleLFO_NoteOn:
 	ld a,(iy + TriangleLFO.keyTrigger)
@@ -42,10 +49,6 @@ TriangleLFO_NoteOn:
 	ret z
 	ld (iy + TriangleLFO.counter),0
 	ld (iy + TriangleLFO.sign),10101010B
-	ret
-
-; iy = this
-TriangleLFO_NoteOff:
 	ret
 
 ; iy = this
