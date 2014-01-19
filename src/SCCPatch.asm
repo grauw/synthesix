@@ -8,7 +8,7 @@
 ;
 SCCPatch: MACRO
 	super:
-		Patch SCCPatch_NoteOn, SCCPatch_NoteOff, SCCPatch_ControlChange, SCCPatch_Update
+		Patch SCCPatch_NoteOn, SCCPatch_NoteOff, SCCPatch_Update
 	MAX_VOICES: equ 5
 	polyphony:
 		db 4
@@ -110,11 +110,6 @@ SCCPatch_NoteOff:
 SCCPatch_NoteOff_Next:
 	ENDM
 	; note not found
-	ret
-
-; ix = this
-; iy = controller
-SCCPatch_ControlChange:
 	ret
 
 ; ix = this

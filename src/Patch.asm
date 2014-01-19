@@ -6,13 +6,11 @@
 ; released. When a voice is bound, it will try the next one.
 ; Each sound chip has a separate voice pool implementation.
 ;
-Patch: MACRO ?noteOn, ?noteOff, ?controlChange, ?update
+Patch: MACRO ?noteOn, ?noteOff, ?update
 	noteOn:
 		dw ?noteOn
 	noteOff:
 		dw ?noteOff
-	controlChange:
-		dw ?controlChange
 	update:
 		dw ?update
 	size:
@@ -28,13 +26,6 @@ Patch_NoteOn:
 Patch_NoteOff:
 	ld l,(ix + Patch.noteOff + 0)
 	ld h,(ix + Patch.noteOff + 1)
-	jp hl
-
-; ix = this
-; iy = controller
-Patch_ControlChange:
-	ld l,(ix + Patch.controlChange + 0)
-	ld h,(ix + Patch.controlChange + 1)
 	jp hl
 
 ; ix = this

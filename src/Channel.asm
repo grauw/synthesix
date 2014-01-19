@@ -124,19 +124,6 @@ Channel_ControlChange:
 	ld iyl,e
 	ld iyh,d
 	ld (iy),c
-
-	REPT Channel.MAX_VOICE_POOLS, ?pool
-	ld e,(ix + Channel.patches + ?pool * 2)
-	ld d,(ix + Channel.patches + ?pool * 2 + 1)
-	inc d
-	dec d
-	ret z
-	push ix
-	ld ixl,e
-	ld ixh,d
-	call Patch_ControlChange
-	pop ix
-	ENDM
 	ret
 
 Channel_PolyPressure:
