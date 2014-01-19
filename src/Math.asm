@@ -34,8 +34,8 @@ Math_Multiply127x127_Inverse:
 ; a <- product (one’s complement)
 ; Modifies: hl
 Math_Multiply127x127Signed:
-	bit 7,a
-	jp z,Math_Multiply127x127
+	and a
+	jp p,Math_Multiply127x127
 	cpl
 	call Math_Multiply127x127
 	cpl
