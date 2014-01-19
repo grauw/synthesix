@@ -1,4 +1,5 @@
 ; Multiply a 7-bit integer with a 7-bit number which represents the range 0..1.
+; Bit 7 of a must be 0, bit 7 of l is ignored.
 ; a = multiplicand
 ; l = multiplier
 ; a <- product
