@@ -36,6 +36,8 @@ Synthesix_Interrupt:
 	call MSXMidi_CheckOverrun
 	call Keys_Scan
 	call MidiIn_ProcessMessages
+	ld ix,Clock_60Hz
+	call Clock_Update
 	call Channels_Update
 
 	ld a,0F4H
