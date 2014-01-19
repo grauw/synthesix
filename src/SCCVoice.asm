@@ -54,7 +54,7 @@ SCCVoice_Constructor:
 	ld (ix + SCCVoice.modulation + 0),e
 	ld (ix + SCCVoice.modulation + 1),d
 	push ix
-	call TriangleLFO_New
+	call SignedTriangleLFO_New
 	ld e,ixl
 	ld d,ixh
 	pop ix

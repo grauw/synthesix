@@ -64,6 +64,7 @@ ROM_Bank3Default: equ ROM_MultiplyTableBank
 	INCLUDE "modulation/ADEnvelope.asm"
 	INCLUDE "modulation/AREnvelope.asm"
 	INCLUDE "modulation/TriangleLFO.asm"
+	INCLUDE "modulation/SignedTriangleLFO.asm"
 	INCLUDE "ui/UI.asm"
 
 ;

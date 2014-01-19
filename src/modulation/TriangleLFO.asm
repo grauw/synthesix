@@ -7,8 +7,6 @@ TriangleLFO: MACRO
 		db 64
 	counter:
 		db 0
-	sign:
-		db 10101010B
 	size:
 	ENDM
 
@@ -43,7 +41,6 @@ TriangleLFO_SetKeyTrigger:
 ; iy = this
 TriangleLFO_NoteOn:
 	ld (iy + TriangleLFO.counter),0
-	ld (iy + TriangleLFO.sign),10101010B
 	ret
 
 ; iy = this
@@ -52,24 +49,9 @@ TriangleLFO_Update: PROC
 	ld a,(iy + TriangleLFO.counter)
 	add a,(iy + TriangleLFO.speed)
 	ld (iy + TriangleLFO.counter),a
-	call c,FlipSign
-	bit 7,(iy + TriangleLFO.sign)
-	jp nz,Negative
-	ld (iy + TriangleLFO.super.value),a
-	and a
-	ret p
-	neg
-	dec a
-	ld (iy + TriangleLFO.super.value),a
-	ret
-Negative:
-	ld (iy + TriangleLFO.super.value),a
-	and a
-	ret m
+	jp p,Positive
 	cpl
+Positive:
 	ld (iy + TriangleLFO.super.value),a
-	ret
-FlipSign:
-	rrc (iy + TriangleLFO.sign)
 	ret
 	ENDP
