@@ -2,8 +2,7 @@
 ; An AR envelope
 ;
 AREnvelope: MACRO
-	super:
-		Modulation AREnvelope_NoteOn, AREnvelope_NoteOff, AREnvelope_Update
+	super: Modulation AREnvelope_NoteOn, AREnvelope_NoteOff
 	attack:
 		db 8
 	release:
@@ -24,6 +23,18 @@ AREnvelope_class: AREnvelope
 AREnvelope_New:
 	ld iy,AREnvelope_class
 	call Class_New
+	call AREnvelope_Constructor
+	ret
+
+; ix = this
+AREnvelope_Constructor:
+	push ix
+	ld e,ixl
+	ld d,ixh
+	ld ix,Clock_60Hz
+	ld hl,AREnvelope_Update
+	call Clock_AddListener
+	pop ix
 	ret
 
 ; iy = this
@@ -52,16 +63,18 @@ AREnvelope_UpdateAttack: PROC
 	jr c,Complete
 	ld (iy + AREnvelope.counter),a
 	rra
+	ld (iy + AREnvelope.super.value),a
 	bit 0,(iy + AREnvelope.sign)
 	ret z
 	cpl
+	ld (iy + AREnvelope.super.value),a
 	ret
 Complete:
 	ld (iy + AREnvelope.counter),255
-	ld a,127
+	ld (iy + AREnvelope.super.value),127
 	bit 0,(iy + AREnvelope.sign)
 	ret z
-	cpl
+	ld (iy + AREnvelope.super.value),~127
 	ret
 	ENDP
 
@@ -73,15 +86,17 @@ AREnvelope_UpdateRelease: PROC
 	jr c,Complete
 	ld (iy + AREnvelope.counter),a
 	rra
+	ld (iy + AREnvelope.super.value),a
 	bit 0,(iy + AREnvelope.sign)
 	ret z
 	cpl
+	ld (iy + AREnvelope.super.value),a
 	ret
 Complete:
 	ld (iy + AREnvelope.counter),0
-	xor a
+	ld (iy + AREnvelope.super.value),0
 	bit 0,(iy + AREnvelope.sign)
 	ret z
-	cpl
+	ld (iy + AREnvelope.super.value),~0
 	ret
 	ENDP

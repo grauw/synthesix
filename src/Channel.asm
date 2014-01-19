@@ -123,7 +123,7 @@ Channel_ControlChange:
 	ret z
 	ld iyl,e
 	ld iyh,d
-	ld (iy + Value.value),c
+	ld (iy),c
 
 	REPT Channel.MAX_VOICE_POOLS, ?pool
 	ld e,(ix + Channel.patches + ?pool * 2)

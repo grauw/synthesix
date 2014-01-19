@@ -2,8 +2,7 @@
 ; An AR envelope
 ;
 TriangleLFO: MACRO
-	super:
-		Modulation TriangleLFO_NoteOn, TriangleLFO_NoteOff, TriangleLFO_Update
+	super: Modulation TriangleLFO_NoteOn, TriangleLFO_NoteOff
 	speed:
 		db 64
 	keyTrigger:
@@ -22,6 +21,18 @@ TriangleLFO_class: TriangleLFO
 TriangleLFO_New:
 	ld iy,TriangleLFO_class
 	call Class_New
+	call TriangleLFO_Constructor
+	ret
+
+; ix = this
+TriangleLFO_Constructor:
+	push ix
+	ld e,ixl
+	ld d,ixh
+	ld ix,Clock_60Hz
+	ld hl,TriangleLFO_Update
+	call Clock_AddListener
+	pop ix
 	ret
 
 ; iy = this
@@ -46,15 +57,19 @@ TriangleLFO_Update: PROC
 	call c,FlipSign
 	bit 7,(iy + TriangleLFO.sign)
 	jp nz,Negative
+	ld (iy + TriangleLFO.super.value),a
 	and a
 	ret p
 	neg
 	dec a
+	ld (iy + TriangleLFO.super.value),a
 	ret
 Negative:
+	ld (iy + TriangleLFO.super.value),a
 	and a
 	ret m
 	cpl
+	ld (iy + TriangleLFO.super.value),a
 	ret
 FlipSign:
 	rrc (iy + TriangleLFO.sign)

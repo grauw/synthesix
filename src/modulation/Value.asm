@@ -2,10 +2,7 @@
 ; An fixed value
 ;
 Value: MACRO
-	super:
-		Modulation Value_NoteOn, Value_NoteOff, Value_Update
-	value:
-		db 127
+	super: Modulation Value_NoteOn, Value_NoteOff
 	size:
 	ENDM
 
@@ -16,14 +13,11 @@ Value_class: Value
 Value_New:
 	ld iy,Value_class
 	call Class_New
+	ld (ix + Value.super.value),0
 	ret
 
 Value_NoteOn:
 	ret
 
 Value_NoteOff:
-	ret
-
-Value_Update:
-	ld a,(ix + Value.value)
 	ret

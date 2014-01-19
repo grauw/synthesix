@@ -2,8 +2,7 @@
 ; An AR envelope
 ;
 ADEnvelope: MACRO
-	super:
-		Modulation ADEnvelope_NoteOn, ADEnvelope_NoteOff, ADEnvelope_Update
+	super: Modulation ADEnvelope_NoteOn, ADEnvelope_NoteOff
 	attack:
 		db 128
 	decay:
@@ -24,6 +23,18 @@ ADEnvelope_class: ADEnvelope
 ADEnvelope_New:
 	ld iy,ADEnvelope_class
 	call Class_New
+	call ADEnvelope_Constructor
+	ret
+
+; ix = this
+ADEnvelope_Constructor:
+	push ix
+	ld e,ixl
+	ld d,ixh
+	ld ix,Clock_60Hz
+	ld hl,ADEnvelope_Update
+	call Clock_AddListener
+	pop ix
 	ret
 
 ; iy = this
@@ -51,9 +62,11 @@ ADEnvelope_UpdateAttack: PROC
 	ld (iy + ADEnvelope.counter),a
 	jr c,Complete
 	rra
+	ld (iy + ADEnvelope.super.value),a
 	bit 0,(iy + ADEnvelope.sign)
 	ret z
 	cpl
+	ld (iy + ADEnvelope.super.value),a
 	ret
 Complete:
 	ld (iy + ADEnvelope.phase),-1
@@ -70,15 +83,17 @@ ContinueFromAttack:
 	ld (iy + ADEnvelope.counter),a
 	cpl
 	rra
+	ld (iy + ADEnvelope.super.value),a
 	bit 0,(iy + ADEnvelope.sign)
 	ret z
 	cpl
+	ld (iy + ADEnvelope.super.value),a
 	ret
 Complete:
 	ld (iy + ADEnvelope.counter),255
-	xor a
+	ld (iy + ADEnvelope.super.value),0
 	bit 0,(iy + ADEnvelope.sign)
 	ret z
-	cpl
+	ld (iy + ADEnvelope.super.value),~0
 	ret
 	ENDP

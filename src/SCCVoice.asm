@@ -94,18 +94,14 @@ SCCVoice_NoteOff:
 
 ; ix = this
 SCCVoice_Update:
-	ld e,(ix + SCCVoice.pitchModulation + 0)
-	ld d,(ix + SCCVoice.pitchModulation + 1)
-	ld iyl,e
-	ld iyh,d
-	call Modulation_Update
+	ld l,(ix + SCCVoice.pitchModulation + 0)
+	ld h,(ix + SCCVoice.pitchModulation + 1)
+	ld a,(hl)
 	call SCCVoice_SetFrequency
 
-	ld e,(ix + SCCVoice.modulation + 0)
-	ld d,(ix + SCCVoice.modulation + 1)
-	ld iyl,e
-	ld iyh,d
-	call Modulation_Update
+	ld l,(ix + SCCVoice.modulation + 0)
+	ld h,(ix + SCCVoice.modulation + 1)
+	ld a,(hl)
 	call SCCVoice_SetLevel
 	ret
 
