@@ -1,9 +1,10 @@
-Listeners: MACRO
-	MAX_LISTENERS: equ 32
+Listeners: MACRO ?maxSize
 	size:
 		db 0
+	maxSize:
+		db ?maxSize
 	Update:
-		REPT MAX_LISTENERS
+		REPT ?maxSize
 		Listener
 		ENDM
 	ENDM
@@ -23,7 +24,7 @@ Listener: MACRO
 ; hl = callback
 Listeners_AddListener: PROC
 	ld a,(ix + Listeners.size)
-	cp Listeners.MAX_LISTENERS
+	cp (ix + Listeners.maxSize)
 	call nc,System_ThrowException
 	inc (ix + Listeners.size)
 	call Listeners_GetListener
