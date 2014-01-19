@@ -4,9 +4,10 @@ Synthesix_Main:
 
 	call UI_Init
 	call Keys_Init
+	call Channels_Init
 	call PSG_Init
 	call SCC_Init
-	call Channels_Init
+	call Program_LoadDefault
 
 	call Math_UnitTest
 

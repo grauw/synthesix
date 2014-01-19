@@ -16,8 +16,6 @@ SCCPatch: MACRO
 		db 127
 	pitch:
 		db 0
-	wave:
-		db 0
 	notes:
 		db -1, -1, -1, -1, -1
 	nextNote:
@@ -53,8 +51,6 @@ SCCPatch_New_Loop:
 	call SCCPatch_AddVoice
 	pop bc
 	djnz SCCPatch_New_Loop
-	ld a,(ix + SCCPatch.wave)
-	call SCCPatch_SetWave
 	ret
 
 ; TODO if no notes are available, pick the one most recently played
@@ -119,8 +115,6 @@ SCCPatch_NoteOff_Next:
 ; ix = this
 ; iy = controller
 SCCPatch_ControlChange:
-	ld a,(iy)
-	call SCCPatch_SetWave
 	ret
 
 ; ix = this
@@ -137,26 +131,6 @@ SCCPatch_Update:
 	call SCCVoice_Update
 	pop ix
 SCCPatch_Update_Next:
-	ENDM
-	ret
-
-; ix = this
-; a = wave number
-SCCPatch_SetWave:
-	REPT SCCPatch.MAX_VOICES, ?voice
-	ld e,(ix + SCCPatch.voices + ?voice * 2)
-	ld d,(ix + SCCPatch.voices + ?voice * 2 + 1)
-	inc d
-	dec d
-	ret z
-	push de
-	ex (sp),ix
-	push hl
-	push af
-	call SCCVoice_SetWave
-	pop af
-	pop hl
-	pop ix
 	ENDM
 	ret
 

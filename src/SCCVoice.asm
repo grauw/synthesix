@@ -12,6 +12,8 @@ SCCVoice: MACRO
 		db 0
 	velocity:
 		db 0
+	wave:
+		dw 0
 	modulation:
 		dw 0
 	pitchModulation:
@@ -22,6 +24,8 @@ SCCVoice: MACRO
 		db 0
 	frequency:
 		dw 0
+	lastWave:
+		db -1
 	free:
 		db 0
 	size:
@@ -53,6 +57,13 @@ SCCVoice_Constructor:
 	pop ix
 	ld (ix + SCCVoice.pitchModulation + 0),e
 	ld (ix + SCCVoice.pitchModulation + 1),d
+	push ix
+	ld a,1
+	ld ix,Channel_channels.0
+	call Channel_GetController
+	pop ix
+	ld (ix + SCCVoice.wave + 0),e
+	ld (ix + SCCVoice.wave + 1),d
 	ret
 
 ; ix = this
@@ -94,6 +105,12 @@ SCCVoice_NoteOff:
 
 ; ix = this
 SCCVoice_Update:
+	ld l,(ix + SCCVoice.wave + 0)
+	ld h,(ix + SCCVoice.wave + 1)
+	ld a,(hl)
+	cp (ix + SCCVoice.lastWave)
+	call nz,SCCVoice_SetWave
+
 	ld l,(ix + SCCVoice.pitchModulation + 0)
 	ld h,(ix + SCCVoice.pitchModulation + 1)
 	ld a,(hl)
@@ -170,6 +187,7 @@ SCCVoice_SetLevel:
 ; a = wave number
 ; Modifies: af, bc, de, hl
 SCCVoice_SetWave:
+	ld (ix + SCCVoice.lastWave),a
 	ld l,a
 	ld h,0
 	add hl,hl

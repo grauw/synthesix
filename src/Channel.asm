@@ -206,13 +206,6 @@ Channels_Init:
 	ld ix,Channel_channels + ?channel * Channel.size
 	call Channel_Constructor
 	ENDM
-
-	ld ix,Channel_channels.0
-	call SCCPatch_New
-	push ix
-	pop hl
-	ld ix,Channel_channels.0
-	call Channel_AddPatch
 	ret
 
 Channels_Update:
