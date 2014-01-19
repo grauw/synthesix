@@ -5,8 +5,6 @@ TriangleLFO: MACRO
 	super: Value 0
 	speed:
 		db 64
-	keyTrigger:
-		db 0
 	counter:
 		db 0
 	sign:
@@ -44,9 +42,6 @@ TriangleLFO_SetKeyTrigger:
 
 ; iy = this
 TriangleLFO_NoteOn:
-	ld a,(iy + TriangleLFO.keyTrigger)
-	and a
-	ret z
 	ld (iy + TriangleLFO.counter),0
 	ld (iy + TriangleLFO.sign),10101010B
 	ret
