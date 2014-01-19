@@ -166,16 +166,16 @@ Math_UnitTest:
 	cp 37
 	call nz,System_ThrowException
 
-	ld a,-47
+	ld a,~47
 	ld l,101
 	call Math_Multiply127x127Signed
-	cp -38
+	cp ~37
 	call nz,System_ThrowException
 
-	ld a,-102
+	ld a,~101
 	ld l,47
 	call Math_Multiply127x127Signed
-	cp -38
+	cp ~37
 	call nz,System_ThrowException
 
 	ld a,101
