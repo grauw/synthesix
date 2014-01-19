@@ -189,7 +189,7 @@ SCCVoice_SetLevel:
 	ret
 
 ; ix = this
-; a = wave number
+; a = wave number (one’s complement)
 ; Modifies: af, bc, de, hl
 SCCVoice_SetWave:
 	ld (ix + SCCVoice.lastWave),a
