@@ -114,10 +114,12 @@ Keys_PressDecreaseVelocity:
 	ret
 
 Keys_PressIncreaseModulation:
-	ld a,(Keys_modulation)
+	ld a,1
+	ld ix,Channel_channels.0
+	call Channel_GetController
+	ld a,(de)
 	inc a
 	and 7FH
-	ld (Keys_modulation),a
 	ld b,1
 	ld c,a
 	ld a,0
@@ -125,10 +127,12 @@ Keys_PressIncreaseModulation:
 	ret
 
 Keys_PressDecreaseModulation:
-	ld a,(Keys_modulation)
+	ld a,1
+	ld ix,Channel_channels.0
+	call Channel_GetController
+	ld a,(de)
 	dec a
 	and 7FH
-	ld (Keys_modulation),a
 	ld b,1
 	ld c,a
 	ld a,0
@@ -163,9 +167,6 @@ Keys_lastScan:
 
 Keys_velocity:
 	db 7FH
-
-Keys_modulation:
-	db 00H
 
 Keys_escape:
 	db 0
