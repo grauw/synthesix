@@ -4,11 +4,11 @@
 ; hl <- allocated memory end address
 ; Modifies: bc, de, hl
 ; Throws out of memory exception
-Heap_Allocate:
+Heap_Allocate: PROC
 	ld hl,(Heap_heapCapacity)
 	and a
 	sbc hl,bc
-	jr c,Heap_Allocate_Throw
+	jr c,Throw
 	ld hl,(Heap_heapCapacity)
 	ld de,(Heap_heapPosition)
 	ld l,e
@@ -16,9 +16,10 @@ Heap_Allocate:
 	add hl,bc
 	ld (Heap_heapPosition),hl
 	ret
-Heap_Allocate_Throw:
+Throw:
 	ld hl,Heap_outOfHeapException
 	jp System_ThrowExceptionWithMessage
+	ENDP
 
 Heap_outOfHeapException:
 	db "Out of heap space.",0
