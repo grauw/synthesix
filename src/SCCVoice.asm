@@ -13,11 +13,11 @@ SCCVoice: MACRO
 	velocity:
 		db 0
 	wave:
-		dw 0
+		dw Value_values.0
 	modulation:
-		dw 0
+		dw Value_values.0
 	pitchModulation:
-		dw 0
+		dw Value_values.0
 	noteFrequency:
 		dw 0
 	noteFrequency50cent:
