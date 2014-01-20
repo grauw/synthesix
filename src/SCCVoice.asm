@@ -71,10 +71,8 @@ SCCVoice_AddNoteOffListener:
 ; b = note number (0-127)
 ; c = velocity (0-127)
 SCCVoice_NoteOn:
+	ld (ix + SCCVoice.note),b
 	ld (ix + SCCVoice.velocity),c
-
-	ld a,b
-	call SCCVoice_SetNote
 
 	ld bc,SCCVoice.noteOnListeners.Update
 	add ix,bc
@@ -94,9 +92,10 @@ SCCVoice_Update:
 	cp (ix + SCCVoice.lastWave)
 	call nz,SCCVoice_SetWave
 
+	ld a,(ix + SCCVoice.note)
 	ld l,(ix + SCCVoice.detune + 0)
 	ld h,(ix + SCCVoice.detune + 1)
-	ld a,(hl)
+	ld b,(hl)
 	call SCCVoice_SetFrequency
 
 	ld l,(ix + SCCVoice.amplitude + 0)
@@ -107,8 +106,8 @@ SCCVoice_Update:
 
 ; ix = this
 ; a = note
-SCCVoice_SetNote: PROC
-	ld (ix + SCCVoice.note),a
+; b = detune (one’s complement)
+SCCVoice_SetFrequency: PROC
 	ld h,PSG_frequencyTable / 100H
 	add a,a
 	ld l,a
@@ -120,18 +119,7 @@ SCCVoice_SetNote: PROC
 	sub e
 	neg
 	srl a
-	ld (ix + SCCVoice.noteFrequency),e
-	ld (ix + SCCVoice.noteFrequency + 1),d
-	ld (ix + SCCVoice.noteFrequency50cent),a
-	ret
-	ENDP
-
-; ix = this
-; a = detune (one’s complement)
-SCCVoice_SetFrequency: PROC
-	ld e,(ix + SCCVoice.noteFrequency)
-	ld d,(ix + SCCVoice.noteFrequency + 1)
-	ld l,(ix + SCCVoice.noteFrequency50cent)
+	ld l,b
 	call Math_Multiply127x127Signed
 	cpl
 	call Math_AddSigned
