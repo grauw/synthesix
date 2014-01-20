@@ -4,7 +4,7 @@
 TriangleLFO: MACRO
 	super: Value 0
 	speed:
-		db 4
+		db 2
 	counter:
 		db 0
 	size:

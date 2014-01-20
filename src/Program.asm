@@ -57,10 +57,10 @@ Program_CreateSquareWaveLFO:
 	pop de
 	ld (ix + MultiplyAdd.multiplicand),e
 	ld (ix + MultiplyAdd.multiplicand + 1),d
-	ld de,Value_values.13
+	ld de,Value_values.50
 	ld (ix + MultiplyAdd.multiplier),e
 	ld (ix + MultiplyAdd.multiplier + 1),d
-	ld de,Value_values.2
+	ld de,Value_values.64
 	ld (ix + MultiplyAdd.addend),e
 	ld (ix + MultiplyAdd.addend + 1),d
 	ld e,ixl
