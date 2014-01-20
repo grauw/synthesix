@@ -40,9 +40,9 @@ SCCPatch_New:
 
 ; ix = this
 ; ix <- this
-SCCPatch_Constructor:
+SCCPatch_Constructor: PROC
 	ld b,(ix + SCCPatch.polyphony)
-SCCPatch_New_Loop:
+Loop:
 	push bc
 	push ix
 	call SCC_GetFreeVoice
@@ -50,8 +50,9 @@ SCCPatch_New_Loop:
 	pop hl
 	call SCCPatch_AddVoice
 	pop bc
-	djnz SCCPatch_New_Loop
+	djnz Loop
 	ret
+	ENDP
 
 ; TODO if no notes are available, pick the one most recently played
 ;      (or, at least retrigger the missed one once another is released)
@@ -65,7 +66,7 @@ SCCPatch_NoteOn:
 	ret z
 	REPT SCCPatch.MAX_VOICES, ?voice
 	cp (ix + SCCPatch.notes + ?voice)
-	jr nz,SCCPatch_NoteOn_Next
+	jr nz,Next
 	dec a
 	or 80H
 	ld (ix + SCCPatch.nextNote),a
@@ -84,7 +85,7 @@ SCCPatch_NoteOn:
 	ld ixl,e
 	ld ixh,d
 	jp SCCVoice_NoteOn
-SCCPatch_NoteOn_Next:
+Next:
 	ENDM
 	call System_ThrowException
 	ret
@@ -96,7 +97,7 @@ SCCPatch_NoteOff:
 	ld a,b
 	REPT SCCPatch.MAX_VOICES, ?voice
 	cp (ix + SCCPatch.notes + ?voice)
-	jr nz,SCCPatch_NoteOff_Next
+	jr nz,Next
 	ld a,(ix + SCCPatch.lastNote)
 	ld (ix + SCCPatch.notes + ?voice),a
 	dec a
@@ -107,7 +108,7 @@ SCCPatch_NoteOff:
 	ld ixl,e
 	ld ixh,d
 	jp SCCVoice_NoteOff
-SCCPatch_NoteOff_Next:
+Next:
 	ENDM
 	; note not found
 	ret
@@ -119,13 +120,13 @@ SCCPatch_Update:
 	ld d,(ix + SCCPatch.voices + ?voice * 2 + 1)
 	inc d
 	dec d
-	jr z,SCCPatch_Update_Next
+	jr z,Next
 	push ix
 	ld ixl,e
 	ld ixh,d
 	call SCCVoice_Update
 	pop ix
-SCCPatch_Update_Next:
+Next:
 	ENDM
 	ret
 
@@ -135,7 +136,7 @@ SCCPatch_AddVoice:
 	REPT SCCPatch.MAX_VOICES, ?voice
 	ld a,(ix + SCCPatch.voices + ?voice * 2 + 1)
 	and a
-	jr nz,SCCPatch_AddVoice_Next
+	jr nz,Next
 	ld (ix + SCCPatch.voices + ?voice * 2),l
 	ld (ix + SCCPatch.voices + ?voice * 2 + 1),h
 	ld a,(ix + SCCPatch.lastNote)
@@ -144,6 +145,6 @@ SCCPatch_AddVoice:
 	or 80H
 	ld (ix + SCCPatch.lastNote),a
 	ret
-SCCPatch_AddVoice_Next:
+Next:
 	ENDM
 	call System_ThrowException
