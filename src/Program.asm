@@ -1,12 +1,12 @@
 Program_LoadDefault: PROC
-	ld ix,Channel_channels.0
 	call SCCPatch_New
+	call SCCPatch_GetVoicePool
 	push ix
 	ld hl,Voice
-	call SCCPatch_ForEach
+	call VoicePool_ForEach
 	pop hl
 	ld ix,Channel_channels.0
-	call Channel_AddPatch
+	call Channel_AddVoicePool
 	ret
 Voice:
 	call Program_CreateAREnvelope

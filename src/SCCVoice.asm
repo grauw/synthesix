@@ -2,6 +2,7 @@
 ; An SCC voice (channel)
 ;
 SCCVoice: MACRO
+	super: Voice SCCVoice_NoteOn, SCCVoice_NoteOff, SCCVoice_Update
 	waveRegister:
 		db SCC_WAVE_1
 	frequencyRegister:

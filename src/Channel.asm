@@ -9,7 +9,7 @@ Channel: MACRO
 	MAX_VOICE_POOLS: equ 7
 	controllers:
 		dw 0
-	patches:
+	voicePools:
 		REPT MAX_VOICE_POOLS
 		dw 0
 		ENDM
@@ -69,8 +69,8 @@ Channel_NoteOn: PROC
 	dec c
 	jp z,NoteOff
 	REPT Channel.MAX_VOICE_POOLS, ?pool
-	ld e,(ix + Channel.patches + ?pool * 2)
-	ld d,(ix + Channel.patches + ?pool * 2 + 1)
+	ld e,(ix + Channel.voicePools + ?pool * 2)
+	ld d,(ix + Channel.voicePools + ?pool * 2 + 1)
 	inc d
 	dec d
 	ret z
@@ -79,7 +79,7 @@ Channel_NoteOn: PROC
 	push bc
 	ld ixl,e
 	ld ixh,d
-	call Patch_NoteOn
+	call VoicePool_NoteOn
 	pop bc
 	pop af
 	pop ix
@@ -95,8 +95,8 @@ NoteOff:
 ; c = velocity (0-127)
 Channel_NoteOff:
 	REPT Channel.MAX_VOICE_POOLS, ?pool
-	ld e,(ix + Channel.patches + ?pool * 2)
-	ld d,(ix + Channel.patches + ?pool * 2 + 1)
+	ld e,(ix + Channel.voicePools + ?pool * 2)
+	ld d,(ix + Channel.voicePools + ?pool * 2 + 1)
 	inc d
 	dec d
 	ret z
@@ -105,7 +105,7 @@ Channel_NoteOff:
 	push bc
 	ld ixl,e
 	ld ixh,d
-	call Patch_NoteOff
+	call VoicePool_NoteOff
 	pop bc
 	pop af
 	pop ix
@@ -146,15 +146,15 @@ Channel_PitchBend:
 ; ix = this
 Channel_Update:
 	REPT Channel.MAX_VOICE_POOLS, ?pool
-	ld e,(ix + Channel.patches + ?pool * 2)
-	ld d,(ix + Channel.patches + ?pool * 2 + 1)
+	ld e,(ix + Channel.voicePools + ?pool * 2)
+	ld d,(ix + Channel.voicePools + ?pool * 2 + 1)
 	inc d
 	dec d
 	ret z
 	push ix
 	ld ixl,e
 	ld ixh,d
-	call Patch_Update
+	call VoicePool_Update
 	pop ix
 	ENDM
 	ret
@@ -180,15 +180,15 @@ Channel_GetController:
 
 ; ix = this
 ; hl = voice pool
-Channel_AddPatch:
+Channel_AddVoicePool:
 	REPT Channel.MAX_VOICE_POOLS, ?pool
-	ld a,(ix + Channel.patches + ?pool * 2 + 1)
+	ld a,(ix + Channel.voicePools + ?pool * 2 + 1)
 	and a
-	jr nz,Channel_AddPatch_Next
-	ld (ix + Channel.patches + ?pool * 2),l
-	ld (ix + Channel.patches + ?pool * 2 + 1),h
+	jr nz,Channel_AddVoicePool_Next
+	ld (ix + Channel.voicePools + ?pool * 2),l
+	ld (ix + Channel.voicePools + ?pool * 2 + 1),h
 	ret
-Channel_AddPatch_Next:
+Channel_AddVoicePool_Next:
 	ENDM
 	call System_ThrowException
 

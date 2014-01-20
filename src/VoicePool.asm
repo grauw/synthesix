@@ -1,0 +1,142 @@
+;
+; A voice pool
+;
+; Pools voices for polyphonic playback.
+; When a note is played it binds a voice to it until it is
+; released. When a voice is bound, it will try the next one.
+;
+VoicePool: MACRO
+	MAX_VOICES: equ 5
+	polyphony:
+		db 4
+	notes:
+		db -1, -1, -1, -1, -1
+	nextNote:
+		db -1
+	lastNote:
+		db -1
+	voices:
+		REPT MAX_VOICES, ?voice
+		dw 0
+		ENDM
+	size:
+	ENDM
+
+	dw VoicePool.size
+VoicePool_class: VoicePool
+
+; ix <- new class
+VoicePool_New:
+	ld iy,VoicePool_class
+	call Class_New
+	ret
+
+; TODO if no notes are available, pick the one most recently played
+;      (or, at least retrigger the missed one once another is released)
+;
+; ix = this
+; b = note number (0-127)
+; c = velocity (0-127)
+VoicePool_NoteOn:
+	ld a,(ix + VoicePool.nextNote)
+	cp (ix + VoicePool.lastNote)
+	ret z
+	REPT VoicePool.MAX_VOICES, ?voice
+	cp (ix + VoicePool.notes + ?voice)
+	jr nz,Next
+	dec a
+	or 80H
+	ld (ix + VoicePool.nextNote),a
+	ld a,b
+	ld (ix + VoicePool.notes + ?voice),a
+
+	ld e,(ix + VoicePool.voices + ?voice * 2)
+	ld d,(ix + VoicePool.voices + ?voice * 2 + 1)
+	ld ixl,e
+	ld ixh,d
+	jp Voice_NoteOn
+Next:
+	ENDM
+	call System_ThrowException
+	ret
+
+; ix = this
+; b = note number (0-127)
+; c = velocity (0-127)
+VoicePool_NoteOff:
+	ld a,b
+	REPT VoicePool.MAX_VOICES, ?voice
+	cp (ix + VoicePool.notes + ?voice)
+	jr nz,Next
+	ld a,(ix + VoicePool.lastNote)
+	ld (ix + VoicePool.notes + ?voice),a
+	dec a
+	or 80H
+	ld (ix + VoicePool.lastNote),a
+	ld e,(ix + VoicePool.voices + ?voice * 2)
+	ld d,(ix + VoicePool.voices + ?voice * 2 + 1)
+	ld ixl,e
+	ld ixh,d
+	jp Voice_NoteOff
+Next:
+	ENDM
+	; note not found
+	ret
+
+; ix = this
+VoicePool_Update:
+	REPT VoicePool.MAX_VOICES, ?voice
+	ld e,(ix + VoicePool.voices + ?voice * 2)
+	ld d,(ix + VoicePool.voices + ?voice * 2 + 1)
+	inc d
+	dec d
+	ret z
+	push ix
+	ld ixl,e
+	ld ixh,d
+	call Voice_Update
+	pop ix
+	ENDM
+	ret
+
+; ix = this
+; hl = callback
+VoicePool_ForEach: PROC
+	REPT VoicePool.MAX_VOICES, ?voice
+	ld e,(ix + VoicePool.voices + ?voice * 2)
+	ld d,(ix + VoicePool.voices + ?voice * 2 + 1)
+	inc d
+	dec d
+	ret z
+	push ix
+	ld ixl,e
+	ld ixh,d
+	push hl
+	call CallHL
+	pop hl
+	pop ix
+	ENDM
+	ret
+CallHL:
+	jp hl
+	ENDP
+
+; ix = this
+; hl = voice
+VoicePool_AddVoice:
+	REPT VoicePool.MAX_VOICES, ?voice
+	ld a,(ix + VoicePool.voices + ?voice * 2 + 1)
+	and a
+	jr nz,Next
+	ld (ix + VoicePool.voices + ?voice * 2),l
+	ld (ix + VoicePool.voices + ?voice * 2 + 1),h
+	ld a,(ix + VoicePool.lastNote)
+	ld (ix + VoicePool.notes + ?voice),a
+	dec a
+	or 80H
+	ld (ix + VoicePool.lastNote),a
+	inc (ix + VoicePool.polyphony)
+	ret
+Next:
+	ENDM
+	call System_ThrowException
