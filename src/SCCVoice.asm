@@ -12,11 +12,11 @@ SCCVoice: MACRO
 		db 0
 	velocity:
 		db 0
+	amplitude:
+		dw Value_values.0
+	pitch:
+		dw Value_values.0
 	wave:
-		dw Value_values.0
-	modulation:
-		dw Value_values.0
-	pitchModulation:
 		dw Value_values.0
 	noteFrequency:
 		dw 0
@@ -51,15 +51,15 @@ SCCVoice_Constructor:
 	ld d,ixh
 	pop ix
 	call AREnvelope_SetKeyTrigger
-	ld (ix + SCCVoice.modulation + 0),e
-	ld (ix + SCCVoice.modulation + 1),d
+	ld (ix + SCCVoice.amplitude + 0),e
+	ld (ix + SCCVoice.amplitude + 1),d
 	push ix
 	call SignedTriangleLFO_New
 	ld e,ixl
 	ld d,ixh
 	pop ix
-	ld (ix + SCCVoice.pitchModulation + 0),e
-	ld (ix + SCCVoice.pitchModulation + 1),d
+	ld (ix + SCCVoice.pitch + 0),e
+	ld (ix + SCCVoice.pitch + 1),d
 	push ix
 	ld a,1
 	ld ix,Channel_channels.0
@@ -116,13 +116,13 @@ SCCVoice_Update:
 	cp (ix + SCCVoice.lastWave)
 	call nz,SCCVoice_SetWave
 
-	ld l,(ix + SCCVoice.pitchModulation + 0)
-	ld h,(ix + SCCVoice.pitchModulation + 1)
+	ld l,(ix + SCCVoice.pitch + 0)
+	ld h,(ix + SCCVoice.pitch + 1)
 	ld a,(hl)
 	call SCCVoice_SetFrequency
 
-	ld l,(ix + SCCVoice.modulation + 0)
-	ld h,(ix + SCCVoice.modulation + 1)
+	ld l,(ix + SCCVoice.amplitude + 0)
+	ld h,(ix + SCCVoice.amplitude + 1)
 	ld a,(hl)
 	call SCCVoice_SetLevel
 	ret
