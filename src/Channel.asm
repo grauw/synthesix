@@ -120,9 +120,6 @@ Channel_ControlChange:
 	cp 121
 	jr nc,Channel_ChannelMode
 	call Channel_GetController
-	ld a,d
-	or e
-	ret z
 	ld iyl,e
 	ld iyh,d
 	ld (iy),c
@@ -169,9 +166,6 @@ Channel_GetController:
 	add a,a
 	ld l,a
 	ld h,0
-	ld a,e
-	or d
-	ret z
 	add hl,de
 	ld e,(hl)
 	inc hl
@@ -195,7 +189,7 @@ Next:
 
 ;
 Channels_Init:
-	REPT 1, ?channel
+	REPT 16, ?channel
 	ld ix,Channel_channels + ?channel * Channel.size
 	call Channel_Constructor
 	ENDM
