@@ -120,13 +120,12 @@ SCCPatch_Update:
 	ld d,(ix + SCCPatch.voices + ?voice * 2 + 1)
 	inc d
 	dec d
-	jr z,Next
+	ret z
 	push ix
 	ld ixl,e
 	ld ixh,d
 	call SCCVoice_Update
 	pop ix
-Next:
 	ENDM
 	ret
 
