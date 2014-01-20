@@ -117,6 +117,8 @@ Channel_NoteOff:
 ; c = value
 Channel_ControlChange:
 	ld a,b
+	cp 121
+	jr nc,Channel_ChannelMode
 	call Channel_GetController
 	ld a,d
 	or e
@@ -124,6 +126,9 @@ Channel_ControlChange:
 	ld iyl,e
 	ld iyh,d
 	ld (iy),c
+	ret
+
+Channel_ChannelMode:
 	ret
 
 Channel_PolyPressure:
