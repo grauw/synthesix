@@ -15,8 +15,8 @@ Voice:
 	ld (ix + SCCVoice.amplitude + 1),d
 
 	call Program_SignedTriangleLFO
-	ld (ix + SCCVoice.pitch + 0),e
-	ld (ix + SCCVoice.pitch + 1),d
+	ld (ix + SCCVoice.detune + 0),e
+	ld (ix + SCCVoice.detune + 1),d
 
 ;	call Program_GetController1
 	call Program_CreateSquareWaveLFO
