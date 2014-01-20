@@ -130,6 +130,28 @@ SCCPatch_Update:
 	ret
 
 ; ix = this
+; hl = callback
+SCCPatch_ForEach: PROC
+	REPT SCCPatch.MAX_VOICES, ?voice
+	ld e,(ix + SCCPatch.voices + ?voice * 2)
+	ld d,(ix + SCCPatch.voices + ?voice * 2 + 1)
+	inc d
+	dec d
+	ret z
+	push ix
+	ld ixl,e
+	ld ixh,d
+	push hl
+	call CallHL
+	pop hl
+	pop ix
+	ENDM
+	ret
+CallHL:
+	jp hl
+	ENDP
+
+; ix = this
 ; hl = voice
 SCCPatch_AddVoice:
 	REPT SCCPatch.MAX_VOICES, ?voice
