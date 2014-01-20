@@ -18,18 +18,18 @@ Patch: MACRO ?noteOn, ?noteOff, ?update
 
 ; ix = this
 Patch_NoteOn:
-	ld l,(ix + Patch.noteOn + 0)
+	ld l,(ix + Patch.noteOn)
 	ld h,(ix + Patch.noteOn + 1)
 	jp hl
 
 ; ix = this
 Patch_NoteOff:
-	ld l,(ix + Patch.noteOff + 0)
+	ld l,(ix + Patch.noteOff)
 	ld h,(ix + Patch.noteOff + 1)
 	jp hl
 
 ; ix = this
 Patch_Update:
-	ld l,(ix + Patch.update + 0)
+	ld l,(ix + Patch.update)
 	ld h,(ix + Patch.update + 1)
 	jp hl

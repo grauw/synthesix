@@ -56,7 +56,7 @@ UINode_GetBufferPosition_DE:
 
 ; ix = this
 UINode_Update:
-	ld l,(ix + UINode.update + 0)
+	ld l,(ix + UINode.update)
 	ld h,(ix + UINode.update + 1)
 	jp hl
 

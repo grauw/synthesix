@@ -11,16 +11,16 @@ Program_LoadDefault: PROC
 Voice:
 	call Program_CreateAREnvelope
 	call AREnvelope_SetKeyTrigger
-	ld (ix + SCCVoice.amplitude + 0),e
+	ld (ix + SCCVoice.amplitude),e
 	ld (ix + SCCVoice.amplitude + 1),d
 
 	call Program_SignedTriangleLFO
-	ld (ix + SCCVoice.detune + 0),e
+	ld (ix + SCCVoice.detune),e
 	ld (ix + SCCVoice.detune + 1),d
 
 ;	call Program_GetController1
 	call Program_CreateSquareWaveLFO
-	ld (ix + SCCVoice.wave + 0),e
+	ld (ix + SCCVoice.wave),e
 	ld (ix + SCCVoice.wave + 1),d
 	ret
 	ENDP

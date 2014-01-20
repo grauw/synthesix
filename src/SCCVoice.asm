@@ -95,21 +95,21 @@ SCCVoice_NoteOff:
 
 ; ix = this
 SCCVoice_Update:
-	ld l,(ix + SCCVoice.wave + 0)
+	ld l,(ix + SCCVoice.wave)
 	ld h,(ix + SCCVoice.wave + 1)
 	ld a,(hl)
 	cp (ix + SCCVoice.lastWave)
 	call nz,SCCVoice_SetWave
 
-	ld l,(ix + SCCVoice.pitch + 0)
+	ld l,(ix + SCCVoice.pitch)
 	ld h,(ix + SCCVoice.pitch + 1)
 	ld a,(hl)
-	ld l,(ix + SCCVoice.detune + 0)
+	ld l,(ix + SCCVoice.detune)
 	ld h,(ix + SCCVoice.detune + 1)
 	ld b,(hl)
 	call SCCVoice_SetFrequency
 
-	ld l,(ix + SCCVoice.amplitude + 0)
+	ld l,(ix + SCCVoice.amplitude)
 	ld h,(ix + SCCVoice.amplitude + 1)
 	ld a,(hl)
 	call SCCVoice_SetLevel
