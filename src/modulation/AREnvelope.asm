@@ -10,7 +10,7 @@ AREnvelope: MACRO
 	sign:
 		db 0
 	phase:
-		db 0
+		db -1
 	counter:
 		db 0
 	size:
