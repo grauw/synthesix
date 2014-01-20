@@ -100,7 +100,7 @@ SCCVoice_Update:
 	ld h,(ix + SCCVoice.amplitude + 1)
 	ld a,(hl)
 	and a
-	jp z,SCCVoice_SetLevel
+;	jp z,SCCVoice_SetLevel
 	push af
 
 	ld l,(ix + SCCVoice.wave)
