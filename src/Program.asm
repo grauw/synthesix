@@ -18,7 +18,8 @@ Voice:
 	ld (ix + SCCVoice.pitch + 0),e
 	ld (ix + SCCVoice.pitch + 1),d
 
-	call Program_GetController1
+;	call Program_GetController1
+	call Program_CreateSquareWaveLFO
 	ld (ix + SCCVoice.wave + 0),e
 	ld (ix + SCCVoice.wave + 1),d
 	ret
@@ -45,5 +46,24 @@ Program_GetController1:
 	ld a,1
 	ld ix,Channel_channels.0
 	call Channel_GetController
+	pop ix
+	ret
+
+Program_CreateSquareWaveLFO:
+	push ix
+	call TriangleLFO_New
+	push ix
+	call MultiplyAdd_New
+	pop de
+	ld (ix + MultiplyAdd.multiplicand),e
+	ld (ix + MultiplyAdd.multiplicand + 1),d
+	ld de,Value_values.13
+	ld (ix + MultiplyAdd.multiplier),e
+	ld (ix + MultiplyAdd.multiplier + 1),d
+	ld de,Value_values.2
+	ld (ix + MultiplyAdd.addend),e
+	ld (ix + MultiplyAdd.addend + 1),d
+	ld e,ixl
+	ld d,ixh
 	pop ix
 	ret
