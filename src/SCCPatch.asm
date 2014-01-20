@@ -12,8 +12,6 @@ SCCPatch: MACRO
 	MAX_VOICES: equ 5
 	polyphony:
 		db 4
-	level:
-		db 127
 	pitch:
 		db 0
 	notes:
@@ -74,12 +72,6 @@ SCCPatch_NoteOn:
 	ld (ix + SCCPatch.notes + ?voice),a
 
 	add a,(ix + SCCPatch.pitch)
-	ex af,af'
-	ld a,c
-	ld l,(ix + SCCPatch.level)
-	call Math_Multiply127x127
-	ld c,a
-	ex af,af'
 	ld e,(ix + SCCPatch.voices + ?voice * 2)
 	ld d,(ix + SCCPatch.voices + ?voice * 2 + 1)
 	ld ixl,e
