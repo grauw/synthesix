@@ -133,19 +133,19 @@ SCCVoice_SetFrequency: PROC
 	ld d,(hl)
 	bit 7,b
 	jr nz,Negative
-	inc l
+	inc l     ; get 100 cent upwards
 	ld a,e
 	sub (hl)
-	inc a  ; round up
+	inc a     ; round up division that follows
 	jp Continue
 Negative:
-	dec l
+	dec l     ; get 100 cent downwards
 	dec l
 	dec l
 	ld a,(hl)
 	sub e
 Continue:
-	srl a
+	srl a     ; divide 100 cent to 50 cent
 	ld l,b
 	call Math_Multiply127x127Signed
 	cpl
