@@ -180,17 +180,18 @@ Channel_GetController:
 
 ; ix = this
 ; hl = voice pool
-Channel_AddVoicePool:
+Channel_AddVoicePool: PROC
 	REPT Channel.MAX_VOICE_POOLS, ?pool
 	ld a,(ix + Channel.voicePools + ?pool * 2 + 1)
 	and a
-	jr nz,Channel_AddVoicePool_Next
+	jr nz,Next
 	ld (ix + Channel.voicePools + ?pool * 2),l
 	ld (ix + Channel.voicePools + ?pool * 2 + 1),h
 	ret
-Channel_AddVoicePool_Next:
+Next:
 	ENDM
 	call System_ThrowException
+	ENDP
 
 ;
 Channels_Init:
