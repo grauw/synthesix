@@ -96,6 +96,13 @@ SCCVoice_NoteOff:
 
 ; ix = this
 SCCVoice_Update:
+	ld l,(ix + SCCVoice.amplitude)
+	ld h,(ix + SCCVoice.amplitude + 1)
+	ld a,(hl)
+	and a
+	jp z,SCCVoice_SetLevel
+	push af
+
 	ld l,(ix + SCCVoice.wave)
 	ld h,(ix + SCCVoice.wave + 1)
 	ld a,(hl)
@@ -110,9 +117,7 @@ SCCVoice_Update:
 	ld b,(hl)
 	call SCCVoice_SetFrequency
 
-	ld l,(ix + SCCVoice.amplitude)
-	ld h,(ix + SCCVoice.amplitude + 1)
-	ld a,(hl)
+	pop af
 	call SCCVoice_SetLevel
 	ret
 
