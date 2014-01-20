@@ -156,8 +156,6 @@ FrequencyChanged:
 ; a = level (one’s complement)
 SCCVoice_SetLevel:
 	and 7FH
-	ld l,(ix + SCCVoice.velocity)
-	call Math_Multiply127x127
 	rrca
 	rrca
 	rrca
