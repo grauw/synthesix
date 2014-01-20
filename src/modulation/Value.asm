@@ -16,6 +16,7 @@ Value_New:
 	call Class_New
 	ret
 
+;
 Value_values: REPT 128, ?value
 	Value ?value
 	ENDM

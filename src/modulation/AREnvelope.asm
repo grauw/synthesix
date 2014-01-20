@@ -58,14 +58,12 @@ AREnvelope_NoteOff:
 	ret
 
 ; ix = this
-; a <- value (one’s complement)
 AREnvelope_Update:
 	bit 7,(ix + AREnvelope.phase)  ; to test a third phase: rlc (ix) ; jp po
 	jr nz,AREnvelope_UpdateRelease
 	jp AREnvelope_UpdateAttack
 
 ; ix = this
-; a <- value (one’s complement)
 AREnvelope_UpdateAttack: PROC
 	ld a,(ix + AREnvelope.counter)
 	add a,(ix + AREnvelope.attack)
@@ -88,7 +86,6 @@ Complete:
 	ENDP
 
 ; ix = this
-; a <- value (one’s complement)
 AREnvelope_UpdateRelease: PROC
 	ld a,(ix + AREnvelope.counter)
 	sub (ix + AREnvelope.release)

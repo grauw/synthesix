@@ -47,7 +47,6 @@ SignedTriangleLFO_NoteOn:
 	ret
 
 ; ix = this
-; a <- value (one’s complement)
 SignedTriangleLFO_Update: PROC
 	ld a,(ix + SignedTriangleLFO.counter)
 	add a,(ix + SignedTriangleLFO.speed)

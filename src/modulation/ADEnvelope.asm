@@ -51,14 +51,12 @@ ADEnvelope_NoteOn:
 	ret
 
 ; ix = this
-; a <- value (one’s complement)
 ADEnvelope_Update:
 	bit 7,(ix + ADEnvelope.phase)  ; to test a third phase: rlc (ix) ; jp po
 	jr nz,ADEnvelope_UpdateDecay
 	jp ADEnvelope_UpdateAttack
 
 ; ix = this
-; a <- value (one’s complement)
 ADEnvelope_UpdateAttack: PROC
 	ld a,(ix + ADEnvelope.counter)
 	add a,(ix + ADEnvelope.attack)
@@ -77,7 +75,6 @@ Complete:
 	ENDP
 
 ; ix = this
-; a <- value (one’s complement)
 ADEnvelope_UpdateDecay: PROC
 	ld a,(ix + ADEnvelope.counter)
 	add a,(ix + ADEnvelope.decay)
