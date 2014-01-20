@@ -40,36 +40,36 @@ SignedTriangleLFO_SetKeyTrigger:
 	call SCCVoice_AddNoteOnListener
 	ret
 
-; iy = this
+; ix = this
 SignedTriangleLFO_NoteOn:
-	ld (iy + SignedTriangleLFO.counter),0
-	ld (iy + SignedTriangleLFO.sign),10101010B
+	ld (ix + SignedTriangleLFO.counter),0
+	ld (ix + SignedTriangleLFO.sign),10101010B
 	ret
 
-; iy = this
+; ix = this
 ; a <- value (one’s complement)
 SignedTriangleLFO_Update: PROC
-	ld a,(iy + SignedTriangleLFO.counter)
-	add a,(iy + SignedTriangleLFO.speed)
-	ld (iy + SignedTriangleLFO.counter),a
+	ld a,(ix + SignedTriangleLFO.counter)
+	add a,(ix + SignedTriangleLFO.speed)
+	ld (ix + SignedTriangleLFO.counter),a
 	call c,FlipSign
-	bit 7,(iy + SignedTriangleLFO.sign)
+	bit 7,(ix + SignedTriangleLFO.sign)
 	jp nz,Negative
-	ld (iy + SignedTriangleLFO.super.value),a
+	ld (ix + SignedTriangleLFO.super.value),a
 	and a
 	ret p
 	neg
 	dec a
-	ld (iy + SignedTriangleLFO.super.value),a
+	ld (ix + SignedTriangleLFO.super.value),a
 	ret
 Negative:
-	ld (iy + SignedTriangleLFO.super.value),a
+	ld (ix + SignedTriangleLFO.super.value),a
 	and a
 	ret m
 	cpl
-	ld (iy + SignedTriangleLFO.super.value),a
+	ld (ix + SignedTriangleLFO.super.value),a
 	ret
 FlipSign:
-	rrc (iy + SignedTriangleLFO.sign)
+	rrc (ix + SignedTriangleLFO.sign)
 	ret
 	ENDP

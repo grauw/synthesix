@@ -35,21 +35,21 @@ MultiplyAdd_Constructor:
 
 ; ix = this
 MultiplyAdd_Update: PROC
-	ld l,(iy + MultiplyAdd.multiplicand)
-	ld h,(iy + MultiplyAdd.multiplicand + 1)
+	ld l,(ix + MultiplyAdd.multiplicand)
+	ld h,(ix + MultiplyAdd.multiplicand + 1)
 	ld a,(hl)
-	ld l,(iy + MultiplyAdd.multiplier)
-	ld h,(iy + MultiplyAdd.multiplier + 1)
+	ld l,(ix + MultiplyAdd.multiplier)
+	ld h,(ix + MultiplyAdd.multiplier + 1)
 	ld l,(hl)
 	call Math_Multiply127x127Signed
-	ld l,(iy + MultiplyAdd.addend)
-	ld h,(iy + MultiplyAdd.addend + 1)
+	ld l,(ix + MultiplyAdd.addend)
+	ld h,(ix + MultiplyAdd.addend + 1)
 	add a,(hl)
-	ld (iy + MultiplyAdd.super.value),a
+	ld (ix + MultiplyAdd.super.value),a
 	ret po
 	bit 7,(hl)
-	ld (iy + MultiplyAdd.super.value),127
+	ld (ix + MultiplyAdd.super.value),127
 	ret z
-	ld (iy + MultiplyAdd.super.value),128
+	ld (ix + MultiplyAdd.super.value),128
 	ret
 	ENDP

@@ -38,20 +38,20 @@ TriangleLFO_SetKeyTrigger:
 	call SCCVoice_AddNoteOnListener
 	ret
 
-; iy = this
+; ix = this
 TriangleLFO_NoteOn:
-	ld (iy + TriangleLFO.counter),0
+	ld (ix + TriangleLFO.counter),0
 	ret
 
-; iy = this
+; ix = this
 ; a <- value (one’s complement)
 TriangleLFO_Update: PROC
-	ld a,(iy + TriangleLFO.counter)
-	add a,(iy + TriangleLFO.speed)
-	ld (iy + TriangleLFO.counter),a
+	ld a,(ix + TriangleLFO.counter)
+	add a,(ix + TriangleLFO.speed)
+	ld (ix + TriangleLFO.counter),a
 	jp p,Positive
 	cpl
 Positive:
-	ld (iy + TriangleLFO.super.value),a
+	ld (ix + TriangleLFO.super.value),a
 	ret
 	ENDP

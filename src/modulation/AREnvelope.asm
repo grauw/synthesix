@@ -46,66 +46,66 @@ AREnvelope_SetKeyTrigger:
 	call SCCVoice_AddNoteOffListener
 	ret
 
-; iy = this
+; ix = this
 AREnvelope_NoteOn:
-	ld (iy + AREnvelope.phase),0
-	ld (iy + AREnvelope.counter),0
+	ld (ix + AREnvelope.phase),0
+	ld (ix + AREnvelope.counter),0
 	ret
 
-; iy = this
+; ix = this
 AREnvelope_NoteOff:
-	ld (iy + AREnvelope.phase),-1
+	ld (ix + AREnvelope.phase),-1
 	ret
 
-; iy = this
+; ix = this
 ; a <- value (one’s complement)
 AREnvelope_Update:
-	bit 7,(iy + AREnvelope.phase)  ; to test a third phase: rlc (iy) ; jp po
+	bit 7,(ix + AREnvelope.phase)  ; to test a third phase: rlc (ix) ; jp po
 	jr nz,AREnvelope_UpdateRelease
 	jp AREnvelope_UpdateAttack
 
-; iy = this
+; ix = this
 ; a <- value (one’s complement)
 AREnvelope_UpdateAttack: PROC
-	ld a,(iy + AREnvelope.counter)
-	add a,(iy + AREnvelope.attack)
+	ld a,(ix + AREnvelope.counter)
+	add a,(ix + AREnvelope.attack)
 	jr c,Complete
-	ld (iy + AREnvelope.counter),a
+	ld (ix + AREnvelope.counter),a
 	rra
-	ld (iy + AREnvelope.super.value),a
-	bit 0,(iy + AREnvelope.sign)
+	ld (ix + AREnvelope.super.value),a
+	bit 0,(ix + AREnvelope.sign)
 	ret z
 	cpl
-	ld (iy + AREnvelope.super.value),a
+	ld (ix + AREnvelope.super.value),a
 	ret
 Complete:
-	ld (iy + AREnvelope.counter),255
-	ld (iy + AREnvelope.super.value),127
-	bit 0,(iy + AREnvelope.sign)
+	ld (ix + AREnvelope.counter),255
+	ld (ix + AREnvelope.super.value),127
+	bit 0,(ix + AREnvelope.sign)
 	ret z
-	ld (iy + AREnvelope.super.value),~127
+	ld (ix + AREnvelope.super.value),~127
 	ret
 	ENDP
 
-; iy = this
+; ix = this
 ; a <- value (one’s complement)
 AREnvelope_UpdateRelease: PROC
-	ld a,(iy + AREnvelope.counter)
-	sub (iy + AREnvelope.release)
+	ld a,(ix + AREnvelope.counter)
+	sub (ix + AREnvelope.release)
 	jr c,Complete
-	ld (iy + AREnvelope.counter),a
+	ld (ix + AREnvelope.counter),a
 	rra
-	ld (iy + AREnvelope.super.value),a
-	bit 0,(iy + AREnvelope.sign)
+	ld (ix + AREnvelope.super.value),a
+	bit 0,(ix + AREnvelope.sign)
 	ret z
 	cpl
-	ld (iy + AREnvelope.super.value),a
+	ld (ix + AREnvelope.super.value),a
 	ret
 Complete:
-	ld (iy + AREnvelope.counter),0
-	ld (iy + AREnvelope.super.value),0
-	bit 0,(iy + AREnvelope.sign)
+	ld (ix + AREnvelope.counter),0
+	ld (ix + AREnvelope.super.value),0
+	bit 0,(ix + AREnvelope.sign)
 	ret z
-	ld (iy + AREnvelope.super.value),~0
+	ld (ix + AREnvelope.super.value),~0
 	ret
 	ENDP

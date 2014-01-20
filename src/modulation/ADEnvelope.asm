@@ -44,59 +44,59 @@ ADEnvelope_SetKeyTrigger:
 	call SCCVoice_AddNoteOnListener
 	ret
 
-; iy = this
+; ix = this
 ADEnvelope_NoteOn:
-	ld (iy + ADEnvelope.phase),0
-	ld (iy + ADEnvelope.counter),0
+	ld (ix + ADEnvelope.phase),0
+	ld (ix + ADEnvelope.counter),0
 	ret
 
-; iy = this
+; ix = this
 ; a <- value (one’s complement)
 ADEnvelope_Update:
-	bit 7,(iy + ADEnvelope.phase)  ; to test a third phase: rlc (iy) ; jp po
+	bit 7,(ix + ADEnvelope.phase)  ; to test a third phase: rlc (ix) ; jp po
 	jr nz,ADEnvelope_UpdateDecay
 	jp ADEnvelope_UpdateAttack
 
-; iy = this
+; ix = this
 ; a <- value (one’s complement)
 ADEnvelope_UpdateAttack: PROC
-	ld a,(iy + ADEnvelope.counter)
-	add a,(iy + ADEnvelope.attack)
-	ld (iy + ADEnvelope.counter),a
+	ld a,(ix + ADEnvelope.counter)
+	add a,(ix + ADEnvelope.attack)
+	ld (ix + ADEnvelope.counter),a
 	jr c,Complete
 	rra
-	ld (iy + ADEnvelope.super.value),a
-	bit 0,(iy + ADEnvelope.sign)
+	ld (ix + ADEnvelope.super.value),a
+	bit 0,(ix + ADEnvelope.sign)
 	ret z
 	cpl
-	ld (iy + ADEnvelope.super.value),a
+	ld (ix + ADEnvelope.super.value),a
 	ret
 Complete:
-	ld (iy + ADEnvelope.phase),-1
+	ld (ix + ADEnvelope.phase),-1
 	jp ADEnvelope_UpdateDecay.ContinueFromAttack
 	ENDP
 
-; iy = this
+; ix = this
 ; a <- value (one’s complement)
 ADEnvelope_UpdateDecay: PROC
-	ld a,(iy + ADEnvelope.counter)
-	add a,(iy + ADEnvelope.decay)
+	ld a,(ix + ADEnvelope.counter)
+	add a,(ix + ADEnvelope.decay)
 	jr c,Complete
 ContinueFromAttack:
-	ld (iy + ADEnvelope.counter),a
+	ld (ix + ADEnvelope.counter),a
 	cpl
 	rra
-	ld (iy + ADEnvelope.super.value),a
-	bit 0,(iy + ADEnvelope.sign)
+	ld (ix + ADEnvelope.super.value),a
+	bit 0,(ix + ADEnvelope.sign)
 	ret z
 	cpl
-	ld (iy + ADEnvelope.super.value),a
+	ld (ix + ADEnvelope.super.value),a
 	ret
 Complete:
-	ld (iy + ADEnvelope.counter),255
-	ld (iy + ADEnvelope.super.value),0
-	bit 0,(iy + ADEnvelope.sign)
+	ld (ix + ADEnvelope.counter),255
+	ld (ix + ADEnvelope.super.value),0
+	bit 0,(ix + ADEnvelope.sign)
 	ret z
-	ld (iy + ADEnvelope.super.value),~0
+	ld (ix + ADEnvelope.super.value),~0
 	ret
 	ENDP

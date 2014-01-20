@@ -11,7 +11,7 @@ Listeners: MACRO ?maxSize
 
 Listener: MACRO
 	Update:
-		ld iy,0
+		ld ix,0
 	object: equ $ - 2
 	jump:
 		jp Listeners_DefaultListener
