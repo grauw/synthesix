@@ -131,9 +131,19 @@ SCCVoice_SetFrequency: PROC
 	ld e,(hl)
 	inc l
 	ld d,(hl)
+	bit 7,b
+	jr nz,Negative
 	inc l
 	ld a,e
 	sub (hl)
+	jp Continue
+Negative:
+	dec l
+	dec l
+	dec l
+	ld a,(hl)
+	sub e
+Continue:
 	srl a
 	ld l,b
 	call Math_Multiply127x127Signed
