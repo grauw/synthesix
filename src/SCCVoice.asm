@@ -136,6 +136,7 @@ SCCVoice_SetFrequency: PROC
 	inc l
 	ld a,e
 	sub (hl)
+	inc a  ; round up
 	jp Continue
 Negative:
 	dec l
