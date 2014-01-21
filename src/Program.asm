@@ -42,8 +42,9 @@ Program_SignedTriangleLFO:
 	ret
 
 Program_GetController1:
-	push ix
 	ld a,1
+Program_GetController:
+	push ix
 	ld ix,Channel_channels.0
 	call Channel_GetController
 	pop ix
