@@ -57,10 +57,9 @@ Negative:
 	and a
 	sbc hl,de
 	add hl,hl
-	ld e,0
-	ld a,(ix + PitchBend.downRange)
+	xor a
+	ld b,(ix + PitchBend.downRange)
 	call PitchBend_MultiplyRange
-	ld a,e
 	cpl
 	ld (ix + PitchBend.note),a
 	ld a,h
@@ -75,10 +74,10 @@ Positive:
 	ld d,a
 	ex de,hl
 	add hl,hl
-	ld e,0
-	ld a,(ix + PitchBend.upRange)
+	xor a
+	ld b,(ix + PitchBend.upRange)
 	call PitchBend_MultiplyRange
-	ld (ix + PitchBend.note),e
+	ld (ix + PitchBend.note),a
 	ld (ix + PitchBend.detune),h
 	bit 7,h
 	ret z
@@ -87,24 +86,24 @@ Positive:
 	ENDP
 
 PitchBend_MultiplyRange:
-	srl a
+	srl b
 	ret z
 	add hl,hl
-	rl e
-	srl a
+	adc a,a
+	srl b
 	ret z
 	add hl,hl
-	rl e
-	srl a
+	adc a,a
+	srl b
 	ret z
 	add hl,hl
-	rl e
-	srl a
+	adc a,a
+	srl b
 	ret z
 	add hl,hl
-	rl e
-	srl a
+	adc a,a
+	srl b
 	ret z
 	add hl,hl
-	rl e
+	adc a,a
 	ret
