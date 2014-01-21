@@ -20,8 +20,8 @@ Voice:
 
 	call Program_GetController1
 ;	call Program_CreatePWM
-	ld (ix + SCCVoice.wave),e
-	ld (ix + SCCVoice.wave + 1),d
+	ld (ix + SCCVoice.wave),l
+	ld (ix + SCCVoice.wave + 1),h
 	ret
 	ENDP
 
@@ -54,16 +54,15 @@ Program_CreatePWM:
 	call TriangleLFO_New
 	push ix
 	call MultiplyAdd_New
-	pop de
-	ld (ix + MultiplyAdd.multiplicand),e
-	ld (ix + MultiplyAdd.multiplicand + 1),d
-	ld de,Value_values.50
-	ld (ix + MultiplyAdd.multiplier),e
-	ld (ix + MultiplyAdd.multiplier + 1),d
-	ld de,Value_values.64
-	ld (ix + MultiplyAdd.addend),e
-	ld (ix + MultiplyAdd.addend + 1),d
-	ld e,ixl
-	ld d,ixh
-	pop ix
+	pop hl
+	ld (ix + MultiplyAdd.multiplicand),l
+	ld (ix + MultiplyAdd.multiplicand + 1),h
+	ld hl,Value_values.50
+	ld (ix + MultiplyAdd.multiplier),l
+	ld (ix + MultiplyAdd.multiplier + 1),h
+	ld hl,Value_values.64
+	ld (ix + MultiplyAdd.addend),l
+	ld (ix + MultiplyAdd.addend + 1),h
+	ex (sp),ix
+	pop hl
 	ret

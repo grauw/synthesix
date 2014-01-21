@@ -117,7 +117,7 @@ Keys_PressIncreaseModulation:
 	ld a,1
 	ld ix,Channel_channels.0
 	call Channel_GetController
-	ld a,(de)
+	ld a,(hl)
 	inc a
 	and 7FH
 	ld b,1
@@ -130,7 +130,7 @@ Keys_PressDecreaseModulation:
 	ld a,1
 	ld ix,Channel_channels.0
 	call Channel_GetController
-	ld a,(de)
+	ld a,(hl)
 	dec a
 	and 7FH
 	ld b,1

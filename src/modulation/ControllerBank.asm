@@ -13,12 +13,11 @@ ControllerBank_New:
 	call Class_New
 	ret
 
-; de = this
+; hl = this
 ; hl <- controller value address
 ControllerBank_GetController:
 	add a,a
-	ld l,a
-	ld h,0
+	ld e,a
+	ld d,0
 	add hl,de
-	ex de,hl
 	ret

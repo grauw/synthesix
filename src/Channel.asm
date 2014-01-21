@@ -97,7 +97,6 @@ Channel_ControlChange:
 	cp 121
 	jr nc,Channel_ChannelMode
 	call Channel_GetController
-	ex de,hl
 	ld (hl),c
 	ret
 
@@ -110,25 +109,21 @@ Channel_PolyPressure:
 Channel_ProgramChange:
 	ld a,127
 	call Channel_GetController
-	ex de,hl
 	ld (hl),b
 	ret
 
 Channel_ChannelPressure:
 	ld a,123
 	call Channel_GetController
-	ex de,hl
 	ld (hl),b
 	ret
 
 Channel_PitchBend:
 	ld a,124
 	call Channel_GetController
-	ex de,hl
 	ld (hl),b
 	ld a,125
 	call Channel_GetController
-	ex de,hl
 	ld (hl),c
 	ret
 
@@ -150,11 +145,11 @@ Channel_Update:
 
 ; ix = this
 ; a = controller number
-; de <- controller
+; hl <- controller
 ; Modifies: af, de, hl
 Channel_GetController:
-	ld e,(ix + Channel.controllers)
-	ld d,(ix + Channel.controllers + 1)
+	ld l,(ix + Channel.controllers)
+	ld h,(ix + Channel.controllers + 1)
 	jp ControllerBank_GetController
 
 ; ix = this
