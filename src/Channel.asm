@@ -138,7 +138,7 @@ Channel_ProgramChange:
 	ret
 
 Channel_ChannelPressure:
-	ld a,126
+	ld a,123
 	call Channel_GetController
 	ex de,hl
 	ld (hl),b
