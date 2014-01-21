@@ -21,10 +21,6 @@ SCCVoice: MACRO
 		dw Value_values.0
 	wave:
 		dw Value_values.0
-	noteFrequency:
-		dw 0
-	noteFrequency50cent:
-		db 0
 	frequency:
 		dw 0
 	lastWave:
