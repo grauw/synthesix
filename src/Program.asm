@@ -18,8 +18,8 @@ Voice:
 	ld (ix + SCCVoice.detune),e
 	ld (ix + SCCVoice.detune + 1),d
 
-;	call Program_GetController1
-	call Program_CreateSquareWaveLFO
+	call Program_GetController1
+;	call Program_CreatePWM
 	ld (ix + SCCVoice.wave),e
 	ld (ix + SCCVoice.wave + 1),d
 	ret
@@ -49,7 +49,7 @@ Program_GetController1:
 	pop ix
 	ret
 
-Program_CreateSquareWaveLFO:
+Program_CreatePWM:
 	push ix
 	call TriangleLFO_New
 	push ix
