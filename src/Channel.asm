@@ -131,12 +131,28 @@ Channel_PolyPressure:
 	ret
 
 Channel_ProgramChange:
+	ld a,127
+	call Channel_GetController
+	ex de,hl
+	ld (hl),b
 	ret
 
 Channel_ChannelPressure:
+	ld a,126
+	call Channel_GetController
+	ex de,hl
+	ld (hl),b
 	ret
 
 Channel_PitchBend:
+	ld a,124
+	call Channel_GetController
+	ex de,hl
+	ld (hl),b
+	ld a,125
+	call Channel_GetController
+	ex de,hl
+	ld (hl),c
 	ret
 
 ; ix = this
