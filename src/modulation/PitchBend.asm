@@ -62,9 +62,8 @@ Negative:
 	cpl
 	ld (ix + PitchBend.note),a
 	ld a,h
-	cpl
+	xor 0FFH
 	ld (ix + PitchBend.detune),a
-	and a
 	ret m
 	dec (ix + PitchBend.note)
 	ret
