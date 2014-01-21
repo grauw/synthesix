@@ -145,12 +145,12 @@ Keys_PressEscape:
 	ret
 
 Keys_noteMapping:
-	db 63, -1, 49, 51, -1, 54, 56, 58  ; row 0: 0 1 2 3 4 5 6 7
-	db -1, 61, -1, 66, 68, 65, 67, 75  ; row 1: 8 9 - = \ [ ] ;
-	db -1, -1, 72, 74, 76, -1, -1, 67  ; row 2: ' ` , . / DEAD A B
-	db 64, 63, 52, -1, 66, 68, 60, 70  ; row 3: C D E F G H I J
-	db -1, 73, 71, 69, 62, 64, 48, 53  ; row 4: K L M N O P Q R
-	db 61, 55, 59, 65, 50, 62, 57, 60  ; row 4: S T U V W X Y Z
+	db 75, -1, 61, 63, -1, 66, 68, 70  ; row 0: 0 1 2 3 4 5 6 7
+	db -1, 73, -1, 78, 56, 77, 79, 63  ; row 1: 8 9 - = \ [ ] ;
+	db -1, -1, 60, 62, 64, -1, -1, 55  ; row 2: ' ` , . / DEAD A B
+	db 52, 51, 64, -1, 54, 56, 72, 58  ; row 3: C D E F G H I J
+	db -1, 61, 59, 57, 74, 76, 60, 65  ; row 4: K L M N O P Q R
+	db 49, 67, 71, 53, 62, 50, 69, 48  ; row 4: S T U V W X Y Z
 	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: SHIFT CTRL GRAPH CAPS CODE F1 F2 F3
 	db -1, -1,-99, -1, -1, -1, -1, -1  ; row 4: F4 F5 ESC TAB STOP BS SELECT RET
 	db -1, -1, -1, -1, -5, -2, -3, -4  ; row 4: SPACE HOME INS DEL ← ↑ ↓ →
