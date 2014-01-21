@@ -64,8 +64,8 @@ Program_AddPitchBend:
 	ld (ix + AddPitch.augendDetune),l
 	ld (ix + AddPitch.augendDetune + 1),h
 	pop iy
-	ld l,(iy + SCCVoice.pitch)
-	ld h,(iy + SCCVoice.pitch + 1)
+	ld l,(iy + SCCVoice.note)
+	ld h,(iy + SCCVoice.note + 1)
 	ld (ix + AddPitch.addendNote),l
 	ld (ix + AddPitch.addendNote + 1),h
 	ld l,(iy + SCCVoice.detune)
@@ -76,8 +76,8 @@ Program_AddPitchBend:
 	ld e,ixl
 	ld d,ixh
 	pop ix
-	ld (ix + SCCVoice.pitch),e
-	ld (ix + SCCVoice.pitch + 1),d
+	ld (ix + SCCVoice.note),e
+	ld (ix + SCCVoice.note + 1),d
 	inc de
 	ld (ix + SCCVoice.detune),e
 	ld (ix + SCCVoice.detune + 1),d

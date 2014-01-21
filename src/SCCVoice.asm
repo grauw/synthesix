@@ -15,7 +15,7 @@ SCCVoice: MACRO
 		db 0
 	amplitude:
 		dw Value_values.0
-	pitch:
+	note:
 		dw Value_values.0
 	detune:
 		dw Value_values.0
@@ -49,8 +49,8 @@ SCCVoice_Constructor:
 	ld b,ixh
 	ld hl,SCCVoice.key
 	add hl,bc
-	ld (ix + SCCVoice.pitch),l
-	ld (ix + SCCVoice.pitch + 1),h
+	ld (ix + SCCVoice.note),l
+	ld (ix + SCCVoice.note + 1),h
 	ret
 
 ; ix = this
@@ -105,8 +105,8 @@ SCCVoice_Update:
 	cp (ix + SCCVoice.lastWave)
 	call nz,SCCVoice_SetWave
 
-	ld l,(ix + SCCVoice.pitch)
-	ld h,(ix + SCCVoice.pitch + 1)
+	ld l,(ix + SCCVoice.note)
+	ld h,(ix + SCCVoice.note + 1)
 	ld a,(hl)
 	ld l,(ix + SCCVoice.detune)
 	ld h,(ix + SCCVoice.detune + 1)
