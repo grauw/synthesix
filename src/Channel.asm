@@ -120,9 +120,8 @@ Channel_ControlChange:
 	cp 121
 	jr nc,Channel_ChannelMode
 	call Channel_GetController
-	ld iyl,e
-	ld iyh,d
-	ld (iy),c
+	ex de,hl
+	ld (hl),c
 	ret
 
 Channel_ChannelMode:
