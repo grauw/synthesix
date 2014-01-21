@@ -14,7 +14,7 @@ PitchBend: MACRO
 	ENDM
 
 	dw PitchBend.size
-PitchBend_class: Value 0
+PitchBend_class: PitchBend
 
 ; ix <- new class
 PitchBend_New:
