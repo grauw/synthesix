@@ -9,36 +9,34 @@ Program_LoadDefault: PROC
 	call Channel_AddVoicePool
 	ret
 Voice:
-	call Program_CreateAREnvelope
-	call AREnvelope_SetKeyTrigger
-	ld (ix + SCCVoice.amplitude),e
-	ld (ix + SCCVoice.amplitude + 1),d
+	call Program_AddAREnvelope
 
-	call Program_SignedTriangleLFO
-	ld (ix + SCCVoice.detune),e
-	ld (ix + SCCVoice.detune + 1),d
+	call Program_AddVibrato
 
-	call Program_GetController1
-;	call Program_CreatePWM
-	ld (ix + SCCVoice.wave),l
-	ld (ix + SCCVoice.wave + 1),h
+	call Program_AddPWControl
+;	call Program_AddPWM
 	ret
 	ENDP
 
-Program_CreateAREnvelope:
+Program_AddAREnvelope:
 	push ix
 	call AREnvelope_New
 	ld e,ixl
 	ld d,ixh
 	pop ix
+	call AREnvelope_SetKeyTrigger
+	ld (ix + SCCVoice.amplitude),e
+	ld (ix + SCCVoice.amplitude + 1),d
 	ret
 
-Program_SignedTriangleLFO:
+Program_AddVibrato:
 	push ix
 	call SignedTriangleLFO_New
 	ld e,ixl
 	ld d,ixh
 	pop ix
+	ld (ix + SCCVoice.detune),e
+	ld (ix + SCCVoice.detune + 1),d
 	ret
 
 Program_GetController1:
@@ -50,7 +48,13 @@ Program_GetController:
 	pop ix
 	ret
 
-Program_CreatePWM:
+Program_AddPWControl:
+	call Program_GetController1
+	ld (ix + SCCVoice.wave),l
+	ld (ix + SCCVoice.wave + 1),h
+	ret
+
+Program_AddPWM:
 	push ix
 	call TriangleLFO_New
 	push ix
@@ -66,4 +70,6 @@ Program_CreatePWM:
 	ld (ix + MultiplyAdd.addend + 1),h
 	ex (sp),ix
 	pop hl
+	ld (ix + SCCVoice.wave),l
+	ld (ix + SCCVoice.wave + 1),h
 	ret
