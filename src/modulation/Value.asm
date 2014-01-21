@@ -1,5 +1,5 @@
 ;
-; An fixed value
+; A fixed value
 ;
 Value: MACRO ?value
 	value:
