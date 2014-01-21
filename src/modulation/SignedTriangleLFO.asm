@@ -52,9 +52,9 @@ SignedTriangleLFO_Update: PROC
 	add a,(ix + SignedTriangleLFO.speed)
 	ld (ix + SignedTriangleLFO.counter),a
 	call c,FlipSign
+	ld (ix + SignedTriangleLFO.super.value),a
 	bit 7,(ix + SignedTriangleLFO.sign)
 	jp nz,Negative
-	ld (ix + SignedTriangleLFO.super.value),a
 	and a
 	ret p
 	neg
@@ -62,7 +62,6 @@ SignedTriangleLFO_Update: PROC
 	ld (ix + SignedTriangleLFO.super.value),a
 	ret
 Negative:
-	ld (ix + SignedTriangleLFO.super.value),a
 	and a
 	ret m
 	cpl
