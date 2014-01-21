@@ -9,7 +9,7 @@ SCCVoice: MACRO
 		db SCC_FREQUENCY_1
 	levelRegister:
 		db SCC_LEVEL_1
-	note:
+	key:
 		db 0
 	velocity:
 		db 0
@@ -47,7 +47,7 @@ SCCVoice_Constructor:
 
 	ld c,ixl
 	ld b,ixh
-	ld hl,SCCVoice.note
+	ld hl,SCCVoice.key
 	add hl,bc
 	ld (ix + SCCVoice.pitch),l
 	ld (ix + SCCVoice.pitch + 1),h
@@ -77,7 +77,7 @@ SCCVoice_AddNoteOffListener:
 ; b = note number (0-127)
 ; c = velocity (0-127)
 SCCVoice_NoteOn:
-	ld (ix + SCCVoice.note),b
+	ld (ix + SCCVoice.key),b
 	ld (ix + SCCVoice.velocity),c
 
 	ld bc,SCCVoice.noteOnListeners.Update
