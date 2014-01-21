@@ -10,9 +10,9 @@ PitchBend: MACRO
 		dw 0
 	pitchFine:
 		dw 0
-	upRange:    ;bend range in powers of 2 (1, 2, 3, 4 = 1, 2, 4, 8 notes)
+	upRange:    ;bend range (rounded down to powers of 2)
 		db 2
-	downRange:  ;bend range in powers of 2 (1, 2, 3, 4 = 1, 2, 4, 8 notes)
+	downRange:  ;bend range (rounded down to powers of 2)
 		db 2
 	size:
 	ENDM
@@ -80,7 +80,7 @@ Positive:
 	ENDP
 
 PitchBend_MultiplyRange:
-	dec a
+	srl a
 	ret z
 	add hl,hl
 	rl e
