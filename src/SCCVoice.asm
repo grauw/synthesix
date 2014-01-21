@@ -21,7 +21,7 @@ SCCVoice: MACRO
 		dw Value_values.0
 	wave:
 		dw Value_values.0
-	frequency:
+	lastFrequency:
 		dw 0
 	lastWave:
 		db -1
@@ -146,15 +146,15 @@ Continue:
 	call Math_Multiply127x127Signed
 	cpl
 	call Math_AddSigned
-	ld a,(ix + SCCVoice.frequency)
+	ld a,(ix + SCCVoice.lastFrequency)
 	cp e
 	jr nz,FrequencyChanged
-	ld a,(ix + SCCVoice.frequency + 1)
+	ld a,(ix + SCCVoice.lastFrequency + 1)
 	cp d
 	ret z
 FrequencyChanged:
-	ld (ix + SCCVoice.frequency),e
-	ld (ix + SCCVoice.frequency + 1),d
+	ld (ix + SCCVoice.lastFrequency),e
+	ld (ix + SCCVoice.lastFrequency + 1),d
 	ld h,SCC_BASE_MSB
 	ld l,(ix + SCCVoice.frequencyRegister)
 	ld (hl),e
