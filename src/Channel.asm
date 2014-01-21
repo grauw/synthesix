@@ -30,34 +30,11 @@ Channel_New:
 ; ix <- this
 Channel_Constructor: PROC
 	push ix
-	call Channel_CreateControllerArray
-	pop ix
+	call ControllerBank_New
+	ex (sp),ix
+	pop hl
 	ld (ix + Channel.controllers),l
 	ld (ix + Channel.controllers + 1),h
-	ret
-	ENDP
-
-; hl <- array address
-; Modifies: af, bc, de, hl, ix
-Channel_CreateControllerArray: PROC
-	ld bc,128 * 2
-	call Heap_Allocate
-	push de
-	ld b,128
-Loop:
-	push bc
-	push de
-	call Value_New
-	pop de
-	ld a,ixl
-	ld (de),a
-	inc de
-	ld a,ixh
-	ld (de),a
-	inc de
-	pop bc
-	djnz Loop
-	pop hl
 	ret
 	ENDP
 
@@ -173,19 +150,12 @@ Channel_Update:
 
 ; ix = this
 ; a = controller number
-; de <- controller (null if not available)
+; de <- controller
 ; Modifies: af, de, hl
 Channel_GetController:
 	ld e,(ix + Channel.controllers)
 	ld d,(ix + Channel.controllers + 1)
-	add a,a
-	ld l,a
-	ld h,0
-	add hl,de
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	ret
+	jp ControllerBank_GetController
 
 ; ix = this
 ; hl = voice pool
