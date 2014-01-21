@@ -5,10 +5,10 @@
 ; It contains one voice pool per sound chip / patch.
 ; All MIDI messages are forwarded to the voice pools.
 ;
-Channel: MACRO
+Channel: MACRO ?controllers
 	MAX_VOICE_POOLS: equ 7
 	controllers:
-		dw 0
+		dw ?controllers
 	voicePools:
 		REPT MAX_VOICE_POOLS
 		dw 0
@@ -17,7 +17,7 @@ Channel: MACRO
 	ENDM
 
 	dw Channel.size
-Channel_class: Channel
+Channel_class: Channel 0
 
 ; ix <- new class
 Channel_New:
@@ -29,12 +29,6 @@ Channel_New:
 ; ix = this
 ; ix <- this
 Channel_Constructor: PROC
-	push ix
-	call ControllerBank_New
-	ex (sp),ix
-	pop hl
-	ld (ix + Channel.controllers),l
-	ld (ix + Channel.controllers + 1),h
 	ret
 	ENDP
 
@@ -186,11 +180,15 @@ Channels_Update:
 	SECTION RAM
 
 	ALIGN 100H
-Channel_channels: REPT 16
-	Channel
+Channel_channels: REPT 16, ?channel
+	Channel Channel_controllerBanks + ?channel * ControllerBank.size
 	IF ($ & 0FH) != 0
 		ERROR "Channel size must be exactly 16."
 	ENDIF
+	ENDM
+
+Channel_controllerBanks: REPT 16
+	ControllerBank
 	ENDM
 
 	ENDS
