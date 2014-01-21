@@ -41,11 +41,35 @@ PitchBend_Update: PROC
 	ld a,(hl)
 	add a,a
 	add a,a
+	ld e,a
 	ld l,(ix + PitchBend.pitchCoarse)
 	ld h,(ix + PitchBend.pitchCoarse + 1)
 	ld a,(hl)
-	rla
-	sub 80H
-	ld (ix + PitchBend.detune),a
+	adc a,a
+	add a,80H
+	ld d,a
+	ex de,hl
+	add hl,hl
+	jr nc,Positive
+Negative:
+	ld e,-1
+	rl e
+	ld (ix + PitchBend.note),e
+	ld (ix + PitchBend.detune),h
+	bit 7,h
+	ret nz
+	dec (ix + PitchBend.note)
+	ret
+Positive:
+	ld e,0
+	rl e
+	ld (ix + PitchBend.note),e
+	ld (ix + PitchBend.detune),h
+	bit 7,h
+	ret z
+	inc (ix + PitchBend.note)
 	ret
 	ENDP
+
+PitchBend_Multiply:
+	ret
