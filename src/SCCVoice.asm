@@ -10,9 +10,9 @@ SCCVoice: MACRO
 	levelRegister:
 		db SCC_LEVEL_1
 	key:
-		db 0
+		Value 0
 	velocity:
-		db 0
+		Value 0
 	amplitude:
 		dw Value_values.0
 	note:
