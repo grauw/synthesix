@@ -10,6 +10,10 @@ PitchBend: MACRO
 		dw 0
 	pitchFine:
 		dw 0
+	upRange:    ;bend range in powers of 2 (1, 2, 3, 4 = 1, 2, 4, 8 notes)
+		db 2
+	downRange:  ;bend range in powers of 2 (1, 2, 3, 4 = 1, 2, 4, 8 notes)
+		db 2
 	size:
 	ENDM
 
@@ -54,6 +58,8 @@ PitchBend_Update: PROC
 Negative:
 	ld e,-1
 	rl e
+	ld a,(ix + PitchBend.downRange)
+	call PitchBend_MultiplyRange
 	ld (ix + PitchBend.note),e
 	ld (ix + PitchBend.detune),h
 	bit 7,h
@@ -63,6 +69,8 @@ Negative:
 Positive:
 	ld e,0
 	rl e
+	ld a,(ix + PitchBend.upRange)
+	call PitchBend_MultiplyRange
 	ld (ix + PitchBend.note),e
 	ld (ix + PitchBend.detune),h
 	bit 7,h
@@ -71,5 +79,9 @@ Positive:
 	ret
 	ENDP
 
-PitchBend_Multiply:
-	ret
+PitchBend_MultiplyRange:
+	dec a
+	ret z
+	add hl,hl
+	rl e
+	jp PitchBend_MultiplyRange
