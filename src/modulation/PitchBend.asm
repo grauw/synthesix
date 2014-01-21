@@ -84,4 +84,20 @@ PitchBend_MultiplyRange:
 	ret z
 	add hl,hl
 	rl e
-	jp PitchBend_MultiplyRange
+	srl a
+	ret z
+	add hl,hl
+	rl e
+	srl a
+	ret z
+	add hl,hl
+	rl e
+	srl a
+	ret z
+	add hl,hl
+	rl e
+	srl a
+	ret z
+	add hl,hl
+	rl e
+	ret
