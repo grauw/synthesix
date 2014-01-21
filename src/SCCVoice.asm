@@ -7,8 +7,8 @@ SCCVoice: MACRO
 		db SCC_WAVE_1
 	frequencyRegister:
 		db SCC_FREQUENCY_1
-	levelRegister:
-		db SCC_LEVEL_1
+	amplitudeRegister:
+		db SCC_AMPLITUDE_1
 	key:
 		Value 0
 	velocity:
@@ -38,12 +38,12 @@ SCCVoice_class: SCCVoice
 ; ix = this
 ; b = wave register
 ; c = frequency register
-; d = level register
+; d = amplitude register
 ; ix <- this
 SCCVoice_Constructor:
 	ld (ix + SCCVoice.waveRegister),b
 	ld (ix + SCCVoice.frequencyRegister),c
-	ld (ix + SCCVoice.levelRegister),d
+	ld (ix + SCCVoice.amplitudeRegister),d
 
 	ld c,ixl
 	ld b,ixh
@@ -96,7 +96,7 @@ SCCVoice_Update:
 	ld h,(ix + SCCVoice.amplitude + 1)
 	ld a,(hl)
 	and a
-;	jp z,SCCVoice_SetLevel
+;	jp z,SCCVoice_SetAmplitude
 	push af
 
 	ld l,(ix + SCCVoice.wave)
@@ -114,7 +114,7 @@ SCCVoice_Update:
 	call SCCVoice_SetPitch
 
 	pop af
-	call SCCVoice_SetLevel
+	call SCCVoice_SetAmplitude
 	ret
 
 ; ix = this
@@ -164,14 +164,14 @@ FrequencyChanged:
 	ENDP
 
 ; ix = this
-; a = level (one’s complement)
-SCCVoice_SetLevel:
+; a = amplitude (one’s complement)
+SCCVoice_SetAmplitude:
 	and 7FH
 	rrca
 	rrca
 	rrca
 	ld h,SCC_BASE_MSB
-	ld l,(ix + SCCVoice.levelRegister)
+	ld l,(ix + SCCVoice.amplitudeRegister)
 	ld (hl),a
 	ret
 

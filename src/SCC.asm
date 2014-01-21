@@ -10,11 +10,11 @@ SCC_FREQUENCY_2: equ 82H
 SCC_FREQUENCY_3: equ 84H
 SCC_FREQUENCY_4: equ 86H
 SCC_FREQUENCY_5: equ 88H
-SCC_LEVEL_1: equ 8AH
-SCC_LEVEL_2: equ 8BH
-SCC_LEVEL_3: equ 8CH
-SCC_LEVEL_4: equ 8DH
-SCC_LEVEL_5: equ 8EH
+SCC_AMPLITUDE_1: equ 8AH
+SCC_AMPLITUDE_2: equ 8BH
+SCC_AMPLITUDE_3: equ 8CH
+SCC_AMPLITUDE_4: equ 8DH
+SCC_AMPLITUDE_5: equ 8EH
 SCC_MIXER: equ 8FH
 SCC_DEFORMATION: equ 0E0H
 
@@ -25,11 +25,11 @@ SCC_Init:
 	ld (ROM_BANK_2_CHANGE),a
 
 	ld a,0
-	ld (SCC_BASE + SCC_LEVEL_1),a
-	ld (SCC_BASE + SCC_LEVEL_2),a
-	ld (SCC_BASE + SCC_LEVEL_3),a
-	ld (SCC_BASE + SCC_LEVEL_4),a
-	ld (SCC_BASE + SCC_LEVEL_5),a
+	ld (SCC_BASE + SCC_AMPLITUDE_1),a
+	ld (SCC_BASE + SCC_AMPLITUDE_2),a
+	ld (SCC_BASE + SCC_AMPLITUDE_3),a
+	ld (SCC_BASE + SCC_AMPLITUDE_4),a
+	ld (SCC_BASE + SCC_AMPLITUDE_5),a
 	ld a,00011111B
 	ld (SCC_BASE + SCC_MIXER),a
 	ld (SCC_mixerCopy),a
@@ -39,7 +39,7 @@ SCC_Init:
 	ld (SCC_voices + 0),ix
 	ld b,SCC_WAVE_1
 	ld c,SCC_FREQUENCY_1
-	ld d,SCC_LEVEL_1
+	ld d,SCC_AMPLITUDE_1
 	ld e,00000001B
 	call SCCVoice_Constructor
 
@@ -48,7 +48,7 @@ SCC_Init:
 	ld (SCC_voices + 2),ix
 	ld b,SCC_WAVE_2
 	ld c,SCC_FREQUENCY_2
-	ld d,SCC_LEVEL_2
+	ld d,SCC_AMPLITUDE_2
 	ld e,00000010B
 	call SCCVoice_Constructor
 
@@ -57,7 +57,7 @@ SCC_Init:
 	ld (SCC_voices + 4),ix
 	ld b,SCC_WAVE_3
 	ld c,SCC_FREQUENCY_3
-	ld d,SCC_LEVEL_3
+	ld d,SCC_AMPLITUDE_3
 	ld e,00000100B
 	call SCCVoice_Constructor
 
@@ -66,7 +66,7 @@ SCC_Init:
 	ld (SCC_voices + 6),ix
 	ld b,SCC_WAVE_4_5
 	ld c,SCC_FREQUENCY_4
-	ld d,SCC_LEVEL_4
+	ld d,SCC_AMPLITUDE_4
 	ld e,00001000B
 	call SCCVoice_Constructor
 	ret

@@ -53,8 +53,8 @@ PSGVoice_NoteOn:
 	ld a,(hl)
 	out (PSG_WRITE),a
 
-	; volume
-	ld a,(ix + PSGVoice_level)
+	; amplitude
+	ld a,(ix + PSGVoice_amplitude)
 	out (PSG_REGISTER_SELECT),a
 	ld h,PSG_volumeTable / 100H
 	ld l,c
@@ -64,7 +64,7 @@ PSGVoice_NoteOn:
 
 ; ix = this
 PSGVoice_NoteOff:
-	ld a,(ix + PSGVoice_level)
+	ld a,(ix + PSGVoice_amplitude)
 	out (PSG_REGISTER_SELECT),a
 	xor a
 	out (PSG_WRITE),a
@@ -79,7 +79,7 @@ PSGVoice_frequencyLSB: equ $ - PSGVoice
 	db PSG_TONE_GENERATOR_CONTROL + 0
 PSGVoice_frequencyMSB: equ $ - PSGVoice
 	db PSG_TONE_GENERATOR_CONTROL + 1
-PSGVoice_level: equ $ - PSGVoice
+PSGVoice_amplitude: equ $ - PSGVoice
 	db PSG_AMPLITUDE_CONTROL + 0
 
 PSG_voice1: equ PSGVoice
@@ -98,7 +98,7 @@ PSG_initValues:
 	db 0, 0, 0, 0, 0, 0  ; tone frequency (x3)
 	db 0                 ; noise frequency
 	db 10111000B         ; mixer control 1, 0, noise (x3), tone (x3)
-	db 0, 0, 0           ; level (x3)
+	db 0, 0, 0           ; amplitude (x3)
 	db 0BH, 00H          ; envelope frequency
 	db 0B8H              ; envelope shape
 
