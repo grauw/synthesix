@@ -111,7 +111,7 @@ SCCVoice_Update:
 	ld l,(ix + SCCVoice.detune)
 	ld h,(ix + SCCVoice.detune + 1)
 	ld b,(hl)
-	call SCCVoice_SetFrequency
+	call SCCVoice_SetPitch
 
 	pop af
 	call SCCVoice_SetLevel
@@ -120,7 +120,7 @@ SCCVoice_Update:
 ; ix = this
 ; a = note
 ; b = detune (one’s complement)
-SCCVoice_SetFrequency: PROC
+SCCVoice_SetPitch: PROC
 	ld h,PSG_frequencyTable / 100H
 	add a,a
 	ld l,a
