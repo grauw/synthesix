@@ -48,11 +48,10 @@ PitchBend_Update: PROC
 	ld e,a
 	ld l,(ix + PitchBend.pitchCoarse)
 	ld h,(ix + PitchBend.pitchCoarse + 1)
-	ld a,(hl)
-	adc a,a
+	ld d,(hl)
+	rl d
 	jp m,Positive
 Negative:
-	ld d,a
 	ld hl,7FFFH
 	and a
 	sbc hl,de
@@ -68,8 +67,7 @@ Negative:
 	dec (ix + PitchBend.note)
 	ret
 Positive:
-	add a,80H
-	ld d,a
+	res 7,d
 	ex de,hl
 	add hl,hl
 	ld a,(ix + PitchBend.upRange)
