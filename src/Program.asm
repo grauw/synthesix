@@ -11,7 +11,7 @@ Program_LoadDefault: PROC
 Voice:
 	call Program_AddAREnvelope
 
-	call Program_AddVibrato
+	call Program_AddAftertouchVibrato
 	call Program_AddPitchBend
 
 	call Program_AddPWControl
@@ -30,9 +30,17 @@ Program_AddAREnvelope:
 	ld (ix + SCCVoice.amplitude + 1),d
 	ret
 
-Program_AddVibrato:
+Program_AddAftertouchVibrato:
 	push ix
 	call SignedTriangleLFO_New
+	push ix
+	call Multiply_New
+	pop de
+	ld (ix + Multiply.multiplicand),e
+	ld (ix + Multiply.multiplicand + 1),d
+	ld de,Channel_channels.0 + Channel.channelPressure
+	ld (ix + Multiply.multiplier),e
+	ld (ix + Multiply.multiplier + 1),d
 	ld e,ixl
 	ld d,ixh
 	pop ix
