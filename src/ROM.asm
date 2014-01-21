@@ -62,6 +62,7 @@ ROM_Bank3Default: equ ROM_MultiplyTableBank
 	INCLUDE "Listeners.asm"
 	INCLUDE "Clock.asm"
 	INCLUDE "modulation/Value.asm"
+	INCLUDE "modulation/Multiply.asm"
 	INCLUDE "modulation/MultiplyAdd.asm"
 	INCLUDE "modulation/AddPitch.asm"
 	INCLUDE "modulation/ControllerBank.asm"
