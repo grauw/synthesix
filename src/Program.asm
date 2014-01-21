@@ -46,21 +46,32 @@ Program_AddPitchBend:
 	ld hl,Channel_channels.0
 	ld bc,Channel.pitchBendFine
 	add hl,bc
-	ld (ix + PitchBend.depthFine),l
-	ld (ix + PitchBend.depthFine + 1),h
+	ld (ix + PitchBend.pitchFine),l
+	ld (ix + PitchBend.pitchFine + 1),h
 	ld bc,Channel.pitchBendCoarse - Channel.pitchBendFine
 	add hl,bc
-	ld (ix + PitchBend.depthCoarse),l
-	ld (ix + PitchBend.depthCoarse + 1),h
+	ld (ix + PitchBend.pitchCoarse),l
+	ld (ix + PitchBend.pitchCoarse + 1),h
+	push ix
+	call AddPitch_New
+	pop hl
+	ld bc,PitchBend.note
+	add hl,bc
+	ld (ix + AddPitch.augendNote),l
+	ld (ix + AddPitch.augendNote + 1),h
+	ld bc,PitchBend.detune - PitchBend.note
+	add hl,bc
+	ld (ix + AddPitch.augendDetune),l
+	ld (ix + AddPitch.augendDetune + 1),h
 	pop iy
 	ld l,(iy + SCCVoice.pitch)
 	ld h,(iy + SCCVoice.pitch + 1)
-	ld (ix + PitchBend.inputNote),l
-	ld (ix + PitchBend.inputNote + 1),h
+	ld (ix + AddPitch.addendNote),l
+	ld (ix + AddPitch.addendNote + 1),h
 	ld l,(iy + SCCVoice.detune)
 	ld h,(iy + SCCVoice.detune + 1)
-	ld (ix + PitchBend.inputDetune),l
-	ld (ix + PitchBend.inputDetune + 1),h
+	ld (ix + AddPitch.addendDetune),l
+	ld (ix + AddPitch.addendDetune + 1),h
 	push iy
 	ld e,ixl
 	ld d,ixh
