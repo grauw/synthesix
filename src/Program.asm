@@ -12,6 +12,7 @@ Voice:
 	call Program_AddAREnvelope
 
 	call Program_AddVibrato
+	call Program_AddPitchBend
 
 	call Program_AddPWControl
 ;	call Program_AddPWM
@@ -35,6 +36,37 @@ Program_AddVibrato:
 	ld e,ixl
 	ld d,ixh
 	pop ix
+	ld (ix + SCCVoice.detune),e
+	ld (ix + SCCVoice.detune + 1),d
+	ret
+
+Program_AddPitchBend:
+	push ix
+	call PitchBend_New
+	ld a,124
+	call Program_GetController
+	ld (ix + PitchBend.depthFine),l
+	ld (ix + PitchBend.depthFine + 1),h
+	ld a,125
+	call Program_GetController
+	ld (ix + PitchBend.depthCoarse),l
+	ld (ix + PitchBend.depthCoarse + 1),h
+	pop iy
+	ld l,(iy + SCCVoice.pitch)
+	ld h,(iy + SCCVoice.pitch + 1)
+	ld (ix + PitchBend.inputNote),l
+	ld (ix + PitchBend.inputNote + 1),h
+	ld l,(iy + SCCVoice.detune)
+	ld h,(iy + SCCVoice.detune + 1)
+	ld (ix + PitchBend.inputDetune),l
+	ld (ix + PitchBend.inputDetune + 1),h
+	push iy
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (ix + SCCVoice.pitch),e
+	ld (ix + SCCVoice.pitch + 1),d
+	inc de
 	ld (ix + SCCVoice.detune),e
 	ld (ix + SCCVoice.detune + 1),d
 	ret
