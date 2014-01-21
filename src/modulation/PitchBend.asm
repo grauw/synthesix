@@ -10,9 +10,9 @@ PitchBend: MACRO
 		dw 0
 	pitchFine:
 		dw 0
-	upRange:    ;bend range (rounded down to powers of 2)
+	upRange:    ;max range is 31 notes
 		db 2
-	downRange:  ;bend range (rounded down to powers of 2)
+	downRange:  ;max range is 31 notes
 		db 2
 	size:
 	ENDM
@@ -57,8 +57,7 @@ Negative:
 	and a
 	sbc hl,de
 	add hl,hl
-	xor a
-	ld b,(ix + PitchBend.downRange)
+	ld a,(ix + PitchBend.downRange)
 	call PitchBend_MultiplyRange
 	cpl
 	ld (ix + PitchBend.note),a
@@ -74,8 +73,7 @@ Positive:
 	ld d,a
 	ex de,hl
 	add hl,hl
-	xor a
-	ld b,(ix + PitchBend.upRange)
+	ld a,(ix + PitchBend.upRange)
 	call PitchBend_MultiplyRange
 	ld (ix + PitchBend.note),a
 	ld (ix + PitchBend.detune),h
@@ -85,25 +83,42 @@ Positive:
 	ret
 	ENDP
 
-PitchBend_MultiplyRange:
-	srl b
-	ret z
+; Pitch range multiplication
+; hl = multiplier
+; a = multiplicand (5 bits)
+; ahl <- product (24-bit)
+PitchBend_MultiplyRange: PROC
+	ld e,l
+	ld d,h
+	add a,a
+	add a,a
+	add a,a
+	add a,a
+	jr c,Continue1
+	ld hl,0
+Continue1:
 	add hl,hl
 	adc a,a
-	srl b
-	ret z
+	jr nc,Continue2
+	add hl,de
+	adc a,0
+Continue2:
 	add hl,hl
 	adc a,a
-	srl b
-	ret z
+	jr nc,Continue3
+	add hl,de
+	adc a,0
+Continue3:
 	add hl,hl
 	adc a,a
-	srl b
-	ret z
+	jr nc,Continue4
+	add hl,de
+	adc a,0
+Continue4:
 	add hl,hl
 	adc a,a
-	srl b
-	ret z
-	add hl,hl
-	adc a,a
+	ret nc
+	add hl,de
+	adc a,0
 	ret
+	ENDP
