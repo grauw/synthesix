@@ -43,12 +43,13 @@ Program_AddVibrato:
 Program_AddPitchBend:
 	push ix
 	call PitchBend_New
-	ld a,124
-	call Program_GetController
+	ld hl,Channel_channels.0
+	ld bc,Channel.pitchBendFine
+	add hl,bc
 	ld (ix + PitchBend.depthFine),l
 	ld (ix + PitchBend.depthFine + 1),h
-	ld a,125
-	call Program_GetController
+	ld bc,Channel.pitchBendCoarse - Channel.pitchBendFine
+	add hl,bc
 	ld (ix + PitchBend.depthCoarse),l
 	ld (ix + PitchBend.depthCoarse + 1),h
 	pop iy

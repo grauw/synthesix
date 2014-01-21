@@ -6,9 +6,19 @@
 ; All MIDI messages are forwarded to the voice pools.
 ;
 Channel: MACRO ?controllers
-	MAX_VOICE_POOLS: equ 7
+	MAX_VOICE_POOLS: equ 4
 	controllers:
 		dw ?controllers
+	program:
+		Value 0
+	channelPressure:
+		Value 0
+	pitchBendFine:
+		Value 0
+	pitchBendCoarse:
+		Value 40H
+	reserved:
+		ds 2
 	voicePools:
 		REPT MAX_VOICE_POOLS
 		dw 0
@@ -101,24 +111,16 @@ Channel_PolyPressure:
 	ret
 
 Channel_ProgramChange:
-	ld a,127
-	call Channel_GetController
-	ld (hl),b
+	ld (ix + Channel.program),b
 	ret
 
 Channel_ChannelPressure:
-	ld a,123
-	call Channel_GetController
-	ld (hl),b
+	ld (ix + Channel.channelPressure),b
 	ret
 
 Channel_PitchBend:
-	ld a,124
-	call Channel_GetController
-	ld (hl),b
-	ld a,125
-	call Channel_GetController
-	ld (hl),c
+	ld (ix + Channel.pitchBendFine),b
+	ld (ix + Channel.pitchBendCoarse),c
 	ret
 
 ; ix = this
