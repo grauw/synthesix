@@ -142,19 +142,23 @@ CallHL:
 ; ix = this
 ; hl = voice
 VoicePool_AddVoice:
-	REPT VoicePool.MAX_VOICES, ?voice
-	ld a,(ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.voice + 1)
-	and a
-	jr nz,Next
-	ld (ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.voice),l
-	ld (ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.voice + 1),h
+	ld a,(ix + VoicePool.polyphony)
+	cp VoicePool.MAX_VOICES
+	call nc,System_ThrowException
+	ld c,a
+	add a,c  ; * NoteVoicePair.size
+	add a,c
+	ld c,a
+	ld b,0
 	ld a,(ix + VoicePool.lastNote)
-	ld (ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.note),a
+	push ix
+	add ix,bc
+	ld (ix + VoicePool.voices + NoteVoicePair.note),a
+	ld (ix + VoicePool.voices + NoteVoicePair.voice),l
+	ld (ix + VoicePool.voices + NoteVoicePair.voice + 1),h
+	pop ix
 	dec a
 	or 80H
 	ld (ix + VoicePool.lastNote),a
 	inc (ix + VoicePool.polyphony)
 	ret
-Next:
-	ENDM
-	call System_ThrowException
