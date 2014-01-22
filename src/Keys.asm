@@ -1,21 +1,47 @@
-Keys_Init:
+;
+; Keyboard MIDI
+;
+; And other key handling.
+;
+Keys: MACRO
+	super: MidiIn Keys_buffer
+	lastScan:
+		ds 11,0
+	velocity:
+		db 7FH
+	escape:
+		db 0
+	ENDM
+
+; ix = this
+Keys_Constructor:
 	ld a,0
 	ld (CLIKSW),a  ; disable key click
+	ld e,ixl
+	ld d,ixh
+	ld hl,Keys.lastScan
+	add hl,de
+	ex de,hl
 	ld hl,NEWKEY
-	ld de,Keys_lastScan
 	ld bc,11
 	ldir
 	ret
 
+; ix = this
 Keys_Scan:
-	ld hl,Keys_lastScan
+	ld e,ixl
+	ld d,ixh
+	ld hl,Keys.lastScan
+	add hl,de
 	ld de,Keys_noteMapping
 	REPT 11, ?row
 	ld b,?row
 	call Keys_ProcessRow
+	inc iy
 	ENDM
 	ret
 
+; ix = this
 Keys_ProcessRow:
 	di
 	in a,(PPI_PORT_C)
@@ -38,8 +64,10 @@ Keys_ProcessRow_Loop:
 	push bc
 	push de
 	push hl
+	push ix
 	ld a,(de)
 	call Keys_ProcessKeyChange
+	pop ix
 	pop hl
 	pop de
 	pop bc
@@ -56,12 +84,14 @@ Keys_ProcessRow_NoChange:
 	inc d
 	ret
 
+; ix = this
 ; a = key / note identifier
 ; f = negative sign: press, positive sign: release
 Keys_ProcessKeyChange:
 	jp p,Keys_ProcessKeyRelease
 	jp Keys_ProcessKeyPress
 
+; ix = this
 ; a = key / note identifier
 Keys_ProcessKeyPress:
 	and a
@@ -78,20 +108,23 @@ Keys_ProcessKeyPress:
 	jp z,Keys_PressEscape
 	ret
 
+; ix = this
 ; a = key / note identifier
 Keys_ProcessKeyRelease:
 	and a
 	jp p,Keys_ReleaseNote
 	ret
 
+; ix = this
 Keys_PressNote:
 	ld b,a
-	ld a,(Keys_velocity)
+	ld a,(ix + Keys.velocity)
 	ld c,a
 	ld a,0
 	call MidiIn_NoteOn
 	ret
 
+; ix = this
 Keys_ReleaseNote:
 	ld b,a
 	ld c,40H
@@ -99,24 +132,29 @@ Keys_ReleaseNote:
 	call MidiIn_NoteOff
 	ret
 
+; ix = this
 Keys_PressIncreaseVelocity:
-	ld a,(Keys_velocity)
+	ld a,(ix + Keys.velocity)
 	add a,8
 	and 7FH
-	ld (Keys_velocity),a
+	ld (ix + Keys.velocity),a
 	ret
 
+; ix = this
 Keys_PressDecreaseVelocity:
-	ld a,(Keys_velocity)
+	ld a,(ix + Keys.velocity)
 	sub 8
 	and 7FH
-	ld (Keys_velocity),a
+	ld (ix + Keys.velocity),a
 	ret
 
+; ix = this
 Keys_PressIncreaseModulation:
 	ld a,1
+	push ix
 	ld ix,Channel_channels.0
 	call Channel_GetController
+	pop ix
 	ld a,(hl)
 	inc a
 	and 7FH
@@ -126,10 +164,13 @@ Keys_PressIncreaseModulation:
 	call MidiIn_ControlChange
 	ret
 
+; ix = this
 Keys_PressDecreaseModulation:
 	ld a,1
+	push ix
 	ld ix,Channel_channels.0
 	call Channel_GetController
+	pop ix
 	ld a,(hl)
 	dec a
 	and 7FH
@@ -139,9 +180,10 @@ Keys_PressDecreaseModulation:
 	call MidiIn_ControlChange
 	ret
 
+; ix = this
 Keys_PressEscape:
 	ld a,-1
-	ld (Keys_escape),a
+	ld (ix + Keys.escape),a
 	ret
 
 Keys_noteMapping:
@@ -162,13 +204,11 @@ Keys_noteMapping:
 ;
 	SECTION RAM
 
-Keys_lastScan:
-	ds 11,0
+Keys_instance:
+	Keys
 
-Keys_velocity:
-	db 7FH
-
-Keys_escape:
-	db 0
+	ALIGN 100H
+Keys_buffer:
+	ds 256, 0FEH
 
 	ENDS

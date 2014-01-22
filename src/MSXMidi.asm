@@ -20,6 +20,11 @@ S1990_TIMER_CLEAR: equ 0E6H
 S1990_TIMER_LSB: equ 0E6H
 S1990_TIMER_MSB: equ 0E7H
 
+MSXMidi: MACRO
+	super: MidiIn MSXMidi_buffer
+	ENDM
+
+; ix = this
 MSXMidi_Install:
 	call MSXMidi_Detect
 	ret c
@@ -29,6 +34,7 @@ MSXMidi_Install:
 	ei
 	ret
 
+; ix = this
 MSXMidi_Uninstall:
 	di
 	call MSXMidi_RestoreHook
@@ -38,8 +44,10 @@ MSXMidi_Uninstall:
 
 ;
 ; Set hook
+; ix = this
 ;
 MSXMidi_SetHook:
+	ld (MSXMidi_InterruptHandler.this),ix
 	ld a,IM2Table >> 8
 	ld i,a
 	im 2
@@ -47,6 +55,7 @@ MSXMidi_SetHook:
 
 ;
 ; Restore hook
+; ix = this
 ;
 MSXMidi_RestoreHook:
 	im 1
@@ -54,6 +63,7 @@ MSXMidi_RestoreHook:
 
 ;
 ; Configure MIDI Interface
+; ix = this
 ;
 MSXMidi_Configure:
 	call MSXMidi_ConfigureExternal
@@ -91,6 +101,7 @@ MSXMidi_Configure:
 	ei
 	ret
 
+; ix = this
 MSXMidi_ConfigureExternal:
 	call MSXMidi_DetectInternal
 	ret nz
@@ -100,6 +111,7 @@ MSXMidi_ConfigureExternal:
 
 ;
 ; Reset MIDI interface
+; ix = this
 ;
 MSXMidi_Reset:
 	ld a,00000001B  ; reset all except for transmission enable
@@ -108,6 +120,7 @@ MSXMidi_Reset:
 
 ;
 ; Check for overrun, and clear flag if needed.
+; ix = this
 ; f <- z: no overrun
 ;
 MSXMidi_CheckOverrun: PROC
@@ -132,8 +145,12 @@ MSXMidi_InterruptHandler: PROC
 	and 00000010B
 	jr z,NotMSXMidi
 	push hl
+	push ix
 	in a,(MSXMidi_UART_RECEIVE)
+	ld ix,0
+this: equ $ - 2
 	call MidiIn_WriteByte
+	pop ix
 	pop hl
 	pop af
 	ei
@@ -147,6 +164,7 @@ NotMSXMidi:
 ;
 ; Detect MIDI interface
 ;
+; ix = this
 ; f <- c: not found, nc: found, z: external, nz: internal
 ;
 MSXMidi_Detect: PROC
@@ -196,6 +214,7 @@ FoundID:
 	ENDP
 
 ;
+; ix = this
 ; f <- nz: built in MIDI found
 ;
 MSXMidi_DetectInternal: PROC
@@ -209,6 +228,7 @@ MSXMidi_DetectInternal: PROC
 ;
 ; Check slot for MIDI ID
 ;
+; ix = this
 ; a = slot address
 ; f <- z: MIDI ID found
 ;
@@ -246,6 +266,7 @@ NotFound:
 ;
 ; Wait 1ms between UART command register writes
 ; Note that this is unnecessarily long; only a 5 µs wait is required.
+; ix = this
 ;
 MSXMidi_Wait: PROC
 	push af
@@ -271,6 +292,13 @@ MSXMidi_idString:
 
 MSXMidi_commandSave:
 	db 0            ;8251 command save area
+
+MSXMidi_instance:
+	MSXMidi
+
+	ALIGN 100H
+MSXMidi_buffer:
+	ds 256, 0FEH
 
 	ALIGN 100H
 IM2Table:

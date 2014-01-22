@@ -3,7 +3,8 @@ Synthesix_Main:
 	call RAM_Init
 
 	call UI_Init
-	call Keys_Init
+	ld ix,Keys_instance
+	call Keys_Constructor
 	call Channels_Init
 	call PSG_Init
 	call SCC_Init
@@ -11,6 +12,7 @@ Synthesix_Main:
 
 	call Math_UnitTest
 
+	ld ix,MSXMidi_instance
 	call MSXMidi_Install
 	ld hl,Synthesix_Interrupt
 	call System_InstallTIMIHook
@@ -24,7 +26,8 @@ Synthesix_Main:
 
 Synthesix_MainLoop:
 	call UI_Update
-	ld a,(Keys_escape)
+	ld ix,Keys_instance
+	ld a,(ix + Keys.escape)
 	and a
 	jp z,Synthesix_MainLoop
 	ret
@@ -35,7 +38,10 @@ Synthesix_Interrupt:
 	call VDP_SetRegister
 
 	call MSXMidi_CheckOverrun
+	ld ix,Keys_instance
 	call Keys_Scan
+	call MidiIn_ProcessMessages
+	ld ix,MSXMidi_instance
 	call MidiIn_ProcessMessages
 	ld ix,Clock_60Hz
 	call Clock_Update

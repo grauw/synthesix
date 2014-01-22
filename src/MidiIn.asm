@@ -1,43 +1,56 @@
 ;
 ; MIDI in
 ;
+MidiIn: MACRO ?buffer  ; buffer must be aligned to 100H
+	bufferHead:
+		dw ?buffer
+	bufferTail:
+		dw ?buffer
+	runningStatus:
+		db -1
+	ENDM
 
+; ix = this
 ; z = a message can be read
-; Modifies: af, hl
+; Modifies: af
 MidiIn_HasMessage:
-	ld hl,(MidiIn_bufferHead)
-	ld a,(MidiIn_bufferTail)
-	cp l
+	ld a,(ix + MidiIn.bufferHead)
+	cp (ix + MidiIn.bufferTail)
 	ret
 
+; ix = this
 ; a = byte
 ; f <- z: buffer full
 ; Modifies: af, hl
 	SECTION RAM
 MidiIn_WriteByte:
-	ld hl,(MidiIn_bufferHead)
+	ld l,(ix + MidiIn.bufferHead)
+	ld h,(ix + MidiIn.bufferHead + 1)
 	ld (hl),a
 	inc l
-	ld (MidiIn_bufferHead),hl
-	ld a,(MidiIn_bufferTail)
+	ld (ix + MidiIn.bufferHead),l
+	ld a,(ix + MidiIn.bufferTail)
 	cp l
 	ret nz
 	call System_ThrowException
 	ENDS
 
+; ix = this
 ; a <- byte
 ; f <- z: buffer empty
 ; Modifies: af, hl
 MidiIn_ReadByte:
-	ld hl,(MidiIn_bufferTail)
-	ld a,(MidiIn_bufferHead)
+	ld l,(ix + MidiIn.bufferTail)
+	ld h,(ix + MidiIn.bufferTail + 1)
+	ld a,(ix + MidiIn.bufferHead)
 	cp l
 	ret z
 	ld a,(hl)
 	inc l
-	ld (MidiIn_bufferTail),hl
+	ld (ix + MidiIn.bufferTail),l
 	ret
 
+; ix = this
 ; a = channel
 ; b = note
 ; c = velocity
@@ -50,6 +63,7 @@ MidiIn_NoteOff:
 	call MidiIn_WriteByte
 	ret
 
+; ix = this
 ; a = channel
 ; b = note
 ; c = velocity
@@ -62,6 +76,7 @@ MidiIn_NoteOn:
 	call MidiIn_WriteByte
 	ret
 
+; ix = this
 ; a = channel
 ; b = note
 ; c = pressure
@@ -74,6 +89,7 @@ MidiIn_PolyPressure:
 	call MidiIn_WriteByte
 	ret
 
+; ix = this
 ; a = channel
 ; b = controller
 ; c = value
@@ -86,6 +102,7 @@ MidiIn_ControlChange:
 	call MidiIn_WriteByte
 	ret
 
+; ix = this
 ; a = channel
 ; b = program
 MidiIn_ProgramChange:
@@ -95,6 +112,7 @@ MidiIn_ProgramChange:
 	call MidiIn_WriteByte
 	ret
 
+; ix = this
 ; a = channel
 ; b = pressure
 MidiIn_ChannelPressure:
@@ -104,6 +122,7 @@ MidiIn_ChannelPressure:
 	call MidiIn_WriteByte
 	ret
 
+; ix = this
 ; a = channel
 ; b = coarse
 ; c = fine
@@ -114,11 +133,12 @@ MidiIn_PitchBend:
 	call MidiIn_WriteByte
 	ret
 
-;
+; ix = this
 ; Modifies: af, af', bc, hl
 MidiIn_ProcessMessages: PROC
-	ld hl,(MidiIn_bufferTail)
-	ld a,(MidiIn_bufferHead)
+	ld l,(ix + MidiIn.bufferTail)
+	ld h,(ix + MidiIn.bufferTail + 1)
+	ld a,(ix + MidiIn.bufferHead)
 	sub l
 	ret z  ; no messages
 	ex af,af'
@@ -127,7 +147,7 @@ MidiIn_ProcessMessages: PROC
 	add a,a
 	jp c,ProcessStatus_1
 ProcessStatus_0:
-	ld a,(MidiIn_runningStatus)
+	ld a,(ix + MidiIn.runningStatus)
 	cp -1
 	jp z,ProcessStatus_Skip
 	dec l
@@ -140,13 +160,10 @@ ProcessStatus_1:
 	jr c,ProcessStatus_1_SetRunning
 	cp 0F8H << 1
 	jr nc,ProcessStatus_1_Running
-	push af
-	ld a,-1
-	ld (MidiIn_runningStatus),a
-	pop af
+	ld (ix + MidiIn.runningStatus),-1
 	jp ProcessStatus_1_Running
 ProcessStatus_1_SetRunning:
-	ld (MidiIn_runningStatus),a
+	ld (ix + MidiIn.runningStatus),a
 ProcessStatus_1_Running:
 	add a,a
 	jp c,ProcessStatus_11
@@ -195,7 +212,7 @@ ProcessStatus_1111:
 	inc l  ; only increase if it is a data byte
 ProcessStatus_111100:
 ProcessStatus_Skip:
-	ld (MidiIn_bufferTail),hl
+	ld (ix + MidiIn.bufferTail),l
 	jp MidiIn_ProcessMessages
 
 call_channel: MACRO ?length, ?method
@@ -209,7 +226,7 @@ call_channel: MACRO ?length, ?method
 	ld c,(hl)
 	inc l
 	ENDIF
-	ld (MidiIn_bufferTail),hl
+	ld (ix + MidiIn.bufferTail),l
 	ld ixl,a
 	ld ixh,Channel_channels >> 8
 	IF ?length = 2
@@ -226,27 +243,10 @@ call_channel: MACRO ?length, ?method
 ; if value is out of bounds, skip it
 NotADataByte:
 	dec l
-	ld (MidiIn_bufferTail),hl
+	ld (ix + MidiIn.bufferTail),l
 	bit 7,b
 	jp z,MidiIn_ProcessMessages
 	dec l
-	ld (MidiIn_bufferTail),hl
+	ld (ix + MidiIn.bufferTail),l
 	jp MidiIn_ProcessMessages
 	ENDP
-
-;
-	SECTION RAM
-
-MidiIn_runningStatus:
-	db -1
-
-MidiIn_bufferHead:
-	dw MidiIn_buffer
-MidiIn_bufferTail:
-	dw MidiIn_buffer
-
-	ALIGN 100H
-MidiIn_buffer:
-	ds 256, 0FEH
-
-	ENDS
