@@ -49,7 +49,6 @@ VoicePool_NoteOn:
 	ld (ix + VoicePool.nextNote),a
 	ld a,b
 	ld (ix + VoicePool.notes + ?voice),a
-
 	ld e,(ix + VoicePool.voices + ?voice * 2)
 	ld d,(ix + VoicePool.voices + ?voice * 2 + 1)
 	ld ixl,e
@@ -84,38 +83,49 @@ Next:
 	ret
 
 ; ix = this
-VoicePool_Update:
-	REPT VoicePool.MAX_VOICES, ?voice
-	ld e,(ix + VoicePool.voices + ?voice * 2)
-	ld d,(ix + VoicePool.voices + ?voice * 2 + 1)
-	inc d
-	dec d
+VoicePool_Update: PROC
+	ld a,(ix + VoicePool.polyphony)
+	and a
 	ret z
+Loop:
+	ld e,(ix + VoicePool.voices)
+	ld d,(ix + VoicePool.voices + 1)
 	push ix
 	ld ixl,e
 	ld ixh,d
+	push af
 	call Voice_Update
+	pop af
 	pop ix
-	ENDM
+	inc ix  ; next voice
+	inc ix
+	dec a
+	jp nz,Loop
 	ret
+	ENDP
 
 ; ix = this
 ; hl = callback
 VoicePool_ForEach: PROC
-	REPT VoicePool.MAX_VOICES, ?voice
-	ld e,(ix + VoicePool.voices + ?voice * 2)
-	ld d,(ix + VoicePool.voices + ?voice * 2 + 1)
-	inc d
-	dec d
+	ld a,(ix + VoicePool.polyphony)
+	and a
 	ret z
+Loop:
+	ld e,(ix + VoicePool.voices)
+	ld d,(ix + VoicePool.voices + 1)
 	push ix
 	ld ixl,e
 	ld ixh,d
 	push hl
+	push af
 	call CallHL
+	pop af
 	pop hl
 	pop ix
-	ENDM
+	inc ix  ; next voice
+	inc ix
+	dec a
+	jp nz,Loop
 	ret
 CallHL:
 	jp hl
