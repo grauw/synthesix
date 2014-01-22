@@ -49,7 +49,7 @@ ROM_Bank3Default: equ ROM_MultiplyTableBank
 	INCLUDE "Heap.asm"
 	INCLUDE "Class.asm"
 	INCLUDE "MidiIn.asm"
-	INCLUDE "MSXMIDI.asm"
+	INCLUDE "MSXMidi.asm"
 	INCLUDE "KeyMidi.asm"
 	INCLUDE "Channel.asm"
 	INCLUDE "VoicePool.asm"
