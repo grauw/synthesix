@@ -8,7 +8,7 @@
 VoicePool: MACRO
 	MAX_VOICES: equ 5
 	polyphony:
-		db 4
+		db 0
 	notes:
 		db -1, -1, -1, -1, -1
 	nextNote:

@@ -21,9 +21,11 @@ SCCPatch_New:
 ; ix = this
 ; ix <- this
 SCCPatch_Constructor: PROC
-	push ix
-	call VoicePool_New
 	ld b,(ix + SCCPatch.polyphony)
+	push ix
+	push bc
+	call VoicePool_New
+	pop bc
 Loop:
 	push bc
 	push ix
