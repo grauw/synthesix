@@ -9,16 +9,22 @@ VoicePool: MACRO
 	MAX_VOICES: equ 5
 	polyphony:
 		db 0
-	notes:
-		db -1, -1, -1, -1, -1
 	nextNote:
 		db -1
 	lastNote:
 		db -1
 	voices:
 		REPT MAX_VOICES, ?voice
-		dw 0
+		NoteVoicePair
 		ENDM
+	size:
+	ENDM
+
+NoteVoicePair: MACRO
+	note:
+		db -1
+	voice:
+		dw 0
 	size:
 	ENDM
 
@@ -42,15 +48,15 @@ VoicePool_NoteOn:
 	cp (ix + VoicePool.lastNote)
 	ret z
 	REPT VoicePool.MAX_VOICES, ?voice
-	cp (ix + VoicePool.notes + ?voice)
+	cp (ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.note)
 	jr nz,Next
 	dec a
 	or 80H
 	ld (ix + VoicePool.nextNote),a
 	ld a,b
-	ld (ix + VoicePool.notes + ?voice),a
-	ld e,(ix + VoicePool.voices + ?voice * 2)
-	ld d,(ix + VoicePool.voices + ?voice * 2 + 1)
+	ld (ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.note),a
+	ld e,(ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.voice)
+	ld d,(ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.voice + 1)
 	ld ixl,e
 	ld ixh,d
 	jp Voice_NoteOn
@@ -65,15 +71,15 @@ Next:
 VoicePool_NoteOff:
 	ld a,b
 	REPT VoicePool.MAX_VOICES, ?voice
-	cp (ix + VoicePool.notes + ?voice)
+	cp (ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.note)
 	jr nz,Next
 	ld a,(ix + VoicePool.lastNote)
-	ld (ix + VoicePool.notes + ?voice),a
+	ld (ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.note),a
 	dec a
 	or 80H
 	ld (ix + VoicePool.lastNote),a
-	ld e,(ix + VoicePool.voices + ?voice * 2)
-	ld d,(ix + VoicePool.voices + ?voice * 2 + 1)
+	ld e,(ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.voice)
+	ld d,(ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.voice + 1)
 	ld ixl,e
 	ld ixh,d
 	jp Voice_NoteOff
@@ -88,8 +94,8 @@ VoicePool_Update: PROC
 	and a
 	ret z
 Loop:
-	ld e,(ix + VoicePool.voices)
-	ld d,(ix + VoicePool.voices + 1)
+	ld e,(ix + VoicePool.voices + NoteVoicePair.voice)
+	ld d,(ix + VoicePool.voices + NoteVoicePair.voice + 1)
 	push ix
 	ld ixl,e
 	ld ixh,d
@@ -98,6 +104,7 @@ Loop:
 	pop af
 	pop ix
 	inc ix  ; next voice
+	inc ix
 	inc ix
 	dec a
 	jp nz,Loop
@@ -111,8 +118,8 @@ VoicePool_ForEach: PROC
 	and a
 	ret z
 Loop:
-	ld e,(ix + VoicePool.voices)
-	ld d,(ix + VoicePool.voices + 1)
+	ld e,(ix + VoicePool.voices + NoteVoicePair.voice)
+	ld d,(ix + VoicePool.voices + NoteVoicePair.voice + 1)
 	push ix
 	ld ixl,e
 	ld ixh,d
@@ -123,6 +130,7 @@ Loop:
 	pop hl
 	pop ix
 	inc ix  ; next voice
+	inc ix
 	inc ix
 	dec a
 	jp nz,Loop
@@ -135,13 +143,13 @@ CallHL:
 ; hl = voice
 VoicePool_AddVoice:
 	REPT VoicePool.MAX_VOICES, ?voice
-	ld a,(ix + VoicePool.voices + ?voice * 2 + 1)
+	ld a,(ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.voice + 1)
 	and a
 	jr nz,Next
-	ld (ix + VoicePool.voices + ?voice * 2),l
-	ld (ix + VoicePool.voices + ?voice * 2 + 1),h
+	ld (ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.voice),l
+	ld (ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.voice + 1),h
 	ld a,(ix + VoicePool.lastNote)
-	ld (ix + VoicePool.notes + ?voice),a
+	ld (ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.note),a
 	dec a
 	or 80H
 	ld (ix + VoicePool.lastNote),a
