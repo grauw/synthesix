@@ -43,27 +43,29 @@ VoicePool_New:
 ; ix = this
 ; b = note number (0-127)
 ; c = velocity (0-127)
-VoicePool_NoteOn:
+VoicePool_NoteOn: PROC
 	ld a,(ix + VoicePool.nextNote)
 	cp (ix + VoicePool.lastNote)
 	ret z
-	REPT VoicePool.MAX_VOICES, ?voice
-	cp (ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.note)
-	jr nz,Next
+	push ix
+	ld de,NoteVoicePair.size
+Loop:
+	cp (ix + VoicePool.voices + NoteVoicePair.note)
+	jr z,Found
+	add ix,de  ; next voice
+	jp Loop
+Found:
+	ld (ix + VoicePool.voices + NoteVoicePair.note),b
+	ld e,(ix + VoicePool.voices + NoteVoicePair.voice)
+	ld d,(ix + VoicePool.voices + NoteVoicePair.voice + 1)
+	pop ix
 	dec a
 	or 80H
 	ld (ix + VoicePool.nextNote),a
-	ld a,b
-	ld (ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.note),a
-	ld e,(ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.voice)
-	ld d,(ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.voice + 1)
 	ld ixl,e
 	ld ixh,d
 	jp Voice_NoteOn
-Next:
-	ENDM
-	call System_ThrowException
-	ret
+	ENDP
 
 ; ix = this
 ; b = note number (0-127)
