@@ -3,8 +3,8 @@
 ;
 ; And other key handling.
 ;
-Keys: MACRO
-	super: MidiIn Keys_buffer
+KeyMidi: MACRO
+	super: MidiIn KeyMidi_buffer
 	lastScan:
 		ds 11,0
 	velocity:
@@ -14,12 +14,12 @@ Keys: MACRO
 	ENDM
 
 ; ix = this
-Keys_Constructor:
+KeyMidi_Constructor:
 	ld a,0
 	ld (CLIKSW),a  ; disable key click
 	ld e,ixl
 	ld d,ixh
-	ld hl,Keys.lastScan
+	ld hl,KeyMidi.lastScan
 	add hl,de
 	ex de,hl
 	ld hl,NEWKEY
@@ -28,21 +28,21 @@ Keys_Constructor:
 	ret
 
 ; ix = this
-Keys_Scan:
+KeyMidi_Scan:
 	ld e,ixl
 	ld d,ixh
-	ld hl,Keys.lastScan
+	ld hl,KeyMidi.lastScan
 	add hl,de
-	ld de,Keys_noteMapping
+	ld de,KeyMidi_noteMapping
 	REPT 11, ?row
 	ld b,?row
-	call Keys_ProcessRow
+	call KeyMidi_ProcessRow
 	inc iy
 	ENDM
 	ret
 
 ; ix = this
-Keys_ProcessRow:
+KeyMidi_ProcessRow:
 	di
 	in a,(PPI_PORT_C)
 	and 11110000B
@@ -54,29 +54,29 @@ Keys_ProcessRow:
 	ld (hl),a
 	inc hl
 	xor c
-	jr z,Keys_ProcessRow_NoChange
+	jr z,KeyMidi_ProcessRow_NoChange
 	ld b,8
-Keys_ProcessRow_Loop:
+KeyMidi_ProcessRow_Loop:
 	rrc c
 	rrca       ; preserves sign flag
-	jp nc,Keys_ProcessRow_Next
+	jp nc,KeyMidi_ProcessRow_Next
 	push af
 	push bc
 	push de
 	push hl
 	push ix
 	ld a,(de)
-	call Keys_ProcessKeyChange
+	call KeyMidi_ProcessKeyChange
 	pop ix
 	pop hl
 	pop de
 	pop bc
 	pop af
-Keys_ProcessRow_Next:
+KeyMidi_ProcessRow_Next:
 	inc de
-	djnz Keys_ProcessRow_Loop
+	djnz KeyMidi_ProcessRow_Loop
 	ret
-Keys_ProcessRow_NoChange:
+KeyMidi_ProcessRow_NoChange:
 	ld a,e
 	add a,8
 	ld e,a
@@ -87,45 +87,45 @@ Keys_ProcessRow_NoChange:
 ; ix = this
 ; a = key / note identifier
 ; f = negative sign: press, positive sign: release
-Keys_ProcessKeyChange:
-	jp p,Keys_ProcessKeyRelease
-	jp Keys_ProcessKeyPress
+KeyMidi_ProcessKeyChange:
+	jp p,KeyMidi_ProcessKeyRelease
+	jp KeyMidi_ProcessKeyPress
 
 ; ix = this
 ; a = key / note identifier
-Keys_ProcessKeyPress:
+KeyMidi_ProcessKeyPress:
 	and a
-	jp p,Keys_PressNote
+	jp p,KeyMidi_PressNote
 	cp -2
-	jp z,Keys_PressIncreaseVelocity
+	jp z,KeyMidi_PressIncreaseVelocity
 	cp -3
-	jp z,Keys_PressDecreaseVelocity
+	jp z,KeyMidi_PressDecreaseVelocity
 	cp -4
-	jp z,Keys_PressIncreaseModulation
+	jp z,KeyMidi_PressIncreaseModulation
 	cp -5
-	jp z,Keys_PressDecreaseModulation
+	jp z,KeyMidi_PressDecreaseModulation
 	cp -99
-	jp z,Keys_PressEscape
+	jp z,KeyMidi_PressEscape
 	ret
 
 ; ix = this
 ; a = key / note identifier
-Keys_ProcessKeyRelease:
+KeyMidi_ProcessKeyRelease:
 	and a
-	jp p,Keys_ReleaseNote
+	jp p,KeyMidi_ReleaseNote
 	ret
 
 ; ix = this
-Keys_PressNote:
+KeyMidi_PressNote:
 	ld b,a
-	ld a,(ix + Keys.velocity)
+	ld a,(ix + KeyMidi.velocity)
 	ld c,a
 	ld a,0
 	call MidiIn_NoteOn
 	ret
 
 ; ix = this
-Keys_ReleaseNote:
+KeyMidi_ReleaseNote:
 	ld b,a
 	ld c,40H
 	ld a,0
@@ -133,23 +133,23 @@ Keys_ReleaseNote:
 	ret
 
 ; ix = this
-Keys_PressIncreaseVelocity:
-	ld a,(ix + Keys.velocity)
+KeyMidi_PressIncreaseVelocity:
+	ld a,(ix + KeyMidi.velocity)
 	add a,8
 	and 7FH
-	ld (ix + Keys.velocity),a
+	ld (ix + KeyMidi.velocity),a
 	ret
 
 ; ix = this
-Keys_PressDecreaseVelocity:
-	ld a,(ix + Keys.velocity)
+KeyMidi_PressDecreaseVelocity:
+	ld a,(ix + KeyMidi.velocity)
 	sub 8
 	and 7FH
-	ld (ix + Keys.velocity),a
+	ld (ix + KeyMidi.velocity),a
 	ret
 
 ; ix = this
-Keys_PressIncreaseModulation:
+KeyMidi_PressIncreaseModulation:
 	ld a,1
 	push ix
 	ld ix,Channel_channels.0
@@ -165,7 +165,7 @@ Keys_PressIncreaseModulation:
 	ret
 
 ; ix = this
-Keys_PressDecreaseModulation:
+KeyMidi_PressDecreaseModulation:
 	ld a,1
 	push ix
 	ld ix,Channel_channels.0
@@ -181,12 +181,12 @@ Keys_PressDecreaseModulation:
 	ret
 
 ; ix = this
-Keys_PressEscape:
+KeyMidi_PressEscape:
 	ld a,-1
-	ld (ix + Keys.escape),a
+	ld (ix + KeyMidi.escape),a
 	ret
 
-Keys_noteMapping:
+KeyMidi_noteMapping:
 	db 75, -1, 61, 63, -1, 66, 68, 70  ; row 0: 0 1 2 3 4 5 6 7
 	db -1, 73, -1, 78, 56, 77, 79, 63  ; row 1: 8 9 - = \ [ ] ;
 	db -1, -1, 60, 62, 64, -1, -1, 55  ; row 2: ' ` , . / DEAD A B
@@ -204,11 +204,11 @@ Keys_noteMapping:
 ;
 	SECTION RAM
 
-Keys_instance:
-	Keys
+KeyMidi_instance:
+	KeyMidi
 
 	ALIGN 100H
-Keys_buffer:
+KeyMidi_buffer:
 	ds 256, 0FEH
 
 	ENDS

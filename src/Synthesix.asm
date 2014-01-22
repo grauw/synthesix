@@ -3,8 +3,8 @@ Synthesix_Main:
 	call RAM_Init
 
 	call UI_Init
-	ld ix,Keys_instance
-	call Keys_Constructor
+	ld ix,KeyMidi_instance
+	call KeyMidi_Constructor
 	call Channels_Init
 	call PSG_Init
 	call SCC_Init
@@ -26,8 +26,8 @@ Synthesix_Main:
 
 Synthesix_MainLoop:
 	call UI_Update
-	ld ix,Keys_instance
-	ld a,(ix + Keys.escape)
+	ld ix,KeyMidi_instance
+	ld a,(ix + KeyMidi.escape)
 	and a
 	jp z,Synthesix_MainLoop
 	ret
@@ -38,8 +38,8 @@ Synthesix_Interrupt:
 	call VDP_SetRegister
 
 	call MSXMidi_CheckOverrun
-	ld ix,Keys_instance
-	call Keys_Scan
+	ld ix,KeyMidi_instance
+	call KeyMidi_Scan
 	call MidiIn_ProcessMessages
 	ld ix,MSXMidi_instance
 	call MidiIn_ProcessMessages
