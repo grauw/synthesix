@@ -103,9 +103,8 @@ Loop:
 	call Voice_Update
 	pop af
 	pop ix
-	inc ix  ; next voice
-	inc ix
-	inc ix
+	ld de,NoteVoicePair.size  ; next voice
+	add ix,de
 	dec a
 	jp nz,Loop
 	ret
@@ -129,9 +128,8 @@ Loop:
 	pop af
 	pop hl
 	pop ix
-	inc ix  ; next voice
-	inc ix
-	inc ix
+	ld de,NoteVoicePair.size  ; next voice
+	add ix,de
 	dec a
 	jp nz,Loop
 	ret
