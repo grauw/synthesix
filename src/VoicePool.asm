@@ -48,17 +48,17 @@ VoicePool_NoteOn: PROC
 	cp (ix + VoicePool.lastNote)
 	ret z
 	push ix
+	pop iy
 	ld de,NoteVoicePair.size
 Loop:
-	cp (ix + VoicePool.voices + NoteVoicePair.note)
+	cp (iy + VoicePool.voices + NoteVoicePair.note)
 	jr z,Found
-	add ix,de  ; next voice
+	add iy,de  ; next voice
 	jp Loop
 Found:
-	ld (ix + VoicePool.voices + NoteVoicePair.note),b
-	ld e,(ix + VoicePool.voices + NoteVoicePair.voice)
-	ld d,(ix + VoicePool.voices + NoteVoicePair.voice + 1)
-	pop ix
+	ld (iy + VoicePool.voices + NoteVoicePair.note),b
+	ld e,(iy + VoicePool.voices + NoteVoicePair.voice)
+	ld d,(iy + VoicePool.voices + NoteVoicePair.voice + 1)
 	dec a
 	or 80H
 	ld (ix + VoicePool.nextNote),a
