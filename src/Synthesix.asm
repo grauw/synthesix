@@ -23,7 +23,7 @@ Synthesix_Main:
 	ret
 
 Synthesix_MainLoop:
-;	call UI_Update
+	call UI_Update
 	ld a,(Keys_escape)
 	and a
 	jp z,Synthesix_MainLoop
