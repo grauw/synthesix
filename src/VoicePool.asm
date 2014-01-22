@@ -7,6 +7,7 @@
 ;
 VoicePool: MACRO
 	MAX_VOICES: equ 5
+	MAX_QUEUEDNOTES: equ 5
 	polyphony:
 		db 0
 	nextNote:
@@ -16,6 +17,12 @@ VoicePool: MACRO
 	voices:
 		REPT MAX_VOICES, ?voice
 		NoteVoicePair
+		ENDM
+	queuedNoteCount:
+		db 0
+	queuedNotes:
+		REPT MAX_QUEUEDNOTES
+		QueuedNote
 		ENDM
 	size:
 	ENDM
@@ -28,6 +35,14 @@ NoteVoicePair: MACRO
 	size:
 	ENDM
 
+QueuedNote: MACRO
+	note:
+		db -1
+	velocity:
+		db 0
+	size:
+	ENDM
+
 	dw VoicePool.size
 VoicePool_class: VoicePool
 
@@ -37,16 +52,13 @@ VoicePool_New:
 	call Class_New
 	ret
 
-; TODO if no notes are available, pick the one most recently played
-;      (or, at least retrigger the missed one once another is released)
-;
 ; ix = this
 ; b = note number (0-127)
 ; c = velocity (0-127)
 VoicePool_NoteOn: PROC
 	ld a,(ix + VoicePool.nextNote)
 	cp (ix + VoicePool.lastNote)
-	ret z
+	jp z,VoicePool_QueueNote
 	push ix
 	pop iy
 	ld de,NoteVoicePair.size
@@ -70,10 +82,10 @@ Found:
 ; ix = this
 ; b = note number (0-127)
 ; c = velocity (0-127)
-VoicePool_NoteOff:
+VoicePool_NoteOff: PROC
 	ld a,(ix + VoicePool.polyphony)
 	and a
-	jr z,NotFound
+	jp z,VoicePool_UnqueueNote
 	push ix
 	pop iy
 	ld l,a
@@ -85,8 +97,10 @@ Loop:
 	add iy,de
 	dec l
 	jp nz,Loop
-	jp NotFound
+	jp VoicePool_UnqueueNote
 Found:
+	call VoicePool_PopQueuedNote
+	jr nc,Replace
 	ld a,(ix + VoicePool.lastNote)
 	ld (iy + VoicePool.voices + NoteVoicePair.note),a
 	dec a
@@ -97,9 +111,14 @@ Found:
 	ld ixl,e
 	ld ixh,d
 	jp Voice_NoteOff
-NotFound:
-	; note not found
-	ret
+Replace:
+	ld (iy + VoicePool.voices + NoteVoicePair.note),b
+	ld e,(iy + VoicePool.voices + NoteVoicePair.voice)
+	ld d,(iy + VoicePool.voices + NoteVoicePair.voice + 1)
+	ld ixl,e
+	ld ixh,d
+	jp Voice_NoteOn
+	ENDP
 
 ; ix = this
 VoicePool_Update: PROC
@@ -172,4 +191,67 @@ VoicePool_AddVoice:
 	or 80H
 	ld (ix + VoicePool.lastNote),a
 	inc (ix + VoicePool.polyphony)
+	ret
+
+; ix = this
+; b = note number (0-127)
+; c = velocity (0-127)
+VoicePool_QueueNote:
+	ld a,(ix + VoicePool.queuedNoteCount)
+	cp VoicePool.MAX_QUEUEDNOTES
+	ret nc
+	inc (ix + VoicePool.queuedNoteCount)
+	add a,a
+	ld e,a
+	ld d,0
+	add ix,de
+	ld (ix + VoicePool.queuedNotes + QueuedNote.note),b
+	ld (ix + VoicePool.queuedNotes + QueuedNote.velocity),c
+	ret
+
+; ix = this
+; b = note number (0-127)
+; c = velocity (0-127)
+VoicePool_UnqueueNote: PROC
+	ld a,(ix + VoicePool.queuedNoteCount)
+	and a
+	ret z
+	dec (ix + VoicePool.queuedNoteCount)
+	ld e,a
+	ld a,b
+Loop:
+	cp (ix + VoicePool.queuedNotes + QueuedNote.note)
+	jr z,Found
+	inc ix
+	inc ix
+	dec e
+	jp nz,Loop
+	ret
+Found:
+	dec e
+	ret z
+	ld a,(ix + VoicePool.queuedNotes + QueuedNote.note + QueuedNote.size)
+	ld (ix + VoicePool.queuedNotes + QueuedNote.note),a
+	ld a,(ix + VoicePool.queuedNotes + QueuedNote.velocity + QueuedNote.size)
+	ld (ix + VoicePool.queuedNotes + QueuedNote.velocity),a
+	inc ix
+	inc ix
+	jp Found
+	ENDP
+
+; ix = this
+; b <- note number (0-127)
+; c <- velocity (0-127)
+; f <- c: queue empty (bc not modified)
+VoicePool_PopQueuedNote:
+	ld a,(ix + VoicePool.queuedNoteCount)
+	sub 1
+	ret c
+	ld (ix + VoicePool.queuedNoteCount),a
+	add a,a
+	ld e,a
+	ld d,0
+	add ix,de
+	ld b,(ix + VoicePool.queuedNotes + QueuedNote.note)
+	ld c,(ix + VoicePool.queuedNotes + QueuedNote.velocity)
 	ret
