@@ -71,22 +71,33 @@ Found:
 ; b = note number (0-127)
 ; c = velocity (0-127)
 VoicePool_NoteOff:
+	ld a,(ix + VoicePool.polyphony)
+	and a
+	jr z,NotFound
+	push ix
+	pop iy
+	ld l,a
 	ld a,b
-	REPT VoicePool.MAX_VOICES, ?voice
-	cp (ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.note)
-	jr nz,Next
+	ld de,NoteVoicePair.size
+Loop:
+	cp (iy + VoicePool.voices + NoteVoicePair.note)
+	jr z,Found
+	add iy,de
+	dec l
+	jp nz,Loop
+	jp NotFound
+Found:
 	ld a,(ix + VoicePool.lastNote)
-	ld (ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.note),a
+	ld (iy + VoicePool.voices + NoteVoicePair.note),a
 	dec a
 	or 80H
 	ld (ix + VoicePool.lastNote),a
-	ld e,(ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.voice)
-	ld d,(ix + VoicePool.voices + ?voice * NoteVoicePair.size + NoteVoicePair.voice + 1)
+	ld e,(iy + VoicePool.voices + NoteVoicePair.voice)
+	ld d,(iy + VoicePool.voices + NoteVoicePair.voice + 1)
 	ld ixl,e
 	ld ixh,d
 	jp Voice_NoteOff
-Next:
-	ENDM
+NotFound:
 	; note not found
 	ret
 
