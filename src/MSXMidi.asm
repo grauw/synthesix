@@ -47,7 +47,11 @@ MSXMidi_Uninstall:
 ; ix = this
 ;
 MSXMidi_SetHook:
-	ld (MSXMidi_InterruptHandler.this),ix
+	ld e,ixl
+	ld d,ixh
+	ld hl,MSXMidi.super.WriteByte
+	add hl,de
+	ld (MSXMidi_InterruptHandler.writeByte),hl
 	ld a,IM2Table >> 8
 	ld i,a
 	im 2
@@ -145,12 +149,9 @@ MSXMidi_InterruptHandler: PROC
 	and 00000010B
 	jr z,NotMSXMidi
 	push hl
-	push ix
 	in a,(MSXMidi_UART_RECEIVE)
-	ld ix,0
-this: equ $ - 2
-	call MidiIn_WriteByte
-	pop ix
+	call System_ThrowException
+writeByte: equ $ - 2
 	pop hl
 	pop af
 	ei

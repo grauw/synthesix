@@ -8,6 +8,17 @@ MidiIn: MACRO ?buffer  ; buffer must be aligned to 100H
 		dw ?buffer
 	runningStatus:
 		db -1
+
+	WriteByte: PROC
+		ld hl,(bufferHead)
+		ld (hl),a
+		inc l
+		ld (bufferHead),hl
+		ld a,(bufferTail)
+		cp l
+		ret nz
+		call System_ThrowException
+		ENDP
 	ENDM
 
 ; ix = this
