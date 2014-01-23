@@ -22,6 +22,8 @@ S1990_TIMER_MSB: equ 0E7H
 
 MSXMidi: MACRO
 	super: MidiIn MSXMidi_buffer
+	found:
+		db 0
 	ENDM
 
 ; ix = this
@@ -29,6 +31,7 @@ MSXMidi_Install:
 	call MSXMidi_Detect
 	ret c
 	di
+	ld (ix + MSXMidi.found),-1
 	call MSXMidi_SetHook
 	call MSXMidi_Configure
 	ei
@@ -127,6 +130,9 @@ MSXMidi_Reset:
 ; f <- z: no overrun
 ;
 MSXMidi_CheckOverrun: PROC
+	ld a,(ix + MSXMidi.found)
+	and a
+	ret z
 	in a,(MSXMidi_UART_STATUS)
 	and 00010000B
 	ret z

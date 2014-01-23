@@ -39,6 +39,7 @@ Synthesix_Interrupt:
 	ld b,7
 	call VDP_SetRegister
 
+	ld ix,MSXMidi_instance
 	call MSXMidi_CheckOverrun
 	ld ix,KeyMidi_instance
 	call KeyMidi_Scan
