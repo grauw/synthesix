@@ -39,6 +39,9 @@ MSXMidi_Install:
 
 ; ix = this
 MSXMidi_Uninstall:
+	ld a,(ix + MSXMidi.found)
+	and a
+	ret z
 	di
 	call MSXMidi_RestoreHook
 	call MSXMidi_Reset
