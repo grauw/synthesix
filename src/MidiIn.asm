@@ -219,16 +219,12 @@ call_channel: MACRO ?length, ?method
 	ex af,af'
 	cp ?length
 	ret c  ; message incomplete
-	ex af,af'
 	ld b,(hl)
 	inc l
 	IF ?length = 3
 	ld c,(hl)
 	inc l
 	ENDIF
-	ld (ix + MidiIn.bufferTail),l
-	ld ixl,a
-	ld ixh,Channel_channels >> 8
 	IF ?length = 2
 	ld a,b
 	ELSE
@@ -236,7 +232,13 @@ call_channel: MACRO ?length, ?method
 	ENDIF
 	or b
 	jp m,NotADataByte
+	ex af,af'
+	push ix
+	ld (ix + MidiIn.bufferTail),l
+	ld ixl,a
+	ld ixh,Channel_channels >> 8
 	call ?method
+	pop ix
 	jp MidiIn_ProcessMessages  ; next message
 	ENDM
 
