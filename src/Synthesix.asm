@@ -13,6 +13,8 @@ Synthesix_Main:
 	call Math_UnitTest
 
 	call System_EnableInterruptHandler
+	ld ix,PhilipsMidi_instance
+	call PhilipsMidi_Install
 	ld ix,MSXMidi_instance
 	call MSXMidi_Install
 	ld hl,Synthesix_Interrupt
@@ -20,10 +22,12 @@ Synthesix_Main:
 
 	call Synthesix_MainLoop
 
-	call System_RestoreTIMIHook
-	call System_DisableInterruptHandler
 	ld ix,MSXMidi_instance
 	call MSXMidi_Uninstall
+	ld ix,PhilipsMidi_instance
+	call PhilipsMidi_Uninstall
+	call System_RestoreTIMIHook
+	call System_DisableInterruptHandler
 	call KILBUF
 	ret
 
@@ -44,6 +48,8 @@ Synthesix_Interrupt:
 	call MSXMidi_CheckOverrun
 	ld ix,KeyMidi_instance
 	call KeyMidi_Scan
+	call MidiIn_ProcessMessages
+	ld ix,PhilipsMidi_instance
 	call MidiIn_ProcessMessages
 	ld ix,MSXMidi_instance
 	call MidiIn_ProcessMessages
