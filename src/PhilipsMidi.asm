@@ -12,6 +12,8 @@ PhilipsMidi_RECEIVE: equ 05H
 
 PhilipsMidi: MACRO
 	super: MidiIn PhilipsMidi_buffer
+	found:
+		db 0
 	ENDM
 
 ; ix = this
@@ -19,6 +21,7 @@ PhilipsMidi_Install:
 	call PhilipsMidi_Detect
 	ret c
 	di
+	ld (ix + PhilipsMidi.found),-1
 	call PhilipsMidi_SetHook
 	call PhilipsMidi_Configure
 	ei
@@ -26,6 +29,9 @@ PhilipsMidi_Install:
 
 ; ix = this
 PhilipsMidi_Uninstall:
+	ld a,(ix + PhilipsMidi.found)
+	and a
+	ret z
 	di
 	call PhilipsMidi_RestoreHook
 	call PhilipsMidi_Reset
@@ -85,6 +91,9 @@ PhilipsMidi_Reset:
 ; f <- z: no overrun
 ;
 PhilipsMidi_CheckOverrun: PROC
+	ld a,(ix + PhilipsMidi.found)
+	and a
+	ret z
 	ret
 	ENDP
 
