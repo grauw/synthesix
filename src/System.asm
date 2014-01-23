@@ -167,12 +167,9 @@ System_InstallTIMIHook:
 	ld (System_TIMIHook.address),hl
 	ld hl,H.TIMI
 	ld de,System_OldTIMIHook
+	ld bc,5
 	di
-	ldi
-	ldi
-	ldi
-	ldi
-	ldi
+	ldir
 	ld a,0C3H  ; jp
 	ld (H.TIMI),a
 	ld hl,System_TIMIHook
@@ -183,16 +180,14 @@ System_InstallTIMIHook:
 System_RestoreTIMIHook:
 	ld hl,System_OldTIMIHook
 	ld de,H.TIMI
+	ld bc,5
 	di
-	ldi
-	ldi
-	ldi
-	ldi
-	ldi
+	ldir
 	ei
 	ret
 
 	SECTION RAM
+
 System_TIMIHook: PROC
 	push af
 	call System_OldTIMIHook
@@ -214,6 +209,7 @@ Return:
 	ENDP
 System_OldTIMIHook:
 	ds 5
+
 	ENDS
 
 
