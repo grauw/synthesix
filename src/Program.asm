@@ -21,7 +21,21 @@ Voice:
 
 Program_AddAREnvelope:
 	push ix
+	ld a,93
+	call Program_GetController
+	ld (hl),32
+	push hl
+	ld a,94
+	call Program_GetController
+	ld (hl),4
+	push hl
 	call AREnvelope_New
+	pop hl
+	pop de
+	ld (ix + AREnvelope.attack),e
+	ld (ix + AREnvelope.attack + 1),d
+	ld (ix + AREnvelope.release),l
+	ld (ix + AREnvelope.release + 1),h
 	ld e,ixl
 	ld d,ixh
 	pop ix
@@ -99,7 +113,7 @@ Program_GetController:
 	ret
 
 Program_AddPWControl:
-	ld a,94
+	ld a,7
 	call Program_GetController
 	ld (ix + SCCVoice.wave),l
 	ld (ix + SCCVoice.wave + 1),h
