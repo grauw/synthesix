@@ -4,9 +4,9 @@
 AREnvelope: MACRO
 	super: Value 0
 	attack:
-		db 32
+		dw Value_values.32
 	release:
-		db 8
+		dw Value_values.8
 	sign:
 		db 0
 	phase:
@@ -66,7 +66,9 @@ AREnvelope_Update:
 ; ix = this
 AREnvelope_UpdateAttack: PROC
 	ld a,(ix + AREnvelope.counter)
-	add a,(ix + AREnvelope.attack)
+	ld l,(ix + AREnvelope.attack)
+	ld h,(ix + AREnvelope.attack + 1)
+	add a,(hl)
 	jr c,Complete
 	ld (ix + AREnvelope.counter),a
 	rra
@@ -88,7 +90,9 @@ Complete:
 ; ix = this
 AREnvelope_UpdateRelease: PROC
 	ld a,(ix + AREnvelope.counter)
-	sub (ix + AREnvelope.release)
+	ld l,(ix + AREnvelope.release)
+	ld h,(ix + AREnvelope.release + 1)
+	sub (hl)
 	jr c,Complete
 	ld (ix + AREnvelope.counter),a
 	rra

@@ -4,9 +4,9 @@
 ADEnvelope: MACRO
 	super: Value 0
 	attack:
-		db 128
+		dw Value_values.127
 	decay:
-		db 4
+		dw Value_values.4
 	sign:
 		db 0
 	phase:
@@ -59,7 +59,9 @@ ADEnvelope_Update:
 ; ix = this
 ADEnvelope_UpdateAttack: PROC
 	ld a,(ix + ADEnvelope.counter)
-	add a,(ix + ADEnvelope.attack)
+	ld l,(ix + ADEnvelope.attack)
+	ld h,(ix + ADEnvelope.attack + 1)
+	add a,(hl)
 	ld (ix + ADEnvelope.counter),a
 	jr c,Complete
 	rra
@@ -77,7 +79,9 @@ Complete:
 ; ix = this
 ADEnvelope_UpdateDecay: PROC
 	ld a,(ix + ADEnvelope.counter)
-	add a,(ix + ADEnvelope.decay)
+	ld l,(ix + ADEnvelope.decay)
+	ld h,(ix + ADEnvelope.decay + 1)
+	add a,(hl)
 	jr c,Complete
 ContinueFromAttack:
 	ld (ix + ADEnvelope.counter),a
