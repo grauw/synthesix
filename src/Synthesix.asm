@@ -22,6 +22,7 @@ Synthesix_Main:
 
 	call System_RestoreTIMIHook
 	call System_DisableInterruptHandler
+	ld ix,MSXMidi_instance
 	call MSXMidi_Uninstall
 	call KILBUF
 	ret
