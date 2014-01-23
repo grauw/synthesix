@@ -4,7 +4,7 @@
 SignedTriangleLFO: MACRO
 	super: Value 0
 	speed:
-		db 64
+		db 48
 	counter:
 		db 0
 	sign:
