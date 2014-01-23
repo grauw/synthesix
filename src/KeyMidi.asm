@@ -150,7 +150,7 @@ KeyMidi_PressDecreaseVelocity:
 
 ; ix = this
 KeyMidi_PressIncreaseModulation:
-	ld a,1
+	ld a,94
 	push ix
 	ld ix,Channel_channels.0
 	call Channel_GetController
@@ -158,7 +158,7 @@ KeyMidi_PressIncreaseModulation:
 	ld a,(hl)
 	inc a
 	and 7FH
-	ld b,1
+	ld b,94
 	ld c,a
 	ld a,0
 	call MidiIn_ControlChange
@@ -166,7 +166,7 @@ KeyMidi_PressIncreaseModulation:
 
 ; ix = this
 KeyMidi_PressDecreaseModulation:
-	ld a,1
+	ld a,94
 	push ix
 	ld ix,Channel_channels.0
 	call Channel_GetController
@@ -174,7 +174,7 @@ KeyMidi_PressDecreaseModulation:
 	ld a,(hl)
 	dec a
 	and 7FH
-	ld b,1
+	ld b,94
 	ld c,a
 	ld a,0
 	call MidiIn_ControlChange
