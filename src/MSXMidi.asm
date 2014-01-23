@@ -52,9 +52,9 @@ MSXMidi_SetHook:
 	ld hl,MSXMidi.super.WriteByte
 	add hl,de
 	ld (MSXMidi_InterruptHandler.writeByte),hl
-	ld a,IM2Table >> 8
-	ld i,a
-	im 2
+	ld hl,MSXMidi_NewHook
+	ld de,MSXMidi_InterruptHandler.OldHook
+	call System_InstallInterruptHook
 	ret
 
 ;
@@ -62,7 +62,6 @@ MSXMidi_SetHook:
 ; ix = this
 ;
 MSXMidi_RestoreHook:
-	im 1
 	ret
 
 ;
@@ -142,7 +141,7 @@ MSXMidi_CheckOverrun: PROC
 ; Interrupt handler
 ;
 	SECTION RAM
-	ALIGN 101H  ; address MSB and LSB must be the same for IM 2
+
 MSXMidi_InterruptHandler: PROC
 	push af
 	in a,(MSXMidi_UART_STATUS)
@@ -158,9 +157,14 @@ writeByte: equ $ - 2
 	ret
 NotMSXMidi:
 	pop af
-	jp 38H
+OldHook:
+	ds 5
 	ENDP
+
 	ENDS
+
+MSXMidi_NewHook:
+	jp MSXMidi_InterruptHandler
 
 ;
 ; Detect MIDI interface
@@ -300,10 +304,5 @@ MSXMidi_instance:
 	ALIGN 100H
 MSXMidi_buffer:
 	ds 256, 0FEH
-
-	ALIGN 100H
-IM2Table:
-	; 257, in case data bus is 0FFH (which it is)
-	ds 257,MSXMidi_InterruptHandler & 0FFH
 
 	ENDS

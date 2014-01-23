@@ -186,6 +186,30 @@ System_RestoreTIMIHook:
 	ei
 	ret
 
+System_EnableInterruptHandler:
+	ld a,System_im2Table >> 8
+	ld i,a
+	im 2
+	ret
+
+System_DisableInterruptHandler:
+	im 1
+	ret
+
+; Note: interrupts must be disabled
+; hl = new hook (5 bytes)
+; de = old hook (5 bytes)
+System_InstallInterruptHook:
+	push hl
+	ld hl,System_InterruptHandler
+	ld bc,5
+	ldir
+	pop hl
+	ld de,System_InterruptHandler
+	ld bc,5
+	ldir
+	ret
+
 	SECTION RAM
 
 System_TIMIHook: PROC
@@ -210,6 +234,15 @@ Return:
 System_OldTIMIHook:
 	ds 5
 
+;
+; Interrupt handler
+;
+	ALIGN 101H  ; address MSB and LSB must be the same for IM 2
+System_InterruptHandler:
+	jp 38H
+	nop
+	nop
+
 	ENDS
 
 
@@ -223,5 +256,10 @@ System_crlf:
 
 System_suspendTIMIHook:
 	db 0
+
+	ALIGN 100H
+System_im2Table:
+	; 257, in case data bus is 0FFH (which it is)
+	ds 257,System_InterruptHandler & 0FFH
 
 	ENDS

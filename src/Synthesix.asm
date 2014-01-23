@@ -12,6 +12,7 @@ Synthesix_Main:
 
 	call Math_UnitTest
 
+	call System_EnableInterruptHandler
 	ld ix,MSXMidi_instance
 	call MSXMidi_Install
 	ld hl,Synthesix_Interrupt
@@ -20,6 +21,7 @@ Synthesix_Main:
 	call Synthesix_MainLoop
 
 	call System_RestoreTIMIHook
+	call System_DisableInterruptHandler
 	call MSXMidi_Uninstall
 	call KILBUF
 	ret
