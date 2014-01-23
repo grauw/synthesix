@@ -91,8 +91,6 @@ Program_AddPitchBend:
 	ld (ix + SCCVoice.detune + 1),d
 	ret
 
-Program_GetController1:
-	ld a,1
 Program_GetController:
 	push ix
 	ld ix,Channel_channels.0
@@ -101,7 +99,8 @@ Program_GetController:
 	ret
 
 Program_AddPWControl:
-	call Program_GetController1
+	ld a,94
+	call Program_GetController
 	ld (ix + SCCVoice.wave),l
 	ld (ix + SCCVoice.wave + 1),h
 	ret
