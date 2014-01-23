@@ -4,7 +4,7 @@
 AREnvelope: MACRO
 	super: Value 0
 	attack:
-		db 8
+		db 32
 	release:
 		db 8
 	sign:
