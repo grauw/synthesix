@@ -38,6 +38,12 @@ Program_AddAREnvelope:
 	ld (ix + AREnvelope.release + 1),h
 	ld e,ixl
 	ld d,ixh
+	pop hl
+	push hl
+	ld bc,SCCVoice.gate
+	add hl,bc
+	ld (ix + AREnvelope.gate),l
+	ld (ix + AREnvelope.gate + 1),h
 	pop ix
 	call AREnvelope_SetKeyTrigger
 	ld (ix + SCCVoice.amplitude),e

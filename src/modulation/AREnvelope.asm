@@ -7,10 +7,10 @@ AREnvelope: MACRO
 		dw Value_values.32
 	release:
 		dw Value_values.8
+	gate:
+		dw Value_values.0
 	sign:
 		db 0
-	phase:
-		db -1
 	counter:
 		db 0
 	size:
@@ -42,25 +42,19 @@ AREnvelope_Constructor:
 AREnvelope_SetKeyTrigger:
 	ld hl,AREnvelope_NoteOn
 	call SCCVoice_AddNoteOnListener
-	ld hl,AREnvelope_NoteOff
-	call SCCVoice_AddNoteOffListener
 	ret
 
 ; ix = this
 AREnvelope_NoteOn:
-	ld (ix + AREnvelope.phase),0
 	ld (ix + AREnvelope.counter),0
 	ret
 
 ; ix = this
-AREnvelope_NoteOff:
-	ld (ix + AREnvelope.phase),-1
-	ret
-
-; ix = this
 AREnvelope_Update:
-	bit 7,(ix + AREnvelope.phase)  ; to test a third phase: rlc (ix) ; jp po
-	jr nz,AREnvelope_UpdateRelease
+	ld l,(ix + AREnvelope.gate)
+	ld h,(ix + AREnvelope.gate + 1)
+	bit 6,(hl)
+	jr z,AREnvelope_UpdateRelease
 	jp AREnvelope_UpdateAttack
 
 ; ix = this
