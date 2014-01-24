@@ -5,6 +5,8 @@ TriangleLFO: MACRO
 	super: Value 0
 	speed:
 		db 2
+	trigger:
+		dw Value_values.0
 	counter:
 		db 0
 	size:
@@ -31,20 +33,17 @@ TriangleLFO_Constructor:
 	pop ix
 	ret
 
-; ix = voice
-; de = this
-TriangleLFO_SetKeyTrigger:
-	ld hl,TriangleLFO_NoteOn
-	call SCCVoice_AddNoteOnListener
-	ret
-
 ; ix = this
-TriangleLFO_NoteOn:
+TriangleLFO_Reset:
 	ld (ix + TriangleLFO.counter),0
 	ret
 
 ; ix = this
 TriangleLFO_Update: PROC
+	ld l,(ix + TriangleLFO.trigger)
+	ld h,(ix + TriangleLFO.trigger + 1)
+	bit 6,(hl)
+	call nz,TriangleLFO_Reset
 	ld a,(ix + TriangleLFO.counter)
 	add a,(ix + TriangleLFO.speed)
 	ld (ix + TriangleLFO.counter),a

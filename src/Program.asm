@@ -40,12 +40,15 @@ Program_AddAREnvelope:
 	ld d,ixh
 	pop hl
 	push hl
-	ld bc,SCCVoice.gate
+	ld bc,SCCVoice.trigger
+	add hl,bc
+	ld (ix + AREnvelope.trigger),l
+	ld (ix + AREnvelope.trigger + 1),h
+	ld bc,SCCVoice.gate - SCCVoice.trigger
 	add hl,bc
 	ld (ix + AREnvelope.gate),l
 	ld (ix + AREnvelope.gate + 1),h
 	pop ix
-	call AREnvelope_SetKeyTrigger
 	ld (ix + SCCVoice.amplitude),e
 	ld (ix + SCCVoice.amplitude + 1),d
 	ret

@@ -31,7 +31,6 @@ SCCVoice: MACRO
 		db -1
 	free:
 		db 0
-	noteOnListeners: Listeners 4
 	size:
 	ENDM
 
@@ -62,16 +61,6 @@ SCCVoice_Constructor:
 	ret
 
 ; ix = this
-; Remaining parameters are the same as Listeners_AddListener
-SCCVoice_AddNoteOnListener:
-	push ix
-	ld bc,SCCVoice.noteOnListeners
-	add ix,bc
-	call Listeners_AddListener
-	pop ix
-	ret
-
-; ix = this
 ; b = note number (0-127)
 ; c = velocity (0-127)
 SCCVoice_NoteOn:
@@ -79,10 +68,7 @@ SCCVoice_NoteOn:
 	ld (ix + SCCVoice.velocity),c
 	ld (ix + SCCVoice.trigger),7FH
 	ld (ix + SCCVoice.gate),7FH
-
-	ld bc,SCCVoice.noteOnListeners.Update
-	add ix,bc
-	jp ix
+	ret
 
 ; ix = this
 SCCVoice_NoteOff:

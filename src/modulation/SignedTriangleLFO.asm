@@ -5,6 +5,8 @@ SignedTriangleLFO: MACRO
 	super: Value 0
 	speed:
 		db 48
+	trigger:
+		dw Value_values.0
 	counter:
 		db 0
 	sign:
@@ -33,21 +35,18 @@ SignedTriangleLFO_Constructor:
 	pop ix
 	ret
 
-; ix = voice
-; de = this
-SignedTriangleLFO_SetKeyTrigger:
-	ld hl,SignedTriangleLFO_NoteOn
-	call SCCVoice_AddNoteOnListener
-	ret
-
 ; ix = this
-SignedTriangleLFO_NoteOn:
+SignedTriangleLFO_Reset:
 	ld (ix + SignedTriangleLFO.counter),0
 	ld (ix + SignedTriangleLFO.sign),10101010B
 	ret
 
 ; ix = this
 SignedTriangleLFO_Update: PROC
+	ld l,(ix + SignedTriangleLFO.trigger)
+	ld h,(ix + SignedTriangleLFO.trigger + 1)
+	bit 6,(hl)
+	call nz,SignedTriangleLFO_Reset
 	ld a,(ix + SignedTriangleLFO.counter)
 	add a,(ix + SignedTriangleLFO.speed)
 	ld (ix + SignedTriangleLFO.counter),a

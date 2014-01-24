@@ -9,6 +9,8 @@ AREnvelope: MACRO
 		dw Value_values.8
 	gate:
 		dw Value_values.0
+	trigger:
+		dw Value_values.0
 	sign:
 		db 0
 	counter:
@@ -37,20 +39,17 @@ AREnvelope_Constructor:
 	pop ix
 	ret
 
-; ix = voice
-; de = this
-AREnvelope_SetKeyTrigger:
-	ld hl,AREnvelope_NoteOn
-	call SCCVoice_AddNoteOnListener
-	ret
-
 ; ix = this
-AREnvelope_NoteOn:
+AREnvelope_Reset:
 	ld (ix + AREnvelope.counter),0
 	ret
 
 ; ix = this
 AREnvelope_Update:
+	ld l,(ix + AREnvelope.trigger)
+	ld h,(ix + AREnvelope.trigger + 1)
+	bit 6,(hl)
+	call nz,AREnvelope_Reset
 	ld l,(ix + AREnvelope.gate)
 	ld h,(ix + AREnvelope.gate + 1)
 	bit 6,(hl)

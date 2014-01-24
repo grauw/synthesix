@@ -7,6 +7,8 @@ ADEnvelope: MACRO
 		dw Value_values.127
 	decay:
 		dw Value_values.4
+	trigger:
+		dw Value_values.0
 	sign:
 		db 0
 	phase:
@@ -37,21 +39,18 @@ ADEnvelope_Constructor:
 	pop ix
 	ret
 
-; ix = voice
-; de = this
-ADEnvelope_SetKeyTrigger:
-	ld hl,ADEnvelope_NoteOn
-	call SCCVoice_AddNoteOnListener
-	ret
-
 ; ix = this
-ADEnvelope_NoteOn:
+ADEnvelope_Reset:
 	ld (ix + ADEnvelope.phase),0
 	ld (ix + ADEnvelope.counter),0
 	ret
 
 ; ix = this
 ADEnvelope_Update:
+	ld l,(ix + ADEnvelope.trigger)
+	ld h,(ix + ADEnvelope.trigger + 1)
+	bit 6,(hl)
+	call nz,ADEnvelope_Reset
 	bit 7,(ix + ADEnvelope.phase)  ; to test a third phase: rlc (ix) ; jp po
 	jr nz,ADEnvelope_UpdateDecay
 	jp ADEnvelope_UpdateAttack
