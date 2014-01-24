@@ -67,6 +67,7 @@ ROM_Bank3Default: equ ROM_MultiplyTableBank
 	INCLUDE "modulation/MultiplyAdd.asm"
 	INCLUDE "modulation/AddPitch.asm"
 	INCLUDE "modulation/Or.asm"
+	INCLUDE "modulation/Sustain.asm"
 	INCLUDE "modulation/ControllerBank.asm"
 	INCLUDE "modulation/ADEnvelope.asm"
 	INCLUDE "modulation/AREnvelope.asm"

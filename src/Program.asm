@@ -38,16 +38,31 @@ Program_AddAREnvelope:
 	ld (ix + AREnvelope.release + 1),h
 	ld e,ixl
 	ld d,ixh
-	pop hl
+	pop hl  ; hl = voice
 	push hl
+	push de
 	ld bc,SCCVoice.trigger
 	add hl,bc
 	ld (ix + AREnvelope.trigger),l
 	ld (ix + AREnvelope.trigger + 1),h
 	ld bc,SCCVoice.gate - SCCVoice.trigger
 	add hl,bc
-	ld (ix + AREnvelope.gate),l
-	ld (ix + AREnvelope.gate + 1),h
+	push ix
+	push hl
+	call Sustain_New
+	pop hl
+	ld (ix + Sustain.gate),l
+	ld (ix + Sustain.gate + 1),h
+	ld a,64
+	call Program_GetController
+	ld (ix + Sustain.hold),l
+	ld (ix + Sustain.hold + 1),h
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (ix + AREnvelope.gate),e
+	ld (ix + AREnvelope.gate + 1),d
+	pop de
 	pop ix
 	ld (ix + SCCVoice.amplitude),e
 	ld (ix + SCCVoice.amplitude + 1),d
