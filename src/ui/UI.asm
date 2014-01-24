@@ -3,9 +3,10 @@
 ;
 
 	INCLUDE "UINode.asm"
-	INCLUDE "UISynthesix.asm"
 	INCLUDE "UIText.asm"
 	INCLUDE "UIValue.asm"
+	INCLUDE "UISynthesix.asm"
+	INCLUDE "UISCCVoice.asm"
 
 UI_Init:
 	call VDP_InitScreen0

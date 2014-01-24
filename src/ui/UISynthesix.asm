@@ -5,6 +5,14 @@ UISynthesix: MACRO
 	super: UINode UISynthesix_Update
 	title:
 		dw 0
+	voice1:
+		dw 0
+	voice2:
+		dw 0
+	voice3:
+		dw 0
+	voice4:
+		dw 0
 	size:
 	ENDM
 
@@ -25,10 +33,75 @@ UISynthesix_Constructor:
 	call UIText_New_DE
 	ld (ix + UISynthesix.title),e
 	ld (ix + UISynthesix.title + 1),d
+
+	ld bc,0100H
+	ld hl,(SCC_voices)
+	push ix
+	call UISCCVoice_New_DE
+	pop ix
+	ld (ix + UISynthesix.voice1),e
+	ld (ix + UISynthesix.voice1 + 1),d
+
+	ld bc,0500H
+	ld hl,(SCC_voices + 2)
+	push ix
+	call UISCCVoice_New_DE
+	pop ix
+	ld (ix + UISynthesix.voice2),e
+	ld (ix + UISynthesix.voice2 + 1),d
+
+	ld bc,0900H
+	ld hl,(SCC_voices + 4)
+	push ix
+	call UISCCVoice_New_DE
+	pop ix
+	ld (ix + UISynthesix.voice3),e
+	ld (ix + UISynthesix.voice3 + 1),d
+
+	ld bc,0D00H
+	ld hl,(SCC_voices + 6)
+	push ix
+	call UISCCVoice_New_DE
+	pop ix
+	ld (ix + UISynthesix.voice4),e
+	ld (ix + UISynthesix.voice4 + 1),d
 	ret
 
 UISynthesix_Update:
 	call UISynthesix_UpdateLiveIndicator
+
+	ld e,(ix + UISynthesix.voice1)
+	ld d,(ix + UISynthesix.voice1 + 1)
+	push ix
+	ld ixl,e
+	ld ixh,d
+	call UINode_Update
+	pop ix
+
+	ld e,(ix + UISynthesix.voice2)
+	ld d,(ix + UISynthesix.voice2 + 1)
+	push ix
+	ld ixl,e
+	ld ixh,d
+	call UINode_Update
+	pop ix
+
+	ld e,(ix + UISynthesix.voice3)
+	ld d,(ix + UISynthesix.voice3 + 1)
+	push ix
+	ld ixl,e
+	ld ixh,d
+	call UINode_Update
+	pop ix
+
+	ld e,(ix + UISynthesix.voice4)
+	ld d,(ix + UISynthesix.voice4 + 1)
+	push ix
+	ld ixl,e
+	ld ixh,d
+	call UINode_Update
+	pop ix
+
 	call UISynthesix_Draw
 	ret
 
@@ -58,22 +131,22 @@ UISynthesix_titleText:
 
 UISynthesix_template:
 	ds 80,23
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
+	db 24,23,23,23,23,23,23,23,23," SCC Voice 1 ",23,23,23,23,23,23,23,23,25,"                                                 "
+	db 22," Note: 0000     Detune: 0000 ",22,"                                                 "
+	db 22," Wave: 0000  Amplitude: 0000 ",22,"                                                 "
+	db 26,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,27,"                                                 "
+	db 24,23,23,23,23,23,23,23,23," SCC Voice 2 ",23,23,23,23,23,23,23,23,25,"                                                 "
+	db 22," Note: 0000     Detune: 0000 ",22,"                                                 "
+	db 22," Wave: 0000  Amplitude: 0000 ",22,"                                                 "
+	db 26,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,27,"                                                 "
+	db 24,23,23,23,23,23,23,23,23," SCC Voice 3 ",23,23,23,23,23,23,23,23,25,"                                                 "
+	db 22," Note: 0000     Detune: 0000 ",22,"                                                 "
+	db 22," Wave: 0000  Amplitude: 0000 ",22,"                                                 "
+	db 26,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,27,"                                                 "
+	db 24,23,23,23,23,23,23,23,23," SCC Voice 4 ",23,23,23,23,23,23,23,23,25,"                                                 "
+	db 22," Note: 0000     Detune: 0000 ",22,"                                                 "
+	db 22," Wave: 0000  Amplitude: 0000 ",22,"                                                 "
+	db 26,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,27,"                                                 "
 	db "                                                                                "
 	db "                                                                                "
 	db "                                                                                "

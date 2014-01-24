@@ -2,7 +2,6 @@ Synthesix_Main:
 	call System_EnableROMInPage2
 	call RAM_Init
 
-	call UI_Init
 	ld ix,KeyMidi_instance
 	call KeyMidi_Constructor
 	call Channels_Init
@@ -11,6 +10,8 @@ Synthesix_Main:
 	call Program_LoadDefault
 
 	call Math_UnitTest
+
+	call UI_Init
 
 	call System_EnableInterruptHandler
 	ld ix,PhilipsMidi_instance
