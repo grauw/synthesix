@@ -144,9 +144,11 @@ FrequencyChanged:
 	ld (ix + SCCVoice.lastFrequency + 1),d
 	ld h,SCC_BASE_MSB
 	ld l,(ix + SCCVoice.frequencyRegister)
-	ld (hl),e
+	ld (hl),0FFH
 	inc l
 	ld (hl),d
+	dec l
+	ld (hl),e
 	ret
 	ENDP
 
