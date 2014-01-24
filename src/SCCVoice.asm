@@ -55,6 +55,11 @@ SCCVoice_Constructor:
 	add hl,bc
 	ld (ix + SCCVoice.note),l
 	ld (ix + SCCVoice.note + 1),h
+
+	ld de,SCCVoice.gate - SCCVoice.key
+	add hl,bc
+	ld (ix + SCCVoice.amplitude),l
+	ld (ix + SCCVoice.amplitude + 1),h
 	ret
 
 ; ix = this
