@@ -27,7 +27,7 @@ Program_AddAREnvelope:
 	push hl
 	ld a,94
 	call Program_GetController
-	ld (hl),4
+	ld (hl),8
 	push hl
 	call AREnvelope_New
 	pop hl
