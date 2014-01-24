@@ -13,6 +13,10 @@ SCCVoice: MACRO
 		Value 0
 	velocity:
 		Value 0
+	trigger:
+		Value 0
+	gate:
+		Value 0
 	amplitude:
 		dw Value_values.0
 	note:
@@ -79,6 +83,8 @@ SCCVoice_AddNoteOffListener:
 SCCVoice_NoteOn:
 	ld (ix + SCCVoice.key),b
 	ld (ix + SCCVoice.velocity),c
+	ld (ix + SCCVoice.trigger),7FH
+	ld (ix + SCCVoice.gate),7FH
 
 	ld bc,SCCVoice.noteOnListeners.Update
 	add ix,bc
@@ -86,12 +92,15 @@ SCCVoice_NoteOn:
 
 ; ix = this
 SCCVoice_NoteOff:
+	ld (ix + SCCVoice.gate),0
 	ld bc,SCCVoice.noteOffListeners.Update
 	add ix,bc
 	jp ix
 
 ; ix = this
 SCCVoice_Update:
+	ld (ix + SCCVoice.trigger),0
+
 	ld l,(ix + SCCVoice.amplitude)
 	ld h,(ix + SCCVoice.amplitude + 1)
 	ld a,(hl)
