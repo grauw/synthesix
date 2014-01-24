@@ -16,7 +16,6 @@ ControllerBank_New:
 ; hl = this
 ; hl <- controller value address
 ControllerBank_GetController:
-	add a,a
 	ld e,a
 	ld d,0
 	add hl,de
