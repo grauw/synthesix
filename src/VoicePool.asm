@@ -143,33 +143,6 @@ Loop:
 	ENDP
 
 ; ix = this
-; hl = callback
-VoicePool_ForEach: PROC
-	ld a,(ix + VoicePool.polyphony)
-	and a
-	ret z
-Loop:
-	ld e,(ix + VoicePool.voices + NoteVoicePair.voice)
-	ld d,(ix + VoicePool.voices + NoteVoicePair.voice + 1)
-	push ix
-	ld ixl,e
-	ld ixh,d
-	push hl
-	push af
-	call CallHL
-	pop af
-	pop hl
-	pop ix
-	ld de,NoteVoicePair.size  ; next voice
-	add ix,de
-	dec a
-	jp nz,Loop
-	ret
-CallHL:
-	jp hl
-	ENDP
-
-; ix = this
 ; hl = voice
 VoicePool_AddVoice:
 	ld a,(ix + VoicePool.polyphony)

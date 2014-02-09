@@ -21,31 +21,21 @@ SCCPatch_New:
 ; ix = this
 ; ix <- this
 SCCPatch_Constructor: PROC
-	ld b,(ix + SCCPatch.polyphony)
 	push ix
-	push bc
 	call VoicePool_New
-	pop bc
-Loop:
-	push bc
-	push ix
-	call SCC_GetFreeVoice
-	ex (sp),ix
-	pop hl
-	call VoicePool_AddVoice
-	pop bc
-	djnz Loop
-
-	push ix
-	ld hl,SCCPatch_InitVoice
-	call VoicePool_ForEach
-	pop ix
-
 	ld e,ixl
 	ld d,ixh
 	pop ix
 	ld (ix + SCCPatch.voicePool),e
 	ld (ix + SCCPatch.voicePool + 1),d
+	ld b,(ix + SCCPatch.polyphony)
+Loop:
+	push ix
+	push bc
+	call SCCPatch_CreateVoice
+	pop bc
+	pop ix
+	djnz Loop
 	ret
 	ENDP
 
@@ -54,6 +44,18 @@ SCCPatch_GetVoicePool:
 	ld d,(ix + SCCPatch.voicePool + 1)
 	ld ixl,e
 	ld ixh,d
+	ret
+
+; ix = this
+SCCPatch_CreateVoice:
+	ld e,(ix + SCCPatch.voicePool)
+	ld d,(ix + SCCPatch.voicePool + 1)
+	push de
+	call SCC_GetFreeVoice
+	call SCCPatch_InitVoice
+	ex (sp),ix
+	pop hl
+	call VoicePool_AddVoice
 	ret
 
 SCCPatch_InitVoice:
