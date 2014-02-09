@@ -1,7 +1,7 @@
 ;
-; An SCC patch
+; A patch
 ;
-SCCPatch: MACRO
+Patch: MACRO
 	polyphony:
 		db 4
 	voicePool:
@@ -9,73 +9,73 @@ SCCPatch: MACRO
 	size:
 	ENDM
 
-	dw SCCPatch.size
-SCCPatch_class: SCCPatch
+	dw Patch.size
+Patch_class: Patch
 
 ; ix <- new class
-SCCPatch_New:
-	ld iy,SCCPatch_class
+Patch_New:
+	ld iy,Patch_class
 	call Class_New
-	jp SCCPatch_Constructor
+	jp Patch_Constructor
 
 ; ix = this
 ; ix <- this
-SCCPatch_Constructor: PROC
+Patch_Constructor: PROC
 	push ix
 	call VoicePool_New
 	ld e,ixl
 	ld d,ixh
 	pop ix
-	ld (ix + SCCPatch.voicePool),e
-	ld (ix + SCCPatch.voicePool + 1),d
-	ld b,(ix + SCCPatch.polyphony)
+	ld (ix + Patch.voicePool),e
+	ld (ix + Patch.voicePool + 1),d
+	ld b,(ix + Patch.polyphony)
 Loop:
 	push ix
 	push bc
-	call SCCPatch_CreateVoice
+	call Patch_CreateVoice
 	pop bc
 	pop ix
 	djnz Loop
 	ret
 	ENDP
 
-SCCPatch_GetVoicePool:
-	ld e,(ix + SCCPatch.voicePool)
-	ld d,(ix + SCCPatch.voicePool + 1)
+Patch_GetVoicePool:
+	ld e,(ix + Patch.voicePool)
+	ld d,(ix + Patch.voicePool + 1)
 	ld ixl,e
 	ld ixh,d
 	ret
 
 ; ix = this
-SCCPatch_CreateVoice:
-	ld e,(ix + SCCPatch.voicePool)
-	ld d,(ix + SCCPatch.voicePool + 1)
+Patch_CreateVoice:
+	ld e,(ix + Patch.voicePool)
+	ld d,(ix + Patch.voicePool + 1)
 	push de
 	call SCC_GetFreeVoice
-	call SCCPatch_InitVoice
+	call Patch_InitVoice
 	ex (sp),ix
 	pop hl
 	call VoicePool_AddVoice
 	ret
 
-SCCPatch_InitVoice:
-	call SCCPatch_AddAREnvelope
+Patch_InitVoice:
+	call Patch_AddAREnvelope
 
-	call SCCPatch_AddAftertouchVibrato
-	call SCCPatch_AddPitchBend
+	call Patch_AddAftertouchVibrato
+	call Patch_AddPitchBend
 
-	call SCCPatch_AddPWControl
-;	call SCCPatch_AddPWM
+	call Patch_AddPWControl
+;	call Patch_AddPWM
 	ret
 
-SCCPatch_AddAREnvelope:
+Patch_AddAREnvelope:
 	push ix
 	ld a,93
-	call SCCPatch_GetController
+	call Patch_GetController
 	ld (hl),32
 	push hl
 	ld a,94
-	call SCCPatch_GetController
+	call Patch_GetController
 	ld (hl),8
 	push hl
 	call AREnvelope_New
@@ -103,7 +103,7 @@ SCCPatch_AddAREnvelope:
 	ld (ix + Sustain.gate),l
 	ld (ix + Sustain.gate + 1),h
 	ld a,64
-	call SCCPatch_GetController
+	call Patch_GetController
 	ld (ix + Sustain.hold),l
 	ld (ix + Sustain.hold + 1),h
 	ld e,ixl
@@ -117,7 +117,7 @@ SCCPatch_AddAREnvelope:
 	ld (ix + SCCVoice.amplitude + 1),d
 	ret
 
-SCCPatch_AddAftertouchVibrato:
+Patch_AddAftertouchVibrato:
 	push ix
 	call SignedTriangleLFO_New
 	push ix
@@ -135,7 +135,7 @@ SCCPatch_AddAftertouchVibrato:
 	ld (ix + SCCVoice.detune + 1),d
 	ret
 
-SCCPatch_AddPitchBend:
+Patch_AddPitchBend:
 	push ix
 	call PitchBend_New
 	ld hl,Channel_channels.0
@@ -178,21 +178,21 @@ SCCPatch_AddPitchBend:
 	ld (ix + SCCVoice.detune + 1),d
 	ret
 
-SCCPatch_GetController:
+Patch_GetController:
 	push ix
 	ld ix,Channel_channels.0
 	call Channel_GetController
 	pop ix
 	ret
 
-SCCPatch_AddPWControl:
+Patch_AddPWControl:
 	ld a,7
-	call SCCPatch_GetController
+	call Patch_GetController
 	ld (ix + SCCVoice.wave),l
 	ld (ix + SCCVoice.wave + 1),h
 	ret
 
-SCCPatch_AddPWM:
+Patch_AddPWM:
 	push ix
 	call TriangleLFO_New
 	push ix

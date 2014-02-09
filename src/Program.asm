@@ -1,6 +1,6 @@
 Program_LoadDefault:
-	call SCCPatch_New
-	call SCCPatch_GetVoicePool
+	call Patch_New
+	call Patch_GetVoicePool
 	push ix
 	pop hl
 	ld ix,Channel_channels.0
