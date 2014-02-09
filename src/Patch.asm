@@ -39,6 +39,7 @@ Loop:
 	ret
 	ENDP
 
+; ix = this
 Patch_GetVoicePool:
 	ld e,(ix + Patch.voicePool)
 	ld d,(ix + Patch.voicePool + 1)
@@ -58,6 +59,7 @@ Patch_CreateVoice:
 	call VoicePool_AddVoice
 	ret
 
+; ix = voice
 Patch_InitVoice:
 	call Patch_AddAREnvelope
 
@@ -68,6 +70,7 @@ Patch_InitVoice:
 ;	call Patch_AddPWM
 	ret
 
+; ix = voice
 Patch_AddAREnvelope:
 	push ix
 	ld a,93
@@ -117,6 +120,7 @@ Patch_AddAREnvelope:
 	ld (ix + SCCVoice.amplitude + 1),d
 	ret
 
+; ix = voice
 Patch_AddAftertouchVibrato:
 	push ix
 	call SignedTriangleLFO_New
@@ -135,6 +139,7 @@ Patch_AddAftertouchVibrato:
 	ld (ix + SCCVoice.detune + 1),d
 	ret
 
+; ix = voice
 Patch_AddPitchBend:
 	push ix
 	call PitchBend_New
@@ -185,6 +190,7 @@ Patch_GetController:
 	pop ix
 	ret
 
+; ix = voice
 Patch_AddPWControl:
 	ld a,7
 	call Patch_GetController
@@ -192,6 +198,7 @@ Patch_AddPWControl:
 	ld (ix + SCCVoice.wave + 1),h
 	ret
 
+; ix = voice
 Patch_AddPWM:
 	push ix
 	call TriangleLFO_New
