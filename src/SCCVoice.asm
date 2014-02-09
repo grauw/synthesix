@@ -2,21 +2,13 @@
 ; An SCC voice (channel)
 ;
 SCCVoice: MACRO
-	super: Voice SCCVoice_NoteOn, SCCVoice_NoteOff, SCCVoice_Update
+	super: Voice SCCVoice_Update
 	waveRegister:
 		db SCC_WAVE_1
 	frequencyRegister:
 		db SCC_FREQUENCY_1
 	amplitudeRegister:
 		db SCC_AMPLITUDE_1
-	key:
-		Value 0
-	velocity:
-		Value 0
-	trigger:
-		Value 0
-	gate:
-		Value 0
 	amplitude:
 		dw Value_values.0
 	note:
@@ -49,36 +41,19 @@ SCCVoice_Constructor:
 
 	ld c,ixl
 	ld b,ixh
-	ld hl,SCCVoice.key
+	ld hl,SCCVoice.super.key
 	add hl,bc
 	ld (ix + SCCVoice.note),l
 	ld (ix + SCCVoice.note + 1),h
 
-	ld de,SCCVoice.gate - SCCVoice.key
+	ld de,SCCVoice.super.gate - SCCVoice.super.key
 	add hl,bc
 	ld (ix + SCCVoice.amplitude),l
 	ld (ix + SCCVoice.amplitude + 1),h
 	ret
 
 ; ix = this
-; b = note number (0-127)
-; c = velocity (0-127)
-SCCVoice_NoteOn:
-	ld (ix + SCCVoice.key),b
-	ld (ix + SCCVoice.velocity),c
-	ld (ix + SCCVoice.trigger),7FH
-	ld (ix + SCCVoice.gate),7FH
-	ret
-
-; ix = this
-SCCVoice_NoteOff:
-	ld (ix + SCCVoice.gate),0
-	ret
-
-; ix = this
 SCCVoice_Update:
-	ld (ix + SCCVoice.trigger),0
-
 	ld l,(ix + SCCVoice.amplitude)
 	ld h,(ix + SCCVoice.amplitude + 1)
 	ld a,(hl)

@@ -41,11 +41,11 @@ Program_AddAREnvelope:
 	pop hl  ; hl = voice
 	push hl
 	push de
-	ld bc,SCCVoice.trigger
+	ld bc,SCCVoice.super.trigger
 	add hl,bc
 	ld (ix + AREnvelope.trigger),l
 	ld (ix + AREnvelope.trigger + 1),h
-	ld bc,SCCVoice.gate - SCCVoice.trigger
+	ld bc,SCCVoice.super.gate - SCCVoice.super.trigger
 	add hl,bc
 	push ix
 	push hl
