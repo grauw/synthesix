@@ -9,6 +9,8 @@ SCCVoice: MACRO
 		db SCC_FREQUENCY_1
 	amplitudeRegister:
 		db SCC_AMPLITUDE_1
+	deformationRegister:
+		db SCC_DEFORMATION
 	amplitude:
 		dw Value_values.0
 	note:
@@ -16,6 +18,8 @@ SCCVoice: MACRO
 	detune:
 		dw Value_values.0
 	wave:
+		dw Value_values.0
+	phaseReset:
 		dw Value_values.0
 	lastFrequency:
 		dw 0
@@ -108,6 +112,10 @@ Continue:
 	call Math_Multiply127x127Signed
 	cpl
 	call Math_AddSigned
+	ld l,(ix + SCCVoice.phaseReset)
+	ld h,(ix + SCCVoice.phaseReset + 1)
+	bit 6,(hl)
+	jr nz,PhaseReset
 	ld a,(ix + SCCVoice.lastFrequency)
 	cp e
 	jr nz,FrequencyChanged
@@ -124,6 +132,15 @@ FrequencyChanged:
 	ld (hl),d
 	dec l
 	ld (hl),e
+	ret
+PhaseReset:
+	ld h,SCC_BASE_MSB
+	ld l,(ix + SCCVoice.deformationRegister)
+	ld (hl),00100000B
+	push hl
+	call FrequencyChanged
+	pop hl
+	ld (hl),0
 	ret
 	ENDP
 
