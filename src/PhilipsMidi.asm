@@ -119,7 +119,7 @@ writeByte: equ $ - 2
 	pop hl
 	pop af
 	ei
-	ret
+	reti
 NotPhilipsMidi2:
 	pop af
 	pop hl
