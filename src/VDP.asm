@@ -11,11 +11,30 @@ VDP_MIRROR_0: equ 0F3DFH
 VDP_MIRROR_8: equ 0FFE7H - 8
 VDP_MIRROR_25: equ 0FFFAH - 25
 
-VDP_InitScreen0:
+VDP_InitScreen0: PROC
 	ld a,80
 	ld (LINL40),a
+	ld a,(IDBYT2)
+	and a
+	jr z,MSX1
 	call INITXT
 	ret
+MSX1: ; complicated dance to enable TEXT 2 mode on MSX1 computers with v9938
+	ld hl,1000H              ; increase pattern generator table address
+	ld (TXTCGP),hl           ; so that it isn’t overwritten in 80x26.5 mode
+	call INITXT
+	ld a,(VDP_MIRROR_0)      ; change TEXT1 to TEXT2 mode
+	or 4
+	ld (VDP_MIRROR_0),a
+	ld b,0
+	call VDP_SetRegister
+	ld a,(VDP_MIRROR_0 + 2)  ; without this we get masking
+	or 3
+	ld (VDP_MIRROR_0 + 2),a
+	ld b,2
+	call VDP_SetRegister
+	ret
+	ENDP
 
 VDP_Enable212Lines:
 	ld a,(VDP_MIRROR_8 + 9)
