@@ -1,4 +1,7 @@
 Synthesix_Main:
+	call VDP_IsTMS9918A
+	ret z
+
 	call System_EnableROMInPage2
 	call RAM_Init
 

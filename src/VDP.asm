@@ -44,6 +44,40 @@ VDP_Enable212Lines:
 	call VDP_SetRegister
 	ret
 
+;
+; Test if the VDP is a TMS9918A.
+;
+; The VDP ID number was only introduced in the V9938, so we have to use a
+; different method to detect the TMS9918A. We wait for the vertical blanking
+; interrupt flag, and then quickly read status register 2 and expect bit 6
+; (VR, vertical retrace flag) to be set as well. The TMS9918A has only one
+; status register, so bit 6 (5S, 5th sprite flag) will return 0 in stead.
+;
+; f <- z: TMS9918A, nz: V99X8
+;
+VDP_IsTMS9918A: PROC
+	di
+	in a,(VDP_PORT_1)
+	and a
+	jp p,VDP_IsTMS9918A
+	ld a,2
+	out (VDP_PORT_1),a
+	ld a,15 + 128
+	out (VDP_PORT_1),a
+	nop
+	nop
+	in a,(VDP_PORT_1)
+	ex af,af'
+	xor a
+	out (VDP_PORT_1),a
+	ld a,15 + 128
+	ei
+	out (VDP_PORT_1),a
+	ex af,af'
+	and 01000000B
+	ret
+	ENDP
+
 ; a = value
 ; b = register
 ; Modifies: af
