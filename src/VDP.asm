@@ -48,25 +48,38 @@ VDP_Enable212Lines:
 ; Test if the VDP is a TMS9918A.
 ;
 ; The VDP ID number was only introduced in the V9938, so we have to use a
-; different method to detect the TMS9918A. We wait for the vertical blanking
-; interrupt flag, and then quickly read status register 2 and expect bit 6
-; (VR, vertical retrace flag) to be set as well. The TMS9918A has only one
-; status register, so bit 6 (5S, 5th sprite flag) will return 0 in stead.
+; different method to detect the TMS9918A. In V9938 status register 2, bits 5
+; and 6 (HR and VR) get set periodically, whereas the TMS9918A has only one
+; status register whose bits 5 and 6 (5S and C) remain zero as long as we don’t
+; show any sprites. So, we simply wait for bits 5 or 6 to go high and we know
+; the VDP is a V9938 or higher. To not wait forever, we stop when bit 7 goes
+; high, which is the vertical blanking interrupt flag on the TMS9918A and the
+; TR flag on the V9938 which will remain 0 after we’ve reset it.
 ;
 ; f <- z: TMS9918A, nz: V99X8
 ;
 VDP_IsTMS9918A: PROC
+	ld a,7
 	di
-	in a,(VDP_PORT_1)
-	and a
-	jp p,VDP_IsTMS9918A
+	out (VDP_PORT_1),a
+	ld a,15 + 128
+	out (VDP_PORT_1),a
+	nop
+	nop
+	in a,(VDP_PORT_1)  ; reset TR flag if it was set
 	ld a,2
 	out (VDP_PORT_1),a
 	ld a,15 + 128
 	out (VDP_PORT_1),a
 	nop
 	nop
+Loop:
 	in a,(VDP_PORT_1)
+	and 11100000B
+	add a,a
+	jp nz,Done
+	jp nc,Loop
+Done:
 	ex af,af'
 	xor a
 	out (VDP_PORT_1),a
@@ -74,7 +87,6 @@ VDP_IsTMS9918A: PROC
 	ei
 	out (VDP_PORT_1),a
 	ex af,af'
-	and 01000000B
 	ret
 	ENDP
 
