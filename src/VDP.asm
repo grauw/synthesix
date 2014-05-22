@@ -45,6 +45,35 @@ VDP_Enable212Lines:
 	ret
 
 ;
+; Detect VDP version
+;
+; a <- 0: TMS9918A, 1: V9938, 2: V9958, x: VDP ID
+;
+VDP_GetVersion:
+	call VDP_IsTMS9918A  ; use a different way to detect TMS9918A
+	ret z
+	ld a,1               ; select s#1
+	di
+	out (VDP_PORT_1),a
+	ld a,15 + 128
+	out (VDP_PORT_1),a
+	nop
+	nop
+	in a,(VDP_PORT_1)    ; read s#1
+	and 00111110B        ; get VDP ID
+	rrca
+	ex af,af'
+	xor a                ; select s#0 as required by BIOS
+	out (VDP_PORT_1),a
+	ld a,15 + 128
+	ei
+	out (VDP_PORT_1),a
+	ex af,af'
+	ret nz               ; return VDP ID for V9958 or higher
+	inc a                ; return 1 for V9938
+	ret
+
+;
 ; Test if the VDP is a TMS9918A.
 ;
 ; The VDP ID number was only introduced in the V9938, so we have to use a
