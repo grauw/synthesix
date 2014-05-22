@@ -59,29 +59,29 @@ VDP_Enable212Lines:
 ; f <- z: TMS9918A, nz: V99X8
 ;
 VDP_IsTMS9918A: PROC
-	ld a,7
+	ld a,7               ; select s#7 on V9938
 	di
 	out (VDP_PORT_1),a
 	ld a,15 + 128
 	out (VDP_PORT_1),a
 	nop
 	nop
-	in a,(VDP_PORT_1)  ; reset TR flag if it was set
-	ld a,2
+	in a,(VDP_PORT_1)    ; reset TR flag if it was set
+	ld a,2               ; select s#2 on V9938
 	out (VDP_PORT_1),a
 	ld a,15 + 128
 	out (VDP_PORT_1),a
 	nop
 	nop
 Loop:
-	in a,(VDP_PORT_1)
+	in a,(VDP_PORT_1)    ; read s#2 / s#0
 	and 11100000B
 	add a,a
-	jp nz,Done
-	jp nc,Loop
+	jp nz,Done           ; bits 5 or 6: s#2 VR or HR flags
+	jp nc,Loop           ; bit 7: s#0 interrupt flag
 Done:
 	ex af,af'
-	xor a
+	xor a                ; select s#0 as required by BIOS
 	out (VDP_PORT_1),a
 	ld a,15 + 128
 	ei
