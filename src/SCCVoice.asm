@@ -2,7 +2,6 @@
 ; An SCC voice (channel)
 ;
 SCCVoice: MACRO
-	super: Voice SCCVoice_Update
 	waveRegister:
 		db SCC_WAVE_1
 	frequencyRegister:
@@ -43,17 +42,13 @@ SCCVoice_Constructor:
 	ld (ix + SCCVoice.frequencyRegister),c
 	ld (ix + SCCVoice.amplitudeRegister),d
 
-	ld c,ixl
-	ld b,ixh
-	ld hl,SCCVoice.super.key
-	add hl,bc
-	ld (ix + SCCVoice.note),l
-	ld (ix + SCCVoice.note + 1),h
-
-	ld de,SCCVoice.super.gate - SCCVoice.super.key
-	add hl,bc
-	ld (ix + SCCVoice.amplitude),l
-	ld (ix + SCCVoice.amplitude + 1),h
+	push ix
+	ld e,ixl
+	ld d,ixh
+	ld ix,Clock_60HzLate
+	ld hl,SCCVoice_Update
+	call Clock_AddListener
+	pop ix
 	ret
 
 ; ix = this

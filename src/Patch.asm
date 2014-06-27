@@ -52,15 +52,19 @@ Patch_CreateVoice:
 	ld e,(ix + Patch.voicePool)
 	ld d,(ix + Patch.voicePool + 1)
 	push de
-	call SCC_GetFreeVoice
-	call Patch_InitVoice
+	call Voice_New
 	ex (sp),ix
 	pop hl
+	push hl
 	call VoicePool_AddVoice
+	pop ix
+	call Patch_InitVoice
 	ret
 
 ; ix = voice
 Patch_InitVoice:
+	call Patch_AddSCCVoice
+
 	call Patch_AddAREnvelope
 
 	call Patch_AddAftertouchVibrato
@@ -71,7 +75,30 @@ Patch_InitVoice:
 	ret
 
 ; ix = voice
+; ix <- scc voice
+; iy <- voice
+Patch_AddSCCVoice:
+	push ix
+	call SCC_GetFreeVoice
+	pop bc
+	push bc
+
+	ld hl,Voice.key
+	add hl,bc
+	ld (ix + SCCVoice.note),l
+	ld (ix + SCCVoice.note + 1),h
+
+	ld de,Voice.gate - Voice.key
+	add hl,bc
+	ld (ix + SCCVoice.amplitude),l
+	ld (ix + SCCVoice.amplitude + 1),h
+	pop iy
+	ret
+
+; ix = scc voice
+; iy = voice
 Patch_AddAREnvelope:
+	push iy
 	push ix
 	ld a,93
 	call Patch_GetController
@@ -90,14 +117,16 @@ Patch_AddAREnvelope:
 	ld (ix + AREnvelope.release + 1),h
 	ld e,ixl
 	ld d,ixh
+	pop iy
 	pop hl  ; hl = voice
 	push hl
+	push iy
 	push de
-	ld bc,SCCVoice.super.trigger
+	ld bc,Voice.trigger
 	add hl,bc
 	ld (ix + AREnvelope.trigger),l
 	ld (ix + AREnvelope.trigger + 1),h
-	ld bc,SCCVoice.super.gate - SCCVoice.super.trigger
+	ld bc,Voice.gate - Voice.trigger
 	add hl,bc
 	push ix
 	push hl
@@ -118,10 +147,13 @@ Patch_AddAREnvelope:
 	pop ix
 	ld (ix + SCCVoice.amplitude),e
 	ld (ix + SCCVoice.amplitude + 1),d
+	pop iy
 	ret
 
-; ix = voice
+; ix = scc voice
+; iy = voice
 Patch_AddAftertouchVibrato:
+	push iy
 	push ix
 	call SignedTriangleLFO_New
 	push ix
@@ -137,10 +169,13 @@ Patch_AddAftertouchVibrato:
 	pop ix
 	ld (ix + SCCVoice.detune),e
 	ld (ix + SCCVoice.detune + 1),d
+	pop iy
 	ret
 
-; ix = voice
+; ix = scc voice
+; iy = voice
 Patch_AddPitchBend:
+	push iy
 	push ix
 	call PitchBend_New
 	ld hl,Channel_channels.0
@@ -181,6 +216,7 @@ Patch_AddPitchBend:
 	inc de
 	ld (ix + SCCVoice.detune),e
 	ld (ix + SCCVoice.detune + 1),d
+	pop iy
 	ret
 
 Patch_GetController:
@@ -190,7 +226,8 @@ Patch_GetController:
 	pop ix
 	ret
 
-; ix = voice
+; ix = scc voice
+; iy = voice
 Patch_AddPWControl:
 	ld a,7
 	call Patch_GetController
@@ -198,8 +235,10 @@ Patch_AddPWControl:
 	ld (ix + SCCVoice.wave + 1),h
 	ret
 
-; ix = voice
+; ix = scc voice
+; iy = voice
 Patch_AddPWM:
+	push iy
 	push ix
 	call TriangleLFO_New
 	push ix
@@ -217,4 +256,5 @@ Patch_AddPWM:
 	pop hl
 	ld (ix + SCCVoice.wave),l
 	ld (ix + SCCVoice.wave + 1),h
+	pop iy
 	ret

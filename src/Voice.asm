@@ -1,9 +1,7 @@
 ;
 ; A voice
 ;
-Voice: MACRO ?update
-	update:
-		dw ?update
+Voice: MACRO
 	key:
 		Value 0
 	velocity:
@@ -14,6 +12,22 @@ Voice: MACRO ?update
 		Value 0
 	size:
 	ENDM
+
+	dw Voice.size
+Voice_class: Voice
+
+; ix <- new class
+Voice_New:
+	ld iy,Voice_class
+	call Class_New
+	call Voice_Constructor
+	ret
+
+; ix = this
+; ix <- this
+Voice_Constructor: PROC
+	ret
+	ENDP
 
 ; ix = this
 ; b = note number (0-127)
@@ -33,6 +47,4 @@ Voice_NoteOff:
 ; ix = this
 Voice_Update:
 	ld (ix + Voice.trigger),0
-	ld l,(ix + Voice.update)
-	ld h,(ix + Voice.update + 1)
-	jp hl
+	ret

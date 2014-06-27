@@ -37,4 +37,7 @@ Clock_AddListener:
 Clock_60Hz:
 	Clock
 
+Clock_60HzLate:
+	Clock
+
 	ENDS
