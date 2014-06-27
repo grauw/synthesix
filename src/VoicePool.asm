@@ -2,8 +2,10 @@
 ; A voice pool
 ;
 ; Pools voices for polyphonic playback.
-; When a note is played it binds a voice to it until it is
-; released. When a voice is bound, it will try the next one.
+;
+; Implements first note priority algorithm: When a note is played it binds a
+; voice to it until it is released. When a voice is bound, it will try the next
+; one. If no voices are available, the note will be queued until one is.
 ;
 VoicePool: MACRO
 	MAX_VOICES: equ 5
