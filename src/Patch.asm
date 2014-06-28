@@ -88,7 +88,7 @@ Patch_AddSCCVoice:
 	ld (ix + SCCVoice.note),l
 	ld (ix + SCCVoice.note + 1),h
 
-	ld de,Voice.gate - Voice.key
+	ld bc,Voice.gate - Voice.key
 	add hl,bc
 	ld (ix + SCCVoice.amplitude),l
 	ld (ix + SCCVoice.amplitude + 1),h
