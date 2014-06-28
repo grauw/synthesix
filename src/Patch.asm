@@ -80,10 +80,10 @@ Patch_InitVoice:
 Patch_AddSCCVoice:
 	push ix
 	call SCC_GetFreeVoice
-	pop bc
-	push bc
+	pop hl
+	push hl
 
-	ld hl,Voice.key
+	ld bc,Voice.key
 	add hl,bc
 	ld (ix + SCCVoice.note),l
 	ld (ix + SCCVoice.note + 1),h
