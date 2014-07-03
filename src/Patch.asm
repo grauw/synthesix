@@ -35,7 +35,13 @@ Patch_Constructor: PROC
 	push ix
 	call Patch_InitModuleLists
 	pop ix
-	ld hl,Patch_CreateVoice
+	ld hl,Patch_ValuesFactory
+	call Patch_AddModule
+	ld hl,Patch_ChannelFactory
+	call Patch_AddModule
+	ld hl,Patch_ControllerBankFactory
+	call Patch_AddModule
+	ld hl,Patch_VoiceFactory
 	call Patch_AddModule
 	ret
 	ENDP
@@ -101,7 +107,23 @@ Patch_CallModuleFactory:
 	jp hl
 
 ; ix = this
-Patch_CreateVoice:
+Patch_ValuesFactory:
+	ld ix,Value_values
+	ret
+
+; ix = this
+Patch_ChannelFactory:
+	ld ix,Channel_channels.0
+	ret
+
+; ix = this
+Patch_ControllerBankFactory:
+	ld ix,Channel_channels.0
+	call Channel_GetControllerBank
+	ret
+
+; ix = this
+Patch_VoiceFactory:
 	ld l,(ix + Patch.voicePool)
 	ld h,(ix + Patch.voicePool + 1)
 	push hl

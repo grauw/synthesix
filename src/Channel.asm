@@ -149,6 +149,15 @@ Channel_GetController:
 	jp ControllerBank_GetController
 
 ; ix = this
+; ix <- controller bank
+Channel_GetControllerBank:
+	ld e,(ix + Channel.controllers)
+	ld d,(ix + Channel.controllers + 1)
+	ld ixl,e
+	ld ixh,d
+	ret
+
+; ix = this
 ; hl = voice pool
 Channel_AddVoicePool: PROC
 	REPT Channel.MAX_VOICE_POOLS, ?pool
