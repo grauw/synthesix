@@ -11,7 +11,7 @@ PatchModules: MACRO
 	ENDM
 
 	dw PatchModules.size
-PatchModules_class: Patch
+PatchModules_class: PatchModules
 
 ; ix <- new class
 PatchModules_New:
