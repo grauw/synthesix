@@ -102,9 +102,9 @@ Patch_CallModuleFactory:
 
 ; ix = this
 Patch_CreateVoice:
-	ld e,(ix + Patch.voicePool)
-	ld d,(ix + Patch.voicePool + 1)
-	push de
+	ld l,(ix + Patch.voicePool)
+	ld h,(ix + Patch.voicePool + 1)
+	push hl
 	call Voice_New
 	ex (sp),ix
 	pop hl
