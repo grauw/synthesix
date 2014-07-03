@@ -80,8 +80,8 @@ Loop:
 	ret
 	ENDP
 
-; hl = module factory
 ; ix = this
+; hl = module factory
 Patch_AddModule: PROC
 	push ix
 	pop iy
