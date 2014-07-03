@@ -6,6 +6,10 @@ Patch: MACRO
 		db 4
 	voicePool:
 		dw 0
+	moduleLists:
+		REPT VoicePool.MAX_VOICES
+		dw 0
+		ENDM
 	size:
 	ENDM
 
@@ -28,14 +32,11 @@ Patch_Constructor: PROC
 	pop ix
 	ld (ix + Patch.voicePool),e
 	ld (ix + Patch.voicePool + 1),d
-	ld b,(ix + Patch.polyphony)
-Loop:
 	push ix
-	push bc
-	call Patch_CreateVoice
-	pop bc
+	call Patch_InitModuleLists
 	pop ix
-	djnz Loop
+	ld hl,Patch_CreateVoice
+	call Patch_AddModule
 	ret
 	ENDP
 
@@ -48,6 +49,58 @@ Patch_GetVoicePool:
 	ret
 
 ; ix = this
+Patch_InitModuleLists: PROC
+	ld b,(ix + Patch.polyphony)
+Loop:
+	push bc
+	push ix
+	call PatchModules_New
+	ex (sp),ix
+	pop bc
+	ld (ix + Patch.moduleLists),c
+	ld (ix + Patch.moduleLists + 1),b
+	inc ix
+	inc ix
+	pop bc
+	djnz Loop
+	ret
+	ENDP
+
+; hl = module factory
+; ix = this
+Patch_AddModule: PROC
+	push ix
+	pop iy
+	ld b,(ix + Patch.polyphony)
+Loop:
+	push bc
+	push hl
+	push ix
+	push iy
+	call Patch_CallModuleFactory
+	pop iy
+	ld l,(iy + Patch.moduleLists)
+	ld h,(iy + Patch.moduleLists + 1)
+	inc iy
+	inc iy
+	push iy
+	push hl
+	ex (sp),ix
+	pop hl
+	call PatchModules_AddModule
+	pop iy
+	pop ix
+	pop hl
+	pop bc
+	djnz Loop
+	ret
+	ENDP
+
+; hl = module factory
+Patch_CallModuleFactory:
+	jp hl
+
+; ix = this
 Patch_CreateVoice:
 	ld e,(ix + Patch.voicePool)
 	ld d,(ix + Patch.voicePool + 1)
@@ -58,7 +111,9 @@ Patch_CreateVoice:
 	push hl
 	call VoicePool_AddVoice
 	pop ix
+	push ix
 	call Patch_InitVoice
+	pop ix
 	ret
 
 ; ix = voice
