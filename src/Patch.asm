@@ -85,11 +85,9 @@ Loop:
 	push iy
 	call Patch_CallModuleFactory
 	pop iy
+	push iy
 	ld l,(iy + Patch.moduleLists)
 	ld h,(iy + Patch.moduleLists + 1)
-	inc iy
-	inc iy
-	push iy
 	push hl
 	ex (sp),ix
 	pop hl
@@ -98,6 +96,8 @@ Loop:
 	pop ix
 	pop hl
 	pop bc
+	inc iy
+	inc iy
 	djnz Loop
 	ret
 	ENDP
