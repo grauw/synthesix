@@ -44,3 +44,33 @@ EntryFound:
 	sub b
 	ret
 	ENDP
+
+; ix = this
+; hl = link source (h: module, l: offset)
+; de = link destination (d: module, e: offset)
+PatchModules_AddLink:
+	push ix
+	ex de,hl
+	call PatchModules_GetModuleJack
+	ex de,hl
+	pop ix
+	call PatchModules_GetModuleJack
+	ld (hl),e
+	inc hl
+	ld (hl),d
+	ret
+
+; ix = this
+; h = module index
+; l = module offset
+; hl <- module jack point
+PatchModules_GetModuleJack:
+	ld c,h
+	ld b,0
+	sla c
+	add ix,bc
+	ld c,(ix + PatchModules.modules)
+	ld b,(ix + PatchModules.modules + 1)
+	ld h,0
+	add hl,bc
+	ret

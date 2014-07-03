@@ -36,13 +36,21 @@ Patch_Constructor: PROC
 	call Patch_InitModuleLists
 	pop ix
 	ld hl,Patch_ValuesFactory
-	call Patch_AddModule
+	call Patch_AddModule                ; module 0
 	ld hl,Patch_ChannelFactory
-	call Patch_AddModule
+	call Patch_AddModule                ; module 1
 	ld hl,Patch_ControllerBankFactory
-	call Patch_AddModule
+	call Patch_AddModule                ; module 2
 	ld hl,Patch_VoiceFactory
-	call Patch_AddModule
+	call Patch_AddModule                ; module 3
+	ld hl,Patch_SCCVoiceFactory
+	call Patch_AddModule                ; module 4
+	ld hl,4 << 8 | SCCVoice.note
+	ld de,3 << 8 | Voice.key
+	call Patch_AddLink
+	ld hl,4 << 8 | SCCVoice.amplitude
+	ld de,3 << 8 | Voice.gate
+	call Patch_AddLink
 	ret
 	ENDP
 
@@ -102,6 +110,33 @@ Loop:
 	ret
 	ENDP
 
+; ix = this
+; hl = link source (h: module, l: offset)
+; de = link destination (d: module, e: offset)
+Patch_AddLink: PROC
+	push ix
+	ld b,(ix + Patch.polyphony)
+Loop:
+	push bc
+	push de
+	push hl
+	push ix
+	ld c,(ix + Patch.moduleLists)
+	ld b,(ix + Patch.moduleLists + 1)
+	ld ixl,c
+	ld ixh,b
+	call PatchModules_AddLink
+	pop ix
+	pop hl
+	pop de
+	pop bc
+	inc ix
+	inc ix
+	djnz Loop
+	pop ix
+	ret
+	ENDP
+
 ; hl = module factory
 Patch_CallModuleFactory:
 	jp hl
@@ -133,9 +168,11 @@ Patch_VoiceFactory:
 	push hl
 	call VoicePool_AddVoice
 	pop ix
-	push ix
-	call Patch_InitVoice
-	pop ix
+	ret
+
+; ix = this
+Patch_SCCVoiceFactory:
+	call SCC_GetFreeVoice
 	ret
 
 ; ix = voice
