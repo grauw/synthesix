@@ -237,6 +237,14 @@ Loop:
 Patch_CallModuleFactory:
 	jp hl
 
+; hl <- controller
+Patch_GetController:
+	push ix
+	ld ix,Channel_channels.0
+	call Channel_GetController
+	pop ix
+	ret
+
 ; ix = this
 Patch_ValuesFactory:
 	ld ix,Value_values
@@ -309,11 +317,4 @@ Patch_TriangleLFOFactory:
 ; ix = this
 Patch_MultiplyAddFactory:
 	call MultiplyAdd_New
-	ret
-
-Patch_GetController:
-	push ix
-	ld ix,Channel_channels.0
-	call Channel_GetController
-	pop ix
 	ret
