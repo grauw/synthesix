@@ -51,6 +51,102 @@ Patch_Constructor: PROC
 	ld hl,4 << 8 | SCCVoice.amplitude
 	ld de,3 << 8 | Voice.gate
 	call Patch_AddLink
+	; AR envelope
+	ld hl,Patch_AREnvelopeFactory
+	call Patch_AddModule                ; module 5
+	ld hl,Patch_SustainFactory
+	call Patch_AddModule                ; module 6
+	ld a,93
+	call Patch_GetController
+	ld (hl),32
+	ld a,94
+	call Patch_GetController
+	ld (hl),8
+	ld hl,5 << 8 | AREnvelope.attack
+	ld de,2 << 8 | 93
+	call Patch_AddLink
+	ld hl,5 << 8 | AREnvelope.release
+	ld de,2 << 8 | 94
+	call Patch_AddLink
+	ld hl,5 << 8 | AREnvelope.trigger
+	ld de,3 << 8 | Voice.trigger
+	call Patch_AddLink
+	ld hl,6 << 8 | Sustain.gate
+	ld de,3 << 8 | Voice.gate
+	call Patch_AddLink
+	ld hl,6 << 8 | Sustain.hold
+	ld de,2 << 8 | 64
+	call Patch_AddLink
+	ld hl,5 << 8 | AREnvelope.gate
+	ld de,6 << 8 | Sustain.super.value
+	call Patch_AddLink
+	ld hl,4 << 8 | SCCVoice.amplitude
+	ld de,5 << 8 | AREnvelope.super.value
+	call Patch_AddLink
+	; After touch vibrato
+	ld hl,Patch_SignedTriangleLFOFactory
+	call Patch_AddModule                ; module 7
+	ld hl,Patch_MultiplyFactory
+	call Patch_AddModule                ; module 8
+	ld hl,8 << 8 | Multiply.multiplicand
+	ld de,7 << 8 | SignedTriangleLFO.super.value
+	call Patch_AddLink
+	ld hl,8 << 8 | Multiply.multiplier
+	ld de,1 << 8 | Channel.channelPressure
+	call Patch_AddLink
+	ld hl,4 << 8 | SCCVoice.detune
+	ld de,8 << 8 | Multiply.super.value
+	call Patch_AddLink
+	; Pitch bend
+	ld hl,Patch_PitchBendFactory
+	call Patch_AddModule                ; module 9
+	ld hl,Patch_AddPitchFactory
+	call Patch_AddModule                ; module 10
+	ld hl,9 << 8 | PitchBend.pitchFine
+	ld de,1 << 8 | Channel.pitchBendFine
+	call Patch_AddLink
+	ld hl,9 << 8 | PitchBend.pitchCoarse
+	ld de,1 << 8 | Channel.pitchBendCoarse
+	call Patch_AddLink
+	ld hl,10 << 8 | AddPitch.augendNote
+	ld de,9 << 8 | PitchBend.note
+	call Patch_AddLink
+	ld hl,10 << 8 | AddPitch.augendDetune
+	ld de,9 << 8 | PitchBend.detune
+	call Patch_AddLink
+	ld hl,10 << 8 | AddPitch.addendNote
+	ld de,3 << 8 | Voice.key
+	call Patch_AddLink
+	ld hl,10 << 8 | AddPitch.addendDetune
+	ld de,0 << 8 | 0
+	call Patch_AddLink
+	ld hl,4 << 8 | SCCVoice.note
+	ld de,10 << 8 | AddPitch.note
+	call Patch_AddLink
+	ld hl,4 << 8 | SCCVoice.detune
+	ld de,10 << 8 | AddPitch.detune
+	call Patch_AddLink
+	; Pulse width modulation
+	ld hl,Patch_TriangleLFOFactory
+	call Patch_AddModule                ; module 11
+	ld hl,Patch_MultiplyAddFactory
+	call Patch_AddModule                ; module 12
+	ld hl,12 << 8 | MultiplyAdd.multiplicand
+	ld de,11 << 8 | TriangleLFO.super.value
+	call Patch_AddLink
+	ld hl,12 << 8 | MultiplyAdd.multiplier
+	ld de,0 << 8 | 50
+	call Patch_AddLink
+	ld hl,12 << 8 | MultiplyAdd.addend
+	ld de,0 << 8 | 64
+	call Patch_AddLink
+	ld hl,4 << 8 | SCCVoice.wave
+	ld de,12 << 8 | MultiplyAdd.super.value
+	call Patch_AddLink
+	; Pulse width control
+;	ld hl,4 << 8 | SCCVoice.wave
+;	ld de,2 << 8 | 7
+;	call Patch_AddLink
 	ret
 	ENDP
 
@@ -175,162 +271,44 @@ Patch_SCCVoiceFactory:
 	call SCC_GetFreeVoice
 	ret
 
-; ix = voice
-Patch_InitVoice:
-	call Patch_AddSCCVoice
-
-	call Patch_AddAREnvelope
-
-	call Patch_AddAftertouchVibrato
-	call Patch_AddPitchBend
-
-	call Patch_AddPWControl
-;	call Patch_AddPWM
-	ret
-
-; ix = voice
-; ix <- scc voice
-; iy <- voice
-Patch_AddSCCVoice:
-	push ix
-	call SCC_GetFreeVoice
-	pop hl
-	push hl
-
-	ld bc,Voice.key
-	add hl,bc
-	ld (ix + SCCVoice.note),l
-	ld (ix + SCCVoice.note + 1),h
-
-	ld bc,Voice.gate - Voice.key
-	add hl,bc
-	ld (ix + SCCVoice.amplitude),l
-	ld (ix + SCCVoice.amplitude + 1),h
-	pop iy
-	ret
-
-; ix = scc voice
-; iy = voice
-Patch_AddAREnvelope:
-	push iy
-	push ix
-	ld a,93
-	call Patch_GetController
-	ld (hl),32
-	push hl
-	ld a,94
-	call Patch_GetController
-	ld (hl),8
-	push hl
+; ix = this
+Patch_AREnvelopeFactory:
 	call AREnvelope_New
-	pop hl
-	pop de
-	ld (ix + AREnvelope.attack),e
-	ld (ix + AREnvelope.attack + 1),d
-	ld (ix + AREnvelope.release),l
-	ld (ix + AREnvelope.release + 1),h
-	ld e,ixl
-	ld d,ixh
-	pop iy
-	pop hl  ; hl = voice
-	push hl
-	push iy
-	push de
-	ld bc,Voice.trigger
-	add hl,bc
-	ld (ix + AREnvelope.trigger),l
-	ld (ix + AREnvelope.trigger + 1),h
-	ld bc,Voice.gate - Voice.trigger
-	add hl,bc
-	push ix
-	push hl
+	ret
+
+; ix = this
+Patch_SustainFactory:
 	call Sustain_New
-	pop hl
-	ld (ix + Sustain.gate),l
-	ld (ix + Sustain.gate + 1),h
-	ld a,64
-	call Patch_GetController
-	ld (ix + Sustain.hold),l
-	ld (ix + Sustain.hold + 1),h
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (ix + AREnvelope.gate),e
-	ld (ix + AREnvelope.gate + 1),d
-	pop de
-	pop ix
-	ld (ix + SCCVoice.amplitude),e
-	ld (ix + SCCVoice.amplitude + 1),d
-	pop iy
 	ret
 
-; ix = scc voice
-; iy = voice
-Patch_AddAftertouchVibrato:
-	push iy
-	push ix
+; ix = this
+Patch_SignedTriangleLFOFactory:
 	call SignedTriangleLFO_New
-	push ix
-	call Multiply_New
-	pop de
-	ld (ix + Multiply.multiplicand),e
-	ld (ix + Multiply.multiplicand + 1),d
-	ld de,Channel_channels.0 + Channel.channelPressure
-	ld (ix + Multiply.multiplier),e
-	ld (ix + Multiply.multiplier + 1),d
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (ix + SCCVoice.detune),e
-	ld (ix + SCCVoice.detune + 1),d
-	pop iy
 	ret
 
-; ix = scc voice
-; iy = voice
-Patch_AddPitchBend:
-	push iy
-	push ix
+; ix = this
+Patch_MultiplyFactory:
+	call Multiply_New
+	ret
+
+; ix = this
+Patch_PitchBendFactory:
 	call PitchBend_New
-	ld hl,Channel_channels.0
-	ld bc,Channel.pitchBendFine
-	add hl,bc
-	ld (ix + PitchBend.pitchFine),l
-	ld (ix + PitchBend.pitchFine + 1),h
-	ld bc,Channel.pitchBendCoarse - Channel.pitchBendFine
-	add hl,bc
-	ld (ix + PitchBend.pitchCoarse),l
-	ld (ix + PitchBend.pitchCoarse + 1),h
-	push ix
+	ret
+
+; ix = this
+Patch_AddPitchFactory:
 	call AddPitch_New
-	pop hl
-	ld bc,PitchBend.note
-	add hl,bc
-	ld (ix + AddPitch.augendNote),l
-	ld (ix + AddPitch.augendNote + 1),h
-	ld bc,PitchBend.detune - PitchBend.note
-	add hl,bc
-	ld (ix + AddPitch.augendDetune),l
-	ld (ix + AddPitch.augendDetune + 1),h
-	pop iy
-	ld l,(iy + SCCVoice.note)
-	ld h,(iy + SCCVoice.note + 1)
-	ld (ix + AddPitch.addendNote),l
-	ld (ix + AddPitch.addendNote + 1),h
-	ld l,(iy + SCCVoice.detune)
-	ld h,(iy + SCCVoice.detune + 1)
-	ld (ix + AddPitch.addendDetune),l
-	ld (ix + AddPitch.addendDetune + 1),h
-	push iy
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (ix + SCCVoice.note),e
-	ld (ix + SCCVoice.note + 1),d
-	inc de
-	ld (ix + SCCVoice.detune),e
-	ld (ix + SCCVoice.detune + 1),d
-	pop iy
+	ret
+
+; ix = this
+Patch_TriangleLFOFactory:
+	call TriangleLFO_New
+	ret
+
+; ix = this
+Patch_MultiplyAddFactory:
+	call MultiplyAdd_New
 	ret
 
 Patch_GetController:
@@ -338,37 +316,4 @@ Patch_GetController:
 	ld ix,Channel_channels.0
 	call Channel_GetController
 	pop ix
-	ret
-
-; ix = scc voice
-; iy = voice
-Patch_AddPWControl:
-	ld a,7
-	call Patch_GetController
-	ld (ix + SCCVoice.wave),l
-	ld (ix + SCCVoice.wave + 1),h
-	ret
-
-; ix = scc voice
-; iy = voice
-Patch_AddPWM:
-	push iy
-	push ix
-	call TriangleLFO_New
-	push ix
-	call MultiplyAdd_New
-	pop hl
-	ld (ix + MultiplyAdd.multiplicand),l
-	ld (ix + MultiplyAdd.multiplicand + 1),h
-	ld hl,Value_values.50
-	ld (ix + MultiplyAdd.multiplier),l
-	ld (ix + MultiplyAdd.multiplier + 1),h
-	ld hl,Value_values.64
-	ld (ix + MultiplyAdd.addend),l
-	ld (ix + MultiplyAdd.addend + 1),h
-	ex (sp),ix
-	pop hl
-	ld (ix + SCCVoice.wave),l
-	ld (ix + SCCVoice.wave + 1),h
-	pop iy
 	ret
