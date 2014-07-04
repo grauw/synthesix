@@ -2,7 +2,8 @@
 ; A multiply-add
 ;
 MultiplyAdd: MACRO
-	super: Value 0
+	value:
+		Value 0
 	multiplicand:
 		dw Value_values.127
 	multiplier:
@@ -45,11 +46,11 @@ MultiplyAdd_Update: PROC
 	ld l,(ix + MultiplyAdd.addend)
 	ld h,(ix + MultiplyAdd.addend + 1)
 	add a,(hl)
-	ld (ix + MultiplyAdd.super.value),a
+	ld (ix + MultiplyAdd.value),a
 	ret po
 	bit 7,(hl)
-	ld (ix + MultiplyAdd.super.value),127
+	ld (ix + MultiplyAdd.value),127
 	ret z
-	ld (ix + MultiplyAdd.super.value),128
+	ld (ix + MultiplyAdd.value),128
 	ret
 	ENDP

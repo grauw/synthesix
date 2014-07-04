@@ -5,7 +5,8 @@
 ; A value between 0 and 63 is considered low.
 ;
 Sustain: MACRO
-	super: Value 0
+	value:
+		Value 0
 	gate:
 		dw Value_values.0
 	hold:
@@ -49,6 +50,6 @@ Sustain_Update: PROC
 	ret nc
 	ld a,e
 Set:
-	ld (ix + Sustain.super.value),a
+	ld (ix + Sustain.value),a
 	ret
 	ENDP

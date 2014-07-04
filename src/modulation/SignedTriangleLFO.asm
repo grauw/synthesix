@@ -2,7 +2,8 @@
 ; A triangle LFO
 ;
 SignedTriangleLFO: MACRO
-	super: Value 0
+	value:
+		Value 0
 	speed:
 		db 48
 	trigger:
@@ -53,19 +54,19 @@ SignedTriangleLFO_Update: PROC
 	jp nc,NoSignChange
 	rrc (ix + SignedTriangleLFO.sign)  ; flip sign
 NoSignChange:
-	ld (ix + SignedTriangleLFO.super.value),a
+	ld (ix + SignedTriangleLFO.value),a
 	bit 7,(ix + SignedTriangleLFO.sign)
 	jr nz,Negative
 	and a
 	ret p
 	neg
 	dec a
-	ld (ix + SignedTriangleLFO.super.value),a
+	ld (ix + SignedTriangleLFO.value),a
 	ret
 Negative:
 	and a
 	ret m
 	cpl
-	ld (ix + SignedTriangleLFO.super.value),a
+	ld (ix + SignedTriangleLFO.value),a
 	ret
 	ENDP

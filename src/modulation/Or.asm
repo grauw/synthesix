@@ -4,7 +4,8 @@
 ; A value between 0 and 63 is considered false. Short-circuits.
 ;
 Or: MACRO
-	super: Value 0
+	value:
+		Value 0
 	term1:
 		dw Value_values.0
 	term2:
@@ -44,6 +45,6 @@ Or_Update: PROC
 	ld h,(ix + Or.term2 + 1)
 	ld a,(hl)
 Set:
-	ld (ix + Or.super.value),a
+	ld (ix + Or.value),a
 	ret
 	ENDP

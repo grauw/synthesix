@@ -2,7 +2,8 @@
 ; An attack-decay envelope
 ;
 ADEnvelope: MACRO
-	super: Value 0
+	value:
+		Value 0
 	attack:
 		dw Value_values.127
 	decay:
@@ -64,11 +65,11 @@ ADEnvelope_UpdateAttack: PROC
 	ld (ix + ADEnvelope.counter),a
 	jr c,Complete
 	rra
-	ld (ix + ADEnvelope.super.value),a
+	ld (ix + ADEnvelope.value),a
 	bit 0,(ix + ADEnvelope.sign)
 	ret z
 	cpl
-	ld (ix + ADEnvelope.super.value),a
+	ld (ix + ADEnvelope.value),a
 	ret
 Complete:
 	ld (ix + ADEnvelope.phase),-1
@@ -86,17 +87,17 @@ ContinueFromAttack:
 	ld (ix + ADEnvelope.counter),a
 	cpl
 	rra
-	ld (ix + ADEnvelope.super.value),a
+	ld (ix + ADEnvelope.value),a
 	bit 0,(ix + ADEnvelope.sign)
 	ret z
 	cpl
-	ld (ix + ADEnvelope.super.value),a
+	ld (ix + ADEnvelope.value),a
 	ret
 Complete:
 	ld (ix + ADEnvelope.counter),255
-	ld (ix + ADEnvelope.super.value),0
+	ld (ix + ADEnvelope.value),0
 	bit 0,(ix + ADEnvelope.sign)
 	ret z
-	ld (ix + ADEnvelope.super.value),~0
+	ld (ix + ADEnvelope.value),~0
 	ret
 	ENDP

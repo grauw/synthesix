@@ -2,7 +2,8 @@
 ; A multiply
 ;
 Multiply: MACRO
-	super: Value 0
+	value:
+		Value 0
 	multiplicand:
 		dw Value_values.127
 	multiplier:
@@ -40,6 +41,6 @@ Multiply_Update: PROC
 	ld h,(ix + Multiply.multiplier + 1)
 	ld l,(hl)
 	call Math_Multiply127x127Signed
-	ld (ix + Multiply.super.value),a
+	ld (ix + Multiply.value),a
 	ret
 	ENDP

@@ -2,7 +2,8 @@
 ; An attack-release envelope
 ;
 AREnvelope: MACRO
-	super: Value 0
+	value:
+		Value 0
 	attack:
 		dw Value_values.32
 	release:
@@ -65,18 +66,18 @@ AREnvelope_UpdateAttack: PROC
 	jr c,Complete
 	ld (ix + AREnvelope.counter),a
 	rra
-	ld (ix + AREnvelope.super.value),a
+	ld (ix + AREnvelope.value),a
 	bit 0,(ix + AREnvelope.sign)
 	ret z
 	cpl
-	ld (ix + AREnvelope.super.value),a
+	ld (ix + AREnvelope.value),a
 	ret
 Complete:
 	ld (ix + AREnvelope.counter),255
-	ld (ix + AREnvelope.super.value),127
+	ld (ix + AREnvelope.value),127
 	bit 0,(ix + AREnvelope.sign)
 	ret z
-	ld (ix + AREnvelope.super.value),~127
+	ld (ix + AREnvelope.value),~127
 	ret
 	ENDP
 
@@ -89,17 +90,17 @@ AREnvelope_UpdateRelease: PROC
 	jr c,Complete
 	ld (ix + AREnvelope.counter),a
 	rra
-	ld (ix + AREnvelope.super.value),a
+	ld (ix + AREnvelope.value),a
 	bit 0,(ix + AREnvelope.sign)
 	ret z
 	cpl
-	ld (ix + AREnvelope.super.value),a
+	ld (ix + AREnvelope.value),a
 	ret
 Complete:
 	ld (ix + AREnvelope.counter),0
-	ld (ix + AREnvelope.super.value),0
+	ld (ix + AREnvelope.value),0
 	bit 0,(ix + AREnvelope.sign)
 	ret z
-	ld (ix + AREnvelope.super.value),~0
+	ld (ix + AREnvelope.value),~0
 	ret
 	ENDP

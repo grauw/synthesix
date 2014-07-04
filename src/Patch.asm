@@ -78,10 +78,10 @@ Patch_Constructor: PROC
 	ld de,2 << 8 | 64
 	call Patch_AddLink
 	ld hl,5 << 8 | AREnvelope.gate
-	ld de,6 << 8 | Sustain.super.value
+	ld de,6 << 8 | Sustain.value
 	call Patch_AddLink
 	ld hl,4 << 8 | SCCVoice.amplitude
-	ld de,5 << 8 | AREnvelope.super.value
+	ld de,5 << 8 | AREnvelope.value
 	call Patch_AddLink
 	; After touch vibrato
 	ld hl,Patch_SignedTriangleLFOFactory
@@ -89,13 +89,13 @@ Patch_Constructor: PROC
 	ld hl,Patch_MultiplyFactory
 	call Patch_AddModule                ; module 8
 	ld hl,8 << 8 | Multiply.multiplicand
-	ld de,7 << 8 | SignedTriangleLFO.super.value
+	ld de,7 << 8 | SignedTriangleLFO.value
 	call Patch_AddLink
 	ld hl,8 << 8 | Multiply.multiplier
 	ld de,1 << 8 | Channel.channelPressure
 	call Patch_AddLink
 	ld hl,4 << 8 | SCCVoice.detune
-	ld de,8 << 8 | Multiply.super.value
+	ld de,8 << 8 | Multiply.value
 	call Patch_AddLink
 	; Pitch bend
 	ld hl,Patch_PitchBendFactory
@@ -132,7 +132,7 @@ Patch_Constructor: PROC
 	ld hl,Patch_MultiplyAddFactory
 	call Patch_AddModule                ; module 12
 	ld hl,12 << 8 | MultiplyAdd.multiplicand
-	ld de,11 << 8 | TriangleLFO.super.value
+	ld de,11 << 8 | TriangleLFO.value
 	call Patch_AddLink
 	ld hl,12 << 8 | MultiplyAdd.multiplier
 	ld de,0 << 8 | 50
@@ -141,7 +141,7 @@ Patch_Constructor: PROC
 	ld de,0 << 8 | 64
 	call Patch_AddLink
 	ld hl,4 << 8 | SCCVoice.wave
-	ld de,12 << 8 | MultiplyAdd.super.value
+	ld de,12 << 8 | MultiplyAdd.value
 	call Patch_AddLink
 	; Pulse width control
 ;	ld hl,4 << 8 | SCCVoice.wave

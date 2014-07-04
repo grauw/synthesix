@@ -2,7 +2,8 @@
 ; A triangle LFO
 ;
 TriangleLFO: MACRO
-	super: Value 0
+	value:
+		Value 0
 	speed:
 		db 2
 	trigger:
@@ -50,6 +51,6 @@ TriangleLFO_Update: PROC
 	jp p,Positive
 	cpl
 Positive:
-	ld (ix + TriangleLFO.super.value),a
+	ld (ix + TriangleLFO.value),a
 	ret
 	ENDP
