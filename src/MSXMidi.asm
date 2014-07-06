@@ -272,7 +272,7 @@ NotFound:
 	pop af          ;restore slot address
 	pop bc          ;restore environment
 	xor a
-	inc a           ;worng ID
+	inc a           ;wrong ID
 	ret
 	ENDP
 
