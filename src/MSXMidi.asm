@@ -107,7 +107,6 @@ MSXMidi_Configure:
 
 	; 8251 UART: reset interrupt flag
 	in a,(MSXMidi_UART_RECEIVE)
-	ei
 	ret
 
 ; ix = this
