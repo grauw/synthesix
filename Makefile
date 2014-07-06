@@ -5,3 +5,6 @@ all:
 
 run: all
 	openmsx -cart bin/synthe6.rom -romtype KonamiSCC -machine Panasonic_FS-A1GT -script openmsx.tcl
+
+run2: all
+	openmsx -cart bin/synthe6.rom -romtype KonamiSCC -machine Philips_NMS_8245 -ext mu-PACK -script openmsx.tcl
