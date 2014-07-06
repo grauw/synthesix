@@ -79,6 +79,39 @@ System_EnableROMInPage2:
 	ei
 	ret
 
+System_GetSlot:
+	ld a,h
+	sub 64
+	jp c,System_GetPage0Slot
+	sub 64
+	jp c,System_GetPage1Slot
+	sub 64
+	jp c,System_GetPage2Slot
+	jp System_GetPage3Slot
+
+System_GetPage0Slot:
+	call RSLREG
+	and 00000011B
+	ld c,a
+	ld b,0
+	ld hl,EXPTBL
+	add hl,bc
+	ld c,a
+	ld a,(hl)
+	and 80H
+	or c
+	ld c,a
+	inc hl  ; move to SLTTBL
+	inc hl
+	inc hl
+	inc hl
+	ld a,(hl)
+	and 00000011B
+	rlca
+	rlca
+	or c
+	ret
+
 System_GetPage1Slot:
 	call RSLREG
 	and 00001100B
@@ -99,6 +132,33 @@ System_GetPage1Slot:
 	inc hl
 	ld a,(hl)
 	and 00001100B
+	or c
+	ret
+
+System_GetPage2Slot:
+	call RSLREG
+	and 00110000B
+	rrca
+	rrca
+	rrca
+	rrca
+	ld c,a
+	ld b,0
+	ld hl,EXPTBL
+	add hl,bc
+	ld c,a
+	ld a,(hl)
+	and 80H
+	or c
+	ld c,a
+	inc hl  ; move to SLTTBL
+	inc hl
+	inc hl
+	inc hl
+	ld a,(hl)
+	and 00110000B
+	rrca
+	rrca
 	or c
 	ret
 
@@ -128,6 +188,87 @@ System_GetPage3Slot:
 	rrca
 	or c
 	ret
+
+;
+; Search all slots and subslots for a match.
+; Invoke Continue to continue searching where a previous search left off.
+;
+; hl = detection routine (receives a = slot ID, can modify all)
+; f <- c: found
+; a <- slot number
+; Modifies: af, bc, de
+;
+System_SearchSlots: PROC
+	ld a,0
+PrimaryLoop:
+	ex de,hl
+	ld hl,EXPTBL
+	ld b,0
+	ld c,a
+	add hl,bc
+	ld a,(hl)
+	ex de,hl
+	and 10000000B
+	or c
+SecondaryLoop:
+	push af
+	push hl
+	call CallHL
+	pop hl
+	jp c,Found
+	pop af
+Continue:
+	add a,00000100B
+	jp p,NextPrimary
+	bit 4,a
+	jp z,SecondaryLoop
+NextPrimary:
+	inc a
+	and 00000011B
+	ret z  ; not found
+	jp PrimaryLoop
+Found:
+	pop af
+	scf
+	ret
+CallHL:
+	jp hl
+	ENDP
+
+;
+; Match a string in a slot.
+;
+; a = slot
+; de = string (0-terminated)
+; hl = address
+; f <- c: found
+; Modifies: f, bc, de, hl
+;
+System_MatchSlotString: PROC
+	push af
+	push de
+	call RDSLT
+	pop de
+	ex de,hl
+	cp (hl)
+	jr nz,NotFound
+	inc de
+	inc hl
+	ld a,(hl)
+	and a
+	jr z,Found
+	ex de,hl
+	pop af
+	jp System_MatchSlotString
+Found:
+	pop af
+	scf
+	ret
+NotFound:
+	pop af
+	and a
+	ret
+	ENDP
 
 System_Stop:
 	di
@@ -263,3 +404,35 @@ System_im2Table:
 	ds 257,System_InterruptHandler & 0FFH
 
 	ENDS
+
+
+;
+; Unit tests
+;
+System_UnitTest:
+	call System_TestSearchSlots
+	ret
+
+System_TestSearchSlots:
+	di
+	ld hl,System_TestSearchSlots_id
+	call System_GetSlot
+	push af
+	ld hl,System_TestSearchSlots_Matcher
+	call System_SearchSlots
+	pop bc
+	call nc,System_ThrowException
+	call System_PrintHexA
+	cp b
+	call nz,System_ThrowException
+	ei
+	ret
+
+System_TestSearchSlots_Matcher:
+	ld hl,System_TestSearchSlots_id
+	ld de,System_TestSearchSlots_id
+	call System_MatchSlotString
+	ret
+
+System_TestSearchSlots_id:
+	db "UNITTEST",0

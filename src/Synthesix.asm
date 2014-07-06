@@ -13,6 +13,7 @@ Synthesix_Main:
 	call SCC_Init
 	call Program_LoadDefault
 
+	call System_UnitTest
 	call Math_UnitTest
 
 	call UI_Init
