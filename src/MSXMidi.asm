@@ -183,7 +183,7 @@ MSXMidi_NewHook:
 MSXMidi_Detect: PROC
 	call MSXMidi_DetectInternal
 	ret c
-	ld hl,MSXMidi_MatchExternal
+	ld hl,MSXMidi_MatchExternalID
 	call System_SearchSlots
 	ret
 	ENDP
@@ -207,8 +207,8 @@ MSXMidi_DetectInternal: PROC
 ; a = slot address
 ; f <- c: found
 ;
-MSXMidi_MatchExternal:
-	ld de,MSXMidi_idString
+MSXMidi_MatchExternalID:
+	ld de,MSXMidi_id
 	ld hl,MSXMidi_ID_ADDRESS
 	call System_MatchSlotString
 	ret
@@ -232,7 +232,7 @@ Loop:
 	ret
 	ENDP
 
-MSXMidi_idString:
+MSXMidi_id:
 	db "MIDI",0
 
 ;
