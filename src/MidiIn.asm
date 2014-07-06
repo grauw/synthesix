@@ -263,3 +263,12 @@ NotADataByte:
 	ld (ix + MidiIn.bufferTail),l
 	jp MidiIn_ProcessMessages
 	ENDP
+
+MidiIn_overrunErrorMessage:
+	db "MIDI UART overrun error.",0
+
+MidiIn_framingErrorMessage:
+	db "MIDI UART framing error.",0
+
+MidiIn_parityErrorMessage:
+	db "MIDI UART parity error.",0

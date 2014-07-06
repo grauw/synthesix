@@ -136,12 +136,22 @@ MSXMidi_CheckOverrun: PROC
 	and a
 	ret z
 	in a,(MSXMidi_UART_STATUS)
-	and 00010000B
+	and 00111000B
 	ret z
+	push af
 	ld a,(MSXMidi_commandSave)
 	or 00010000B
 	out (MSXMidi_UART_COMMAND),a
-	call System_ThrowException
+	pop af
+	and 00001000B
+	ld hl,MidiIn_parityErrorMessage
+	call nz,System_ThrowExceptionWithMessage
+	and 00010000B
+	ld hl,MidiIn_overrunErrorMessage
+	call nz,System_ThrowExceptionWithMessage
+	and 00100000B
+	ld hl,MidiIn_framingErrorMessage
+	call nz,System_ThrowExceptionWithMessage
 	ret
 	ENDP
 
