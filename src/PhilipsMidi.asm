@@ -73,7 +73,6 @@ PhilipsMidi_Configure:
 
 	; reset interrupt flag
 	in a,(PhilipsMidi_RECEIVE)
-	ei
 	ret
 
 ;
