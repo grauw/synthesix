@@ -22,7 +22,7 @@ MidiIn: MACRO ?buffer  ; buffer must be aligned to 100H
 	ENDM
 
 ; ix = this
-; z = a message can be read
+; f <- nz: a message can be read
 ; Modifies: af
 MidiIn_HasMessage:
 	ld a,(ix + MidiIn.bufferHead)
