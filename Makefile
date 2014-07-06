@@ -8,3 +8,6 @@ run: all
 
 run2: all
 	openmsx -cart bin/synthe6.rom -romtype KonamiSCC -machine Philips_NMS_8245 -ext mu-PACK -script openmsx.tcl
+
+run3: all
+	openmsx -cart bin/synthe6.rom -romtype KonamiSCC -machine Yamaha_CX5MII-128 -ext mu-PACK -script openmsx.tcl
