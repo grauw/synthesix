@@ -14,16 +14,17 @@ SFGMidi: MACRO
 	found:
 		db 0
 	slot:
-		db 10001111B
+		db 0
 	slotBits:
-		dw 1100001100000011B
+		dw 0
 	ENDM
 
 ; ix = this
 SFGMidi_Install:
 	call SFGMidi_Detect
-	ret c
+	ret nc
 	di
+	call SFGMidi_SetSlot
 	ld (ix + SFGMidi.found),-1
 	call SFGMidi_SetHook
 	call SFGMidi_Configure
@@ -39,6 +40,24 @@ SFGMidi_Uninstall:
 	call SFGMidi_RestoreHook
 	call SFGMidi_Reset
 	ei
+	ret
+
+; ix = this
+; a = slot
+SFGMidi_SetSlot:
+	ld (ix + SFGMidi.slot),a
+	ld b,a
+	and 00000011B
+	ld c,a
+	rrca
+	rrca
+	or c
+	ld (ix + SFGMidi.slotBits + 1),a
+	ld a,b
+	and 00001100B
+	rrca
+	rrca
+	ld (ix + SFGMidi.slotBits),a
 	ret
 
 ;
@@ -203,14 +222,12 @@ SFGMidi_Read:
 ; Detect MIDI interface
 ;
 ; ix = this
-; f <- c: not found, nc: found
+; f <- c: found
+; a <- slot
 ;
 SFGMidi_Detect:
-	ld a,(ix + SFGMidi.slot)
-	call SFGMidi_DetectInSlot
-	scf
-	ret nz
-	ccf
+	ld hl,MSXMidi_MatchID
+	call System_SearchSlots
 	ret
 
 ;
@@ -220,39 +237,14 @@ SFGMidi_Detect:
 ; a = slot address
 ; f <- z: MIDI ID found
 ;
-SFGMidi_DetectInSlot: PROC
-	push bc
-	ld de,SFGMidi_idString
+MSXMidi_MatchID:
+	ld de,SFGMidi_id
 	ld hl,SFGMidi_ID_ADDRESS
-	ld b,6          ;length of SFGMidi_idString
-Loop:
-	push af
-	push bc
-	push de
-	call RDSLT      ;read data
-	pop de
-	pop bc
-	ld c,a          ;save data
-	ld a,(de)       ;get char
-	cp c            ;same ?
-	jr nz,NotFound  ;no
-	pop af          ;restore slot address
-	inc de          ;next char
-	inc hl
-	djnz Loop       ;check next char
-	pop bc          ;restore environment
-	xor a           ;I found ID
+	call System_MatchSlotString
 	ret
-NotFound:
-	pop af          ;restore slot address
-	pop bc          ;restore environment
-	xor a
-	inc a           ;wrong ID
-	ret
-	ENDP
 
-SFGMidi_idString:
-	db "MCHFM0"
+SFGMidi_id:
+	db "MCHFM0",0
 
 ;
 ; Workarea definition
