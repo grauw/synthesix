@@ -29,7 +29,7 @@ MSXMidi: MACRO
 ; ix = this
 MSXMidi_Install:
 	call MSXMidi_Detect
-	ret c
+	ret nc
 	di
 	ld (ix + MSXMidi.found),-1
 	call MSXMidi_SetHook
@@ -112,7 +112,7 @@ MSXMidi_Configure:
 ; ix = this
 MSXMidi_ConfigureExternal:
 	call MSXMidi_DetectInternal
-	ret nz
+	ret c
 	xor a           ; let external MSX-MIDI I/O ports match internal ones
 	out (MSXMidi_IOSETTING),a
 	ret
@@ -178,63 +178,25 @@ MSXMidi_NewHook:
 ; Detect MIDI interface
 ;
 ; ix = this
-; f <- c: not found, nc: found, z: external, nz: internal
+; f <- c: found
 ;
 MSXMidi_Detect: PROC
 	call MSXMidi_DetectInternal
-	ret nz          ;MIDI interface is built in
-	ld b,4
-PrimaryLoop:
-	push bc         ;save counter
-	ld a,4
-	sub b           ;primary slot number
-	ld c,a          ;save
-	ld hl,EXPTBL
-	ld a,c
-	add a,l         ;set EXPTBL
-	ld l,a
-	ld a,(hl)
-	and 10000000B   ;expanded ?
-	jr z,SearchPrimary  ;no
-	ld b,4          ;number of expanded slots
-SecondaryLoop:      ;search expanded slot
-	push bc
-	ld a,00100100B
-	sub b           ;001000nnB
-	rlc a
-	rlc a           ;1000nn00B
-	or c            ;1000nnmmB = slot address
-	call MSXMidi_DetectInSlot
-	pop bc
-	jr z,FoundIDPop  ;found MIDI ID
-	djnz SecondaryLoop  ;next expanded slot
-	pop bc
-	jr NextSlot     ;next slot
-SearchPrimary:      ;search primary slot
-	ld a,c          ;set slot address
-	call MSXMidi_DetectInSlot
-	pop bc
-	jr z,FoundID    ;found MIDI ID
-NextSlot:
-	djnz PrimaryLoop  ;search next slot
-	scf             ;no MIDI ID
-	ret
-FoundIDPop:
-	pop bc
-FoundID:
-	xor a           ;set Z flag, reset Cy flag
+	ret c
+	ld hl,MSXMidi_MatchExternal
+	call System_SearchSlots
 	ret
 	ENDP
 
 ;
 ; ix = this
-; f <- nz: built in MIDI found
+; f <- c: found
 ;
 MSXMidi_DetectInternal: PROC
 	ld a,(EXPTBL)
 	ld hl,IDBYT3
 	call RDSLT
-	and 1
+	rra
 	ret
 	ENDP
 
@@ -243,38 +205,13 @@ MSXMidi_DetectInternal: PROC
 ;
 ; ix = this
 ; a = slot address
-; f <- z: MIDI ID found
+; f <- c: found
 ;
-MSXMidi_DetectInSlot: PROC
-	push bc
+MSXMidi_MatchExternal:
 	ld de,MSXMidi_idString
 	ld hl,MSXMidi_ID_ADDRESS
-	ld b,4          ;length of MSXMidi_idString
-Loop:
-	push af
-	push bc
-	push de
-	call RDSLT      ;read data
-	pop de
-	pop bc
-	ld c,a          ;save data
-	ld a,(de)       ;get char
-	cp c            ;same ?
-	jr nz,NotFound  ;no
-	pop af          ;restore slot address
-	inc de          ;next char
-	inc hl
-	djnz Loop       ;check next char
-	pop bc          ;restore environment
-	xor a           ;I found ID
+	call System_MatchSlotString
 	ret
-NotFound:
-	pop af          ;restore slot address
-	pop bc          ;restore environment
-	xor a
-	inc a           ;wrong ID
-	ret
-	ENDP
 
 ;
 ; Wait 1ms between UART command register writes
@@ -296,7 +233,7 @@ Loop:
 	ENDP
 
 MSXMidi_idString:
-	db "MIDI"
+	db "MIDI",0
 
 ;
 ; Workarea definition
