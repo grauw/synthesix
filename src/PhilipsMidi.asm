@@ -19,7 +19,7 @@ PhilipsMidi: MACRO
 ; ix = this
 PhilipsMidi_Install:
 	call PhilipsMidi_Detect
-	ret c
+	ret nc
 	di
 	ld (ix + PhilipsMidi.found),-1
 	call PhilipsMidi_SetHook
@@ -137,10 +137,10 @@ PhilipsMidi_NewHook:
 ; Detect MIDI interface
 ;
 ; ix = this
-; f <- c: not found, nc: found
+; f <- c: found
 ;
 PhilipsMidi_Detect:
-	and a
+	scf
 	ret
 
 ;
