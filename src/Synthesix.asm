@@ -22,11 +22,15 @@ Synthesix_Main:
 	call PhilipsMidi_Install
 	ld ix,MSXMidi_instance
 	call MSXMidi_Install
+	ld ix,SFGMidi_instance
+	call SFGMidi_Install
 	ld hl,Synthesix_Interrupt
 	call System_InstallTIMIHook
 
 	call Synthesix_MainLoop
 
+	ld ix,SFGMidi_instance
+	call SFGMidi_Uninstall
 	ld ix,MSXMidi_instance
 	call MSXMidi_Uninstall
 	ld ix,PhilipsMidi_instance
@@ -51,12 +55,16 @@ Synthesix_Interrupt:
 
 	ld ix,MSXMidi_instance
 	call MSXMidi_CheckOverrun
+	ld ix,SFGMidi_instance
+	call SFGMidi_CheckOverrun
 	ld ix,KeyMidi_instance
 	call KeyMidi_Scan
 	call MidiIn_ProcessMessages
 	ld ix,PhilipsMidi_instance
 	call MidiIn_ProcessMessages
 	ld ix,MSXMidi_instance
+	call MidiIn_ProcessMessages
+	ld ix,SFGMidi_instance
 	call MidiIn_ProcessMessages
 	ld ix,Clock_60Hz
 	call Clock_Update

@@ -51,6 +51,7 @@ ROM_Bank3Default: equ ROM_MultiplyTableBank
 	INCLUDE "MidiIn.asm"
 	INCLUDE "MSXMidi.asm"
 	INCLUDE "PhilipsMidi.asm"
+	INCLUDE "SFGMidi.asm"
 	INCLUDE "KeyMidi.asm"
 	INCLUDE "Channel.asm"
 	INCLUDE "VoicePool.asm"

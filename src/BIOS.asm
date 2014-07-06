@@ -2,6 +2,7 @@
 ; BIOS symbols
 ;
 RDSLT: equ 0CH
+WRSLT: equ 14H
 CALSLT: equ 1CH
 ENASLT: equ 24H
 IDBYT2: equ 2DH
