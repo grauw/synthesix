@@ -108,20 +108,12 @@ PhilipsMidi_InterruptHandler: PROC
 	jr z,NotPhilipsMidi
 	push hl
 	in a,(PhilipsMidi_RECEIVE)
-	push af
-	in a,(PhilipsMidi_STATUS)
-	and 00000001B
-	jr nz,NotPhilipsMidi2
-	pop af
 	call System_ThrowException
 writeByte: equ $ - 2
 	pop hl
 	pop af
 	ei
 	reti
-NotPhilipsMidi2:
-	pop af
-	pop hl
 NotPhilipsMidi:
 	pop af
 OldHook:
@@ -136,10 +128,32 @@ PhilipsMidi_NewHook:
 ;
 ; Detect MIDI interface
 ;
+; After doing some simple checks and a quick configuration, it checks whether
+; the TxRDY status flag goes from 1 to 0 when sending a byte.
+;
 ; ix = this
 ; f <- c: found
 ;
 PhilipsMidi_Detect:
+	in a,(PhilipsMidi_STATUS)
+	cp 255          ; typical n/c value
+	ret z
+	and 00001100B   ; these should always be 0
+	ret nz
+	ld a,00000011B  ; reset
+	out (PhilipsMidi_COMMAND),a
+	ld a,00010101B  ; 1 stop bit, no parity, 8 bits, 16x baud (31250 baud)
+	out (PhilipsMidi_COMMAND),a
+	in a,(PhilipsMidi_STATUS)
+	bit 1,a         ; check TxRDY
+	ret z
+	and 10001100B   ; these should be 0
+	ret nz
+	ld a,0FEH       ; send active sensing message (dummy)
+	out (PhilipsMidi_TRANSMIT),a
+	in a,(PhilipsMidi_STATUS)
+	bit 1,a         ; check TxRDY again
+	ret nz
 	scf
 	ret
 
