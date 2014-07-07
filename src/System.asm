@@ -239,24 +239,24 @@ CallHL:
 ; Match a string in a slot.
 ;
 ; a = slot
-; de = string (0-terminated)
+; bc = string length
+; de = string
 ; hl = address
 ; f <- c: found
 ; Modifies: f, bc, de, hl
 ;
 System_MatchSlotString: PROC
 	push af
+	push bc
 	push de
 	call RDSLT
 	pop de
+	pop bc
 	ex de,hl
-	cp (hl)
+	cpi
 	jr nz,NotFound
+	jp po,Found
 	inc de
-	inc hl
-	ld a,(hl)
-	and a
-	jr z,Found
 	ex de,hl
 	pop af
 	jp System_MatchSlotString
@@ -415,6 +415,7 @@ System_UnitTest:
 
 System_TestSearchSlots:
 	di
+	; does searching for test string yield the current slot?
 	ld hl,System_TestSearchSlots_id
 	call System_GetSlot
 	push af
@@ -422,17 +423,29 @@ System_TestSearchSlots:
 	call System_SearchSlots
 	pop bc
 	call nc,System_ThrowException
-	call System_PrintHexA
 	cp b
 	call nz,System_ThrowException
+
+	; negative test
+	ld hl,System_TestSearchSlots_MatcherNotFound
+	call System_SearchSlots
+	call c,System_ThrowException
 	ei
 	ret
 
 System_TestSearchSlots_Matcher:
 	ld hl,System_TestSearchSlots_id
 	ld de,System_TestSearchSlots_id
+	ld bc,8
+	call System_MatchSlotString
+	ret
+
+System_TestSearchSlots_MatcherNotFound:
+	ld hl,System_TestSearchSlots_id + 4
+	ld de,System_TestSearchSlots_id
+	ld bc,8
 	call System_MatchSlotString
 	ret
 
 System_TestSearchSlots_id:
-	db "UNITTEST",0
+	db "UNITTEST"

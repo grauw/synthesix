@@ -240,11 +240,12 @@ SFGMidi_Detect:
 MSXMidi_MatchID:
 	ld de,SFGMidi_id
 	ld hl,SFGMidi_ID_ADDRESS
+	ld bc,6
 	call System_MatchSlotString
 	ret
 
 SFGMidi_id:
-	db "MCHFM0",0
+	db "MCHFM0"
 
 ;
 ; Workarea definition

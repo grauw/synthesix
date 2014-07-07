@@ -220,6 +220,7 @@ MSXMidi_DetectInternal: PROC
 MSXMidi_MatchExternalID:
 	ld de,MSXMidi_id
 	ld hl,MSXMidi_ID_ADDRESS
+	ld bc,4
 	call System_MatchSlotString
 	ret
 
@@ -243,7 +244,7 @@ Loop:
 	ENDP
 
 MSXMidi_id:
-	db "MIDI",0
+	db "MIDI"
 
 ;
 ; Workarea definition
