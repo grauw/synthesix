@@ -136,8 +136,6 @@ PhilipsMidi_NewHook:
 ;
 PhilipsMidi_Detect:
 	in a,(PhilipsMidi_STATUS)
-	cp 255          ; typical n/c value
-	ret z
 	and 00001100B   ; these should always be 0
 	ret nz
 	ld a,00000011B  ; reset
