@@ -35,15 +35,15 @@ Patch_Constructor: PROC
 	push ix
 	call Patch_InitModuleLists
 	pop ix
-	ld hl,Patch_ValuesFactory
+	ld hl,Module_values
 	call Patch_AddModule                ; module 0
-	ld hl,Patch_ChannelFactory
+	ld hl,Module_channel
 	call Patch_AddModule                ; module 1
-	ld hl,Patch_ControllerBankFactory
+	ld hl,Module_controllerBank
 	call Patch_AddModule                ; module 2
-	ld hl,Patch_VoiceFactory
+	ld hl,Module_voice
 	call Patch_AddModule                ; module 3
-	ld hl,Patch_SCCVoiceFactory
+	ld hl,Module_sccVoice
 	call Patch_AddModule                ; module 4
 	ld hl,4 << 8 | SCCVoice.note
 	ld de,3 << 8 | Voice.key
@@ -52,9 +52,9 @@ Patch_Constructor: PROC
 	ld de,3 << 8 | Voice.gate
 	call Patch_AddLink
 	; AR envelope
-	ld hl,Patch_AREnvelopeFactory
+	ld hl,Module_arEnvelope
 	call Patch_AddModule                ; module 5
-	ld hl,Patch_SustainFactory
+	ld hl,Module_sustain
 	call Patch_AddModule                ; module 6
 	ld a,93
 	call Patch_GetController
@@ -84,9 +84,9 @@ Patch_Constructor: PROC
 	ld de,5 << 8 | AREnvelope.value
 	call Patch_AddLink
 	; After touch vibrato
-	ld hl,Patch_SignedTriangleLFOFactory
+	ld hl,Module_signedTriangleLFO
 	call Patch_AddModule                ; module 7
-	ld hl,Patch_MultiplyFactory
+	ld hl,Module_multiply
 	call Patch_AddModule                ; module 8
 	ld hl,8 << 8 | Multiply.multiplicand
 	ld de,7 << 8 | SignedTriangleLFO.value
@@ -98,9 +98,9 @@ Patch_Constructor: PROC
 	ld de,8 << 8 | Multiply.value
 	call Patch_AddLink
 	; Pitch bend
-	ld hl,Patch_PitchBendFactory
+	ld hl,Module_pitchBend
 	call Patch_AddModule                ; module 9
-	ld hl,Patch_AddPitchFactory
+	ld hl,Module_addPitch
 	call Patch_AddModule                ; module 10
 	ld hl,9 << 8 | PitchBend.pitchFine
 	ld de,1 << 8 | Channel.pitchBendFine
@@ -127,9 +127,9 @@ Patch_Constructor: PROC
 	ld de,10 << 8 | AddPitch.detune
 	call Patch_AddLink
 	; Pulse width modulation
-	ld hl,Patch_TriangleLFOFactory
+	ld hl,Module_triangleLFO
 	call Patch_AddModule                ; module 11
-	ld hl,Patch_MultiplyAddFactory
+	ld hl,Module_multiplyAdd
 	call Patch_AddModule                ; module 12
 	ld hl,12 << 8 | MultiplyAdd.multiplicand
 	ld de,11 << 8 | TriangleLFO.value
@@ -187,7 +187,7 @@ Loop:
 	push hl
 	push ix
 	push iy
-	call Patch_CallModuleFactory
+	call Module_Acquire_HL
 	pop iy
 	push iy
 	ld l,(iy + Patch.moduleLists)
@@ -233,88 +233,10 @@ Loop:
 	ret
 	ENDP
 
-; hl = module factory
-Patch_CallModuleFactory:
-	jp hl
-
 ; hl <- controller
 Patch_GetController:
 	push ix
 	ld ix,Channel_channels.0
 	call Channel_GetController
 	pop ix
-	ret
-
-; ix = this
-Patch_ValuesFactory:
-	ld ix,Value_values
-	ret
-
-; ix = this
-Patch_ChannelFactory:
-	ld ix,Channel_channels.0
-	ret
-
-; ix = this
-Patch_ControllerBankFactory:
-	ld ix,Channel_channels.0
-	call Channel_GetControllerBank
-	ret
-
-; ix = this
-Patch_VoiceFactory:
-	ld l,(ix + Patch.voicePool)
-	ld h,(ix + Patch.voicePool + 1)
-	push hl
-	call Voice_New
-	ex (sp),ix
-	pop hl
-	push hl
-	call VoicePool_AddVoice
-	pop ix
-	ret
-
-; ix = this
-Patch_SCCVoiceFactory:
-	call SCC_GetFreeVoice
-	ret
-
-; ix = this
-Patch_AREnvelopeFactory:
-	call AREnvelope_New
-	ret
-
-; ix = this
-Patch_SustainFactory:
-	call Sustain_New
-	ret
-
-; ix = this
-Patch_SignedTriangleLFOFactory:
-	call SignedTriangleLFO_New
-	ret
-
-; ix = this
-Patch_MultiplyFactory:
-	call Multiply_New
-	ret
-
-; ix = this
-Patch_PitchBendFactory:
-	call PitchBend_New
-	ret
-
-; ix = this
-Patch_AddPitchFactory:
-	call AddPitch_New
-	ret
-
-; ix = this
-Patch_TriangleLFOFactory:
-	call TriangleLFO_New
-	ret
-
-; ix = this
-Patch_MultiplyAddFactory:
-	call MultiplyAdd_New
 	ret
