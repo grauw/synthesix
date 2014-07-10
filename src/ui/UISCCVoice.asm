@@ -59,6 +59,27 @@ UISCCVoice_Constructor:
 
 	push ix
 	push iy
+	ld bc,0000H
+	ld de,UISCCVoice_width << 8 | UISCCVoice_height
+	ld hl,UISCCVoice_template
+	call UIPanel_New
+	pop iy
+	pop ix
+
+	push ix
+	push iy
+	ld bc,0014H
+	call UINode_GetBufferPosition
+	pop ix
+	push ix
+	call SCCVoice_GetNumber
+	add a,"1"
+	ld (hl),a
+	pop iy
+	pop ix
+
+	push ix
+	push iy
 	ld l,(iy + SCCVoice.amplitude)
 	ld h,(iy + SCCVoice.amplitude + 1)
 	ld bc,0219H
@@ -135,3 +156,12 @@ UISCCVoice_Update:
 	call UINode_Update
 	pop ix
 	ret
+
+;
+UISCCVoice_width: equ 31
+UISCCVoice_height: equ 4
+UISCCVoice_template:
+	db 24,23,23,23,23,23,23,23,23," SCC Voice 0 ",23,23,23,23,23,23,23,23,25
+	db 22," Note: 0000     Detune: 0000 ",22
+	db 22," Wave: 0000  Amplitude: 0000 ",22
+	db 26,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,27
