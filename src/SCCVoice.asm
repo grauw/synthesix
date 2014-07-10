@@ -182,3 +182,10 @@ SCCVoice_GetNumber:
 	ld a,(ix + SCCVoice.amplitudeRegister)
 	sub SCC_AMPLITUDE_1
 	ret
+
+; ix = this
+; a <- voice number (0 .. 4)
+SCCVoice_GetNumber_IY:
+	ld a,(iy + SCCVoice.amplitudeRegister)
+	sub SCC_AMPLITUDE_1
+	ret

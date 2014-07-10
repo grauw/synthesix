@@ -66,17 +66,11 @@ UISCCVoice_Constructor:
 	pop iy
 	pop ix
 
-	push ix
-	push iy
 	ld bc,0014H
 	call UINode_GetBufferPosition
-	pop ix
-	push ix
-	call SCCVoice_GetNumber
+	call SCCVoice_GetNumber_IY
 	add a,"1"
 	ld (hl),a
-	pop iy
-	pop ix
 
 	push ix
 	push iy
