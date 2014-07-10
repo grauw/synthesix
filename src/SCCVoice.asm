@@ -175,3 +175,10 @@ SCCVoice_SetWave:
 	ld a,ROM_Bank3Default
 	ld (ROM_BANK_3_CHANGE),a
 	ret
+
+; ix = this
+; a <- voice number (0 .. 4)
+SCCVoice_GetNumber:
+	ld a,(ix + SCCVoice.amplitudeRegister)
+	sub SCC_AMPLITUDE_1
+	ret
