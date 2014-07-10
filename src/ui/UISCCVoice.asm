@@ -20,8 +20,7 @@ UISCCVoice: MACRO
 UISCCVoice_class: UISCCVoice
 
 ; ix = parent
-; c = x coordinate
-; b = y coordinate
+; bc = x / y coordinate
 ; hl = voice
 ; ix <- instance
 UISCCVoice_New:
@@ -37,8 +36,7 @@ UISCCVoice_New:
 	ret
 
 ; ix = parent
-; c = x coordinate
-; b = y coordinate
+; bc = x / y coordinate
 ; hl = value address
 ; de <- instance
 UISCCVoice_New_DE:
