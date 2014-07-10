@@ -104,8 +104,8 @@ PhilipsMidi_CheckOverrun: PROC
 PhilipsMidi_InterruptHandler: PROC
 	push af
 	in a,(PhilipsMidi_STATUS)
-	and 00000001B
-	jr z,NotPhilipsMidi
+	rrca
+	jr nc,NotPhilipsMidi
 	push hl
 	in a,(PhilipsMidi_RECEIVE)
 	call System_ThrowException
