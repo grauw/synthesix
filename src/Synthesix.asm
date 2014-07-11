@@ -44,8 +44,7 @@ Synthesix_Main:
 Synthesix_MainLoop:
 	call UI_Update
 	ld ix,KeyMidi_instance
-	ld a,(ix + KeyMidi.escape)
-	and a
+	bit 0,(ix + KeyMidi.escape)
 	jp z,Synthesix_MainLoop
 	ret
 
