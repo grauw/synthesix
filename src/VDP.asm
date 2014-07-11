@@ -33,22 +33,18 @@ MSX1: ; complicated dance to enable TEXT 2 mode on MSX1 computers with v9938
 	ld (VDP_MIRROR_0 + 2),a
 	ld b,2
 	call VDP_SetRegister
+	ld a,0
+	ld (VDP_MIRROR_8 + 9),a  ; Initialise MSX2 register mirror
 	ret
 	ENDP
 
-VDP_Enable212Lines: PROC
-	ld a,(IDBYT2)
-	and a
+VDP_Enable212Lines:
 	ld a,(VDP_MIRROR_8 + 9)
-	call z,MSX1
 	or 10000000B
 	ld (VDP_MIRROR_8 + 9),a
 	ld b,9
 	call VDP_SetRegister
-MSX1:
-	ld a,0
 	ret
-	ENDP
 
 ;
 ; Detect VDP version
