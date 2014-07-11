@@ -34,7 +34,7 @@ UISynthesix_Constructor:
 	ld (ix + UISynthesix.title),e
 	ld (ix + UISynthesix.title + 1),d
 
-	ld de,0100H
+	ld de,1400H
 	ld hl,(SCC_voices)
 	push ix
 	call UISCCVoice_New_DE
@@ -42,7 +42,7 @@ UISynthesix_Constructor:
 	ld (ix + UISynthesix.voice1),e
 	ld (ix + UISynthesix.voice1 + 1),d
 
-	ld de,0500H
+	ld de,1410H
 	ld hl,(SCC_voices + 2)
 	push ix
 	call UISCCVoice_New_DE
@@ -50,7 +50,7 @@ UISynthesix_Constructor:
 	ld (ix + UISynthesix.voice2),e
 	ld (ix + UISynthesix.voice2 + 1),d
 
-	ld de,0900H
+	ld de,1420H
 	ld hl,(SCC_voices + 4)
 	push ix
 	call UISCCVoice_New_DE
@@ -58,7 +58,7 @@ UISynthesix_Constructor:
 	ld (ix + UISynthesix.voice3),e
 	ld (ix + UISynthesix.voice3 + 1),d
 
-	ld de,0D00H
+	ld de,1430H
 	ld hl,(SCC_voices + 6)
 	push ix
 	call UISCCVoice_New_DE

@@ -64,7 +64,7 @@ UISCCVoice_Constructor:
 	pop iy
 	pop ix
 
-	ld de,0014H
+	ld de,000DH
 	call UINode_GetBufferPosition
 	call SCCVoice_GetNumber_IY
 	add a,"1"
@@ -74,7 +74,7 @@ UISCCVoice_Constructor:
 	push iy
 	ld l,(iy + SCCVoice.amplitude)
 	ld h,(iy + SCCVoice.amplitude + 1)
-	ld de,0219H
+	ld de,030AH
 	call UIValue_New_DE
 	ld (ix + UISCCVoice.amplitudeValue),e
 	ld (ix + UISCCVoice.amplitudeValue + 1),d
@@ -85,7 +85,7 @@ UISCCVoice_Constructor:
 	push iy
 	ld l,(iy + SCCVoice.note)
 	ld h,(iy + SCCVoice.note + 1)
-	ld de,0108H
+	ld de,010AH
 	call UIValue_New_DE
 	ld (ix + UISCCVoice.noteValue),e
 	ld (ix + UISCCVoice.noteValue + 1),d
@@ -96,7 +96,7 @@ UISCCVoice_Constructor:
 	push iy
 	ld l,(iy + SCCVoice.detune)
 	ld h,(iy + SCCVoice.detune + 1)
-	ld de,0119H
+	ld de,020AH
 	call UIValue_New_DE
 	ld (ix + UISCCVoice.detuneValue),e
 	ld (ix + UISCCVoice.detuneValue + 1),d
@@ -107,7 +107,7 @@ UISCCVoice_Constructor:
 	push iy
 	ld l,(iy + SCCVoice.wave)
 	ld h,(iy + SCCVoice.wave + 1)
-	ld de,0208H
+	ld de,040AH
 	call UIValue_New_DE
 	ld (ix + UISCCVoice.waveValue),e
 	ld (ix + UISCCVoice.waveValue + 1),d
@@ -150,10 +150,12 @@ UISCCVoice_Update:
 	ret
 
 ;
-UISCCVoice_width: equ 31
-UISCCVoice_height: equ 4
+UISCCVoice_width: equ 16
+UISCCVoice_height: equ 6
 UISCCVoice_template:
-	db 24,23,23,23,23,23,23,23,23," SCC Voice 0 ",23,23,23,23,23,23,23,23,25
-	db 22," Note: 0000     Detune: 0000 ",22
-	db 22," Wave: 0000  Amplitude: 0000 ",22
-	db 26,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,27
+	db 24," SCC Voice  0 ",25
+	db 22," Note:   0000 ",22
+	db 22," Detune: 0000 ",22
+	db 22," Amplit: 0000 ",22
+	db 22," Wave:   0000 ",22
+	db 26,23,23,23,23,23,23,23,23,23,23,23,23,23,23,27
