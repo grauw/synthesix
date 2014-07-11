@@ -2,6 +2,7 @@
 ; UI system
 ;
 
+	INCLUDE "Font.asm"
 	INCLUDE "UINode.asm"
 	INCLUDE "UIText.asm"
 	INCLUDE "UIPanel.asm"
@@ -12,6 +13,7 @@
 UI_Init:
 	call VDP_InitScreen0
 	call VDP_Enable212Lines
+	call Font_Install
 	ld iy,UISynthesix_class
 	call Class_New
 	ld (UI_root),ix
