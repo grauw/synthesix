@@ -56,8 +56,10 @@ UIValue_Update:
 	ld a,(hl)
 	ld l,(ix + UIValue.super.buffer)
 	ld h,(ix + UIValue.super.buffer + 1)
-	call UIValue_FormatNumber
-	ret
+	ld ix,KeyMidi_instance
+	bit 0,(ix + KeyMidi.shift)
+	jp nz,UIValue_FormatNumber
+	jp UIValue_FormatBar
 
 ; a = number
 ; hl = string buffer (4 characters)
@@ -100,5 +102,35 @@ Continue10:
 	inc hl
 	add a,"0"
 	ld (hl),a
+	ret
+	ENDP
+
+; a = number
+; hl = string buffer (4 characters)
+UIValue_FormatBar: PROC
+	add a,128
+	srl a  ; covert 0-255 to 0-23
+	ld b,a
+	srl a
+	add a,b
+	srl a
+	srl a
+	srl a
+	call WriteSegmentNoInc
+	call WriteSegment
+	call WriteSegment
+WriteSegment:
+	inc hl
+WriteSegmentNoInc:
+	sub 6
+	jp nc,EmptySegment
+	cp 256 - 6
+	jp c,EmptySegment
+	add a,6 + 1  ; + character offset
+	ld (hl),a
+	sub 6 + 1
+	ret
+EmptySegment:
+	ld (hl),23
 	ret
 	ENDP
