@@ -63,8 +63,6 @@ VDP_GetVersion:
 	out (VDP_PORT_1),a
 	ld a,15 + 128
 	out (VDP_PORT_1),a
-	nop
-	nop
 	in a,(VDP_PORT_1)    ; read s#1
 	and 00111110B        ; get VDP ID
 	rrca
@@ -99,8 +97,6 @@ VDP_IsTMS9918A: PROC
 	out (VDP_PORT_1),a
 	ld a,15 + 128
 	out (VDP_PORT_1),a
-	nop
-	nop
 	in a,(VDP_PORT_1)    ; read s#2 / s#0
 	ex af,af'
 	xor a                ; select s#0 as required by BIOS
@@ -140,7 +136,6 @@ VDP_SetReadAddress:
 	out (VDP_PORT_1),a
 VDP_SetReadAddress14Bit:
 	ld a,l
-	nop
 	out (VDP_PORT_1),a
 	ld a,h
 	or VDP_READ
@@ -163,7 +158,6 @@ VDP_SetWriteAddress:
 	out (VDP_PORT_1),a
 VDP_SetWriteAddress14Bit:
 	ld a,l
-	nop
 	out (VDP_PORT_1),a
 	ld a,h
 	or VDP_WRITE
