@@ -13,6 +13,7 @@
 UI_Init:
 	call VDP_InitScreen0
 	call VDP_Enable212Lines
+	call VDP_Enable60Hz
 	call Font_Install
 	ld iy,UISynthesix_class
 	call Class_New
