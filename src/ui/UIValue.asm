@@ -50,12 +50,18 @@ UIValue_Constructor: PROC
 	ENDP
 
 ; ix = this
-UIValue_Update: PROC
+UIValue_Update:
 	ld l,(ix + UIValue.value)
 	ld h,(ix + UIValue.value + 1)
 	ld a,(hl)
 	ld l,(ix + UIValue.super.buffer)
 	ld h,(ix + UIValue.super.buffer + 1)
+	call UIValue_FormatNumber
+	ret
+
+; a = number
+; hl = string buffer (4 characters)
+UIValue_FormatNumber: PROC
 	bit 7,a
 	jr nz,NegativeSign
 	ld (hl)," "
