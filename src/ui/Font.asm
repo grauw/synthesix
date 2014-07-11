@@ -28,7 +28,7 @@ Font_font:
 	db 00000000B
 	db 00000000B
 
-	db 10000000B  ; 1
+	db 10000000B  ; 1 bar segment 0
 	db 10000000B
 	db 10000000B
 	db 11111100B
@@ -37,7 +37,7 @@ Font_font:
 	db 10000000B
 	db 00000000B
 
-	db 01000000B  ; 2
+	db 01000000B  ; 2 bar segment 1
 	db 01000000B
 	db 01000000B
 	db 11111100B
@@ -46,7 +46,7 @@ Font_font:
 	db 01000000B
 	db 00000000B
 
-	db 00100000B  ; 3
+	db 00100000B  ; 3 bar segment 2
 	db 00100000B
 	db 00100000B
 	db 11111100B
@@ -55,7 +55,7 @@ Font_font:
 	db 00100000B
 	db 00000000B
 
-	db 00010000B  ; 4
+	db 00010000B  ; 4 bar segment 3
 	db 00010000B
 	db 00010000B
 	db 11111100B
@@ -64,7 +64,7 @@ Font_font:
 	db 00010000B
 	db 00000000B
 
-	db 00001000B  ; 5
+	db 00001000B  ; 5 bar segment 4
 	db 00001000B
 	db 00001000B
 	db 11111100B
@@ -73,7 +73,7 @@ Font_font:
 	db 00001000B
 	db 00000000B
 
-	db 00000100B  ; 6
+	db 00000100B  ; 6 bar segment 5
 	db 00000100B
 	db 00000100B
 	db 11111100B
