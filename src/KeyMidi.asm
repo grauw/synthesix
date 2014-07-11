@@ -11,6 +11,8 @@ KeyMidi: MACRO
 		db 7FH
 	escape:
 		db 0
+	shift:
+		db 0
 	ENDM
 
 ; ix = this
@@ -108,6 +110,8 @@ KeyMidi_ProcessKeyPress:
 	jp z,KeyMidi_PressSpace
 	cp -99
 	jp z,KeyMidi_PressEscape
+	cp -98
+	jp z,KeyMidi_PressShift
 	ret
 
 ; ix = this
@@ -117,6 +121,8 @@ KeyMidi_ProcessKeyRelease:
 	jp p,KeyMidi_ReleaseNote
 	cp -6
 	jp z,KeyMidi_ReleaseSpace
+	cp -98
+	jp z,KeyMidi_ReleaseShift
 	ret
 
 ; ix = this
@@ -191,6 +197,18 @@ KeyMidi_PressEscape:
 	ret
 
 ; ix = this
+KeyMidi_PressShift:
+	ld a,-1
+	ld (ix + KeyMidi.shift),a
+	ret
+
+; ix = this
+KeyMidi_ReleaseShift:
+	ld a,0
+	ld (ix + KeyMidi.shift),a
+	ret
+
+; ix = this
 KeyMidi_PressSpace:
 	ld b,7FH
 	ld a,0
@@ -211,7 +229,7 @@ KeyMidi_noteMapping:
 	db 52, 51, 64, -1, 54, 56, 72, 58  ; row 3: C D E F G H I J
 	db -1, 61, 59, 57, 74, 76, 60, 65  ; row 4: K L M N O P Q R
 	db 49, 67, 71, 53, 62, 50, 69, 48  ; row 4: S T U V W X Y Z
-	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: SHIFT CTRL GRAPH CAPS CODE F1 F2 F3
+	db -98,-1, -1, -1, -1, -1, -1, -1  ; row 4: SHIFT CTRL GRAPH CAPS CODE F1 F2 F3
 	db -1, -1,-99, -1, -1, -1, -1, -1  ; row 4: F4 F5 ESC TAB STOP BS SELECT RET
 	db -6, -1, -1, -1, -5, -2, -3, -4  ; row 4: SPACE HOME INS DEL ← ↑ ↓ →
 	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: NUM* NUM+ NUM/ NUM0 NUM1 NUM2 NUM3 NUM4
