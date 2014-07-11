@@ -56,5 +56,3 @@ UINode_Update:
 	ld l,(ix + UINode.update)
 	ld h,(ix + UINode.update + 1)
 	jp hl
-
-UINode_GetCoordinate
