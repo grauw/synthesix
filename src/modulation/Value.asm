@@ -17,6 +17,6 @@ Value_New:
 	ret
 
 ;
-Value_values: REPT 128, ?value
+Value_values: REPT 256, ?value
 	Value ?value
 	ENDM
