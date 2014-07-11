@@ -28,13 +28,13 @@ UISynthesix_Constructor:
 	ld hl,UISynthesix_template
 	ldir
 
-	ld bc,001EH
+	ld de,001EH
 	ld hl,UISynthesix_titleText
 	call UIText_New_DE
 	ld (ix + UISynthesix.title),e
 	ld (ix + UISynthesix.title + 1),d
 
-	ld bc,0100H
+	ld de,0100H
 	ld hl,(SCC_voices)
 	push ix
 	call UISCCVoice_New_DE
@@ -42,7 +42,7 @@ UISynthesix_Constructor:
 	ld (ix + UISynthesix.voice1),e
 	ld (ix + UISynthesix.voice1 + 1),d
 
-	ld bc,0500H
+	ld de,0500H
 	ld hl,(SCC_voices + 2)
 	push ix
 	call UISCCVoice_New_DE
@@ -50,7 +50,7 @@ UISynthesix_Constructor:
 	ld (ix + UISynthesix.voice2),e
 	ld (ix + UISynthesix.voice2 + 1),d
 
-	ld bc,0900H
+	ld de,0900H
 	ld hl,(SCC_voices + 4)
 	push ix
 	call UISCCVoice_New_DE
@@ -58,7 +58,7 @@ UISynthesix_Constructor:
 	ld (ix + UISynthesix.voice3),e
 	ld (ix + UISynthesix.voice3 + 1),d
 
-	ld bc,0D00H
+	ld de,0D00H
 	ld hl,(SCC_voices + 6)
 	push ix
 	call UISCCVoice_New_DE
@@ -106,7 +106,7 @@ UISynthesix_Update:
 	ret
 
 UISynthesix_UpdateLiveIndicator:
-	ld bc,002FH
+	ld de,002FH
 	call UINode_GetBufferPosition
 	ld a,(JIFFY)
 	bit 5,a

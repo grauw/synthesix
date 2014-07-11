@@ -12,23 +12,23 @@ UIValue: MACRO
 UIValue_class: UIValue
 
 ; ix = parent
-; bc = x / y coordinate
+; de = x / y coordinate
 ; hl = value address
 ; ix <- instance
 UIValue_New:
 	push ix
 	push hl
-	push bc
+	push de
 	ld iy,UIValue_class
 	call Class_New
-	pop bc
+	pop de
 	pop hl
 	pop iy
 	call UIValue_Constructor
 	ret
 
 ; ix = parent
-; bc = x / y coordinate
+; de = x / y coordinate
 ; hl = value address
 ; de <- instance
 UIValue_New_DE:
@@ -40,7 +40,7 @@ UIValue_New_DE:
 
 ; ix = this
 ; iy = parent
-; bc = x / y coordinate
+; de = x / y coordinate
 ; hl = value address
 UIValue_Constructor: PROC
 	ld (ix + UIValue.value),l

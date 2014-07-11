@@ -11,8 +11,8 @@ UIPanel: MACRO
 UIPanel_class: UIPanel
 
 ; ix = parent
-; bc = x / y coordinate
-; de = width / height
+; bc = width / height
+; de = x / y coordinate
 ; hl = source buffer
 ; ix <- instance
 UIPanel_New:
@@ -30,8 +30,8 @@ UIPanel_New:
 	ret
 
 ; ix = parent
-; bc = x / y coordinate
-; de = width / height
+; bc = width / height
+; de = x / y coordinate
 ; hl = source buffer
 ; de <- instance
 UIPanel_New_DE:
@@ -43,11 +43,11 @@ UIPanel_New_DE:
 
 ; ix = this
 ; iy = parent
-; bc = x / y coordinate
-; de = width / height
+; bc = width / height
+; de = x / y coordinate
 ; hl = source buffer
 UIPanel_Constructor: PROC
-	push de
+	push bc
 	push hl
 	call UINode_SetBuffer
 	ex de,hl
