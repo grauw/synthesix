@@ -34,7 +34,7 @@ UISynthesix_Constructor:
 	ld (ix + UISynthesix.title),e
 	ld (ix + UISynthesix.title + 1),d
 
-	ld de,1400H
+	ld de,1300H
 	ld hl,(SCC_voices)
 	push ix
 	call UISCCVoice_New_DE
@@ -42,7 +42,7 @@ UISynthesix_Constructor:
 	ld (ix + UISynthesix.voice1),e
 	ld (ix + UISynthesix.voice1 + 1),d
 
-	ld de,1410H
+	ld de,1310H
 	ld hl,(SCC_voices + 2)
 	push ix
 	call UISCCVoice_New_DE
@@ -50,7 +50,7 @@ UISynthesix_Constructor:
 	ld (ix + UISynthesix.voice2),e
 	ld (ix + UISynthesix.voice2 + 1),d
 
-	ld de,1420H
+	ld de,1320H
 	ld hl,(SCC_voices + 4)
 	push ix
 	call UISCCVoice_New_DE
@@ -58,7 +58,7 @@ UISynthesix_Constructor:
 	ld (ix + UISynthesix.voice3),e
 	ld (ix + UISynthesix.voice3 + 1),d
 
-	ld de,1430H
+	ld de,1330H
 	ld hl,(SCC_voices + 6)
 	push ix
 	call UISCCVoice_New_DE
@@ -155,6 +155,8 @@ UISynthesix_template:
 	db "                                                                                "
 	db "                                                                                "
 	db "                                                                                "
-	db "                                                                                "
-	ds 80,23
+	db " ",10,11,12,10,11,11,12,10,11,12,10,11,11,12,10,11,12,10,11,11,12,10,11,12,10,11,11,12,10,11,12,10,11,11,12,10,11,12,10
+	db 11,11,12,10,11,12,10,11,11,12,10,11,12,10,11,11,12,10,11,12,10,11,11,12,10,11,12,10,11,11,12,10,11,12,10,11,11,12,13," "
+	db " ",8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8
+	db 8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8," "
 UISynthesix_template_size: equ $ - UISynthesix_template
