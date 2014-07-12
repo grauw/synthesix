@@ -16,7 +16,7 @@ Channel: MACRO ?controllers
 	pitchBendFine:
 		Value 0
 	pitchBendCoarse:
-		Value 40H
+		Value 0
 	reserved:
 		ds 2
 	voicePools:
@@ -119,6 +119,16 @@ Channel_ChannelPressure:
 	ret
 
 Channel_PitchBend:
+	ld a,c
+	xor 40H
+	ld c,a
+	rla
+	rla
+	rla
+	rl b
+	rla
+	rl b
+	rl c
 	ld (ix + Channel.pitchBendFine),b
 	ld (ix + Channel.pitchBendCoarse),c
 	ret

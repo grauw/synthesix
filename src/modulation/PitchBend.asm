@@ -42,15 +42,12 @@ PitchBend_Constructor:
 PitchBend_Update: PROC
 	ld l,(ix + PitchBend.pitchFine)
 	ld h,(ix + PitchBend.pitchFine + 1)
-	ld a,(hl)
-	add a,a
-	add a,a
-	ld e,a
+	ld e,(hl)
 	ld l,(ix + PitchBend.pitchCoarse)
 	ld h,(ix + PitchBend.pitchCoarse + 1)
 	ld d,(hl)
-	rl d
-	jp m,Positive
+	bit 7,d
+	jp z,Positive
 Negative:
 	ld hl,7FFFH
 	and a
