@@ -43,6 +43,7 @@ UINode_GetBufferPosition_BC:
 	add a,a
 	ld l,a
 	ld h,0
+	rl h
 	add hl,hl
 	add hl,hl
 	add hl,hl
