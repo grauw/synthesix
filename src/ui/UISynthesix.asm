@@ -5,6 +5,8 @@ UISynthesix: MACRO
 	super: UINode UISynthesix_Update
 	title:
 		dw 0
+	pitchBend:
+		dw 0
 	voice1:
 		dw 0
 	voice2:
@@ -33,6 +35,16 @@ UISynthesix_Constructor:
 	call UIText_New_DE
 	ld (ix + UISynthesix.title),e
 	ld (ix + UISynthesix.title + 1),d
+
+	push ix
+	push iy
+	ld hl,Channel_channels.0 + Channel.pitchBendCoarse
+	ld de,1900H
+	call UIValue_New_DE
+	pop iy
+	pop ix
+	ld (ix + UISynthesix.pitchBend),e
+	ld (ix + UISynthesix.pitchBend + 1),d
 
 	ld de,1300H
 	ld hl,(SCC_voices)
@@ -69,6 +81,10 @@ UISynthesix_Constructor:
 
 UISynthesix_Update:
 	call UISynthesix_UpdateLiveIndicator
+
+	ld e,(ix + UISynthesix.pitchBend)
+	ld d,(ix + UISynthesix.pitchBend + 1)
+	call UINode_Update_DE
 
 	ld e,(ix + UISynthesix.voice1)
 	ld d,(ix + UISynthesix.voice1 + 1)
