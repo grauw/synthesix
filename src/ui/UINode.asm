@@ -56,3 +56,12 @@ UINode_Update:
 	ld l,(ix + UINode.update)
 	ld h,(ix + UINode.update + 1)
 	jp hl
+
+; de = this
+UINode_Update_DE:
+	push ix
+	ld ixl,e
+	ld ixh,d
+	call UINode_Update
+	pop ix
+	ret

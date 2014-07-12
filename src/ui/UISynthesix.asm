@@ -72,35 +72,19 @@ UISynthesix_Update:
 
 	ld e,(ix + UISynthesix.voice1)
 	ld d,(ix + UISynthesix.voice1 + 1)
-	push ix
-	ld ixl,e
-	ld ixh,d
-	call UINode_Update
-	pop ix
+	call UINode_Update_DE
 
 	ld e,(ix + UISynthesix.voice2)
 	ld d,(ix + UISynthesix.voice2 + 1)
-	push ix
-	ld ixl,e
-	ld ixh,d
-	call UINode_Update
-	pop ix
+	call UINode_Update_DE
 
 	ld e,(ix + UISynthesix.voice3)
 	ld d,(ix + UISynthesix.voice3 + 1)
-	push ix
-	ld ixl,e
-	ld ixh,d
-	call UINode_Update
-	pop ix
+	call UINode_Update_DE
 
 	ld e,(ix + UISynthesix.voice4)
 	ld d,(ix + UISynthesix.voice4 + 1)
-	push ix
-	ld ixl,e
-	ld ixh,d
-	call UINode_Update
-	pop ix
+	call UINode_Update_DE
 
 	call UISynthesix_Draw
 	ret

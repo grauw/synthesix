@@ -118,35 +118,19 @@ UISCCVoice_Constructor:
 UISCCVoice_Update:
 	ld e,(ix + UISCCVoice.amplitudeValue)
 	ld d,(ix + UISCCVoice.amplitudeValue + 1)
-	push ix
-	ld ixl,e
-	ld ixh,d
-	call UINode_Update
-	pop ix
+	call UINode_Update_DE
 
 	ld e,(ix + UISCCVoice.noteValue)
 	ld d,(ix + UISCCVoice.noteValue + 1)
-	push ix
-	ld ixl,e
-	ld ixh,d
-	call UINode_Update
-	pop ix
+	call UINode_Update_DE
 
 	ld e,(ix + UISCCVoice.detuneValue)
 	ld d,(ix + UISCCVoice.detuneValue + 1)
-	push ix
-	ld ixl,e
-	ld ixh,d
-	call UINode_Update
-	pop ix
+	call UINode_Update_DE
 
 	ld e,(ix + UISCCVoice.waveValue)
 	ld d,(ix + UISCCVoice.waveValue + 1)
-	push ix
-	ld ixl,e
-	ld ixh,d
-	call UINode_Update
-	pop ix
+	call UINode_Update_DE
 	ret
 
 ;
