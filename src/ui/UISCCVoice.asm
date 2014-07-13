@@ -55,14 +55,10 @@ UISCCVoice_Constructor:
 	call UINode_SetBuffer
 	pop iy
 
-	push ix
-	push iy
-	ld bc,UISCCVoice_width << 8 | UISCCVoice_height
-	ld de,0000H
 	ld hl,UISCCVoice_template
-	call UIPanel_New
-	pop iy
-	pop ix
+	ld de,0000H
+	ld bc,UISCCVoice_width << 8 | UISCCVoice_height
+	call UINode_CopyToBuffer
 
 	ld de,000DH
 	call UINode_GetBufferPosition
