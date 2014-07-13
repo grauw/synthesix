@@ -6,6 +6,8 @@ Voice: MACRO
 		Value 0
 	velocity:
 		Value 0
+	offVelocity:
+		Value 0
 	trigger:
 		Value 0
 	gate:
@@ -44,6 +46,7 @@ Voice_NoteOn:
 ; c = velocity (0-127)
 Voice_NoteOff:
 	ld (ix + Voice.gate),0
+	ld (ix + Voice.offVelocity),c
 	ret
 
 ; ix = this
