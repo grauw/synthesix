@@ -37,7 +37,7 @@ UISCCVoice_New:
 
 ; ix = parent
 ; de = x / y coordinate
-; hl = value address
+; hl = voice
 ; de <- instance
 UISCCVoice_New_DE:
 	call UISCCVoice_New
