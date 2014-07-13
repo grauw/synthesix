@@ -57,7 +57,7 @@ UISCCVoice_Constructor:
 
 	ld hl,UISCCVoice_template
 	ld de,0000H
-	ld bc,UISCCVoice_width << 8 | UISCCVoice_height
+	ld bc,1006H
 	call UINode_CopyToBuffer
 
 	ld de,000DH
@@ -130,8 +130,6 @@ UISCCVoice_Update:
 	ret
 
 ;
-UISCCVoice_width: equ 16
-UISCCVoice_height: equ 6
 UISCCVoice_template:
 	db 24," SCC Voice  0 ",25
 	db 22," Note:   0000 ",22
