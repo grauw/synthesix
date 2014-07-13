@@ -152,7 +152,7 @@ Channel_Update:
 ; ix = this
 ; a = controller number
 ; hl <- controller
-; Modifies: af, de, hl
+; Modifies: de, hl
 Channel_GetController:
 	ld l,(ix + Channel.controllers)
 	ld h,(ix + Channel.controllers + 1)
