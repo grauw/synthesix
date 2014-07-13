@@ -4,10 +4,10 @@
 Patch: MACRO
 	polyphony:
 		db 4
-	voicePool:
+	notePool:
 		dw 0
 	moduleLists:
-		REPT VoicePool.MAX_VOICES
+		REPT NotePool.MAX_NOTES
 		dw 0
 		ENDM
 	size:
@@ -26,12 +26,12 @@ Patch_New:
 ; ix <- this
 Patch_Constructor: PROC
 	push ix
-	call VoicePool_New
+	call NotePool_New
 	ld e,ixl
 	ld d,ixh
 	pop ix
-	ld (ix + Patch.voicePool),e
-	ld (ix + Patch.voicePool + 1),d
+	ld (ix + Patch.notePool),e
+	ld (ix + Patch.notePool + 1),d
 	push ix
 	call Patch_InitModuleLists
 	pop ix
@@ -41,15 +41,15 @@ Patch_Constructor: PROC
 	call Patch_AddModule                ; module 1
 	ld hl,Module_controllerBank
 	call Patch_AddModule                ; module 2
-	ld hl,Module_voice
+	ld hl,Module_note
 	call Patch_AddModule                ; module 3
 	ld hl,Module_sccVoice
 	call Patch_AddModule                ; module 4
 	ld hl,4 << 8 | SCCVoice.note
-	ld de,3 << 8 | Voice.key
+	ld de,3 << 8 | Note.key
 	call Patch_AddLink
 	ld hl,4 << 8 | SCCVoice.amplitude
-	ld de,3 << 8 | Voice.gate
+	ld de,3 << 8 | Note.gate
 	call Patch_AddLink
 	; AR envelope
 	ld hl,Module_envelopeAR
@@ -69,10 +69,10 @@ Patch_Constructor: PROC
 	ld de,2 << 8 | 94
 	call Patch_AddLink
 	ld hl,5 << 8 | EnvelopeAR.trigger
-	ld de,3 << 8 | Voice.trigger
+	ld de,3 << 8 | Note.trigger
 	call Patch_AddLink
 	ld hl,6 << 8 | Sustain.gate
-	ld de,3 << 8 | Voice.gate
+	ld de,3 << 8 | Note.gate
 	call Patch_AddLink
 	ld hl,6 << 8 | Sustain.hold
 	ld de,2 << 8 | 64
@@ -115,7 +115,7 @@ Patch_Constructor: PROC
 	ld de,9 << 8 | PitchBend.detune
 	call Patch_AddLink
 	ld hl,10 << 8 | AddPitch.addendNote
-	ld de,3 << 8 | Voice.key
+	ld de,3 << 8 | Note.key
 	call Patch_AddLink
 	ld hl,10 << 8 | AddPitch.addendDetune
 	ld de,0 << 8 | 0
@@ -151,9 +151,9 @@ Patch_Constructor: PROC
 	ENDP
 
 ; ix = this
-Patch_GetVoicePool:
-	ld e,(ix + Patch.voicePool)
-	ld d,(ix + Patch.voicePool + 1)
+Patch_GetNotePool:
+	ld e,(ix + Patch.notePool)
+	ld d,(ix + Patch.notePool + 1)
 	ld ixl,e
 	ld ixh,d
 	ret

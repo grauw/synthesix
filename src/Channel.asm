@@ -2,11 +2,11 @@
 ; A MIDI channel
 ;
 ; One channel can control multiple timbres.
-; It contains one voice pool per sound chip / patch.
-; All MIDI messages are forwarded to the voice pools.
+; It contains one note pool per sound chip / patch.
+; All MIDI messages are forwarded to the note pools.
 ;
 Channel: MACRO ?keys, ?controllers
-	MAX_VOICE_POOLS: equ 4
+	MAX_NOTE_POOLS: equ 4
 	keys:
 		dw ?keys
 	controllers:
@@ -19,8 +19,8 @@ Channel: MACRO ?keys, ?controllers
 		Value 0
 	pitchBendCoarse:
 		Value 0
-	voicePools:
-		REPT MAX_VOICE_POOLS
+	notePools:
+		REPT MAX_NOTE_POOLS
 		dw 0
 		ENDM
 	size:
@@ -53,9 +53,9 @@ Channel_NoteOn: PROC
 	inc c
 	dec c
 	jp z,NoteOff
-	REPT Channel.MAX_VOICE_POOLS, ?pool
-	ld e,(ix + Channel.voicePools + ?pool * 2)
-	ld d,(ix + Channel.voicePools + ?pool * 2 + 1)
+	REPT Channel.MAX_NOTE_POOLS, ?pool
+	ld e,(ix + Channel.notePools + ?pool * 2)
+	ld d,(ix + Channel.notePools + ?pool * 2 + 1)
 	inc d
 	dec d
 	ret z
@@ -64,7 +64,7 @@ Channel_NoteOn: PROC
 	push bc
 	ld ixl,e
 	ld ixh,d
-	call VoicePool_NoteOn
+	call NotePool_NoteOn
 	pop bc
 	pop af
 	pop ix
@@ -83,9 +83,9 @@ Channel_NoteOff:
 	call Channel_GetKey
 	ld (hl),0
 	;
-	REPT Channel.MAX_VOICE_POOLS, ?pool
-	ld e,(ix + Channel.voicePools + ?pool * 2)
-	ld d,(ix + Channel.voicePools + ?pool * 2 + 1)
+	REPT Channel.MAX_NOTE_POOLS, ?pool
+	ld e,(ix + Channel.notePools + ?pool * 2)
+	ld d,(ix + Channel.notePools + ?pool * 2 + 1)
 	inc d
 	dec d
 	ret z
@@ -94,7 +94,7 @@ Channel_NoteOff:
 	push bc
 	ld ixl,e
 	ld ixh,d
-	call VoicePool_NoteOff
+	call NotePool_NoteOff
 	pop bc
 	pop af
 	pop ix
@@ -143,16 +143,16 @@ Channel_PitchBend:
 
 ; ix = this
 Channel_Update:
-	REPT Channel.MAX_VOICE_POOLS, ?pool
-	ld e,(ix + Channel.voicePools + ?pool * 2)
-	ld d,(ix + Channel.voicePools + ?pool * 2 + 1)
+	REPT Channel.MAX_NOTE_POOLS, ?pool
+	ld e,(ix + Channel.notePools + ?pool * 2)
+	ld d,(ix + Channel.notePools + ?pool * 2 + 1)
 	inc d
 	dec d
 	ret z
 	push ix
 	ld ixl,e
 	ld ixh,d
-	call VoicePool_Update
+	call NotePool_Update
 	pop ix
 	ENDM
 	ret
@@ -185,14 +185,14 @@ Channel_GetControllerBank:
 	ret
 
 ; ix = this
-; hl = voice pool
-Channel_AddVoicePool: PROC
-	REPT Channel.MAX_VOICE_POOLS, ?pool
-	ld a,(ix + Channel.voicePools + ?pool * 2 + 1)
+; hl = note pool
+Channel_AddNotePool: PROC
+	REPT Channel.MAX_NOTE_POOLS, ?pool
+	ld a,(ix + Channel.notePools + ?pool * 2 + 1)
 	and a
 	jr nz,Next
-	ld (ix + Channel.voicePools + ?pool * 2),l
-	ld (ix + Channel.voicePools + ?pool * 2 + 1),h
+	ld (ix + Channel.notePools + ?pool * 2),l
+	ld (ix + Channel.notePools + ?pool * 2 + 1),h
 	ret
 Next:
 	ENDM

@@ -1,9 +1,9 @@
 ;
 ; Display a virtual keyboard
 ;
-UIVoice: MACRO
-	super: UINode UIVoice_Update
-	voice:
+UINote: MACRO
+	super: UINode UINote_Update
+	note:
 		dw 0
 	key:
 		dw 0
@@ -16,47 +16,47 @@ UIVoice: MACRO
 	size:
 	ENDM
 
-	dw UIVoice.size
-UIVoice_class: UIVoice
+	dw UINote.size
+UINote_class: UINote
 
 ; ix = parent
 ; de = x / y coordinate
-; hl = voice
+; hl = note
 ; ix <- instance
-UIVoice_New:
+UINote_New:
 	push ix
 	push hl
 	push de
-	ld iy,UIVoice_class
+	ld iy,UINote_class
 	call Class_New
 	pop de
 	pop hl
 	pop iy
-	call UIVoice_Constructor
+	call UINote_Constructor
 	ret
 
 ; ix = parent
 ; de = x / y coordinate
-; hl = voice
+; hl = note
 ; de <- instance
-UIVoice_New_DE:
-	call UIVoice_New
+UINote_New_DE:
+	call UINote_New
 	push iy
 	ex (sp),ix
 	pop de
 	ret
 
 ; ix = this
-; hl = voice
-UIVoice_Constructor:
-	ld (ix + UIVoice.voice),l
-	ld (ix + UIVoice.voice + 1),h
+; hl = note
+UINote_Constructor:
+	ld (ix + UINote.note),l
+	ld (ix + UINote.note + 1),h
 	push hl
 	call UINode_SetBuffer
 	pop hl
 
 	push hl
-	ld hl,UIVoice_background
+	ld hl,UINote_background
 	ld de,0000H
 	ld bc,1006H
 	call UINode_CopyToBuffer
@@ -64,71 +64,71 @@ UIVoice_Constructor:
 
 	push hl
 	push ix
-	ld bc,Voice.key
+	ld bc,Note.key
 	add hl,bc
 	ld de,010AH
 	call UIValue_New_DE
 	pop ix
 	pop hl
-	ld (ix + UIVoice.key),e
-	ld (ix + UIVoice.key + 1),d
+	ld (ix + UINote.key),e
+	ld (ix + UINote.key + 1),d
 
 	push hl
 	push ix
-	ld bc,Voice.velocity
+	ld bc,Note.velocity
 	add hl,bc
 	ld de,020AH
 	call UIValue_New_DE
 	pop ix
 	pop hl
-	ld (ix + UIVoice.velocity),e
-	ld (ix + UIVoice.velocity + 1),d
+	ld (ix + UINote.velocity),e
+	ld (ix + UINote.velocity + 1),d
 
 	push hl
 	push ix
-	ld bc,Voice.trigger
+	ld bc,Note.trigger
 	add hl,bc
 	ld de,030AH
 	call UIValue_New_DE
 	pop ix
 	pop hl
-	ld (ix + UIVoice.trigger),e
-	ld (ix + UIVoice.trigger + 1),d
+	ld (ix + UINote.trigger),e
+	ld (ix + UINote.trigger + 1),d
 
 	push hl
 	push ix
-	ld bc,Voice.gate
+	ld bc,Note.gate
 	add hl,bc
 	ld de,040AH
 	call UIValue_New_DE
 	pop ix
 	pop hl
-	ld (ix + UIVoice.gate),e
-	ld (ix + UIVoice.gate + 1),d
+	ld (ix + UINote.gate),e
+	ld (ix + UINote.gate + 1),d
 	ret
 
 ; ix = this
-UIVoice_Update:
-	ld e,(ix + UIVoice.key)
-	ld d,(ix + UIVoice.key + 1)
+UINote_Update:
+	ld e,(ix + UINote.key)
+	ld d,(ix + UINote.key + 1)
 	call UINode_Update_DE
 
-	ld e,(ix + UIVoice.velocity)
-	ld d,(ix + UIVoice.velocity + 1)
+	ld e,(ix + UINote.velocity)
+	ld d,(ix + UINote.velocity + 1)
 	call UINode_Update_DE
 
-	ld e,(ix + UIVoice.trigger)
-	ld d,(ix + UIVoice.trigger + 1)
+	ld e,(ix + UINote.trigger)
+	ld d,(ix + UINote.trigger + 1)
 	call UINode_Update_DE
 
-	ld e,(ix + UIVoice.gate)
-	ld d,(ix + UIVoice.gate + 1)
+	ld e,(ix + UINote.gate)
+	ld d,(ix + UINote.gate + 1)
 	call UINode_Update_DE
 	ret
 
 ;
-UIVoice_background:
-	db 24,23,23,23,23," Voice ",23,23,23,25
+UINote_background:
+	db 24,23,23,23,23," Note ",23,23,23,23,25
 	db 22," Key     0000 ",22
 	db 22," Velocit 0000 ",22
 	db 22," Trigger 0000 ",22

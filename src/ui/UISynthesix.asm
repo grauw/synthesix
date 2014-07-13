@@ -9,7 +9,7 @@ UISynthesix: MACRO
 		dw 0
 	controllers:
 		dw 0
-	voice:
+	note:
 		dw 0
 	voice1:
 		dw 0
@@ -59,18 +59,18 @@ UISynthesix_Constructor:
 	ld (ix + UISynthesix.controllers + 1),d
 
 	ld iy,Channel_channels.0
-	ld e,(iy + Channel.voicePools)
-	ld d,(iy + Channel.voicePools + 1)
+	ld e,(iy + Channel.notePools)
+	ld d,(iy + Channel.notePools + 1)
 	ld iyl,e
 	ld iyh,d
-	ld l,(iy + VoicePool.voices + NoteVoicePair.voice)
-	ld h,(iy + VoicePool.voices + NoteVoicePair.voice + 1)
+	ld l,(iy + NotePool.notes + KeyNotePair.note)
+	ld h,(iy + NotePool.notes + KeyNotePair.note + 1)
 	ld de,0110H
 	push ix
-	call UIVoice_New_DE
+	call UINote_New_DE
 	pop ix
-	ld (ix + UISynthesix.voice),e
-	ld (ix + UISynthesix.voice + 1),d
+	ld (ix + UISynthesix.note),e
+	ld (ix + UISynthesix.note + 1),d
 
 	ld de,1300H
 	ld hl,(SCC_voices)
@@ -116,8 +116,8 @@ UISynthesix_Update:
 	ld d,(ix + UISynthesix.controllers + 1)
 	call UINode_Update_DE
 
-	ld e,(ix + UISynthesix.voice)
-	ld d,(ix + UISynthesix.voice + 1)
+	ld e,(ix + UISynthesix.note)
+	ld d,(ix + UISynthesix.note + 1)
 	call UINode_Update_DE
 
 	ld e,(ix + UISynthesix.voice1)

@@ -41,18 +41,18 @@ Module_ControllerBankFactory:
 	call Channel_GetControllerBank
 	ret
 
-Module_voice: Module Module_VoiceFactory
+Module_note: Module Module_NoteFactory
 
 ; ix = Patch
-Module_VoiceFactory:
-	ld l,(ix + Patch.voicePool)
-	ld h,(ix + Patch.voicePool + 1)
+Module_NoteFactory:
+	ld l,(ix + Patch.notePool)
+	ld h,(ix + Patch.notePool + 1)
 	push hl
-	call Voice_New
+	call Note_New
 	ex (sp),ix
 	pop hl
 	push hl
-	call VoicePool_AddVoice
+	call NotePool_AddNote
 	pop ix
 	ret
 
