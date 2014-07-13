@@ -37,6 +37,7 @@ Note_Constructor: PROC
 Note_NoteOn:
 	ld (ix + Note.key),b
 	ld (ix + Note.velocity),c
+	ld (ix + Note.offVelocity),0
 	ld (ix + Note.trigger),7FH
 	ld (ix + Note.gate),7FH
 	ret
