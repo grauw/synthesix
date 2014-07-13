@@ -5,8 +5,10 @@
 ; It contains one voice pool per sound chip / patch.
 ; All MIDI messages are forwarded to the voice pools.
 ;
-Channel: MACRO ?controllers
+Channel: MACRO ?keys, ?controllers
 	MAX_VOICE_POOLS: equ 4
+	keys:
+		dw ?keys
 	controllers:
 		dw ?controllers
 	program:
@@ -17,8 +19,6 @@ Channel: MACRO ?controllers
 		Value 0
 	pitchBendCoarse:
 		Value 0
-	reserved:
-		ds 2
 	voicePools:
 		REPT MAX_VOICE_POOLS
 		dw 0
@@ -27,7 +27,7 @@ Channel: MACRO ?controllers
 	ENDM
 
 	dw Channel.size
-Channel_class: Channel 0
+Channel_class: Channel 0, 0
 
 ; ix <- new class
 Channel_New:
@@ -46,6 +46,10 @@ Channel_Constructor: PROC
 ; b = note number (0-127)
 ; c = velocity (0-127)
 Channel_NoteOn: PROC
+	ld a,b
+	call Channel_GetKey
+	ld (hl),c
+	;
 	inc c
 	dec c
 	jp z,NoteOff
@@ -75,6 +79,10 @@ NoteOff:
 ; b = note number (0-127)
 ; c = velocity (0-127)
 Channel_NoteOff:
+	ld a,b
+	call Channel_GetKey
+	ld (hl),0
+	;
 	REPT Channel.MAX_VOICE_POOLS, ?pool
 	ld e,(ix + Channel.voicePools + ?pool * 2)
 	ld d,(ix + Channel.voicePools + ?pool * 2 + 1)
@@ -150,6 +158,15 @@ Channel_Update:
 	ret
 
 ; ix = this
+; a = key number
+; hl <- key
+; Modifies: de, hl
+Channel_GetKey:
+	ld l,(ix + Channel.keys)
+	ld h,(ix + Channel.keys + 1)
+	jp ControllerBank_GetController
+
+; ix = this
 ; a = controller number
 ; hl <- controller
 ; Modifies: de, hl
@@ -202,10 +219,14 @@ Channels_Update:
 
 	ALIGN 100H
 Channel_channels: REPT 16, ?channel
-	Channel Channel_controllerBanks + ?channel * ControllerBank.size
+	Channel Channel_keysBanks + ?channel * ControllerBank.size, Channel_controllerBanks + ?channel * ControllerBank.size
 	IF ($ & 0FH) != 0
 		ERROR "Channel size must be exactly 16."
 	ENDIF
+	ENDM
+
+Channel_keysBanks: REPT 16
+	ControllerBank
 	ENDM
 
 Channel_controllerBanks: REPT 16
