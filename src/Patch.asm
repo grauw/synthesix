@@ -45,6 +45,22 @@ Patch_Constructor: PROC
 	call Patch_AddModule                ; module 3
 	ld hl,Module_sccVoice
 	call Patch_AddModule                ; module 4
+	ld hl,Module_envelopeAR
+	call Patch_AddModule                ; module 5
+	ld hl,Module_sustain
+	call Patch_AddModule                ; module 6
+	ld hl,Module_lfoTriangleSigned
+	call Patch_AddModule                ; module 7
+	ld hl,Module_attenuate
+	call Patch_AddModule                ; module 8
+	ld hl,Module_pitchBend
+	call Patch_AddModule                ; module 9
+	ld hl,Module_addPitch
+	call Patch_AddModule                ; module 10
+	ld hl,Module_lfoTriangle
+	call Patch_AddModule                ; module 11
+	ld hl,Module_attenuateAdd
+	call Patch_AddModule                ; module 12
 	ld hl,4 << 8 | SCCVoice.note
 	ld de,3 << 8 | Note.key
 	call Patch_AddLink
@@ -52,10 +68,6 @@ Patch_Constructor: PROC
 	ld de,3 << 8 | Note.gate
 	call Patch_AddLink
 	; AR envelope
-	ld hl,Module_envelopeAR
-	call Patch_AddModule                ; module 5
-	ld hl,Module_sustain
-	call Patch_AddModule                ; module 6
 	ld a,93
 	call Patch_GetController
 	ld (hl),32
@@ -84,10 +96,6 @@ Patch_Constructor: PROC
 	ld de,5 << 8 | EnvelopeAR.value
 	call Patch_AddLink
 	; After touch vibrato
-	ld hl,Module_lfoTriangleSigned
-	call Patch_AddModule                ; module 7
-	ld hl,Module_attenuate
-	call Patch_AddModule                ; module 8
 	ld hl,8 << 8 | Attenuate.multiplicand
 	ld de,7 << 8 | LFOTriangleSigned.value
 	call Patch_AddLink
@@ -98,10 +106,6 @@ Patch_Constructor: PROC
 	ld de,8 << 8 | Attenuate.value
 	call Patch_AddLink
 	; Pitch bend
-	ld hl,Module_pitchBend
-	call Patch_AddModule                ; module 9
-	ld hl,Module_addPitch
-	call Patch_AddModule                ; module 10
 	ld hl,9 << 8 | PitchBend.pitchFine
 	ld de,1 << 8 | Channel.pitchBendFine
 	call Patch_AddLink
@@ -127,10 +131,6 @@ Patch_Constructor: PROC
 	ld de,10 << 8 | AddPitch.detune
 	call Patch_AddLink
 	; Pulse width modulation
-	ld hl,Module_lfoTriangle
-	call Patch_AddModule                ; module 11
-	ld hl,Module_attenuateAdd
-	call Patch_AddModule                ; module 12
 	ld hl,12 << 8 | AttenuateAdd.multiplicand
 	ld de,11 << 8 | LFOTriangle.value
 	call Patch_AddLink
