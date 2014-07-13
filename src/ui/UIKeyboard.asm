@@ -87,11 +87,9 @@ UIKeyboard_UpdateKeys: PROC
 	ld b,(iy + Channel.keys + 1)
 	ld e,(ix + UINode.buffer)
 	ld d,(ix + UINode.buffer + 1)
-	inc de
-	inc de
-	inc de
-	inc de
-	inc de
+	ld hl,5
+	add hl,de
+	ex de,hl
 	ld hl,80
 	add hl,de
 	call Octave  ; -2
