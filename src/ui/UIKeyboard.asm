@@ -68,11 +68,100 @@ UIKeyboard_Constructor:
 	ld (ix + UIKeyboard.pitchBend + 1),d
 	ret
 
+; ix = this
 UIKeyboard_Update:
 	ld e,(ix + UIKeyboard.pitchBend)
 	ld d,(ix + UIKeyboard.pitchBend + 1)
 	call UINode_Update_DE
+
+	call UIKeyboard_UpdateKeys
 	ret
+
+; ix = this
+UIKeyboard_UpdateKeys: PROC
+	ld e,(ix + UIKeyboard.channel)
+	ld d,(ix + UIKeyboard.channel + 1)
+	ld iyl,e
+	ld iyh,d
+	ld c,(iy + Channel.keys)
+	ld b,(iy + Channel.keys + 1)
+	ld e,(ix + UINode.buffer)
+	ld d,(ix + UINode.buffer + 1)
+	inc de
+	inc de
+	inc de
+	inc de
+	inc de
+	ld hl,80
+	add hl,de
+	call Octave  ; -2
+	call Octave  ; -1
+	call Octave  ;  0
+	call Octave  ;  1
+	call Octave  ;  2
+	call Octave  ;  3
+	call Octave  ;  4
+	call Octave  ;  5
+	call Octave  ;  6
+	call Octave  ;  7
+	call LastOctave
+	ret
+Octave:
+	call Key  ; c
+	ex de,hl
+	call Key  ; c#
+	ex de,hl
+	call Key  ; d
+	ex de,hl
+	call Key  ; d#
+	ex de,hl
+	call Key  ; e
+	inc de
+	call Key  ; f
+	ex de,hl
+	call Key  ; f#
+	ex de,hl
+	call Key  ; g
+	ex de,hl
+	call Key  ; g#
+	ex de,hl
+	call Key  ; a
+	ex de,hl
+	call Key  ; a#
+	ex de,hl
+	call Key  ; b
+	inc de
+	ret
+LastOctave:
+	call Key  ; c
+	ex de,hl
+	call Key  ; c#
+	ex de,hl
+	call Key  ; d
+	ex de,hl
+	call Key  ; d#
+	ex de,hl
+	call Key  ; e
+	inc de
+	call Key  ; f
+	ex de,hl
+	call Key  ; f#
+	ex de,hl
+	call Key  ; g
+	ret
+Key:
+	ld a,(bc)
+	inc bc
+	and a
+	jr nz,KeyPressed
+	res 0,(hl)
+	inc hl
+	ret
+KeyPressed:
+	set 0,(hl)
+	inc hl
+	ret
+	ENDP
 
 ;
 UIKeyboard_background:
