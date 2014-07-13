@@ -29,6 +29,7 @@ Listeners_AddListener: PROC
 	inc (ix + Listeners.size)
 	call Listeners_GetListener
 	and a
+	di
 	jp z,First
 	ld (ix + Listener.jump - Listener.size),0CDH  ; change previous jp to call
 First:
@@ -36,6 +37,7 @@ First:
 	ld (ix + Listener.object + 1),d
 	ld (ix + Listener.method),l
 	ld (ix + Listener.method + 1),h
+	ei
 	ret
 	ENDP
 
