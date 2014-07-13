@@ -189,3 +189,20 @@ SCCVoice_GetNumber_IY:
 	ld a,(iy + SCCVoice.amplitudeRegister)
 	sub SCC_AMPLITUDE_1
 	ret
+
+; ix = this
+; f <- nz: bound
+SCCVoice_IsBound:
+	bit 7,(ix + SCCVoice.free)
+	ret
+
+; ix = this
+SCCVoice_Bind:
+	set 7,(ix + SCCVoice.free)
+	ret
+
+; ix = this
+SCCVoice_Release:
+	res 7,(ix + SCCVoice.free)
+	ret
+

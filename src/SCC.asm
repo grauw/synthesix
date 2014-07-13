@@ -76,9 +76,8 @@ SCC_Init:
 SCC_GetFreeVoice:
 	REPT SCC_MAX_VOICES, ?voice
 	ld ix,(SCC_voices + ?voice * 2)
-	bit 7,(ix + SCCVoice.free)
-	set 7,(ix + SCCVoice.free)
-	ret z
+	call SCCVoice_IsBound
+	jp z,SCCVoice_Bind
 	ENDM
 	call System_ThrowException
 
