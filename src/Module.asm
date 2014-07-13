@@ -60,6 +60,8 @@ Module_sccVoice: Module SCC_GetFreeVoice
 
 Module_envelopeAR: Module EnvelopeAR_New
 
+Module_envelopeAD: Module EnvelopeAD_New
+
 Module_sustain: Module Sustain_New
 
 Module_signedTriangleLFO: Module SignedTriangleLFO_New
