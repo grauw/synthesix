@@ -64,7 +64,7 @@ Module_envelopeAD: Module EnvelopeAD_New
 
 Module_sustain: Module Sustain_New
 
-Module_signedTriangleLFO: Module SignedTriangleLFO_New
+Module_lfoTriangleSigned: Module LFOTriangleSigned_New
 
 Module_attenuate: Module Attenuate_New
 
@@ -72,6 +72,6 @@ Module_pitchBend: Module PitchBend_New
 
 Module_addPitch: Module AddPitch_New
 
-Module_triangleLFO: Module TriangleLFO_New
+Module_lfoTriangle: Module LFOTriangle_New
 
 Module_attenuateAdd: Module AttenuateAdd_New

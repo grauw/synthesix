@@ -84,12 +84,12 @@ Patch_Constructor: PROC
 	ld de,5 << 8 | EnvelopeAR.value
 	call Patch_AddLink
 	; After touch vibrato
-	ld hl,Module_signedTriangleLFO
+	ld hl,Module_lfoTriangleSigned
 	call Patch_AddModule                ; module 7
 	ld hl,Module_attenuate
 	call Patch_AddModule                ; module 8
 	ld hl,8 << 8 | Attenuate.multiplicand
-	ld de,7 << 8 | SignedTriangleLFO.value
+	ld de,7 << 8 | LFOTriangleSigned.value
 	call Patch_AddLink
 	ld hl,8 << 8 | Attenuate.multiplier
 	ld de,1 << 8 | Channel.channelPressure
@@ -127,12 +127,12 @@ Patch_Constructor: PROC
 	ld de,10 << 8 | AddPitch.detune
 	call Patch_AddLink
 	; Pulse width modulation
-	ld hl,Module_triangleLFO
+	ld hl,Module_lfoTriangle
 	call Patch_AddModule                ; module 11
 	ld hl,Module_attenuateAdd
 	call Patch_AddModule                ; module 12
 	ld hl,12 << 8 | AttenuateAdd.multiplicand
-	ld de,11 << 8 | TriangleLFO.value
+	ld de,11 << 8 | LFOTriangle.value
 	call Patch_AddLink
 	ld hl,12 << 8 | AttenuateAdd.multiplier
 	ld de,0 << 8 | 50

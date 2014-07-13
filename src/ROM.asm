@@ -74,8 +74,8 @@ ROM_Bank3Default: equ ROM_MultiplyTableBank
 	INCLUDE "modulation/ControllerBank.asm"
 	INCLUDE "modulation/EnvelopeAD.asm"
 	INCLUDE "modulation/EnvelopeAR.asm"
-	INCLUDE "modulation/TriangleLFO.asm"
-	INCLUDE "modulation/SignedTriangleLFO.asm"
+	INCLUDE "modulation/LFOTriangle.asm"
+	INCLUDE "modulation/LFOTriangleSigned.asm"
 	INCLUDE "modulation/PitchBend.asm"
 	INCLUDE "ui/UI.asm"
 
