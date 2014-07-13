@@ -41,14 +41,6 @@ SCCVoice_Constructor:
 	ld (ix + SCCVoice.waveRegister),b
 	ld (ix + SCCVoice.frequencyRegister),c
 	ld (ix + SCCVoice.amplitudeRegister),d
-
-	push ix
-	ld e,ixl
-	ld d,ixh
-	ld ix,Clock_60HzLate
-	ld hl,SCCVoice_Update
-	call Clock_AddListener
-	pop ix
 	ret
 
 ; ix = this
@@ -199,6 +191,13 @@ SCCVoice_IsBound:
 ; ix = this
 SCCVoice_Bind:
 	set 7,(ix + SCCVoice.free)
+	push ix
+	ld e,ixl
+	ld d,ixh
+	ld ix,Clock_60Hz
+	ld hl,SCCVoice_Update
+	call Clock_AddListener
+	pop ix
 	ret
 
 ; ix = this
