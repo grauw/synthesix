@@ -123,28 +123,6 @@ Replace:
 	ENDP
 
 ; ix = this
-NotePool_Update: PROC
-	ld a,(ix + NotePool.polyphony)
-	and a
-	ret z
-Loop:
-	ld e,(ix + NotePool.notes + KeyNotePair.note)
-	ld d,(ix + NotePool.notes + KeyNotePair.note + 1)
-	push ix
-	ld ixl,e
-	ld ixh,d
-	push af
-	call Note_Update
-	pop af
-	pop ix
-	ld de,KeyNotePair.size  ; next note
-	add ix,de
-	dec a
-	jp nz,Loop
-	ret
-	ENDP
-
-; ix = this
 ; hl = note
 NotePool_AddNote:
 	ld a,(ix + NotePool.polyphony)

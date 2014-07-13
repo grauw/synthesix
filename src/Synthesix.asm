@@ -70,7 +70,6 @@ Synthesix_Interrupt:
 	call Clock_Update
 	ld ix,Clock_60HzLate
 	call Clock_Update
-	call Channels_Update
 
 	ld a,0F4H
 	ld b,7

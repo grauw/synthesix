@@ -28,6 +28,13 @@ Note_New:
 ; ix = this
 ; ix <- this
 Note_Constructor: PROC
+	push ix
+	ld e,ixl
+	ld d,ixh
+	ld ix,Clock_60HzLate
+	ld hl,Note_UpdateLate
+	call Clock_AddListener
+	pop ix
 	ret
 	ENDP
 
@@ -51,6 +58,6 @@ Note_NoteOff:
 	ret
 
 ; ix = this
-Note_Update:
+Note_UpdateLate:
 	ld (ix + Note.trigger),0
 	ret

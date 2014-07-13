@@ -142,22 +142,6 @@ Channel_PitchBend:
 	ret
 
 ; ix = this
-Channel_Update:
-	REPT Channel.MAX_NOTE_POOLS, ?pool
-	ld e,(ix + Channel.notePools + ?pool * 2)
-	ld d,(ix + Channel.notePools + ?pool * 2 + 1)
-	inc d
-	dec d
-	ret z
-	push ix
-	ld ixl,e
-	ld ixh,d
-	call NotePool_Update
-	pop ix
-	ENDM
-	ret
-
-; ix = this
 ; a = key number
 ; hl <- key
 ; Modifies: de, hl
@@ -204,13 +188,6 @@ Channels_Init:
 	REPT 16, ?channel
 	ld ix,Channel_channels + ?channel * Channel.size
 	call Channel_Constructor
-	ENDM
-	ret
-
-Channels_Update:
-	REPT 1, ?channel
-	ld ix,Channel_channels + ?channel * Channel.size
-	call Channel_Update
 	ENDM
 	ret
 
