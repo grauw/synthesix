@@ -40,6 +40,8 @@ Voice_NoteOn:
 	ret
 
 ; ix = this
+; b = note number (0-127)
+; c = velocity (0-127)
 Voice_NoteOff:
 	ld (ix + Voice.gate),0
 	ret
