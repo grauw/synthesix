@@ -58,7 +58,7 @@ Module_VoiceFactory:
 
 Module_sccVoice: Module SCC_GetFreeVoice
 
-Module_arEnvelope: Module AREnvelope_New
+Module_envelopeAR: Module EnvelopeAR_New
 
 Module_sustain: Module Sustain_New
 

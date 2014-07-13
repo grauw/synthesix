@@ -52,7 +52,7 @@ Patch_Constructor: PROC
 	ld de,3 << 8 | Voice.gate
 	call Patch_AddLink
 	; AR envelope
-	ld hl,Module_arEnvelope
+	ld hl,Module_envelopeAR
 	call Patch_AddModule                ; module 5
 	ld hl,Module_sustain
 	call Patch_AddModule                ; module 6
@@ -62,13 +62,13 @@ Patch_Constructor: PROC
 	ld a,94
 	call Patch_GetController
 	ld (hl),8
-	ld hl,5 << 8 | AREnvelope.attack
+	ld hl,5 << 8 | EnvelopeAR.attack
 	ld de,2 << 8 | 93
 	call Patch_AddLink
-	ld hl,5 << 8 | AREnvelope.release
+	ld hl,5 << 8 | EnvelopeAR.release
 	ld de,2 << 8 | 94
 	call Patch_AddLink
-	ld hl,5 << 8 | AREnvelope.trigger
+	ld hl,5 << 8 | EnvelopeAR.trigger
 	ld de,3 << 8 | Voice.trigger
 	call Patch_AddLink
 	ld hl,6 << 8 | Sustain.gate
@@ -77,11 +77,11 @@ Patch_Constructor: PROC
 	ld hl,6 << 8 | Sustain.hold
 	ld de,2 << 8 | 64
 	call Patch_AddLink
-	ld hl,5 << 8 | AREnvelope.gate
+	ld hl,5 << 8 | EnvelopeAR.gate
 	ld de,6 << 8 | Sustain.value
 	call Patch_AddLink
 	ld hl,4 << 8 | SCCVoice.amplitude
-	ld de,5 << 8 | AREnvelope.value
+	ld de,5 << 8 | EnvelopeAR.value
 	call Patch_AddLink
 	; After touch vibrato
 	ld hl,Module_signedTriangleLFO
