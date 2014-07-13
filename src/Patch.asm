@@ -86,16 +86,16 @@ Patch_Constructor: PROC
 	; After touch vibrato
 	ld hl,Module_signedTriangleLFO
 	call Patch_AddModule                ; module 7
-	ld hl,Module_multiply
+	ld hl,Module_attenuate
 	call Patch_AddModule                ; module 8
-	ld hl,8 << 8 | Multiply.multiplicand
+	ld hl,8 << 8 | Attenuate.multiplicand
 	ld de,7 << 8 | SignedTriangleLFO.value
 	call Patch_AddLink
-	ld hl,8 << 8 | Multiply.multiplier
+	ld hl,8 << 8 | Attenuate.multiplier
 	ld de,1 << 8 | Channel.channelPressure
 	call Patch_AddLink
 	ld hl,4 << 8 | SCCVoice.detune
-	ld de,8 << 8 | Multiply.value
+	ld de,8 << 8 | Attenuate.value
 	call Patch_AddLink
 	; Pitch bend
 	ld hl,Module_pitchBend
@@ -129,19 +129,19 @@ Patch_Constructor: PROC
 	; Pulse width modulation
 	ld hl,Module_triangleLFO
 	call Patch_AddModule                ; module 11
-	ld hl,Module_multiplyAdd
+	ld hl,Module_attenuateAdd
 	call Patch_AddModule                ; module 12
-	ld hl,12 << 8 | MultiplyAdd.multiplicand
+	ld hl,12 << 8 | AttenuateAdd.multiplicand
 	ld de,11 << 8 | TriangleLFO.value
 	call Patch_AddLink
-	ld hl,12 << 8 | MultiplyAdd.multiplier
+	ld hl,12 << 8 | AttenuateAdd.multiplier
 	ld de,0 << 8 | 50
 	call Patch_AddLink
-	ld hl,12 << 8 | MultiplyAdd.addend
+	ld hl,12 << 8 | AttenuateAdd.addend
 	ld de,0 << 8 | 64
 	call Patch_AddLink
 	ld hl,4 << 8 | SCCVoice.wave
-	ld de,12 << 8 | MultiplyAdd.value
+	ld de,12 << 8 | AttenuateAdd.value
 	call Patch_AddLink
 	; Pulse width control
 ;	ld hl,4 << 8 | SCCVoice.wave

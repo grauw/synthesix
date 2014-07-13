@@ -64,7 +64,7 @@ Module_sustain: Module Sustain_New
 
 Module_signedTriangleLFO: Module SignedTriangleLFO_New
 
-Module_multiply: Module Multiply_New
+Module_attenuate: Module Attenuate_New
 
 Module_pitchBend: Module PitchBend_New
 
@@ -72,4 +72,4 @@ Module_addPitch: Module AddPitch_New
 
 Module_triangleLFO: Module TriangleLFO_New
 
-Module_multiplyAdd: Module MultiplyAdd_New
+Module_attenuateAdd: Module AttenuateAdd_New
