@@ -1,7 +1,7 @@
 Clock: MACRO
 	value:
 		dw 0
-	listeners: Listeners 32
+	listeners: Listeners 64
 	ENDM
 
 ; ix = this
