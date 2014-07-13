@@ -43,7 +43,7 @@ Patch_Constructor: PROC
 	call Patch_AddModule                ; module 2
 	ld hl,Module_note
 	call Patch_AddModule                ; module 3
-	ld hl,Module_sccVoice
+	ld hl,Module_envelopeAD
 	call Patch_AddModule                ; module 4
 	ld hl,Module_envelopeAR
 	call Patch_AddModule                ; module 5
@@ -61,10 +61,12 @@ Patch_Constructor: PROC
 	call Patch_AddModule                ; module 11
 	ld hl,Module_attenuateAdd
 	call Patch_AddModule                ; module 12
-	ld hl,4 << 8 | SCCVoice.note
+	ld hl,Module_sccVoice
+	call Patch_AddModule                ; module 13
+	ld hl,13 << 8 | SCCVoice.note
 	ld de,3 << 8 | Note.key
 	call Patch_AddLink
-	ld hl,4 << 8 | SCCVoice.amplitude
+	ld hl,13 << 8 | SCCVoice.amplitude
 	ld de,3 << 8 | Note.gate
 	call Patch_AddLink
 	; AR envelope
@@ -92,7 +94,7 @@ Patch_Constructor: PROC
 	ld hl,5 << 8 | EnvelopeAR.gate
 	ld de,6 << 8 | Sustain.value
 	call Patch_AddLink
-	ld hl,4 << 8 | SCCVoice.amplitude
+	ld hl,13 << 8 | SCCVoice.amplitude
 	ld de,5 << 8 | EnvelopeAR.value
 	call Patch_AddLink
 	; After touch vibrato
@@ -102,7 +104,7 @@ Patch_Constructor: PROC
 	ld hl,8 << 8 | Attenuate.multiplier
 	ld de,1 << 8 | Channel.channelPressure
 	call Patch_AddLink
-	ld hl,4 << 8 | SCCVoice.detune
+	ld hl,13 << 8 | SCCVoice.detune
 	ld de,8 << 8 | Attenuate.value
 	call Patch_AddLink
 	; Pitch bend
@@ -124,10 +126,10 @@ Patch_Constructor: PROC
 	ld hl,10 << 8 | AddPitch.addendDetune
 	ld de,0 << 8 | 0
 	call Patch_AddLink
-	ld hl,4 << 8 | SCCVoice.note
+	ld hl,13 << 8 | SCCVoice.note
 	ld de,10 << 8 | AddPitch.note
 	call Patch_AddLink
-	ld hl,4 << 8 | SCCVoice.detune
+	ld hl,13 << 8 | SCCVoice.detune
 	ld de,10 << 8 | AddPitch.detune
 	call Patch_AddLink
 	; Pulse width modulation
@@ -140,11 +142,11 @@ Patch_Constructor: PROC
 	ld hl,12 << 8 | AttenuateAdd.addend
 	ld de,0 << 8 | 64
 	call Patch_AddLink
-	ld hl,4 << 8 | SCCVoice.wave
+	ld hl,13 << 8 | SCCVoice.wave
 	ld de,12 << 8 | AttenuateAdd.value
 	call Patch_AddLink
 	; Pulse width control
-;	ld hl,4 << 8 | SCCVoice.wave
+;	ld hl,13 << 8 | SCCVoice.wave
 ;	ld de,2 << 8 | 7
 ;	call Patch_AddLink
 	ret
