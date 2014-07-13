@@ -8,6 +8,7 @@
 	INCLUDE "UIPanel.asm"
 	INCLUDE "UIValue.asm"
 	INCLUDE "UISynthesix.asm"
+	INCLUDE "UIControllerBank.asm"
 	INCLUDE "UIKeyboard.asm"
 	INCLUDE "UISCCVoice.asm"
 

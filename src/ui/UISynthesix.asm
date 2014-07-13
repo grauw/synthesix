@@ -7,6 +7,8 @@ UISynthesix: MACRO
 		dw 0
 	keyboard:
 		dw 0
+	controllers:
+		dw 0
 	voice1:
 		dw 0
 	voice2:
@@ -43,6 +45,16 @@ UISynthesix_Constructor:
 	pop ix
 	ld (ix + UISynthesix.keyboard),e
 	ld (ix + UISynthesix.keyboard + 1),d
+
+	ld iy,Channel_channels.0
+	ld l,(iy + Channel.controllers)
+	ld h,(iy + Channel.controllers + 1)
+	ld de,0100H
+	push ix
+	call UIControllerBank_New_DE
+	pop ix
+	ld (ix + UISynthesix.controllers),e
+	ld (ix + UISynthesix.controllers + 1),d
 
 	ld de,1300H
 	ld hl,(SCC_voices)
@@ -82,6 +94,10 @@ UISynthesix_Update:
 
 	ld e,(ix + UISynthesix.keyboard)
 	ld d,(ix + UISynthesix.keyboard + 1)
+	call UINode_Update_DE
+
+	ld e,(ix + UISynthesix.controllers)
+	ld d,(ix + UISynthesix.controllers + 1)
 	call UINode_Update_DE
 
 	ld e,(ix + UISynthesix.voice1)
