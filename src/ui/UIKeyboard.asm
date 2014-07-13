@@ -52,7 +52,7 @@ UIKeyboard_Constructor:
 	push hl
 	ld hl,UIKeyboard_background
 	ld de,0000H
-	ld bc,5002H
+	ld bc,0250H
 	call UINode_CopyToBuffer
 	pop hl
 

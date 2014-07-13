@@ -54,7 +54,7 @@ UINode_GetBufferPosition_BC:
 
 ; ix = this
 ; iy = parent
-; bc = width / height
+; bc = height / width
 ; de = y / x coordinate
 ; hl = source buffer
 UINode_CopyToBuffer: PROC
@@ -66,8 +66,7 @@ UINode_CopyToBuffer: PROC
 	pop bc
 Loop:
 	push bc
-	ld a,b
-	ld c,a
+	ld a,c
 	ld b,0
 	ldir
 	ld c,a
@@ -80,8 +79,7 @@ Loop:
 	ex de,hl
 NoAdd:
 	pop bc
-	dec c
-	jp nz,Loop
+	djnz Loop
 	ret
 	ENDP
 

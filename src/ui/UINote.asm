@@ -58,7 +58,7 @@ UINote_Constructor:
 	push hl
 	ld hl,UINote_background
 	ld de,0000H
-	ld bc,1006H
+	ld bc,0610H
 	call UINode_CopyToBuffer
 	pop hl
 

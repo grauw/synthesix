@@ -57,7 +57,7 @@ UISCCVoice_Constructor:
 
 	ld hl,UISCCVoice_background
 	ld de,0000H
-	ld bc,1006H
+	ld bc,0610H
 	call UINode_CopyToBuffer
 
 	ld de,000DH
