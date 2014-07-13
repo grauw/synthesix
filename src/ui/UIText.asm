@@ -11,7 +11,7 @@ UIText: MACRO
 UIText_class: UIText
 
 ; ix = parent
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl = text (ASCIIZ)
 ; ix <- instance
 UIText_New:
@@ -27,7 +27,7 @@ UIText_New:
 	ret
 
 ; ix = parent
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl = text (ASCIIZ)
 ; de <- instance
 UIText_New_DE:
@@ -39,7 +39,7 @@ UIText_New_DE:
 
 ; ix = this
 ; iy = parent
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl = text (ASCIIZ)
 UIText_Constructor: PROC
 	push hl

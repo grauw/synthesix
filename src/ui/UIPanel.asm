@@ -12,7 +12,7 @@ UIPanel_class: UIPanel
 
 ; ix = parent
 ; bc = width / height
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl = source buffer
 ; ix <- instance
 UIPanel_New:
@@ -31,7 +31,7 @@ UIPanel_New:
 
 ; ix = parent
 ; bc = width / height
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl = source buffer
 ; de <- instance
 UIPanel_New_DE:
@@ -44,7 +44,7 @@ UIPanel_New_DE:
 ; ix = this
 ; iy = parent
 ; bc = width / height
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl = source buffer
 UIPanel_Constructor: PROC
 	push bc

@@ -10,7 +10,7 @@ UINode: MACRO ?update
 
 ; ix = this
 ; iy = parent
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl <- UINode.buffer = buffer
 ; Modifies: af, bc, de
 UINode_SetBuffer:
@@ -22,7 +22,7 @@ UINode_SetBuffer:
 	ret
 
 ; ix = this
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl <- buffer
 ; Modifies: af, bc, de
 UINode_GetBufferPosition:
@@ -32,7 +32,7 @@ UINode_GetBufferPosition:
 	ret
 
 ; bc = buffer start (must be 26.5 x 80)
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl <- buffer
 ; Modifies: af, de
 UINode_GetBufferPosition_BC:
@@ -55,7 +55,7 @@ UINode_GetBufferPosition_BC:
 ; ix = this
 ; iy = parent
 ; bc = width / height
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl = source buffer
 UINode_CopyToBuffer: PROC
 	push bc

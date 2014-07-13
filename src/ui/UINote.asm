@@ -20,7 +20,7 @@ UINote: MACRO
 UINote_class: UINote
 
 ; ix = parent
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl = note
 ; ix <- instance
 UINote_New:
@@ -36,7 +36,7 @@ UINote_New:
 	ret
 
 ; ix = parent
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl = note
 ; de <- instance
 UINote_New_DE:

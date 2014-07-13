@@ -14,7 +14,7 @@ UIKeyboard: MACRO
 UIKeyboard_class: UIKeyboard
 
 ; ix = parent
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl = channel
 ; ix <- instance
 UIKeyboard_New:
@@ -30,7 +30,7 @@ UIKeyboard_New:
 	ret
 
 ; ix = parent
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl = channel
 ; de <- instance
 UIKeyboard_New_DE:

@@ -40,7 +40,7 @@ UIControllerBank: MACRO
 UIControllerBank_class: UIControllerBank
 
 ; ix = parent
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl = controller bank
 ; ix <- instance
 UIControllerBank_New:
@@ -56,7 +56,7 @@ UIControllerBank_New:
 	ret
 
 ; ix = parent
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl = controller bank
 ; de <- instance
 UIControllerBank_New_DE:

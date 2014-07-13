@@ -20,7 +20,7 @@ UISCCVoice: MACRO
 UISCCVoice_class: UISCCVoice
 
 ; ix = parent
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl = voice
 ; ix <- instance
 UISCCVoice_New:
@@ -36,7 +36,7 @@ UISCCVoice_New:
 	ret
 
 ; ix = parent
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl = voice
 ; de <- instance
 UISCCVoice_New_DE:

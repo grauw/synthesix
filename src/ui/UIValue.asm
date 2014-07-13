@@ -12,7 +12,7 @@ UIValue: MACRO
 UIValue_class: UIValue
 
 ; ix = parent
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl = value address
 ; ix <- instance
 UIValue_New:
@@ -28,7 +28,7 @@ UIValue_New:
 	ret
 
 ; ix = parent
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl = value address
 ; de <- instance
 UIValue_New_DE:
@@ -40,7 +40,7 @@ UIValue_New_DE:
 
 ; ix = this
 ; iy = parent
-; de = x / y coordinate
+; de = y / x coordinate
 ; hl = value address
 UIValue_Constructor: PROC
 	ld (ix + UIValue.value),l
