@@ -5,7 +5,7 @@ UISynthesix: MACRO
 	super: UINode UISynthesix_Update
 	title:
 		dw 0
-	pitchBend:
+	keyboard:
 		dw 0
 	voice1:
 		dw 0
@@ -38,13 +38,13 @@ UISynthesix_Constructor:
 
 	push ix
 	push iy
-	ld hl,Channel_channels.0 + Channel.pitchBendCoarse
-	ld de,1A00H
-	call UIValue_New_DE
+	ld hl,Channel_channels.0
+	ld de,1900H
+	call UIKeyboard_New_DE
 	pop iy
 	pop ix
-	ld (ix + UISynthesix.pitchBend),e
-	ld (ix + UISynthesix.pitchBend + 1),d
+	ld (ix + UISynthesix.keyboard),e
+	ld (ix + UISynthesix.keyboard + 1),d
 
 	ld de,1300H
 	ld hl,(SCC_voices)
@@ -82,8 +82,8 @@ UISynthesix_Constructor:
 UISynthesix_Update:
 	call UISynthesix_UpdateLiveIndicator
 
-	ld e,(ix + UISynthesix.pitchBend)
-	ld d,(ix + UISynthesix.pitchBend + 1)
+	ld e,(ix + UISynthesix.keyboard)
+	ld d,(ix + UISynthesix.keyboard + 1)
 	call UINode_Update_DE
 
 	ld e,(ix + UISynthesix.voice1)
@@ -155,8 +155,6 @@ UISynthesix_template:
 	db "                                                                                "
 	db "                                                                                "
 	db "                                                                                "
-	db "Bend ",10,11,12,10,11,11,12,10,11,12,10,11,11,12,10,11,12,10,11,11,12,10,11,12,10,11,11,12,10,11,12,10,11,11,12
-	db 10,11,12,10,11,11,12,10,11,12,10,11,11,12,10,11,12,10,11,11,12,10,11,12,10,11,11,12,10,11,12,10,11,11,12,10,11,12,10,12
-	db "     ",8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8
-	db 8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8
+	db "                                                                                "
+	db "                                                                                "
 UISynthesix_template_size: equ $ - UISynthesix_template
