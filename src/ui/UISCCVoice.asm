@@ -55,7 +55,7 @@ UISCCVoice_Constructor:
 	call UINode_SetBuffer
 	pop iy
 
-	ld hl,UISCCVoice_template
+	ld hl,UISCCVoice_background
 	ld de,0000H
 	ld bc,1006H
 	call UINode_CopyToBuffer
@@ -130,7 +130,7 @@ UISCCVoice_Update:
 	ret
 
 ;
-UISCCVoice_template:
+UISCCVoice_background:
 	db 24," SCC Voice  0 ",25
 	db 22," Note:   0000 ",22
 	db 22," Detune: 0000 ",22
