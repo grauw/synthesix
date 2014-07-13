@@ -37,11 +37,9 @@ UISynthesix_Constructor:
 	ld (ix + UISynthesix.title + 1),d
 
 	push ix
-	push iy
 	ld hl,Channel_channels.0
 	ld de,1900H
 	call UIKeyboard_New_DE
-	pop iy
 	pop ix
 	ld (ix + UISynthesix.keyboard),e
 	ld (ix + UISynthesix.keyboard + 1),d
