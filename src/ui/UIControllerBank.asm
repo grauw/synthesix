@@ -41,7 +41,7 @@ UIControllerBank_class: UIControllerBank
 
 ; ix = parent
 ; de = x / y coordinate
-; hl = channel
+; hl = controller bank
 ; ix <- instance
 UIControllerBank_New:
 	push ix
@@ -57,7 +57,7 @@ UIControllerBank_New:
 
 ; ix = parent
 ; de = x / y coordinate
-; hl = channel
+; hl = controller bank
 ; de <- instance
 UIControllerBank_New_DE:
 	call UIControllerBank_New
@@ -67,7 +67,7 @@ UIControllerBank_New_DE:
 	ret
 
 ; ix = this
-; hl = channel
+; hl = controller bank
 UIControllerBank_Constructor:
 	ld (ix + UIControllerBank.controllers),l
 	ld (ix + UIControllerBank.controllers + 1),h
