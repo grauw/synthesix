@@ -53,6 +53,39 @@ UINode_GetBufferPosition_BC:
 	ret
 
 ; ix = this
+; iy = parent
+; bc = width / height
+; de = x / y coordinate
+; hl = source buffer
+UINode_CopyToBuffer: PROC
+	push bc
+	push hl
+	call UINode_GetBufferPosition
+	ex de,hl
+	pop hl
+	pop bc
+Loop:
+	push bc
+	ld a,b
+	ld c,a
+	ld b,0
+	ldir
+	ld c,a
+	ld a,80
+	sub c
+	jr z,NoAdd
+	ld c,a
+	ex de,hl
+	add hl,bc
+	ex de,hl
+NoAdd:
+	pop bc
+	dec c
+	jp nz,Loop
+	ret
+	ENDP
+
+; ix = this
 UINode_Update:
 	ld l,(ix + UINode.update)
 	ld h,(ix + UINode.update + 1)
