@@ -124,7 +124,7 @@ Patch_Constructor: PROC
 	ld de,3 << 8 | Note.key
 	call Patch_AddLink
 	ld hl,10 << 8 | AddPitch.addendDetune
-	ld de,0 << 8 | 0
+	ld de,8 << 8 | Attenuate.value
 	call Patch_AddLink
 	ld hl,13 << 8 | SCCVoice.note
 	ld de,10 << 8 | AddPitch.note
