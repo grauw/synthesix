@@ -11,7 +11,7 @@ Synthesix_Main:
 	call Channels_Init
 	call PSG_Init
 	call SCC_Init
-	call Program_LoadDefault
+	call Program_New
 
 	call System_UnitTest
 	call Math_UnitTest
