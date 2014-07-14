@@ -153,6 +153,7 @@ Patch_Constructor: PROC
 	ENDP
 
 ; ix = this
+; ix <- note pool
 Patch_GetNotePool:
 	ld e,(ix + Patch.notePool)
 	ld d,(ix + Patch.notePool + 1)
