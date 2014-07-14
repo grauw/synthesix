@@ -13,6 +13,7 @@ Synthesix_Main:
 	call SCC_Init
 	ld hl,Channel_channels.0
 	call Program_New
+	ld (Synthesix_program),ix
 
 	call System_UnitTest
 	call Math_UnitTest
@@ -76,3 +77,11 @@ Synthesix_Interrupt:
 	ld b,7
 	call VDP_SetRegister
 	ret
+
+;
+	SECTION RAM
+
+Synthesix_program:
+	dw 0
+
+	ENDS

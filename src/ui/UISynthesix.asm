@@ -5,13 +5,9 @@ UISynthesix: MACRO
 	super: UINode UISynthesix_Update
 	title:
 		dw 0
+	program:
+		dw 0
 	keyboard:
-		dw 0
-	channel:
-		dw 0
-	controllers:
-		dw 0
-	note:
 		dw 0
 	voice1:
 		dw 0
@@ -45,44 +41,20 @@ UISynthesix_Constructor:
 	ld (ix + UISynthesix.title + 1),d
 
 	push ix
+	ld hl,(Synthesix_program)
+	ld de,0100H
+	call UIProgram_New_DE
+	pop ix
+	ld (ix + UISynthesix.program),e
+	ld (ix + UISynthesix.program + 1),d
+
+	push ix
 	ld hl,Channel_channels.0
 	ld de,1900H
 	call UIKeyboard_New_DE
 	pop ix
 	ld (ix + UISynthesix.keyboard),e
 	ld (ix + UISynthesix.keyboard + 1),d
-
-	push ix
-	ld hl,Channel_channels.0
-	ld de,0100H
-	call UIChannel_New_DE
-	pop ix
-	ld (ix + UISynthesix.channel),e
-	ld (ix + UISynthesix.channel + 1),d
-
-	push ix
-	ld iy,Channel_channels.0
-	ld l,(iy + Channel.controllers)
-	ld h,(iy + Channel.controllers + 1)
-	ld de,0110H
-	call UIControllerBank_New_DE
-	pop ix
-	ld (ix + UISynthesix.controllers),e
-	ld (ix + UISynthesix.controllers + 1),d
-
-	push ix
-	ld iy,Channel_channels.0
-	ld e,(iy + Channel.notePools)
-	ld d,(iy + Channel.notePools + 1)
-	ld iyl,e
-	ld iyh,d
-	ld l,(iy + NotePool.notes + KeyNotePair.note)
-	ld h,(iy + NotePool.notes + KeyNotePair.note + 1)
-	ld de,0120H
-	call UINote_New_DE
-	pop ix
-	ld (ix + UISynthesix.note),e
-	ld (ix + UISynthesix.note + 1),d
 
 	push ix
 	ld de,1300H
@@ -120,20 +92,12 @@ UISynthesix_Constructor:
 UISynthesix_Update:
 	call UISynthesix_UpdateLiveIndicator
 
+	ld e,(ix + UISynthesix.program)
+	ld d,(ix + UISynthesix.program + 1)
+	call UINode_Update_DE
+
 	ld e,(ix + UISynthesix.keyboard)
 	ld d,(ix + UISynthesix.keyboard + 1)
-	call UINode_Update_DE
-
-	ld e,(ix + UISynthesix.channel)
-	ld d,(ix + UISynthesix.channel + 1)
-	call UINode_Update_DE
-
-	ld e,(ix + UISynthesix.controllers)
-	ld d,(ix + UISynthesix.controllers + 1)
-	call UINode_Update_DE
-
-	ld e,(ix + UISynthesix.note)
-	ld d,(ix + UISynthesix.note + 1)
 	call UINode_Update_DE
 
 	ld e,(ix + UISynthesix.voice1)
