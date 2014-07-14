@@ -41,9 +41,8 @@ UISCCVoice_New:
 ; de <- instance
 UISCCVoice_New_DE:
 	call UISCCVoice_New
-	push iy
-	ex (sp),ix
-	pop de
+	ld e,ixl
+	ld d,ixh
 	ret
 
 ; ix = this

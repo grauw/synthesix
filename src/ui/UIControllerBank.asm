@@ -61,9 +61,8 @@ UIControllerBank_New:
 ; de <- instance
 UIControllerBank_New_DE:
 	call UIControllerBank_New
-	push iy
-	ex (sp),ix
-	pop de
+	ld e,ixl
+	ld d,ixh
 	ret
 
 ; ix = this

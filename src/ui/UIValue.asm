@@ -33,9 +33,8 @@ UIValue_New:
 ; de <- instance
 UIValue_New_DE:
 	call UIValue_New
-	push iy
-	ex (sp),ix
-	pop de
+	ld e,ixl
+	ld d,ixh
 	ret
 
 ; ix = this

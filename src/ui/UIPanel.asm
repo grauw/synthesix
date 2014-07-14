@@ -36,9 +36,8 @@ UIPanel_New:
 ; de <- instance
 UIPanel_New_DE:
 	call UIPanel_New
-	push iy
-	ex (sp),ix
-	pop de
+	ld e,ixl
+	ld d,ixh
 	ret
 
 ; ix = this

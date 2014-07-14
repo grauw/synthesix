@@ -35,9 +35,8 @@ UIKeyboard_New:
 ; de <- instance
 UIKeyboard_New_DE:
 	call UIKeyboard_New
-	push iy
-	ex (sp),ix
-	pop de
+	ld e,ixl
+	ld d,ixh
 	ret
 
 ; ix = this

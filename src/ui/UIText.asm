@@ -32,9 +32,8 @@ UIText_New:
 ; de <- instance
 UIText_New_DE:
 	call UIText_New
-	push iy
-	ex (sp),ix
-	pop de
+	ld e,ixl
+	ld d,ixh
 	ret
 
 ; ix = this

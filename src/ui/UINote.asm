@@ -41,9 +41,8 @@ UINote_New:
 ; de <- instance
 UINote_New_DE:
 	call UINote_New
-	push iy
-	ex (sp),ix
-	pop de
+	ld e,ixl
+	ld d,ixh
 	ret
 
 ; ix = this
