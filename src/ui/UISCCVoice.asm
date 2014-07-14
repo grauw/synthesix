@@ -72,10 +72,10 @@ UISCCVoice_Constructor:
 	ld h,(iy + SCCVoice.amplitude + 1)
 	ld de,030AH
 	call UIValue_New_DE
-	ld (ix + UISCCVoice.amplitudeValue),e
-	ld (ix + UISCCVoice.amplitudeValue + 1),d
 	pop iy
 	pop ix
+	ld (ix + UISCCVoice.amplitudeValue),e
+	ld (ix + UISCCVoice.amplitudeValue + 1),d
 
 	push ix
 	push iy
@@ -83,10 +83,10 @@ UISCCVoice_Constructor:
 	ld h,(iy + SCCVoice.note + 1)
 	ld de,010AH
 	call UIValue_New_DE
-	ld (ix + UISCCVoice.noteValue),e
-	ld (ix + UISCCVoice.noteValue + 1),d
 	pop iy
 	pop ix
+	ld (ix + UISCCVoice.noteValue),e
+	ld (ix + UISCCVoice.noteValue + 1),d
 
 	push ix
 	push iy
@@ -94,10 +94,10 @@ UISCCVoice_Constructor:
 	ld h,(iy + SCCVoice.detune + 1)
 	ld de,020AH
 	call UIValue_New_DE
-	ld (ix + UISCCVoice.detuneValue),e
-	ld (ix + UISCCVoice.detuneValue + 1),d
 	pop iy
 	pop ix
+	ld (ix + UISCCVoice.detuneValue),e
+	ld (ix + UISCCVoice.detuneValue + 1),d
 
 	push ix
 	push iy
@@ -105,10 +105,10 @@ UISCCVoice_Constructor:
 	ld h,(iy + SCCVoice.wave + 1)
 	ld de,040AH
 	call UIValue_New_DE
-	ld (ix + UISCCVoice.waveValue),e
-	ld (ix + UISCCVoice.waveValue + 1),d
 	pop iy
 	pop ix
+	ld (ix + UISCCVoice.waveValue),e
+	ld (ix + UISCCVoice.waveValue + 1),d
 	ret
 
 UISCCVoice_Update:
