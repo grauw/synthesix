@@ -34,9 +34,9 @@ UISynthesix_Constructor:
 	ld hl,UISynthesix_template
 	ldir
 
+	push ix
 	ld de,001EH
 	ld hl,UISynthesix_titleText
-	push ix
 	call UIText_New_DE
 	pop ix
 	ld (ix + UISynthesix.title),e
@@ -50,16 +50,17 @@ UISynthesix_Constructor:
 	ld (ix + UISynthesix.keyboard),e
 	ld (ix + UISynthesix.keyboard + 1),d
 
+	push ix
 	ld iy,Channel_channels.0
 	ld l,(iy + Channel.controllers)
 	ld h,(iy + Channel.controllers + 1)
 	ld de,0100H
-	push ix
 	call UIControllerBank_New_DE
 	pop ix
 	ld (ix + UISynthesix.controllers),e
 	ld (ix + UISynthesix.controllers + 1),d
 
+	push ix
 	ld iy,Channel_channels.0
 	ld e,(iy + Channel.notePools)
 	ld d,(iy + Channel.notePools + 1)
@@ -68,39 +69,38 @@ UISynthesix_Constructor:
 	ld l,(iy + NotePool.notes + KeyNotePair.note)
 	ld h,(iy + NotePool.notes + KeyNotePair.note + 1)
 	ld de,0110H
-	push ix
 	call UINote_New_DE
 	pop ix
 	ld (ix + UISynthesix.note),e
 	ld (ix + UISynthesix.note + 1),d
 
+	push ix
 	ld de,1300H
 	ld hl,(SCC_voices)
-	push ix
 	call UISCCVoice_New_DE
 	pop ix
 	ld (ix + UISynthesix.voice1),e
 	ld (ix + UISynthesix.voice1 + 1),d
 
+	push ix
 	ld de,1310H
 	ld hl,(SCC_voices + 2)
-	push ix
 	call UISCCVoice_New_DE
 	pop ix
 	ld (ix + UISynthesix.voice2),e
 	ld (ix + UISynthesix.voice2 + 1),d
 
+	push ix
 	ld de,1320H
 	ld hl,(SCC_voices + 4)
-	push ix
 	call UISCCVoice_New_DE
 	pop ix
 	ld (ix + UISynthesix.voice3),e
 	ld (ix + UISynthesix.voice3 + 1),d
 
+	push ix
 	ld de,1330H
 	ld hl,(SCC_voices + 6)
-	push ix
 	call UISCCVoice_New_DE
 	pop ix
 	ld (ix + UISynthesix.voice4),e

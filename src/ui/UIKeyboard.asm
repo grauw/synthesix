@@ -55,14 +55,14 @@ UIKeyboard_Constructor:
 	call UINode_CopyToBuffer
 	pop hl
 
-	push ix
 	push hl
+	push ix
 	ld bc,Channel.pitchBendCoarse
 	add hl,bc
 	ld de,0100H
 	call UIValue_New_DE
-	pop hl
 	pop ix
+	pop hl
 	ld (ix + UIKeyboard.pitchBend),e
 	ld (ix + UIKeyboard.pitchBend + 1),d
 	ret
