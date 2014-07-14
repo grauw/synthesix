@@ -7,6 +7,8 @@ UISynthesix: MACRO
 		dw 0
 	keyboard:
 		dw 0
+	channel:
+		dw 0
 	controllers:
 		dw 0
 	note:
@@ -51,10 +53,18 @@ UISynthesix_Constructor:
 	ld (ix + UISynthesix.keyboard + 1),d
 
 	push ix
+	ld hl,Channel_channels.0
+	ld de,0100H
+	call UIChannel_New_DE
+	pop ix
+	ld (ix + UISynthesix.channel),e
+	ld (ix + UISynthesix.channel + 1),d
+
+	push ix
 	ld iy,Channel_channels.0
 	ld l,(iy + Channel.controllers)
 	ld h,(iy + Channel.controllers + 1)
-	ld de,0100H
+	ld de,0110H
 	call UIControllerBank_New_DE
 	pop ix
 	ld (ix + UISynthesix.controllers),e
@@ -68,7 +78,7 @@ UISynthesix_Constructor:
 	ld iyh,d
 	ld l,(iy + NotePool.notes + KeyNotePair.note)
 	ld h,(iy + NotePool.notes + KeyNotePair.note + 1)
-	ld de,0110H
+	ld de,0120H
 	call UINote_New_DE
 	pop ix
 	ld (ix + UISynthesix.note),e
@@ -112,6 +122,10 @@ UISynthesix_Update:
 
 	ld e,(ix + UISynthesix.keyboard)
 	ld d,(ix + UISynthesix.keyboard + 1)
+	call UINode_Update_DE
+
+	ld e,(ix + UISynthesix.channel)
+	ld d,(ix + UISynthesix.channel + 1)
 	call UINode_Update_DE
 
 	ld e,(ix + UISynthesix.controllers)
