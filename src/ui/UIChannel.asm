@@ -128,8 +128,8 @@ UIChannel_Update:
 ;
 UIChannel_background:
 	db 24,23,23,23," Channel ",23,23,25
-	db 22," Program 0000 ",22
-	db 22," C.Press 0000 ",22
-	db 22," Bend C  0000 ",22
-	db 22," Bend F  0000 ",22
+	db 22," Program 0000 ",28
+	db 22," C.Press 0000 ",28
+	db 22," Bend C  0000 ",28
+	db 22," Bend F  0000 ",28
 	db 26,23,23,23,23,23,23,23,23,23,23,23,23,23,23,27

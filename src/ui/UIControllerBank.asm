@@ -298,18 +298,18 @@ UIControllerBank_Update:
 ;
 UIControllerBank_background:
 	db 24,23," Controllers ",25
-	db 22," Mod     0000 ",22
-	db 22," Volume  0000 ",22
-	db 22," Express 0000 ",22
-	db 22," Fx 1    0000 ",22
-	db 22," Fx 2    0000 ",22
-	db 22," Macro 1 0000 ",22
-	db 22," Macro 2 0000 ",22
-	db 22," Macro 3 0000 ",22
-	db 22," Macro 4 0000 ",22
-	db 22," Macro 5 0000 ",22
-	db 22," Macro 6 0000 ",22
-	db 22," Macro 7 0000 ",22
-	db 22," Macro 8 0000 ",22
-	db 22," Sustain 0000 ",22
+	db 22," Mod     0000 ",28
+	db 22," Volume  0000 ",28
+	db 22," Express 0000 ",28
+	db 22," Fx 1    0000 ",28
+	db 22," Fx 2    0000 ",28
+	db 22," Macro 1 0000 ",28
+	db 22," Macro 2 0000 ",28
+	db 22," Macro 3 0000 ",28
+	db 22," Macro 4 0000 ",28
+	db 22," Macro 5 0000 ",28
+	db 22," Macro 6 0000 ",28
+	db 22," Macro 7 0000 ",28
+	db 22," Macro 8 0000 ",28
+	db 22," Sustain 0000 ",28
 	db 26,23,23,23,23,23,23,23,23,23,23,23,23,23,23,27

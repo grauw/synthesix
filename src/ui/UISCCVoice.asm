@@ -131,8 +131,8 @@ UISCCVoice_Update:
 ;
 UISCCVoice_background:
 	db 24," SCC Voice  0 ",25
-	db 22," Note    0000 ",22
-	db 22," Detune  0000 ",22
-	db 22," Amplitu 0000 ",22
-	db 22," Wave    0000 ",22
+	db 29," Note    0000 ",22
+	db 29," Detune  0000 ",22
+	db 29," Amplitu 0000 ",22
+	db 29," Wave    0000 ",22
 	db 26,23,23,23,23,23,23,23,23,23,23,23,23,23,23,27

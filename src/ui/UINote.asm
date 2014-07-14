@@ -128,8 +128,8 @@ UINote_Update:
 ;
 UINote_background:
 	db 24,23,23,23,23," Note ",23,23,23,23,25
-	db 22," Key     0000 ",22
-	db 22," Velocit 0000 ",22
-	db 22," Trigger 0000 ",22
-	db 22," Gate    0000 ",22
+	db 22," Key     0000 ",28
+	db 22," Velocit 0000 ",28
+	db 22," Trigger 0000 ",28
+	db 22," Gate    0000 ",28
 	db 26,23,23,23,23,23,23,23,23,23,23,23,23,23,23,27
