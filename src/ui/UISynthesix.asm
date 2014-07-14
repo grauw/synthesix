@@ -36,7 +36,9 @@ UISynthesix_Constructor:
 
 	ld de,001EH
 	ld hl,UISynthesix_titleText
+	push ix
 	call UIText_New_DE
+	pop ix
 	ld (ix + UISynthesix.title),e
 	ld (ix + UISynthesix.title + 1),d
 
