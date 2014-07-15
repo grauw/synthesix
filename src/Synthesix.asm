@@ -5,6 +5,7 @@ Synthesix_Main:
 
 	call System_EnableROMInPage2
 	call ROM_Init
+	call System_EnableRAMInPage2
 	call RAM_Init
 
 	ld ix,KeyMidi_instance
