@@ -2,6 +2,8 @@
 ; An SCC voice (channel)
 ;
 SCCVoice: MACRO
+	slot:
+		db 0
 	waveRegister:
 		db SCC_WAVE_1
 	frequencyRegister:
@@ -32,25 +34,30 @@ SCCVoice: MACRO
 	dw SCCVoice.size
 SCCVoice_class: SCCVoice
 
+; a = slot
 ; b = wave register
 ; c = frequency register
 ; d = amplitude register
 ; ix <- this
 SCCVoice_New:
+	push af
 	push bc
 	push de
 	ld iy,SCCVoice_class
 	call Class_New
 	pop de
 	pop bc
+	pop af
 	jp SCCVoice_Constructor
 
 ; ix = this
+; a = slot
 ; b = wave register
 ; c = frequency register
 ; d = amplitude register
 ; ix <- this
 SCCVoice_Constructor:
+	ld (ix + SCCVoice.slot),a
 	ld (ix + SCCVoice.waveRegister),b
 	ld (ix + SCCVoice.frequencyRegister),c
 	ld (ix + SCCVoice.amplitudeRegister),d

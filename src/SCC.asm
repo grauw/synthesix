@@ -35,29 +35,39 @@ SCC_Init:
 	ld (SCC_BASE + SCC_MIXER),a
 	ld (SCC_mixerCopy),a
 
+	call System_GetPage1Slot
+
+	push af
 	ld b,SCC_WAVE_1
 	ld c,SCC_FREQUENCY_1
 	ld d,SCC_AMPLITUDE_1
 	call SCCVoice_New
 	ld (SCC_voices + 0),ix
+	pop af
 
+	push af
 	ld b,SCC_WAVE_2
 	ld c,SCC_FREQUENCY_2
 	ld d,SCC_AMPLITUDE_2
 	call SCCVoice_New
 	ld (SCC_voices + 2),ix
+	pop af
 
+	push af
 	ld b,SCC_WAVE_3
 	ld c,SCC_FREQUENCY_3
 	ld d,SCC_AMPLITUDE_3
 	call SCCVoice_New
 	ld (SCC_voices + 4),ix
+	pop af
 
+	push af
 	ld b,SCC_WAVE_4_5
 	ld c,SCC_FREQUENCY_4
 	ld d,SCC_AMPLITUDE_4
 	call SCCVoice_New
 	ld (SCC_voices + 6),ix
+	pop af
 	ret
 
 ; ix <- voice
