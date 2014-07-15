@@ -164,8 +164,8 @@ SCCVoice_SetWave:
 	REPT 32
 	ldi
 	ENDM
-	ld h,ROM_BANK_3_CHANGE / 100H
-	ld (hl),ROM_Bank3Default
+	ld hl,(ROM_page3)
+	ld (hl),l
 	ret
 
 ; ix = this

@@ -32,11 +32,6 @@ ROM_BANK_1_CHANGE: equ 7000H
 ROM_BANK_2_CHANGE: equ 9000H
 ROM_BANK_3_CHANGE: equ 0B000H
 
-ROM_Bank0Default: equ ROM_CodeBank1
-ROM_Bank1Default: equ ROM_CodeBank2
-ROM_Bank2Default: equ ROM_SCCBank
-ROM_Bank3Default: equ ROM_MultiplyTableBank
-
 	SECTION ROM_HEADER
 
 	db "AB"
@@ -117,14 +112,14 @@ Math_multiply127x127Table:
 ; The initial ROM banks
 ; Stored as words that include the bank select register address
 ; Example: ld hl,(ROM_bank3) / ld (hl),l
-ROM_bank1:
-	dw 5000H
-ROM_bank2:
-	dw 7001H
-ROM_bank3:
-	dw 9002H
-ROM_bank4:
-	dw 0B003H
+ROM_page0:
+	dw ROM_BANK_0_CHANGE | ROM_CodeBank1
+ROM_page1:
+	dw ROM_BANK_1_CHANGE | ROM_CodeBank2
+ROM_page2:
+	dw ROM_BANK_2_CHANGE | ROM_SCCBank
+ROM_page3:
+	dw ROM_BANK_3_CHANGE | ROM_MultiplyTableBank
 
 ;============================================
 ; HEAP MUST BE THE LAST THING DEFINED IN RAM
