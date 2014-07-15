@@ -32,6 +32,19 @@ SCCVoice: MACRO
 	dw SCCVoice.size
 SCCVoice_class: SCCVoice
 
+; b = wave register
+; c = frequency register
+; d = amplitude register
+; ix <- this
+SCCVoice_New:
+	push bc
+	push de
+	ld iy,SCCVoice_class
+	call Class_New
+	pop de
+	pop bc
+	jp SCCVoice_Constructor
+
 ; ix = this
 ; b = wave register
 ; c = frequency register

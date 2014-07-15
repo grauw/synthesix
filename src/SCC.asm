@@ -35,41 +35,33 @@ SCC_Init:
 	ld (SCC_BASE + SCC_MIXER),a
 	ld (SCC_mixerCopy),a
 
-	ld iy,SCCVoice_class
-	call Class_New
-	ld (SCC_voices + 0),ix
 	ld b,SCC_WAVE_1
 	ld c,SCC_FREQUENCY_1
 	ld d,SCC_AMPLITUDE_1
 	ld e,00000001B
-	call SCCVoice_Constructor
+	call SCCVoice_New
+	ld (SCC_voices + 0),ix
 
-	ld iy,SCCVoice_class
-	call Class_New
-	ld (SCC_voices + 2),ix
 	ld b,SCC_WAVE_2
 	ld c,SCC_FREQUENCY_2
 	ld d,SCC_AMPLITUDE_2
 	ld e,00000010B
-	call SCCVoice_Constructor
+	call SCCVoice_New
+	ld (SCC_voices + 2),ix
 
-	ld iy,SCCVoice_class
-	call Class_New
-	ld (SCC_voices + 4),ix
 	ld b,SCC_WAVE_3
 	ld c,SCC_FREQUENCY_3
 	ld d,SCC_AMPLITUDE_3
 	ld e,00000100B
-	call SCCVoice_Constructor
+	call SCCVoice_New
+	ld (SCC_voices + 4),ix
 
-	ld iy,SCCVoice_class
-	call Class_New
-	ld (SCC_voices + 6),ix
 	ld b,SCC_WAVE_4_5
 	ld c,SCC_FREQUENCY_4
 	ld d,SCC_AMPLITUDE_4
 	ld e,00001000B
-	call SCCVoice_Constructor
+	call SCCVoice_New
+	ld (SCC_voices + 6),ix
 	ret
 
 ; ix <- voice
