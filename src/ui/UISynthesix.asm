@@ -26,7 +26,10 @@ UISynthesix_class: UISynthesix
 ; ix = this
 UISynthesix_Constructor:
 	ld bc,UISynthesix_template_size
+	push ix
+	ld ix,Heap_heap
 	call Heap_Allocate
+	pop ix
 	ld (ix + UISynthesix.super.buffer),e
 	ld (ix + UISynthesix.super.buffer + 1),d
 	ld hl,UISynthesix_template

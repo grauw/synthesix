@@ -1,3 +1,15 @@
+;
+; A heap
+;
+Heap: MACRO ?start, ?size
+	position:
+		dw ?start
+	capacity:
+		dw ?size
+	size:
+	ENDM
+
+; ix = this
 ; bc = number of bytes to allocate
 ; bc <- allocated space
 ; de <- allocated memory start address
@@ -5,16 +17,20 @@
 ; Modifies: bc, de, hl
 ; Throws out of memory exception
 Heap_Allocate: PROC
-	ld hl,(Heap_heapCapacity)
+	ld l,(ix + Heap.capacity)
+	ld h,(ix + Heap.capacity + 1)
 	and a
 	sbc hl,bc
 	jr c,Throw
-	ld (Heap_heapCapacity),hl
-	ld de,(Heap_heapPosition)
+	ld (ix + Heap.capacity),l
+	ld (ix + Heap.capacity + 1),h
+	ld e,(ix + Heap.position)
+	ld d,(ix + Heap.position + 1)
 	ld l,e
 	ld h,d
 	add hl,bc
-	ld (Heap_heapPosition),hl
+	ld (ix + Heap.position),l
+	ld (ix + Heap.position + 1),h
 	ret
 Throw:
 	ld hl,Heap_outOfHeapException
@@ -49,9 +65,7 @@ Skip:
 ;
 	SECTION RAM
 
-Heap_heapPosition:
-	dw Heap_start
-Heap_heapCapacity:
-	dw Heap_size
+Heap_heap:
+	Heap Heap_start, Heap_size
 
 	ENDS

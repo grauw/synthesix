@@ -6,6 +6,7 @@
 Class_New:
 	ld c,(iy - 2)
 	ld b,(iy - 1)
+	ld ix,Heap_heap
 	call Heap_Allocate
 	push de
 	push iy
