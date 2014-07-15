@@ -14,7 +14,9 @@ ROM_WaveTableBank: equ 4
 ROM_SCCBank: equ 3FH
 
 	org 4000H
-ROM: ds 4000H
+ROM_HEADER: ds 10H
+ROM_BANK0: ds 1F0H
+ROM: ds 3E00H
 RAM_sourceAddress:
 	org 0C000H
 RAM_startAddress:
@@ -35,11 +37,15 @@ ROM_Bank1Default: equ ROM_CodeBank2
 ROM_Bank2Default: equ ROM_SCCBank
 ROM_Bank3Default: equ ROM_MultiplyTableBank
 
-	SECTION ROM
+	SECTION ROM_HEADER
 
 	db "AB"
 	dw Synthesix_Main
 	dw 0, 0, 0, 0, 0, 0
+
+	ENDS
+
+	SECTION ROM
 
 	INCLUDE "Synthesix.asm"
 	INCLUDE "BIOS.asm"
