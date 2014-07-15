@@ -56,7 +56,12 @@ Module_NoteFactory:
 	pop ix
 	ret
 
-Module_sccVoice: Module SCC_GetFreeVoice
+Module_sccVoice: Module Module_SCCVoiceFactory
+
+Module_SCCVoiceFactory:
+	ld ix,(Synthesix_scc)
+	call SCC_GetFreeVoice
+	ret
 
 Module_envelopeAD: Module EnvelopeAD_New
 

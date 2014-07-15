@@ -12,7 +12,9 @@ Synthesix_Main:
 	call KeyMidi_Constructor
 	call Channels_Init
 	call PSG_Init
-	call SCC_Init
+	call System_GetSlotPage1
+	call SCC_New
+	ld (Synthesix_scc),ix
 	ld hl,Channel_channels.0
 	call Program_New
 	ld (Synthesix_program),ix
@@ -82,6 +84,9 @@ Synthesix_Interrupt:
 
 ;
 	SECTION RAM
+
+Synthesix_scc:
+	dw 0
 
 Synthesix_program:
 	dw 0

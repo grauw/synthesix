@@ -60,32 +60,48 @@ UISynthesix_Constructor:
 	ld (ix + UISynthesix.keyboard + 1),d
 
 	push ix
+	ld a,0
+	ld ix,(Synthesix_scc)
+	call SCC_GetVoice
+	pop ix
+	push ix
 	ld de,1300H
-	ld hl,(SCC_voices)
 	call UISCCVoice_New_DE
 	pop ix
 	ld (ix + UISynthesix.voice1),e
 	ld (ix + UISynthesix.voice1 + 1),d
 
 	push ix
+	ld a,1
+	ld ix,(Synthesix_scc)
+	call SCC_GetVoice
+	pop ix
+	push ix
 	ld de,1310H
-	ld hl,(SCC_voices + 2)
 	call UISCCVoice_New_DE
 	pop ix
 	ld (ix + UISynthesix.voice2),e
 	ld (ix + UISynthesix.voice2 + 1),d
 
 	push ix
+	ld a,2
+	ld ix,(Synthesix_scc)
+	call SCC_GetVoice
+	pop ix
+	push ix
 	ld de,1320H
-	ld hl,(SCC_voices + 4)
 	call UISCCVoice_New_DE
 	pop ix
 	ld (ix + UISynthesix.voice3),e
 	ld (ix + UISynthesix.voice3 + 1),d
 
 	push ix
+	ld a,3
+	ld ix,(Synthesix_scc)
+	call SCC_GetVoice
+	pop ix
+	push ix
 	ld de,1330H
-	ld hl,(SCC_voices + 6)
 	call UISCCVoice_New_DE
 	pop ix
 	ld (ix + UISynthesix.voice4),e
