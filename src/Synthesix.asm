@@ -4,6 +4,7 @@ Synthesix_Main:
 	ret c
 
 	call System_EnableROMInPage2
+	call ROM_Init
 	call RAM_Init
 
 	ld ix,KeyMidi_instance

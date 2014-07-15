@@ -87,6 +87,17 @@ ROM_BANK_A000_CHANGE: equ 0B000H
 
 	SECTION ROM_BANK0
 
+ROM_Init:
+	ld a,ROM_CodeBank1
+	ld (ROM_BANK_4000_CHANGE),a
+	ld a,ROM_CodeBank2
+	ld (ROM_BANK_6000_CHANGE),a
+	ld a,ROM_RAMInitBank
+	ld (ROM_BANK_8000_CHANGE),a
+	ld a,ROM_MultiplyTableBank
+	ld (ROM_BANK_A000_CHANGE),a
+	ret
+
 ;
 ; Copy RAM initialisation data from ROM to RAM.
 ; These values are defined in the RAM section and copied on boot.
