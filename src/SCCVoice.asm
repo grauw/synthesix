@@ -64,20 +64,20 @@ SCCVoice_Constructor:
 	ret
 
 ; ix = this
-SCCVoice_Update:
+SCCVoice_Update: PROC
+	call System_GetSlotPage2
+	push af
 	ld l,(ix + SCCVoice.amplitude)
 	ld h,(ix + SCCVoice.amplitude + 1)
 	ld a,(hl)
 	and a
-	jp z,SCCVoice_SetAmplitude
 	push af
-
+	jp z,FastPath
 	ld l,(ix + SCCVoice.wave)
 	ld h,(ix + SCCVoice.wave + 1)
 	ld a,(hl)
 	cp (ix + SCCVoice.lastWave)
-	call nz,SCCVoice_SetWave
-
+	push af
 	ld l,(ix + SCCVoice.note)
 	ld h,(ix + SCCVoice.note + 1)
 	ld a,(hl)
@@ -87,11 +87,29 @@ SCCVoice_Update:
 	ld l,(ix + SCCVoice.phaseReset)
 	ld h,(ix + SCCVoice.phaseReset + 1)
 	ld c,(hl)
+	push af
+	push bc
+	ld a,(ix + SCCVoice.slot)
+	call System_SetSlotPage2
+	pop bc
+	pop af
 	call SCCVoice_SetPitch
-
+	pop af
+	call nz,SCCVoice_SetWave
 	pop af
 	call SCCVoice_SetAmplitude
+	pop af
+	call System_SetSlotPage2
 	ret
+FastPath:
+	ld a,(ix + SCCVoice.slot)
+	call System_SetSlotPage2
+	pop af
+	call SCCVoice_SetAmplitude
+	pop af
+	call System_SetSlotPage2
+	ret
+	ENDP
 
 ; ix = this
 ; a = note
