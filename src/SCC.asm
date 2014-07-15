@@ -21,6 +21,10 @@ SCC_DEFORMATION: equ 0E0H
 SCC_MAX_VOICES: equ 4
 
 SCC_Init:
+	call System_GetSlotPage2
+	push af
+
+	call System_EnableROMInPage2
 	ld a,ROM_SCCBank
 	ld (ROM_bank8000),a
 	ld (ROM_BANK_8000_CHANGE),a
@@ -34,6 +38,9 @@ SCC_Init:
 	ld a,00011111B
 	ld (SCC_BASE + SCC_MIXER),a
 	ld (SCC_mixerCopy),a
+
+	pop af
+	call System_SetSlotPage2
 
 	call System_GetSlotPage1
 
