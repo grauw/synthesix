@@ -52,6 +52,6 @@ Skip:
 Heap_heapPosition:
 	dw Heap_start
 Heap_heapCapacity:
-	dw 1000H
+	dw Heap_size
 
 	ENDS
