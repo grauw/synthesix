@@ -4,6 +4,8 @@
 SCCVoice: MACRO
 	slot:
 		db 0
+	preparedSlot:
+		ds 4
 	waveRegister:
 		db SCC_WAVE_1
 	frequencyRegister:
@@ -61,12 +63,16 @@ SCCVoice_Constructor:
 	ld (ix + SCCVoice.waveRegister),b
 	ld (ix + SCCVoice.frequencyRegister),c
 	ld (ix + SCCVoice.amplitudeRegister),d
+
+	call System_PrepareSlotPage2
+	ld (ix + SCCVoice.preparedSlot),b
+	ld (ix + SCCVoice.preparedSlot + 1),c
+	ld (ix + SCCVoice.preparedSlot + 2),d
+	ld (ix + SCCVoice.preparedSlot + 3),e
 	ret
 
 ; ix = this
 SCCVoice_Update: PROC
-	call System_GetSlotPage2
-	push af
 	ld l,(ix + SCCVoice.amplitude)
 	ld h,(ix + SCCVoice.amplitude + 1)
 	ld a,(hl)
@@ -87,27 +93,34 @@ SCCVoice_Update: PROC
 	ld l,(ix + SCCVoice.phaseReset)
 	ld h,(ix + SCCVoice.phaseReset + 1)
 	ld c,(hl)
-	push af
-	push bc
-	ld a,(ix + SCCVoice.slot)
-	call System_SetSlotPage2
-	pop bc
-	pop af
+	ex af,af'
+	exx
+	ld b,(ix + SCCVoice.preparedSlot)
+	ld c,(ix + SCCVoice.preparedSlot + 1)
+	ld d,(ix + SCCVoice.preparedSlot + 2)
+	ld e,(ix + SCCVoice.preparedSlot + 3)
+	call System_ApplyPreparedSlotPage2
+	exx
+	ex af,af'
 	call SCCVoice_SetPitch
 	pop af
 	call nz,SCCVoice_SetWave
 	pop af
 	call SCCVoice_SetAmplitude
-	pop af
-	call System_SetSlotPage2
+	exx
+	call System_ApplyPreparedSlotPage2
 	ret
 FastPath:
-	ld a,(ix + SCCVoice.slot)
-	call System_SetSlotPage2
+	ld b,(ix + SCCVoice.preparedSlot)
+	ld c,(ix + SCCVoice.preparedSlot + 1)
+	ld d,(ix + SCCVoice.preparedSlot + 2)
+	ld e,(ix + SCCVoice.preparedSlot + 3)
+	call System_ApplyPreparedSlotPage2
+	exx
 	pop af
 	call SCCVoice_SetAmplitude
-	pop af
-	call System_SetSlotPage2
+	exx
+	call System_ApplyPreparedSlotPage2
 	ret
 	ENDP
 
