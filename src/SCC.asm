@@ -35,7 +35,7 @@ SCC_Init:
 	ld (SCC_BASE + SCC_MIXER),a
 	ld (SCC_mixerCopy),a
 
-	call System_GetPage1Slot
+	call System_GetSlotPage1
 
 	push af
 	ld b,SCC_WAVE_1

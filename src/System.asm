@@ -73,14 +73,14 @@ System_PrintHex_Done:
 	ret
 
 System_EnableROMInPage2:
-	call System_GetPage1Slot
+	call System_GetSlotPage1
 	ld h,80H
 	call ENASLT
 	ei
 	ret
 
 System_EnableRAMInPage2:
-	call System_GetPage3Slot
+	call System_GetSlotPage3
 	ld h,80H
 	call ENASLT
 	ei
@@ -89,14 +89,14 @@ System_EnableRAMInPage2:
 System_GetSlot:
 	ld a,h
 	sub 64
-	jp c,System_GetPage0Slot
+	jp c,System_GetSlotPage0
 	sub 64
-	jp c,System_GetPage1Slot
+	jp c,System_GetSlotPage1
 	sub 64
-	jp c,System_GetPage2Slot
-	jp System_GetPage3Slot
+	jp c,System_GetSlotPage2
+	jp System_GetSlotPage3
 
-System_GetPage0Slot:
+System_GetSlotPage0:
 	call RSLREG
 	and 00000011B
 	ld c,a
@@ -119,7 +119,7 @@ System_GetPage0Slot:
 	or c
 	ret
 
-System_GetPage1Slot:
+System_GetSlotPage1:
 	call RSLREG
 	and 00001100B
 	rrca
@@ -142,7 +142,7 @@ System_GetPage1Slot:
 	or c
 	ret
 
-System_GetPage2Slot:
+System_GetSlotPage2:
 	call RSLREG
 	and 00110000B
 	rrca
@@ -169,7 +169,7 @@ System_GetPage2Slot:
 	or c
 	ret
 
-System_GetPage3Slot:
+System_GetSlotPage3:
 	call RSLREG
 	and 11000000B
 	rlca
