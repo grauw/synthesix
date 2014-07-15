@@ -17,6 +17,7 @@ ROM_SCCBank: equ 3FH
 ROM_HEADER: ds 10H
 ROM_BANK0: ds 1F0H
 ROM: ds 3E00H
+	org 6000H
 RAM_sourceAddress:
 	org 0C000H
 RAM_startAddress:
@@ -80,16 +81,23 @@ ROM_BANK_3_CHANGE: equ 0B000H
 	INCLUDE "modulation/PitchBend.asm"
 	INCLUDE "ui/UI.asm"
 
-;
-; All RAM data is defined inside the marked section below
-; These values are copied to RAM during program initialisation
-;
+	ENDS
 
+	SECTION ROM_BANK0
+
+;
+; Copy RAM initialisation data from ROM to RAM.
+; These values are defined in the RAM section and copied on boot.
+;
 RAM_Init:
+	ld a,ROM_RAMInitBank
+	ld (ROM_BANK_1_CHANGE),a
 	ld hl,RAM_sourceAddress
 	ld de,RAM_startAddress
 	ld bc,RAM_endAddress - RAM_startAddress
 	ldir
+	ld a,ROM_CodeBank2
+	ld (ROM_BANK_1_CHANGE),a
 	ret
 
 	ENDS
