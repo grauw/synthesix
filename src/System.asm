@@ -79,6 +79,13 @@ System_EnableROMInPage2:
 	ei
 	ret
 
+System_EnableRAMInPage2:
+	call System_GetPage3Slot
+	ld h,80H
+	call ENASLT
+	ei
+	ret
+
 System_GetSlot:
 	ld a,h
 	sub 64
