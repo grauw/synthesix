@@ -22,7 +22,7 @@ SCC_MAX_VOICES: equ 4
 
 SCC_Init:
 	ld a,ROM_SCCBank
-	ld (ROM_BANK_2_CHANGE),a
+	ld (ROM_BANK_8000_CHANGE),a
 
 	ld a,0
 	ld (SCC_BASE + SCC_AMPLITUDE_1),a

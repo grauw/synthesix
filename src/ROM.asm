@@ -30,10 +30,10 @@ ROM_WAVETABLES: ds 2000H
 
 Heap_size: equ 1000H
 
-ROM_BANK_0_CHANGE: equ 5000H
-ROM_BANK_1_CHANGE: equ 7000H
-ROM_BANK_2_CHANGE: equ 9000H
-ROM_BANK_3_CHANGE: equ 0B000H
+ROM_BANK_4000_CHANGE: equ 5000H
+ROM_BANK_6000_CHANGE: equ 7000H
+ROM_BANK_8000_CHANGE: equ 9000H
+ROM_BANK_A000_CHANGE: equ 0B000H
 
 	SECTION ROM_HEADER
 
@@ -93,13 +93,13 @@ ROM_BANK_3_CHANGE: equ 0B000H
 ;
 RAM_Init:
 	ld a,ROM_RAMInitBank
-	ld (ROM_BANK_1_CHANGE),a
+	ld (ROM_BANK_6000_CHANGE),a
 	ld hl,RAM_sourceAddress
 	ld de,RAM_startAddress
 	ld bc,RAM_endAddress - RAM_startAddress
 	ldir
 	ld a,ROM_CodeBank2
-	ld (ROM_BANK_1_CHANGE),a
+	ld (ROM_BANK_6000_CHANGE),a
 	ret
 
 	ENDS
@@ -121,15 +121,15 @@ Math_multiply127x127Table:
 
 ; The initial ROM banks
 ; Stored as words that include the bank select register address
-; Example: ld hl,(ROM_bank3) / ld (hl),l
-ROM_page0:
-	dw ROM_BANK_0_CHANGE | ROM_CodeBank1
-ROM_page1:
-	dw ROM_BANK_1_CHANGE | ROM_CodeBank2
-ROM_page2:
-	dw ROM_BANK_2_CHANGE | ROM_SCCBank
-ROM_page3:
-	dw ROM_BANK_3_CHANGE | ROM_MultiplyTableBank
+; Example: ld hl,(ROM_bank6000) / ld (hl),l
+ROM_bank4000:
+	dw ROM_BANK_4000_CHANGE | ROM_CodeBank1
+ROM_bank6000:
+	dw ROM_BANK_6000_CHANGE | ROM_CodeBank2
+ROM_bank8000:
+	dw ROM_BANK_8000_CHANGE | ROM_SCCBank
+ROM_bankA000:
+	dw ROM_BANK_A000_CHANGE | ROM_MultiplyTableBank
 
 ;============================================
 ; HEAP MUST BE THE LAST THING DEFINED IN RAM

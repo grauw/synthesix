@@ -150,7 +150,7 @@ SCCVoice_SetAmplitude:
 ; Modifies: af, bc, de, hl
 SCCVoice_SetWave:
 	ld (ix + SCCVoice.lastWave),a
-	ld h,ROM_BANK_1_CHANGE / 100H
+	ld h,ROM_BANK_6000_CHANGE / 100H
 	ld (hl),ROM_WaveTableBank
 	add a,a
 	ld l,a
@@ -166,7 +166,7 @@ SCCVoice_SetWave:
 	REPT 32
 	ldi
 	ENDM
-	ld hl,(ROM_page1)
+	ld hl,(ROM_bank6000)
 	ld (hl),l
 	ret
 

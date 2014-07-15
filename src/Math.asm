@@ -14,12 +14,12 @@ Math_Multiply127x127:
 	rra
 	rr l
 	add a,Math_multiply127x127Table / 100H
-	ld h,ROM_BANK_1_CHANGE / 100H
+	ld h,ROM_BANK_6000_CHANGE / 100H
 	di
 	ld (hl),ROM_MultiplyTableBank
 	ld h,a
 	ld a,(hl)
-	ld hl,(ROM_page1)
+	ld hl,(ROM_bank6000)
 	ei
 	ld (hl),l
 	ret
@@ -30,14 +30,14 @@ Math_Multiply127x127_Inverse:
 	rr l
 	and 00011111B
 	add a,Math_multiply127x127Table / 100H
-	ld h,ROM_BANK_1_CHANGE / 100H
+	ld h,ROM_BANK_6000_CHANGE / 100H
 	di
 	ld (hl),ROM_MultiplyTableBank
 	ld h,a
 	ld a,l
 	and 7FH
 	sub (hl)
-	ld hl,(ROM_page1)
+	ld hl,(ROM_bank6000)
 	ei
 	ld (hl),l
 	ret
