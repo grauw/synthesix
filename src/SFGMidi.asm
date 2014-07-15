@@ -183,6 +183,8 @@ OldHook:
 SFGMidi_NewHook:
 	jp SFGMidi_InterruptHandler
 
+	SECTION ROM_BANK0
+
 ;
 ; Does a quick interslot read using prepared slot bits
 ; de = prepared slot bits (d = primary, e = secondary)
@@ -217,6 +219,8 @@ SFGMidi_Read:
 	IF $ >= 0C000H
 		ERROR "Can not be in page 3."
 	ENDIF
+
+	ENDS
 
 ;
 ; Detect MIDI interface
