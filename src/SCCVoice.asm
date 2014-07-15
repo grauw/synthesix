@@ -143,12 +143,14 @@ SCCVoice_SetAmplitude:
 	ld (hl),a
 	ret
 
+	SECTION ROM_BANK0
+
 ; ix = this
 ; a = wave number (one’s complement)
 ; Modifies: af, bc, de, hl
 SCCVoice_SetWave:
 	ld (ix + SCCVoice.lastWave),a
-	ld h,ROM_BANK_3_CHANGE / 100H
+	ld h,ROM_BANK_1_CHANGE / 100H
 	ld (hl),ROM_WaveTableBank
 	add a,a
 	ld l,a
@@ -164,9 +166,11 @@ SCCVoice_SetWave:
 	REPT 32
 	ldi
 	ENDM
-	ld hl,(ROM_page3)
+	ld hl,(ROM_page1)
 	ld (hl),l
 	ret
+
+	ENDS
 
 ; ix = this
 ; a <- voice number (0 .. 4)
