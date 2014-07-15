@@ -3,10 +3,11 @@
 ; iy <- class template
 ; de <- newly allocated class end address
 ; Modifies: bc, de, hl, ix
-Class_New:
+Class_New: PROC
+	ld ix,Heap_heap
+Cont:
 	ld c,(iy - 2)
 	ld b,(iy - 1)
-	ld ix,Heap_heap
 	call Heap_Allocate
 	push de
 	push iy
@@ -14,6 +15,13 @@ Class_New:
 	ldir
 	pop ix
 	ret
+	ENDP
+
+; Allocate a new class in the upper memory heap.
+; Parameters are the same as New.
+Class_NewUpper:
+	ld ix,Heap_heapUpper
+	jp Class_New.Cont
 
 ; iy = class template
 ; de = destination address

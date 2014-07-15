@@ -46,7 +46,7 @@ SCCVoice_New:
 	push bc
 	push de
 	ld iy,SCCVoice_class
-	call Class_New
+	call Class_NewUpper
 	pop de
 	pop bc
 	pop af

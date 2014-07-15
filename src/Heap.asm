@@ -66,6 +66,9 @@ Skip:
 	SECTION RAM
 
 Heap_heap:
+	Heap 8000H, 1000H
+
+Heap_heapUpper:
 	Heap Heap_start, Heap_size
 
 	ENDS
