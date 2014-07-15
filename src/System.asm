@@ -74,16 +74,12 @@ System_PrintHex_Done:
 
 System_EnableROMInPage2:
 	call System_GetSlotPage1
-	ld h,80H
-	call ENASLT
-	ei
+	call System_SetSlotPage2
 	ret
 
 System_EnableRAMInPage2:
 	call System_GetSlotPage3
-	ld h,80H
-	call ENASLT
-	ei
+	call System_SetSlotPage2
 	ret
 
 System_GetSlot:
@@ -194,6 +190,54 @@ System_GetSlotPage3:
 	rrca
 	rrca
 	or c
+	ret
+
+;
+; Sets a slot in page 2.
+; The current interrupt enabled state is preserved.
+;
+; a = slot ID formatted FxxxSSPP
+; Modifies: af, bc, de, hl
+;
+System_SetSlotPage2:
+	ld c,a
+	and 00000011B
+	rlca
+	rlca
+	rlca
+	rlca
+	ld b,a
+	rlca
+	rlca
+	ld d,a
+	ld a,c
+	and 00001100B
+	rlca
+	rlca
+	ld e,a
+	in a,(0A8H)
+	ld c,a
+	and 00111111B
+	or d
+	ld d,a
+	ld a,c
+	and 11001111B
+	or b
+	ld b,a
+	ld a,(SLTTBL + 2)
+	and 11001111B
+	or e
+	ld e,a
+	ld (SLTTBL + 2),a
+	ld c,0A8H
+	ld hl,0FFFFH
+	ld a,r
+	di
+	out (c),d
+	ld (hl),e
+	out (c),b
+	ret po
+	ei
 	ret
 
 ;
