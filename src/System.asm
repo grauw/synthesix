@@ -241,6 +241,80 @@ System_SetSlotPage2:
 	ret
 
 ;
+; Prepares a slot selection in page 2.
+;
+; Note, when applying, primary slots will be set to their state when prepared.
+; So when invoked, slot selection of pages 0, 1 and 2 should be the same.
+;
+; a = slot ID formatted FxxxSSPP
+; bc <- prepared primary slot data
+; de <- prepared secondary slot data
+; Modifies: af, bc, de
+;
+System_PrepareSlotPage2:
+	ld c,a
+	and 00000011B
+	rlca
+	rlca
+	rlca
+	rlca
+	ld b,a
+	rlca
+	rlca
+	ld d,a
+	ld a,c
+	and 00001100B
+	rlca
+	rlca
+	ld e,a
+	in a,(0A8H)
+	ld c,a
+	and 00111111B
+	or d
+	ld d,a
+	ld a,c
+	and 11001111B
+	or b
+	ld b,a
+	ld a,(SLTTBL + 2)
+	and 11001111B
+	or e
+	ld e,a
+	ld c,0A8H
+	ret
+
+;
+; Applies a prepared slot selection in page 2.
+; The current interrupt enabled state is preserved.
+; The original slot layout can be restored by invoking this method again.
+;
+; Note, when applying, primary slots will be set to their state when prepared.
+; So when invoked, slot selection of pages 0, 1 and 2 should be the same.
+;
+; bc = Prepared primary slot data
+; de = Prepared secondary slot data
+; bc <- Restore primary slot data
+; de <- Restore secondary slot data
+; Modifies: af, bc, de, hl
+;
+System_ApplyPreparedSlotPage2:
+	ld hl,0FFFFH
+	ld a,r
+	di
+	in a,(0A8H)  ; be careful not to modify p/v flag
+	out (c),d
+	ld (hl),e
+	out (c),b
+	ld b,a
+	ld hl,SLTTBL + 2
+	ld a,(hl)
+	ld (hl),e
+	ld e,a
+	ret po
+	ei
+	ret
+
+;
 ; Search all slots and subslots for a match.
 ; Invoke Continue to continue searching where a previous search left off.
 ;
