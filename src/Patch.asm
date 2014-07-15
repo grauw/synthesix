@@ -190,7 +190,9 @@ Loop:
 	push hl
 	push ix
 	push iy
+	push hl
 	call Module_Acquire_HL
+	pop de
 	pop iy
 	push iy
 	ld l,(iy + Patch.moduleLists)
