@@ -84,6 +84,9 @@ SCCVoice_Update:
 	ld l,(ix + SCCVoice.detune)
 	ld h,(ix + SCCVoice.detune + 1)
 	ld b,(hl)
+	ld l,(ix + SCCVoice.phaseReset)
+	ld h,(ix + SCCVoice.phaseReset + 1)
+	ld c,(hl)
 	call SCCVoice_SetPitch
 
 	pop af
@@ -93,6 +96,7 @@ SCCVoice_Update:
 ; ix = this
 ; a = note
 ; b = detune (one’s complement)
+; c = phase reset
 SCCVoice_SetPitch: PROC
 	ld h,PSG_frequencyTable / 100H
 	add a,a
@@ -119,9 +123,7 @@ Continue:
 	call Math_Multiply127x127Signed
 	cpl
 	call Math_AddSigned
-	ld l,(ix + SCCVoice.phaseReset)
-	ld h,(ix + SCCVoice.phaseReset + 1)
-	bit 6,(hl)
+	bit 6,c
 	jr nz,PhaseReset
 	ld a,(ix + SCCVoice.lastFrequency)
 	cp e
