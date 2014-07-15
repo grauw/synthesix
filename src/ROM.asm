@@ -23,7 +23,7 @@ RAM_sourceAddress:
 RAM_startAddress:
 RAM: ds 2000H
 RAM_endAddress:
-	org 0A000H
+	org 06000H
 ROM_MULTIPLYTABLE: ds 2000H
 	org 06000H
 ROM_WAVETABLES: ds 2000H

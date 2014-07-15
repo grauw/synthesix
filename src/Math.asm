@@ -1,10 +1,12 @@
+	SECTION ROM_BANK0
+
 ; Multiply a 7-bit integer with a 7-bit number which represents the range 0..1.
 ; Bit 7 of a must be 0, bit 7 of l is ignored.
 ; a = multiplicand
 ; l = multiplier
 ; a <- product
 ; Modifies: hl
-; Clock ticks: 77 / 98
+; Clock ticks: 77 / 98 + 54 cycles for bank switching :(
 Math_Multiply127x127:
 	bit 6,a
 	jr nz,Math_Multiply127x127_Inverse
@@ -12,8 +14,14 @@ Math_Multiply127x127:
 	rra
 	rr l
 	add a,Math_multiply127x127Table / 100H
+	ld h,ROM_BANK_1_CHANGE / 100H
+	di
+	ld (hl),ROM_MultiplyTableBank
 	ld h,a
 	ld a,(hl)
+	ld hl,(ROM_page1)
+	ei
+	ld (hl),l
 	ret
 Math_Multiply127x127_Inverse:
 	cpl
@@ -22,11 +30,19 @@ Math_Multiply127x127_Inverse:
 	rr l
 	and 00011111B
 	add a,Math_multiply127x127Table / 100H
+	ld h,ROM_BANK_1_CHANGE / 100H
+	di
+	ld (hl),ROM_MultiplyTableBank
 	ld h,a
 	ld a,l
 	and 7FH
 	sub (hl)
+	ld hl,(ROM_page1)
+	ei
+	ld (hl),l
 	ret
+
+	ENDS
 
 ; Multiply an 8-bit signed integer with a 8-bit signed fractional number which
 ; represents the range 0..1.
