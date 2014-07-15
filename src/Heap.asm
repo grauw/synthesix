@@ -9,7 +9,7 @@ Heap_Allocate: PROC
 	and a
 	sbc hl,bc
 	jr c,Throw
-	ld hl,(Heap_heapCapacity)
+	ld (Heap_heapCapacity),hl
 	ld de,(Heap_heapPosition)
 	ld l,e
 	ld h,d
