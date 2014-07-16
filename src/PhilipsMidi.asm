@@ -50,7 +50,7 @@ PhilipsMidi_SetHook:
 	ld (PhilipsMidi_InterruptHandler.writeByte),hl
 	ld hl,PhilipsMidi_NewHook
 	ld de,PhilipsMidi_InterruptHandler.OldHook
-	call System_InstallInterruptHook
+	call Interrupt_InstallInterruptHook
 	ret
 
 ;

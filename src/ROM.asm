@@ -53,6 +53,7 @@ ROM_BANK_A000_CHANGE: equ 0B000H
 	INCLUDE "Math.asm"
 	INCLUDE "Heap.asm"
 	INCLUDE "Class.asm"
+	INCLUDE "Interrupt.asm"
 	INCLUDE "MidiIn.asm"
 	INCLUDE "MSXMidi.asm"
 	INCLUDE "PhilipsMidi.asm"

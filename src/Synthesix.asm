@@ -24,7 +24,7 @@ Synthesix_Main:
 
 	call UI_Init
 
-	call System_EnableInterruptHandler
+	call Interrupt_EnableInterruptHandler
 	ld ix,PhilipsMidi_instance
 	call PhilipsMidi_Install
 	ld ix,MSXMidi_instance
@@ -32,7 +32,7 @@ Synthesix_Main:
 	ld ix,SFGMidi_instance
 	call SFGMidi_Install
 	ld hl,Synthesix_Interrupt
-	call System_InstallTIMIHook
+	call Interrupt_InstallTIMIHook
 
 	call Synthesix_MainLoop
 
@@ -42,8 +42,8 @@ Synthesix_Main:
 	call MSXMidi_Uninstall
 	ld ix,PhilipsMidi_instance
 	call PhilipsMidi_Uninstall
-	call System_RestoreTIMIHook
-	call System_DisableInterruptHandler
+	call Interrupt_RestoreTIMIHook
+	call Interrupt_DisableInterruptHandler
 	call KILBUF
 	ret
 

@@ -72,7 +72,7 @@ SFGMidi_SetHook:
 	ld (SFGMidi_InterruptHandler.writeByte),hl
 	ld hl,SFGMidi_NewHook
 	ld de,SFGMidi_InterruptHandler.OldHook
-	call System_InstallInterruptHook
+	call Interrupt_InstallInterruptHook
 	ret
 
 ;
