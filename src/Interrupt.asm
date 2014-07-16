@@ -44,10 +44,12 @@ Interrupt_DisableInterruptHandler:
 	im 1
 	ret
 
-; Note: interrupts must be disabled
 ; hl = new hook (5 bytes)
 ; de = old hook (5 bytes)
 Interrupt_Hook:
+	ld a,r
+	push af
+	di
 	push hl
 	ld hl,Interrupt_InterruptHandler
 	ld bc,5
@@ -56,6 +58,9 @@ Interrupt_Hook:
 	ld de,Interrupt_InterruptHandler
 	ld bc,5
 	ldir
+	pop af
+	ret po
+	ei
 	ret
 
 	SECTION RAM
