@@ -175,6 +175,50 @@ Memory_SetSlotPage2:
 	ret
 
 ;
+; Prepares a slot selection in page 0.
+;
+; Note, when applying, primary slots will be set to their state when prepared.
+; So when invoked, slot selection of pages 1, 2 and 3 should be the same.
+;
+; a = slot ID formatted FxxxSSPP
+; bc <- prepared slot id (1)
+; de <- prepared slot id (2)
+; Modifies: af, bc, de
+;
+Memory_PrepareSlotPage0:
+	ld c,a
+	and 00001100B
+	rrca
+	rrca
+	ld e,a
+	ld a,c
+	and 00000011B
+	ld b,a
+	rrca
+	rrca
+	or b
+	ld d,a
+	ld h,SLTTBL >> 8
+	ld a,SLTTBL & 0FFH
+	add a,b
+	ld l,a
+	in a,(0A8H)
+	ld c,a
+	and 00111100B
+	or d
+	ld d,a
+	ld a,c
+	and 11111100B
+	or b
+	ld b,a
+	ld a,(hl)
+	and 11111100B
+	or e
+	ld e,a
+	ld c,l
+	ret
+
+;
 ; Prepares a slot selection in page 2.
 ;
 ; Note, when applying, primary slots will be set to their state when prepared.

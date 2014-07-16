@@ -15,7 +15,7 @@ SFGMidi: MACRO
 		db 0
 	slot:
 		db 0
-	slotBits:
+	preparedSlot:
 		dw 0
 	ENDM
 
@@ -46,18 +46,10 @@ SFGMidi_Uninstall:
 ; a = slot
 SFGMidi_SetSlot:
 	ld (ix + SFGMidi.slot),a
-	ld b,a
-	and 00000011B
-	ld c,a
-	rrca
-	rrca
-	or c
-	ld (ix + SFGMidi.slotBits + 1),a
-	ld a,b
-	and 00001100B
-	rrca
-	rrca
-	ld (ix + SFGMidi.slotBits),a
+
+	call Memory_PrepareSlotPage0
+	ld (ix + SFGMidi.preparedSlot),e
+	ld (ix + SFGMidi.preparedSlot + 1),d
 	ret
 
 ;
@@ -161,7 +153,7 @@ SFGMidi_InterruptHandler: PROC
 	push bc
 	push de
 	push hl
-	ld de,(SFGMidi_instance.slotBits)
+	ld de,(SFGMidi_instance.preparedSlot)
 	call SFGMidi_ReadStatusData
 	jr z,NotSFGMidi
 	call System_ThrowException
@@ -189,43 +181,27 @@ SFGMidi_NewHook:
 	SECTION ROM_BANK0
 
 ;
-; Does a quick interslot read using prepared slot bits
-; de = prepared slot bits (d = primary, e = secondary)
-; hl = address
+; Does a quick interslot status/data read using a prepared slot id (2)
+; de = prepared slot id (2)
 ; a <- value
-; Modifies: af, bc, hl
-;
-; XXX: There is a flaw here: it expects Synthesix to be in page 1.
-;      This is not necessarily the case (e.g. during disk I/O).
+; Modifies: af, bc, de, hl
 ;
 SFGMidi_ReadStatusData: PROC
-	IF $ < 4000H
-		ERROR "Can not be in page 0."
-	ENDIF
-	in a,(0A8H)
-	ld b,a
-	and 00111100B
-	or d
-	out (0A8H),a
-	ld a,(0FFFFH)
-	cpl
-	ld c,a
-	and 11111100B
-	or e
-	ld (0FFFFH),a
+	ld c,0A8H
+	ld hl,0FFFFH
+	in b,(c)
+	out (c),d
+	ld a,(hl)
+	ld (hl),e
+	ld e,a
 	ld a,(SFGMidi_STATUS)
 	and 00000010B
 	jr z,NotSFGMidi
 	ld a,(SFGMidi_DATA)
 NotSFGMidi:
-	ld hl,0FFFFH
-	ld (hl),c
-	ld c,0A8H
+	ld (hl),e
 	out (c),b
 	ret
-	IF $ >= 0C000H
-		ERROR "Can not be in page 3."
-	ENDIF
 	ENDP
 
 	ENDS
