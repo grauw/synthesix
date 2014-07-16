@@ -21,7 +21,7 @@ S1990_TIMER_LSB: equ 0E6H
 S1990_TIMER_MSB: equ 0E7H
 
 MSXMidi: MACRO
-	super: MidiIn MSXMidi_buffer
+	super: MidiIn MidiIn_buffer2
 	found:
 		db 0
 	ENDM
@@ -256,9 +256,5 @@ MSXMidi_commandSave:
 
 MSXMidi_instance:
 	MSXMidi
-
-	ALIGN 100H
-MSXMidi_buffer:
-	ds 256, 0FEH
 
 	ENDS

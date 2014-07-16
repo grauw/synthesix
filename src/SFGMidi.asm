@@ -10,7 +10,7 @@ SFGMidi_COMMAND: equ 3FF6H
 SFGMidi_ID_ADDRESS: equ 80H
 
 SFGMidi: MACRO
-	super: MidiIn SFGMidi_buffer
+	super: MidiIn MidiIn_buffer4
 	found:
 		db 0
 	slot:
@@ -250,9 +250,5 @@ SFGMidi_id:
 	SECTION RAM
 
 SFGMidi_instance: SFGMidi
-
-	ALIGN 100H
-SFGMidi_buffer:
-	ds 256, 0FEH
 
 	ENDS

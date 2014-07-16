@@ -11,7 +11,7 @@ PhilipsMidi_RECEIVE: equ 05H
 
 
 PhilipsMidi: MACRO
-	super: MidiIn PhilipsMidi_buffer
+	super: MidiIn MidiIn_buffer3
 	found:
 		db 0
 	ENDM
@@ -162,9 +162,5 @@ PhilipsMidi_Detect:
 
 PhilipsMidi_instance:
 	PhilipsMidi
-
-	ALIGN 100H
-PhilipsMidi_buffer:
-	ds 256, 0FEH
 
 	ENDS

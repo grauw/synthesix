@@ -4,7 +4,7 @@
 ; And other key handling.
 ;
 KeyMidi: MACRO
-	super: MidiIn KeyMidi_buffer
+	super: MidiIn MidiIn_buffer1
 	lastScan:
 		ds 11,0
 	velocity:
@@ -244,9 +244,5 @@ KeyMidi_noteMapping:
 
 KeyMidi_instance:
 	KeyMidi
-
-	ALIGN 100H
-KeyMidi_buffer:
-	ds 256, 0FEH
 
 	ENDS

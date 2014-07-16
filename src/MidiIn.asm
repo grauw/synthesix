@@ -270,3 +270,18 @@ MidiIn_framingErrorMessage:
 
 MidiIn_parityErrorMessage:
 	db "MIDI UART parity error.",0
+
+;
+	SECTION RAM
+
+	ALIGN 100H
+MidiIn_buffer1:
+	ds 100H, 0FEH
+MidiIn_buffer2:
+	ds 100H, 0FEH
+MidiIn_buffer3:
+	ds 100H, 0FEH
+MidiIn_buffer4:
+	ds 100H, 0FEH
+
+	ENDS
