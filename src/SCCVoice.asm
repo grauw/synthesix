@@ -64,7 +64,7 @@ SCCVoice_Constructor:
 	ld (ix + SCCVoice.frequencyRegister),c
 	ld (ix + SCCVoice.amplitudeRegister),d
 
-	call Memory_PrepareSetSlotPage2
+	call Memory_PrepareSlotPage2
 	ld (ix + SCCVoice.preparedSlot),b
 	ld (ix + SCCVoice.preparedSlot + 1),c
 	ld (ix + SCCVoice.preparedSlot + 2),d

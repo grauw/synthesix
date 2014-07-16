@@ -185,7 +185,7 @@ Memory_SetSlotPage2:
 ; de <- prepared secondary slot data
 ; Modifies: af, bc, de
 ;
-Memory_PrepareSetSlotPage2:
+Memory_PrepareSlotPage2:
 	ld c,a
 	and 00001100B
 	rlca
