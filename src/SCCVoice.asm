@@ -64,7 +64,7 @@ SCCVoice_Constructor:
 	ld (ix + SCCVoice.frequencyRegister),c
 	ld (ix + SCCVoice.amplitudeRegister),d
 
-	call Memory_PrepareSlotPage2
+	call Memory_PrepareSetSlotPage2
 	ld (ix + SCCVoice.preparedSlot),b
 	ld (ix + SCCVoice.preparedSlot + 1),c
 	ld (ix + SCCVoice.preparedSlot + 2),d
@@ -99,7 +99,7 @@ SCCVoice_Update: PROC
 	ld c,(ix + SCCVoice.preparedSlot + 1)
 	ld d,(ix + SCCVoice.preparedSlot + 2)
 	ld e,(ix + SCCVoice.preparedSlot + 3)
-	call Memory_ApplyPreparedSlotPage2
+	call Memory_SetPreparedSlotPage2
 	exx
 	ex af,af'
 	call SCCVoice_SetPitch
@@ -108,19 +108,19 @@ SCCVoice_Update: PROC
 	pop af
 	call SCCVoice_SetAmplitude
 	exx
-	call Memory_ApplyPreparedSlotPage2
+	call Memory_SetPreparedSlotPage2
 	ret
 FastPath:
 	ld b,(ix + SCCVoice.preparedSlot)
 	ld c,(ix + SCCVoice.preparedSlot + 1)
 	ld d,(ix + SCCVoice.preparedSlot + 2)
 	ld e,(ix + SCCVoice.preparedSlot + 3)
-	call Memory_ApplyPreparedSlotPage2
+	call Memory_SetPreparedSlotPage2
 	exx
 	pop af
 	call SCCVoice_SetAmplitude
 	exx
-	call Memory_ApplyPreparedSlotPage2
+	call Memory_SetPreparedSlotPage2
 	ret
 	ENDP
 

@@ -180,7 +180,7 @@ Memory_SetSlotPage2:
 ; de <- prepared secondary slot data
 ; Modifies: af, bc, de
 ;
-Memory_PrepareSlotPage2:
+Memory_PrepareSetSlotPage2:
 	ld c,a
 	and 00000011B
 	rlca
@@ -213,7 +213,7 @@ Memory_PrepareSlotPage2:
 	ret
 
 ;
-; Applies a prepared slot selection in page 2.
+; Sets a prepared slot selection in page 2.
 ; The current interrupt enabled state is preserved.
 ; The original slot layout can be restored by invoking this method again.
 ;
@@ -226,7 +226,7 @@ Memory_PrepareSlotPage2:
 ; de <- Restore secondary slot data
 ; Modifies: af, bc, de, hl
 ;
-Memory_ApplyPreparedSlotPage2:
+Memory_SetPreparedSlotPage2:
 	ld hl,0FFFFH
 	ld a,r
 	di
