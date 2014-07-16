@@ -5,12 +5,12 @@
 ; It contains one note pool per sound chip / patch.
 ; All MIDI messages are forwarded to the note pools.
 ;
-Channel: MACRO ?keys, ?controllers
+Channel: MACRO
 	MAX_NOTE_POOLS: equ 4
 	keys:
-		dw ?keys
+		dw 0
 	controllers:
-		dw ?controllers
+		dw 0
 	program:
 		Value 0
 	channelPressure:
@@ -27,7 +27,7 @@ Channel: MACRO ?keys, ?controllers
 	ENDM
 
 	dw Channel.size
-Channel_class: Channel 0, 0
+Channel_class: Channel
 
 ; ix <- new class
 Channel_New:
@@ -39,6 +39,20 @@ Channel_New:
 ; ix = this
 ; ix <- this
 Channel_Constructor: PROC
+	push ix
+	call ControllerBank_New
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (ix + Channel.keys),e
+	ld (ix + Channel.keys + 1),d
+	push ix
+	call ControllerBank_New
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (ix + Channel.controllers),e
+	ld (ix + Channel.controllers + 1),d
 	ret
 	ENDP
 
@@ -196,18 +210,10 @@ Channels_Init:
 
 	ALIGN 100H
 Channel_channels: REPT 16, ?channel
-	Channel Channel_keysBanks + ?channel * ControllerBank.size, Channel_controllerBanks + ?channel * ControllerBank.size
+	Channel
 	IF ($ & 0FH) != 0
 		ERROR "Channel size must be exactly 16."
 	ENDIF
-	ENDM
-
-Channel_keysBanks: REPT 16
-	ControllerBank
-	ENDM
-
-Channel_controllerBanks: REPT 16
-	ControllerBank
 	ENDM
 
 	ENDS

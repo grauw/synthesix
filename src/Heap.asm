@@ -66,7 +66,7 @@ Skip:
 	SECTION RAM
 
 Heap_heap:
-	Heap 8000H, 2000H
+	Heap 8000H, 3000H
 
 Heap_heapUpper:
 	Heap Heap_heapUpperSpace, 100H
