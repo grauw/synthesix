@@ -303,6 +303,97 @@ Memory_SetPreparedSlotPage2:
 	ret
 
 ;
+; Reads a byte from a slot in page 0
+; The current interrupt enabled state is preserved.
+;
+; a = slot ID
+; hl = address
+; a <- value
+; Modifies: af, af', bc, de, hl
+;
+Memory_ReadSlotPage0:
+	push hl
+	call Memory_PrepareSlotPage0
+	pop hl
+	jp Memory_ReadPreparedSlotPage0
+
+;
+; Reads a byte from a prepared slot in page 0
+; The current interrupt enabled state is preserved.
+;
+; de = prepared slot id (2)
+; hl = address
+; a <- value
+; Modifies: af, af', bc, de, hl
+;
+Memory_ReadPreparedSlotPage0:
+	ld c,0A8H
+	ld a,r
+	ex af,af'
+	di
+	in b,(c)
+	out (c),d
+	ld a,(0FFFFH)
+	ex af,af'
+	ld a,e
+	ld (0FFFFH),a
+	ld a,(hl)
+	ex af,af'
+	ld (0FFFFH),a
+	out (c),b
+	ex af,af'
+	ret po
+	ei
+	ret
+
+;
+; Writes a byte to a slot in page 0
+; The current interrupt enabled state is preserved.
+;
+; a = slot ID
+; c = value
+; hl = address
+; Modifies: af, af', bc, de, hl
+;
+Memory_WriteSlotPage0:
+	push bc
+	push hl
+	call Memory_PrepareSlotPage0
+	pop hl
+	pop bc
+	jp Memory_WritePreparedSlotPage0
+
+;
+; Writes a byte to a prepared slot in page 0
+; The current interrupt enabled state is preserved.
+;
+; c = value
+; de = prepared slot id (2)
+; hl = address
+; Modifies: af, af', bc, de, hl
+;
+Memory_WritePreparedSlotPage0:
+	ld a,r
+	ld a,c
+	ld c,0A8H
+	ex af,af'
+	di
+	in b,(c)
+	out (c),d
+	ld a,(0FFFFH)
+	ld d,a
+	ld a,e
+	ld (0FFFFH),a
+	ex af,af'
+	ld (hl),a
+	ld a,d
+	ld (0FFFFH),a
+	out (c),b
+	ret po
+	ei
+	ret
+
+;
 ; Search all slots and subslots for a match.
 ; Invoke Continue to continue searching where a previous search left off.
 ;

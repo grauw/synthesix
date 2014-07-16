@@ -80,23 +80,23 @@ SFGMidi_RestoreHook:
 ;
 SFGMidi_Configure:
 	; YM2148 UART: reset
-	ld e,10000000B
+	ld c,10000000B
 	ld a,(ix + SFGMidi.slot)
 	ld hl,SFGMidi_COMMAND
-	call WRSLT
+	call Memory_WriteSlotPage0
 
 	; YM2148 UART: set command
-	ld e,00001101B  ; enable rx interrupt
-	ld a,e
+	ld c,00001101B  ; enable rx interrupt
+	ld a,c
 	ld (SFGMidi_commandSave),a
 	ld a,(ix + SFGMidi.slot)
 	ld hl,SFGMidi_COMMAND
-	call WRSLT
+	call Memory_WriteSlotPage0
 
 	; YM2148 UART: reset interrupt flag
 	ld a,(ix + SFGMidi.slot)
 	ld hl,SFGMidi_DATA
-	call RDSLT
+	call Memory_ReadSlotPage0
 	ret
 
 ;
@@ -104,10 +104,10 @@ SFGMidi_Configure:
 ; ix = this
 ;
 SFGMidi_Reset:
-	ld e,00000000B  ; reset all
+	ld c,00000000B  ; reset all
 	ld a,(ix + SFGMidi.slot)
 	ld hl,SFGMidi_COMMAND
-	call WRSLT
+	call Memory_WriteSlotPage0
 	ret
 
 ;
@@ -121,17 +121,17 @@ SFGMidi_CheckOverrun: PROC
 	ret z
 	ld a,(ix + SFGMidi.slot)
 	ld hl,SFGMidi_STATUS
-	call RDSLT
+	call Memory_ReadSlotPage0
 	ei
 	and 00110000B
 	ret z
 	push af
 	ld a,(SFGMidi_commandSave)
 	or 00010000B
-	ld e,a
+	ld c,a
 	ld a,(ix + SFGMidi.slot)
 	ld hl,SFGMidi_COMMAND
-	call WRSLT
+	call Memory_WriteSlotPage0
 	ei
 	pop af
 	and 00010000B
