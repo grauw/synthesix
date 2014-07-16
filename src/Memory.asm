@@ -201,6 +201,7 @@ Memory_PrepareSlotPage2:
 	ld b,a
 	rlca
 	rlca
+	or b
 	ld d,a
 	ld h,SLTTBL >> 8
 	ld a,SLTTBL & 0FFH
@@ -208,7 +209,7 @@ Memory_PrepareSlotPage2:
 	ld l,a
 	in a,(0A8H)
 	ld c,a
-	and 00111111B
+	and 00001111B
 	or d
 	ld d,a
 	ld a,c
