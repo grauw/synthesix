@@ -60,7 +60,7 @@ MSXMidi_SetHook:
 	ld (MSXMidi_InterruptHandler.writeByte),hl
 	ld hl,MSXMidi_NewHook
 	ld de,MSXMidi_InterruptHandler.OldHook
-	call Interrupt_InstallInterruptHook
+	call Interrupt_Hook
 	ret
 
 ;

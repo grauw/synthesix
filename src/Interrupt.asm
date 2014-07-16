@@ -4,10 +4,10 @@
 Interrupt_Init:
 	ld hl,Interrupt_KEYIHandler.Hook
 	ld de,Interrupt_KEYIHandler.OldHook
-	call Interrupt_InstallInterruptHook
+	call Interrupt_Hook
 	ld hl,Interrupt_VDPHandler.Hook
 	ld de,Interrupt_VDPHandler.OldHook
-	call Interrupt_InstallInterruptHook
+	call Interrupt_Hook
 	ret
 
 ; hl = handler address
@@ -47,7 +47,7 @@ Interrupt_DisableInterruptHandler:
 ; Note: interrupts must be disabled
 ; hl = new hook (5 bytes)
 ; de = old hook (5 bytes)
-Interrupt_InstallInterruptHook:
+Interrupt_Hook:
 	push hl
 	ld hl,Interrupt_InterruptHandler
 	ld bc,5
