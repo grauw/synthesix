@@ -48,6 +48,7 @@ ROM_BANK_A000_CHANGE: equ 0B000H
 	INCLUDE "Synthesix.asm"
 	INCLUDE "BIOS.asm"
 	INCLUDE "System.asm"
+	INCLUDE "Memory.asm"
 	INCLUDE "VDP.asm"
 	INCLUDE "Math.asm"
 	INCLUDE "Heap.asm"

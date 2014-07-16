@@ -194,7 +194,7 @@ MSXMidi_Detect: PROC
 	call MSXMidi_DetectInternal
 	ret c
 	ld hl,MSXMidi_MatchExternalID
-	call System_SearchSlots
+	call Memory_SearchSlots
 	ret
 	ENDP
 
@@ -221,7 +221,7 @@ MSXMidi_MatchExternalID:
 	ld de,MSXMidi_id
 	ld hl,MSXMidi_ID_ADDRESS
 	ld bc,4
-	call System_MatchSlotString
+	call Memory_MatchSlotString
 	ret
 
 ;

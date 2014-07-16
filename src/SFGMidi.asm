@@ -231,7 +231,7 @@ SFGMidi_Read:
 ;
 SFGMidi_Detect:
 	ld hl,MSXMidi_MatchID
-	call System_SearchSlots
+	call Memory_SearchSlots
 	ret
 
 ;
@@ -245,7 +245,7 @@ MSXMidi_MatchID:
 	ld de,SFGMidi_id
 	ld hl,SFGMidi_ID_ADDRESS
 	ld bc,6
-	call System_MatchSlotString
+	call Memory_MatchSlotString
 	ret
 
 SFGMidi_id:

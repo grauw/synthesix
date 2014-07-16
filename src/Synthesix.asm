@@ -3,23 +3,23 @@ Synthesix_Main:
 	cp 1
 	ret c
 
-	call System_EnableROMInPage2
+	call Memory_EnableROMInPage2
 	call ROM_Init
-	call System_EnableRAMInPage2
+	call Memory_EnableRAMInPage2
 	call RAM_Init
 
 	ld ix,KeyMidi_instance
 	call KeyMidi_Constructor
 	call Channels_Init
 	call PSG_Init
-	call System_GetSlotPage1
+	call Memory_GetSlotPage1
 	call SCC_New
 	ld (Synthesix_scc),ix
 	ld hl,Channel_channels.0
 	call Program_New
 	ld (Synthesix_program),ix
 
-	call System_UnitTest
+	call Memory_UnitTest
 	call Math_UnitTest
 
 	call UI_Init

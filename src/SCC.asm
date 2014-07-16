@@ -50,10 +50,10 @@ SCC_New:
 SCC_Constructor:
 	ld (ix + SCC.slot),a
 
-	call System_GetSlotPage2
+	call Memory_GetSlotPage2
 	push af
 	ld a,(ix + SCC.slot)
-	call System_SetSlotPage2
+	call Memory_SetSlotPage2
 
 	ld a,ROM_SCCBank
 	ld (ROM_bank8000),a
@@ -70,7 +70,7 @@ SCC_Constructor:
 	ld (ix + SCC.mixerCopy),a
 
 	pop af
-	call System_SetSlotPage2
+	call Memory_SetSlotPage2
 
 	push ix
 	ld a,(ix + SCC.slot)
