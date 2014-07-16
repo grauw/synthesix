@@ -127,7 +127,7 @@ SCC_Constructor:
 ; Modifies: bc, ix
 SCC_GetVoice:
 	cp SCC_MAX_VOICES
-	jp nc,System_ThrowException
+	call nc,System_ThrowException
 	add a,a
 	ld c,a
 	ld b,0
