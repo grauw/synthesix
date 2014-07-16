@@ -103,9 +103,9 @@ KeyMidi_ProcessKeyPress:
 	cp -3
 	jp z,KeyMidi_PressDecreaseVelocity
 	cp -4
-	jp z,KeyMidi_PressIncreaseModulation
+	jp z,KeyMidi_PressIncreaseVolume
 	cp -5
-	jp z,KeyMidi_PressDecreaseModulation
+	jp z,KeyMidi_PressDecreaseVolume
 	cp -6
 	jp z,KeyMidi_PressSpace
 	cp -99
@@ -159,7 +159,7 @@ KeyMidi_PressDecreaseVelocity:
 	ret
 
 ; ix = this
-KeyMidi_PressIncreaseModulation:
+KeyMidi_PressIncreaseVolume:
 	ld a,7
 	push ix
 	ld ix,Channel_channels.0
@@ -175,7 +175,7 @@ KeyMidi_PressIncreaseModulation:
 	ret
 
 ; ix = this
-KeyMidi_PressDecreaseModulation:
+KeyMidi_PressDecreaseVolume:
 	ld a,7
 	push ix
 	ld ix,Channel_channels.0
