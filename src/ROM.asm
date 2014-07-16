@@ -105,6 +105,13 @@ ROM_Init:
 ; These values are defined in the RAM section and copied on boot.
 ;
 RAM_Init:
+	and a
+	ld hl,(HIMEM)
+	ld bc,RAM_endAddress
+	sbc hl,bc
+	ld hl,RAM_insufficientTPA
+	call c,System_ThrowExceptionWithMessage
+
 	ld a,ROM_RAMInitBank
 	ld (ROM_BANK_6000_CHANGE),a
 	ld hl,RAM_sourceAddress
@@ -114,6 +121,13 @@ RAM_Init:
 	ld a,ROM_CodeBank2
 	ld (ROM_BANK_6000_CHANGE),a
 	ret
+
+	ENDS
+
+	SECTION ROM
+
+RAM_insufficientTPA:
+	db "Insufficient TPA memory.",0
 
 	ENDS
 
