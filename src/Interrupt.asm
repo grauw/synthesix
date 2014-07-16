@@ -59,12 +59,12 @@ Interrupt_TIMIHook: PROC
 	and a
 	jp nz,Return
 	dec a
-	ld (Interrupt_suspendTIMIHook),a
 	ei
+	ld (Interrupt_suspendTIMIHook),a
 	call System_ThrowException
 address: equ $ - 2
-	di
 	xor a
+	di
 	ld (Interrupt_suspendTIMIHook),a
 Return:
 	ld a,255
