@@ -162,12 +162,8 @@ SFGMidi_InterruptHandler: PROC
 	push de
 	push hl
 	ld de,(SFGMidi_instance.slotBits)
-	ld hl,SFGMidi_STATUS
-	call SFGMidi_Read
-	and 00000010B
+	call SFGMidi_ReadStatusData
 	jr z,NotSFGMidi
-	ld hl,SFGMidi_DATA
-	call SFGMidi_Read
 	call System_ThrowException
 writeByte: equ $ - 2
 	pop hl
@@ -202,7 +198,7 @@ SFGMidi_NewHook:
 ; XXX: There is a flaw here: it expects Synthesix to be in page 1.
 ;      This is not necessarily the case (e.g. during disk I/O).
 ;
-SFGMidi_Read:
+SFGMidi_ReadStatusData: PROC
 	IF $ < 4000H
 		ERROR "Can not be in page 0."
 	ENDIF
@@ -217,7 +213,11 @@ SFGMidi_Read:
 	and 11111100B
 	or e
 	ld (0FFFFH),a
-	ld a,(hl)
+	ld a,(SFGMidi_STATUS)
+	and 00000010B
+	jr z,NotSFGMidi
+	ld a,(SFGMidi_DATA)
+NotSFGMidi:
 	ld hl,0FFFFH
 	ld (hl),c
 	ld c,0A8H
@@ -226,6 +226,7 @@ SFGMidi_Read:
 	IF $ >= 0C000H
 		ERROR "Can not be in page 3."
 	ENDIF
+	ENDP
 
 	ENDS
 
