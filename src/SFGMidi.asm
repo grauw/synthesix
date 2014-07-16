@@ -81,6 +81,8 @@ SFGMidi_RestoreHook:
 SFGMidi_Configure:
 	; YM2148 UART: reset
 	ld c,10000000B
+	ld a,c
+	ld (SFGMidi_commandSave),a
 	ld e,(ix + SFGMidi.preparedSlot)
 	ld d,(ix + SFGMidi.preparedSlot + 1)
 	ld hl,SFGMidi_COMMAND
@@ -108,6 +110,8 @@ SFGMidi_Configure:
 ;
 SFGMidi_Reset:
 	ld c,00000000B  ; reset all
+	ld a,c
+	ld (SFGMidi_commandSave),a
 	ld e,(ix + SFGMidi.preparedSlot)
 	ld d,(ix + SFGMidi.preparedSlot + 1)
 	ld hl,SFGMidi_COMMAND
