@@ -60,12 +60,12 @@ Channel_Constructor: PROC
 ; b = note number (0-127)
 ; c = velocity (0-127)
 Channel_NoteOn: PROC
-	ld a,b
-	call Channel_GetKey
-	ld (hl),c
 	inc c
 	dec c
 	jp z,NoteOff
+	ld a,b
+	call Channel_GetKey
+	ld (hl),c
 	REPT Channel.MAX_NOTE_POOLS, ?pool
 	ld e,(ix + Channel.notePools + ?pool * 2)
 	ld d,(ix + Channel.notePools + ?pool * 2 + 1)
