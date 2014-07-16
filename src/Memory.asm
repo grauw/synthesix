@@ -130,7 +130,13 @@ Memory_GetSlotPage3:
 ;
 Memory_SetSlotPage2:
 	ld c,a
+	and 00001100B
+	rlca
+	rlca
+	ld e,a
+	ld a,c
 	and 00000011B
+	ld c,a
 	rlca
 	rlca
 	rlca
@@ -139,11 +145,10 @@ Memory_SetSlotPage2:
 	rlca
 	rlca
 	ld d,a
-	ld a,c
-	and 00001100B
-	rlca
-	rlca
-	ld e,a
+	ld h,SLTTBL >> 8
+	ld a,SLTTBL & 0FFH
+	add a,c
+	ld l,a
 	in a,(0A8H)
 	ld c,a
 	and 00111111B
@@ -153,11 +158,11 @@ Memory_SetSlotPage2:
 	and 11001111B
 	or b
 	ld b,a
-	ld a,(SLTTBL + 2)
+	ld a,(hl)
 	and 11001111B
 	or e
 	ld e,a
-	ld (SLTTBL + 2),a
+	ld (hl),a
 	ld c,0A8H
 	ld hl,0FFFFH
 	ld a,r
@@ -182,7 +187,13 @@ Memory_SetSlotPage2:
 ;
 Memory_PrepareSetSlotPage2:
 	ld c,a
+	and 00001100B
+	rlca
+	rlca
+	ld e,a
+	ld a,c
 	and 00000011B
+	ld c,a
 	rlca
 	rlca
 	rlca
@@ -191,11 +202,10 @@ Memory_PrepareSetSlotPage2:
 	rlca
 	rlca
 	ld d,a
-	ld a,c
-	and 00001100B
-	rlca
-	rlca
-	ld e,a
+	ld h,SLTTBL >> 8
+	ld a,SLTTBL & 0FFH
+	add a,c
+	ld l,a
 	in a,(0A8H)
 	ld c,a
 	and 00111111B
@@ -205,11 +215,11 @@ Memory_PrepareSetSlotPage2:
 	and 11001111B
 	or b
 	ld b,a
-	ld a,(SLTTBL + 2)
+	ld a,(hl)
 	and 11001111B
 	or e
 	ld e,a
-	ld c,0A8H
+	ld c,l
 	ret
 
 ;
@@ -227,7 +237,11 @@ Memory_PrepareSetSlotPage2:
 ; Modifies: af, bc, de, hl
 ;
 Memory_SetPreparedSlotPage2:
+	ld h,SLTTBL >> 8
+	ld l,c
+	push hl
 	ld hl,0FFFFH
+	ld c,0A8H
 	ld a,r
 	di
 	in a,(0A8H)  ; be careful not to modify p/v flag
@@ -235,7 +249,8 @@ Memory_SetPreparedSlotPage2:
 	ld (hl),e
 	out (c),b
 	ld b,a
-	ld hl,SLTTBL + 2
+	pop hl
+	ld c,l
 	ld a,(hl)
 	ld (hl),e
 	ld e,a
