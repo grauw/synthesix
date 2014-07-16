@@ -237,9 +237,7 @@ Memory_PrepareSetSlotPage2:
 ; Modifies: af, bc, de, hl
 ;
 Memory_SetPreparedSlotPage2:
-	ld h,SLTTBL >> 8
-	ld l,c
-	push hl
+	push bc
 	ld hl,0FFFFH
 	ld c,0A8H
 	ld a,r
@@ -248,9 +246,10 @@ Memory_SetPreparedSlotPage2:
 	out (c),d
 	ld (hl),e
 	out (c),b
+	pop bc
+	ld h,SLTTBL >> 8
+	ld l,c
 	ld b,a
-	pop hl
-	ld c,l
 	ld a,(hl)
 	ld (hl),e
 	ld e,a
