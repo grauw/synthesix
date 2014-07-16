@@ -210,16 +210,18 @@ KeyMidi_ReleaseShift:
 
 ; ix = this
 KeyMidi_PressSpace:
-	ld b,7FH
+	ld b,1
+	ld c,7FH
 	ld a,0
-	call MidiIn_ChannelPressure
+	call MidiIn_ControlChange
 	ret
 
 ; ix = this
 KeyMidi_ReleaseSpace:
-	ld b,0
+	ld b,1
+	ld c,0
 	ld a,0
-	call MidiIn_ChannelPressure
+	call MidiIn_ControlChange
 	ret
 
 KeyMidi_noteMapping:

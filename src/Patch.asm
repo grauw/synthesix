@@ -102,7 +102,7 @@ Patch_Constructor: PROC
 	ld de,7 << 8 | LFOTriangleSigned.value
 	call Patch_AddLink
 	ld hl,8 << 8 | Attenuate.multiplier
-	ld de,1 << 8 | Channel.channelPressure
+	ld de,2 << 8 | 1
 	call Patch_AddLink
 	ld hl,13 << 8 | SCCVoice.detune
 	ld de,8 << 8 | Attenuate.value
