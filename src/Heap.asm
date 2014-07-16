@@ -69,6 +69,9 @@ Heap_heap:
 	Heap 8000H, 2000H
 
 Heap_heapUpper:
-	Heap Heap_start, Heap_size
+	Heap Heap_heapUpperSpace, 100H
+
+Heap_heapUpperSpace:
+	ds 100H
 
 	ENDS
