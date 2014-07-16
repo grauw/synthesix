@@ -63,7 +63,6 @@ Channel_NoteOn: PROC
 	ld a,b
 	call Channel_GetKey
 	ld (hl),c
-	;
 	inc c
 	dec c
 	jp z,NoteOff
@@ -96,7 +95,6 @@ Channel_NoteOff:
 	ld a,b
 	call Channel_GetKey
 	ld (hl),0
-	;
 	REPT Channel.MAX_NOTE_POOLS, ?pool
 	ld e,(ix + Channel.notePools + ?pool * 2)
 	ld d,(ix + Channel.notePools + ?pool * 2 + 1)
