@@ -24,6 +24,7 @@ Synthesix_Main:
 
 	call UI_Init
 
+	call Interrupt_Init
 	call Interrupt_EnableInterruptHandler
 	ld ix,PhilipsMidi_instance
 	call PhilipsMidi_Install

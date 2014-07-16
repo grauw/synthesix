@@ -1,6 +1,14 @@
 ;
 ; IM2 interrupt framework
 ;
+Interrupt_Init:
+	ld hl,Interrupt_KEYIHandler.Hook
+	ld de,Interrupt_KEYIHandler.OldHook
+	call Interrupt_InstallInterruptHook
+	ld hl,Interrupt_VDPHandler.Hook
+	ld de,Interrupt_VDPHandler.OldHook
+	call Interrupt_InstallInterruptHook
+	ret
 
 ; hl = handler address
 Interrupt_InstallTIMIHook:
@@ -52,6 +60,91 @@ Interrupt_InstallInterruptHook:
 
 	SECTION RAM
 
+;
+; Handle VDP interrupts
+;
+Interrupt_VDPHandler: PROC
+	push af
+	in a,(99H)
+	and a
+	jp p,NotFromVDP
+	ld (STATFL),a
+	push hl
+	ld hl,(JIFFY)
+	inc hl
+	ld (JIFFY),hl
+	push bc
+	push de
+	ex af,af'
+	exx
+	push af
+	push bc
+	push de
+	push hl
+	push ix
+	push iy
+	call H.TIMI
+	pop iy
+	pop ix
+	pop hl
+	pop de
+	pop bc
+	pop af
+	exx
+	ex af,af'
+	pop de
+	pop bc
+	pop hl
+	pop af
+	ei
+	reti
+NotFromVDP:
+	pop af
+OldHook:
+	ds 5
+Hook:
+	jp Interrupt_VDPHandler
+	ENDP
+
+;
+; Handler for unrecognised interrupts.
+; Falls back on calling H.KEYI.
+;
+Interrupt_KEYIHandler: PROC
+	push af
+	push bc
+	push de
+	push hl
+	ex af,af'
+	exx
+	push af
+	push bc
+	push de
+	push hl
+	push ix
+	push iy
+	call H.KEYI
+	pop iy
+	pop ix
+	pop hl
+	pop de
+	pop bc
+	pop af
+	exx
+	ex af,af'
+	pop hl
+	pop de
+	pop bc
+	pop af
+OldHook:
+	ds 5
+Hook:
+	jp Interrupt_KEYIHandler
+	ENDP
+
+;
+; Synthesix H.TIMI hook
+;
 Interrupt_TIMIHook: PROC
 	push af
 	call Interrupt_OldTIMIHook
@@ -79,7 +172,8 @@ Interrupt_OldTIMIHook:
 ;
 	ALIGN 101H  ; address MSB and LSB must be the same for IM 2
 Interrupt_InterruptHandler:
-	jp 38H
+	ei
+	reti
 	nop
 	nop
 
