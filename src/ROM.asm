@@ -144,9 +144,4 @@ ROM_bank8000:
 ROM_bankA000:
 	dw ROM_BANK_A000_CHANGE | ROM_MultiplyTableBank
 
-;============================================
-; HEAP MUST BE THE LAST THING DEFINED IN RAM
-;============================================
-Heap_start:
-
 	ENDS
