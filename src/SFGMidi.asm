@@ -17,6 +17,8 @@ SFGMidi: MACRO
 		db 0
 	preparedSlot:
 		dw 0
+	commandSave:
+		db 0
 	ENDM
 
 ; ix = this
@@ -81,8 +83,7 @@ SFGMidi_RestoreHook:
 SFGMidi_Configure:
 	; YM2148 UART: reset
 	ld c,10000000B
-	ld a,c
-	ld (SFGMidi_commandSave),a
+	ld (ix + SFGMidi.commandSave),c
 	ld e,(ix + SFGMidi.preparedSlot)
 	ld d,(ix + SFGMidi.preparedSlot + 1)
 	ld hl,SFGMidi_COMMAND
@@ -90,8 +91,7 @@ SFGMidi_Configure:
 
 	; YM2148 UART: set command
 	ld c,00001101B  ; enable rx interrupt
-	ld a,c
-	ld (SFGMidi_commandSave),a
+	ld (ix + SFGMidi.commandSave),c
 	ld e,(ix + SFGMidi.preparedSlot)
 	ld d,(ix + SFGMidi.preparedSlot + 1)
 	ld hl,SFGMidi_COMMAND
@@ -110,8 +110,7 @@ SFGMidi_Configure:
 ;
 SFGMidi_Reset:
 	ld c,00000000B  ; reset all
-	ld a,c
-	ld (SFGMidi_commandSave),a
+	ld (ix + SFGMidi.commandSave),c
 	ld e,(ix + SFGMidi.preparedSlot)
 	ld d,(ix + SFGMidi.preparedSlot + 1)
 	ld hl,SFGMidi_COMMAND
@@ -135,7 +134,7 @@ SFGMidi_CheckOverrun: PROC
 	and 00110000B
 	ret z
 	push af
-	ld a,(SFGMidi_commandSave)
+	ld a,(ix + SFGMidi.commandSave)
 	or 00010000B
 	ld c,a
 	ld e,(ix + SFGMidi.preparedSlot)
@@ -249,9 +248,6 @@ SFGMidi_id:
 ; Workarea definition
 ;
 	SECTION RAM
-
-SFGMidi_commandSave:
-	db 0            ;YM2148 command save area
 
 SFGMidi_instance: SFGMidi
 
