@@ -14,7 +14,7 @@ Interrupt_Init:
 Interrupt_InstallTIMIHook:
 	ld (Interrupt_TIMIHook.address),hl
 	ld hl,H.TIMI
-	ld de,Interrupt_OldTIMIHook
+	ld de,Interrupt_TIMIHook.OldHook
 	ld bc,5
 	di
 	ldir
@@ -26,7 +26,7 @@ Interrupt_InstallTIMIHook:
 	ret
 
 Interrupt_RestoreTIMIHook:
-	ld hl,Interrupt_OldTIMIHook
+	ld hl,Interrupt_TIMIHook.OldHook
 	ld de,H.TIMI
 	ld bc,5
 	di
@@ -162,9 +162,9 @@ Return:
 	ld a,255
 	ld (SCNCNT),a  ; skip the expensive key handling bits of the ISR
 	pop af
-	ENDP
-Interrupt_OldTIMIHook:
+OldHook:
 	ds 5
+	ENDP
 
 ;
 ; Interrupt handler
