@@ -147,7 +147,6 @@ Hook:
 ;
 Interrupt_TIMIHook: PROC
 	push af
-	call Interrupt_OldTIMIHook
 	ld a,(Interrupt_suspendTIMIHook)
 	and a
 	jp nz,Return
