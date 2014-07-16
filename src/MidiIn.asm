@@ -33,7 +33,6 @@ MidiIn_HasMessage:
 ; a = byte
 ; f <- z: buffer full
 ; Modifies: af, hl
-	SECTION RAM
 MidiIn_WriteByte:
 	ld l,(ix + MidiIn.bufferHead)
 	ld h,(ix + MidiIn.bufferHead + 1)
@@ -44,7 +43,6 @@ MidiIn_WriteByte:
 	cp l
 	ret nz
 	call System_ThrowException
-	ENDS
 
 ; ix = this
 ; a <- byte
