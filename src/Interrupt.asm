@@ -159,8 +159,6 @@ address: equ $ - 2
 	di
 	ld (Interrupt_suspendTIMIHook),a
 Return:
-	ld a,255
-	ld (SCNCNT),a  ; skip the expensive key handling bits of the ISR
 	pop af
 OldHook:
 	ds 5
