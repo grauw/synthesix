@@ -133,6 +133,7 @@ SFGMidi_CheckOverrun: PROC
 	ei
 	and 00110000B
 	ret z
+	push af
 	ld a,(SFGMidi_commandSave)
 	or 00010000B
 	ld e,a
@@ -140,7 +141,13 @@ SFGMidi_CheckOverrun: PROC
 	ld hl,SFGMidi_COMMAND
 	call WRSLT
 	ei
-	call System_ThrowException
+	pop af
+	and 00010000B
+	ld hl,MidiIn_overrunErrorMessage
+	call nz,System_ThrowExceptionWithMessage
+	and 00100000B
+	ld hl,MidiIn_framingErrorMessage
+	call nz,System_ThrowExceptionWithMessage
 	ret
 	ENDP
 
