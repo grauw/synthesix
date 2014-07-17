@@ -230,12 +230,12 @@ KeyMidi_noteMapping:
 	db -1, -1, 60, 62, 64, -1, -1, 55  ; row 2: ' ` , . / DEAD A B
 	db 52, 51, 64, -1, 54, 56, 72, 58  ; row 3: C D E F G H I J
 	db -1, 61, 59, 57, 74, 76, 60, 65  ; row 4: K L M N O P Q R
-	db 49, 67, 71, 53, 62, 50, 69, 48  ; row 4: S T U V W X Y Z
-	db -98,-1, -1, -1, -1, -1, -1, -1  ; row 4: SHIFT CTRL GRAPH CAPS CODE F1 F2 F3
-	db -1, -1,-99, -1, -1, -1, -1, -1  ; row 4: F4 F5 ESC TAB STOP BS SELECT RET
-	db -6, -1, -1, -1, -5, -2, -3, -4  ; row 4: SPACE HOME INS DEL ← ↑ ↓ →
-	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: NUM* NUM+ NUM/ NUM0 NUM1 NUM2 NUM3 NUM4
-	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 4: NUM5 NUM6 NUM7 NUM8 NUM9 NUM- NUM, NUM.
+	db 49, 67, 71, 53, 62, 50, 69, 48  ; row 5: S T U V W X Y Z
+	db -98,-1, -1, -1, -1, -1, -1, -1  ; row 6: SHIFT CTRL GRAPH CAPS CODE F1 F2 F3
+	db -1, -1,-99, -1, -1, -1, -1, -1  ; row 7: F4 F5 ESC TAB STOP BS SELECT RET
+	db -6, -1, -1, -1, -5, -2, -3, -4  ; row 8: SPACE HOME INS DEL ← ↑ ↓ →
+	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 9: NUM* NUM+ NUM/ NUM0 NUM1 NUM2 NUM3 NUM4
+	db -1, -1, -1, -1, -1, -1, -1, -1  ; row A: NUM5 NUM6 NUM7 NUM8 NUM9 NUM- NUM, NUM.
 
 ;
 ; Variables in RAM
