@@ -39,7 +39,6 @@ KeyMidi_Scan:
 	REPT 11, ?row
 	ld b,?row
 	call KeyMidi_ProcessRow
-	inc iy
 	ENDM
 	ret
 
