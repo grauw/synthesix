@@ -24,6 +24,8 @@ MSXMidi: MACRO
 	super: MidiIn MidiIn_buffer2
 	found:
 		db 0
+	commandSave:
+		db 0
 	ENDM
 
 ; ix = this
@@ -102,7 +104,7 @@ MSXMidi_Configure:
 
 	; 8251 UART: set command
 	ld a,00100101B  ; enable interrupt, rx, timer interrupt, tx
-	ld (MSXMidi_commandSave),a
+	ld (ix + MSXMidi.commandSave),a
 	out (MSXMidi_UART_COMMAND),a
 
 	; 8251 UART: reset interrupt flag
@@ -123,6 +125,7 @@ MSXMidi_ConfigureExternal:
 ;
 MSXMidi_Reset:
 	ld a,00000001B  ; reset all except for transmission enable
+	ld (ix + MSXMidi.commandSave),a
 	out (MSXMidi_UART_COMMAND),a
 	ret
 
@@ -139,7 +142,7 @@ MSXMidi_CheckOverrun: PROC
 	and 00111000B
 	ret z
 	push af
-	ld a,(MSXMidi_commandSave)
+	ld a,(ix + MSXMidi.commandSave)
 	or 00010000B
 	out (MSXMidi_UART_COMMAND),a
 	pop af
@@ -250,9 +253,6 @@ MSXMidi_id:
 ; Workarea definition
 ;
 	SECTION RAM
-
-MSXMidi_commandSave:
-	db 0            ;8251 command save area
 
 MSXMidi_instance:
 	MSXMidi
