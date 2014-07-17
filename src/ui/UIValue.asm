@@ -3,60 +3,24 @@
 ;
 UIValue: MACRO
 	super: UINode UIValue_Update
-	value:
-		dw 0
 	size:
 	ENDM
 
-	dw UIValue.size
-UIValue_class: UIValue
-
-; ix = parent
-; de = y / x coordinate
-; hl = value address
-; ix <- instance
-UIValue_New:
-	push ix
-	push hl
-	push de
-	ld iy,UIValue_class
-	call Class_New
-	pop de
-	pop hl
-	pop iy
-	call UIValue_Constructor
-	ret
-
-; ix = parent
-; de = y / x coordinate
-; hl = value address
-; de <- instance
-UIValue_New_DE:
-	call UIValue_New
-	ld e,ixl
-	ld d,ixh
-	ret
-
 ; ix = this
-; iy = parent
-; de = y / x coordinate
-; hl = value address
-UIValue_Constructor: PROC
-	ld (ix + UIValue.value),l
-	ld (ix + UIValue.value + 1),h
-	call UINode_SetBuffer
+UIValue_Constructor:
 	ret
-	ENDP
 
 ; ix = this
 UIValue_Update:
-	ld l,(ix + UIValue.value)
-	ld h,(ix + UIValue.value + 1)
-	ld a,(hl)
-	ld l,(ix + UIValue.super.buffer)
-	ld h,(ix + UIValue.super.buffer + 1)
-	ld ix,KeyMidi_instance
-	bit 0,(ix + KeyMidi.shift)
+	ret
+
+; a = value
+; hl = string buffer (4 characters)
+UIValue_Paint:
+	push hl
+	ld hl,KeyMidi_instance.shift
+	bit 0,(hl)
+	pop hl
 	jp nz,UIValue_FormatNumber
 	jp UIValue_FormatBar
 
@@ -133,3 +97,7 @@ EmptySegment:
 	ld (hl),23
 	ret
 	ENDP
+
+;
+UIValue_instance:
+	UIValue

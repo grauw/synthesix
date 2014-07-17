@@ -242,7 +242,6 @@ KeyMidi_noteMapping:
 ;
 	SECTION RAM
 
-KeyMidi_instance:
-	KeyMidi
+KeyMidi_instance: KeyMidi
 
 	ENDS

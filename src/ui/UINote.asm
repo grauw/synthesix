@@ -5,14 +5,6 @@ UINote: MACRO
 	super: UINode UINote_Update
 	note:
 		dw 0
-	key:
-		dw 0
-	velocity:
-		dw 0
-	trigger:
-		dw 0
-	gate:
-		dw 0
 	size:
 	ENDM
 
@@ -60,69 +52,34 @@ UINote_Constructor:
 	ld bc,0610H
 	call UINode_CopyToBuffer
 	pop hl
-
-	push hl
-	push ix
-	ld bc,Note.key
-	add hl,bc
-	ld de,010AH
-	call UIValue_New_DE
-	pop ix
-	pop hl
-	ld (ix + UINote.key),e
-	ld (ix + UINote.key + 1),d
-
-	push hl
-	push ix
-	ld bc,Note.velocity
-	add hl,bc
-	ld de,020AH
-	call UIValue_New_DE
-	pop ix
-	pop hl
-	ld (ix + UINote.velocity),e
-	ld (ix + UINote.velocity + 1),d
-
-	push hl
-	push ix
-	ld bc,Note.trigger
-	add hl,bc
-	ld de,030AH
-	call UIValue_New_DE
-	pop ix
-	pop hl
-	ld (ix + UINote.trigger),e
-	ld (ix + UINote.trigger + 1),d
-
-	push hl
-	push ix
-	ld bc,Note.gate
-	add hl,bc
-	ld de,040AH
-	call UIValue_New_DE
-	pop ix
-	pop hl
-	ld (ix + UINote.gate),e
-	ld (ix + UINote.gate + 1),d
 	ret
 
 ; ix = this
 UINote_Update:
-	ld e,(ix + UINote.key)
-	ld d,(ix + UINote.key + 1)
-	call UINode_Update_DE
+	ld e,(ix + UINote.note)
+	ld d,(ix + UINote.note + 1)
+	ld iyl,e
+	ld iyh,d
 
-	ld e,(ix + UINote.velocity)
-	ld d,(ix + UINote.velocity + 1)
-	call UINode_Update_DE
+	ld de,010AH
+	call UINode_GetBufferPosition
+	ld a,(iy + Note.key)
+	call UIValue_Paint
 
-	ld e,(ix + UINote.trigger)
-	ld d,(ix + UINote.trigger + 1)
-	call UINode_Update_DE
+	ld de,020AH
+	call UINode_GetBufferPosition
+	ld a,(iy + Note.velocity)
+	call UIValue_Paint
 
-	ld e,(ix + UINote.gate)
-	ld d,(ix + UINote.gate + 1)
-	call UINode_Update_DE
+	ld de,030AH
+	call UINode_GetBufferPosition
+	ld a,(iy + Note.trigger)
+	call UIValue_Paint
+
+	ld de,040AH
+	call UINode_GetBufferPosition
+	ld a,(iy + Note.gate)
+	call UIValue_Paint
 	ret
 
 ;

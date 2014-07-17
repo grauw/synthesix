@@ -5,8 +5,6 @@ UIKeyboard: MACRO
 	super: UINode UIKeyboard_Update
 	channel:
 		dw 0
-	pitchBend:
-		dw 0
 	size:
 	ENDM
 
@@ -54,24 +52,19 @@ UIKeyboard_Constructor:
 	ld bc,0250H
 	call UINode_CopyToBuffer
 	pop hl
-
-	push hl
-	push ix
-	ld bc,Channel.pitchBendCoarse
-	add hl,bc
-	ld de,0100H
-	call UIValue_New_DE
-	pop ix
-	pop hl
-	ld (ix + UIKeyboard.pitchBend),e
-	ld (ix + UIKeyboard.pitchBend + 1),d
 	ret
 
 ; ix = this
 UIKeyboard_Update:
-	ld e,(ix + UIKeyboard.pitchBend)
-	ld d,(ix + UIKeyboard.pitchBend + 1)
-	call UINode_Update_DE
+	ld e,(ix + UIKeyboard.channel)
+	ld d,(ix + UIKeyboard.channel + 1)
+	ld iyl,e
+	ld iyh,d
+
+	ld de,0100H
+	call UINode_GetBufferPosition
+	ld a,(iy + Channel.pitchBendCoarse)
+	call UIValue_Paint
 
 	call UIKeyboard_UpdateKeys
 	ret

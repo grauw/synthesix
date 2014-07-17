@@ -5,14 +5,6 @@ UISCCVoice: MACRO
 	super: UINode UISCCVoice_Update
 	voice:
 		dw 0
-	amplitudeValue:
-		dw 0
-	noteValue:
-		dw 0
-	detuneValue:
-		dw 0
-	waveValue:
-		dw 0
 	size:
 	ENDM
 
@@ -64,68 +56,41 @@ UISCCVoice_Constructor:
 	call SCCVoice_GetNumber_IY
 	add a,"1"
 	ld (hl),a
-
-	push ix
-	push iy
-	ld l,(iy + SCCVoice.amplitude)
-	ld h,(iy + SCCVoice.amplitude + 1)
-	ld de,030AH
-	call UIValue_New_DE
-	pop iy
-	pop ix
-	ld (ix + UISCCVoice.amplitudeValue),e
-	ld (ix + UISCCVoice.amplitudeValue + 1),d
-
-	push ix
-	push iy
-	ld l,(iy + SCCVoice.note)
-	ld h,(iy + SCCVoice.note + 1)
-	ld de,010AH
-	call UIValue_New_DE
-	pop iy
-	pop ix
-	ld (ix + UISCCVoice.noteValue),e
-	ld (ix + UISCCVoice.noteValue + 1),d
-
-	push ix
-	push iy
-	ld l,(iy + SCCVoice.detune)
-	ld h,(iy + SCCVoice.detune + 1)
-	ld de,020AH
-	call UIValue_New_DE
-	pop iy
-	pop ix
-	ld (ix + UISCCVoice.detuneValue),e
-	ld (ix + UISCCVoice.detuneValue + 1),d
-
-	push ix
-	push iy
-	ld l,(iy + SCCVoice.wave)
-	ld h,(iy + SCCVoice.wave + 1)
-	ld de,040AH
-	call UIValue_New_DE
-	pop iy
-	pop ix
-	ld (ix + UISCCVoice.waveValue),e
-	ld (ix + UISCCVoice.waveValue + 1),d
 	ret
 
 UISCCVoice_Update:
-	ld e,(ix + UISCCVoice.amplitudeValue)
-	ld d,(ix + UISCCVoice.amplitudeValue + 1)
-	call UINode_Update_DE
+	ld e,(ix + UISCCVoice.voice)
+	ld d,(ix + UISCCVoice.voice + 1)
+	ld iyl,e
+	ld iyh,d
 
-	ld e,(ix + UISCCVoice.noteValue)
-	ld d,(ix + UISCCVoice.noteValue + 1)
-	call UINode_Update_DE
+	ld de,010AH
+	call UINode_GetBufferPosition
+	ld e,(iy + SCCVoice.note)
+	ld d,(iy + SCCVoice.note + 1)
+	ld a,(de)
+	call UIValue_Paint
 
-	ld e,(ix + UISCCVoice.detuneValue)
-	ld d,(ix + UISCCVoice.detuneValue + 1)
-	call UINode_Update_DE
+	ld de,020AH
+	call UINode_GetBufferPosition
+	ld e,(iy + SCCVoice.detune)
+	ld d,(iy + SCCVoice.detune + 1)
+	ld a,(de)
+	call UIValue_Paint
 
-	ld e,(ix + UISCCVoice.waveValue)
-	ld d,(ix + UISCCVoice.waveValue + 1)
-	call UINode_Update_DE
+	ld de,030AH
+	call UINode_GetBufferPosition
+	ld e,(iy + SCCVoice.amplitude)
+	ld d,(iy + SCCVoice.amplitude + 1)
+	ld a,(de)
+	call UIValue_Paint
+
+	ld de,040AH
+	call UINode_GetBufferPosition
+	ld e,(iy + SCCVoice.wave)
+	ld d,(iy + SCCVoice.wave + 1)
+	ld a,(de)
+	call UIValue_Paint
 	ret
 
 ;

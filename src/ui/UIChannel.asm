@@ -5,14 +5,6 @@ UIChannel: MACRO
 	super: UINode UIChannel_Update
 	channel:
 		dw 0
-	program:
-		dw 0
-	channelPressure:
-		dw 0
-	pitchBendFine:
-		dw 0
-	pitchBendCoarse:
-		dw 0
 	size:
 	ENDM
 
@@ -60,69 +52,34 @@ UIChannel_Constructor:
 	ld bc,0610H
 	call UINode_CopyToBuffer
 	pop hl
-
-	push hl
-	push ix
-	ld bc,Channel.program
-	add hl,bc
-	ld de,010AH
-	call UIValue_New_DE
-	pop ix
-	pop hl
-	ld (ix + UIChannel.program),e
-	ld (ix + UIChannel.program + 1),d
-
-	push hl
-	push ix
-	ld bc,Channel.channelPressure
-	add hl,bc
-	ld de,020AH
-	call UIValue_New_DE
-	pop ix
-	pop hl
-	ld (ix + UIChannel.channelPressure),e
-	ld (ix + UIChannel.channelPressure + 1),d
-
-	push hl
-	push ix
-	ld bc,Channel.pitchBendCoarse
-	add hl,bc
-	ld de,030AH
-	call UIValue_New_DE
-	pop ix
-	pop hl
-	ld (ix + UIChannel.pitchBendCoarse),e
-	ld (ix + UIChannel.pitchBendCoarse + 1),d
-
-	push hl
-	push ix
-	ld bc,Channel.pitchBendFine
-	add hl,bc
-	ld de,040AH
-	call UIValue_New_DE
-	pop ix
-	pop hl
-	ld (ix + UIChannel.pitchBendFine),e
-	ld (ix + UIChannel.pitchBendFine + 1),d
 	ret
 
 ; ix = this
 UIChannel_Update:
-	ld e,(ix + UIChannel.program)
-	ld d,(ix + UIChannel.program + 1)
-	call UINode_Update_DE
+	ld e,(ix + UIChannel.channel)
+	ld d,(ix + UIChannel.channel + 1)
+	ld iyl,e
+	ld iyh,d
 
-	ld e,(ix + UIChannel.channelPressure)
-	ld d,(ix + UIChannel.channelPressure + 1)
-	call UINode_Update_DE
+	ld de,010AH
+	call UINode_GetBufferPosition
+	ld a,(iy + Channel.program)
+	call UIValue_Paint
 
-	ld e,(ix + UIChannel.pitchBendCoarse)
-	ld d,(ix + UIChannel.pitchBendCoarse + 1)
-	call UINode_Update_DE
+	ld de,020AH
+	call UINode_GetBufferPosition
+	ld a,(iy + Channel.channelPressure)
+	call UIValue_Paint
 
-	ld e,(ix + UIChannel.pitchBendFine)
-	ld d,(ix + UIChannel.pitchBendFine + 1)
-	call UINode_Update_DE
+	ld de,030AH
+	call UINode_GetBufferPosition
+	ld a,(iy + Channel.pitchBendCoarse)
+	call UIValue_Paint
+
+	ld de,040AH
+	call UINode_GetBufferPosition
+	ld a,(iy + Channel.pitchBendFine)
+	call UIValue_Paint
 	ret
 
 ;
