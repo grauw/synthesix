@@ -6,16 +6,8 @@ Font_Install:
 	ld hl,1000H  ; pattern generator table address
 	call VDP_SetWriteAddress
 	ld hl,Font_font
-	ld c,98H
-	ld b,0
-	otir
-	otir
-	otir
-	otir
-	otir
-	otir
-	otir
-	otir
+	ld bc,256 * 8
+	call VDP_Write
 	ret
 
 Font_font:
