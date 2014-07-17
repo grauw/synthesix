@@ -3,6 +3,8 @@ Synthesix_Main:
 	cp 1
 	ret c
 
+;	call System_EnableTurbo
+
 	call Memory_EnableROMInPage2
 	call ROM_Init
 	call Memory_EnableRAMInPage2

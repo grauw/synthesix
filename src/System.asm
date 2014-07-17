@@ -72,6 +72,14 @@ System_PrintHex_Done:
 	pop af
 	ret
 
+System_EnableTurbo:
+	ld a,(IDBYT2)
+	cp 3
+	ret c
+	ld a,10000001B
+	call CHGCPU
+	ret
+
 System_Stop:
 	di
 	halt
