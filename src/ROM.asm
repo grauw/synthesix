@@ -21,8 +21,9 @@ ROM: ds 3E00H
 RAM_sourceAddress:
 	org 0C000H
 RAM_startAddress:
-RAM: ds 2000H
+RAM: ds 1800H
 RAM_endAddress:
+	ds 800H
 	org 06000H
 ROM_MULTIPLYTABLE: ds 2000H
 	org 06000H
