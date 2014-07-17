@@ -283,5 +283,7 @@ MidiIn_buffer3:
 	ds 100H, 0FEH
 MidiIn_buffer4:
 	ds 100H, 0FEH
+MidiIn_buffer5:
+	ds 100H, 0FEH
 
 	ENDS

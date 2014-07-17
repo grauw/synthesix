@@ -69,6 +69,9 @@ Synthesix_Interrupt:
 	ld ix,KeyMidi_instance
 	call KeyMidi_Scan
 	call MidiIn_ProcessMessages
+	ld ix,AudioMidi_instance
+	call AudioMidi_Scan
+	call MidiIn_ProcessMessages
 	ld ix,PhilipsMidi_instance
 	call MidiIn_ProcessMessages
 	ld ix,MSXMidi_instance

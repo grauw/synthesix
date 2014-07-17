@@ -60,6 +60,7 @@ ROM_BANK_A000_CHANGE: equ 0B000H
 	INCLUDE "PhilipsMidi.asm"
 	INCLUDE "SFGMidi.asm"
 	INCLUDE "KeyMidi.asm"
+	INCLUDE "AudioMidi.asm"
 	INCLUDE "Channel.asm"
 	INCLUDE "NotePool.asm"
 	INCLUDE "Note.asm"
