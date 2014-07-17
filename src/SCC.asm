@@ -48,6 +48,9 @@ SCC_New:
 ; a = slot
 ; ix <- this
 SCC_Constructor:
+	call SCC_Detect
+	call nc,System_ThrowException
+
 	ld (ix + SCC.slot),a
 
 	call Memory_GetSlotPage2
@@ -151,3 +154,65 @@ SCC_GetFreeVoice:
 	jp z,SCCVoice_Bind
 	ENDM
 	call System_ThrowException
+
+;
+; Detect SCC
+;
+; ix = this
+; f <- c: found
+; a <- slot
+;
+SCC_Detect:
+	ld hl,SCC_MatchSlot
+	call Memory_SearchSlots
+	ret
+
+;
+; Check slot for SCC
+;
+; ix = this
+; a = slot id
+; f <- c: found
+;
+SCC_MatchSlot: PROC
+	ex af,af'
+	call Memory_GetSlotPage2
+	push af
+	ex af,af'
+	call Memory_SetSlotPage2
+
+	ld a,(9000H)
+	ld d,a
+	ld a,3FH
+	ld (9000H),a
+	ld hl,9800H
+	ld e,(hl)
+	xor a
+	ld (hl),a
+	ld a,(hl)
+	or a
+	jr nz,NoSCC
+	dec a
+	ld (hl),a
+	ld a,(hl)
+	inc a
+	jr nz,NoSCC
+	ld a,(9000H)
+	cp 3FH
+	jr z,NoSCC
+	xor a
+	jr Found
+NoSCC:
+	ld (hl),e
+	ld a,d
+	ld (9000H),a
+	pop af
+	call Memory_SetSlotPage2
+	and a
+	ret
+Found:
+	pop af
+	call Memory_SetSlotPage2
+	scf
+	ret
+	ENDP
