@@ -231,8 +231,8 @@ SFGMidi_Detect:
 ; Check slot for MIDI ID
 ;
 ; ix = this
-; a = slot address
-; f <- z: MIDI ID found
+; a = slot id
+; f <- c: found
 ;
 MSXMidi_MatchID:
 	ld de,SFGMidi_id

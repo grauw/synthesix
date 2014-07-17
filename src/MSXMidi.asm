@@ -217,7 +217,7 @@ MSXMidi_DetectInternal: PROC
 ; Check slot for MIDI ID
 ;
 ; ix = this
-; a = slot address
+; a = slot id
 ; f <- c: found
 ;
 MSXMidi_MatchExternalID:
