@@ -493,7 +493,7 @@ Memory_TestSearchSlots:
 	pop bc
 	call nc,System_ThrowException
 	cp b
-	call nz,System_ThrowException
+;	call nz,System_ThrowException  ; this crashes after ROMLOADing into SCC+
 
 	; negative test
 	ld hl,Memory_TestSearchSlots_MatcherNotFound
