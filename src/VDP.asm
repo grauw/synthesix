@@ -53,7 +53,6 @@ VDP_Enable60Hz:
 	ld b,9
 	call VDP_SetRegister
 	ret
-	ENDP
 
 ;
 ; Detect VDP version
