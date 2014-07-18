@@ -41,13 +41,16 @@ AudioMidi_Scan:
 	call AudioMidi_GetNoteMapping
 	REPT 8, ?row
 	ld bc,1 << ?row
+	call AudioMidi_ReadRow
 	call AudioMidi_ProcessRow
 	ENDM
 	bit 0,(ix + AudioMidi.toshiba)
 	ret z
 	ld bc,1 << 8
+	call AudioMidi_ReadRow
 	call AudioMidi_ProcessRow
 	ld bc,1 << 9
+	call AudioMidi_ReadRow
 	call AudioMidi_ProcessRow
 	ret
 
@@ -124,9 +127,8 @@ AudioMidi_ReadRow:
 	ret
 
 ; ix = this
-; b = row mask
+; a = row
 AudioMidi_ProcessRow:
-	call AudioMidi_ReadRow
 	ld c,(hl)
 	ld (hl),a
 	inc hl
