@@ -57,7 +57,9 @@ AudioMidi_Scan:
 ;
 ; Returns the note mapping to use.
 ;
+; ix = this
 ; de <- Note mapping
+; Modifies: af, bc
 ;
 AudioMidi_GetNoteMapping:
 	call AudioMidi_CheckKeyboardType
@@ -69,7 +71,9 @@ AudioMidi_GetNoteMapping:
 ;
 ; Checks whether the keyboard is a Philips or Toshiba one.
 ;
+; ix = this
 ; f <- z: Philips, nz: Toshiba / Yamaha
+; Modifies: af, bc
 ;
 AudioMidi_CheckKeyboardType:
 	bit 0,(ix + AudioMidi.toshiba)
@@ -82,13 +86,11 @@ AudioMidi_CheckKeyboardType:
 	ret
 
 ;
-; Switch to Toshiba mode
+; Switch to Toshiba mode.
+; It sets IO0 and IO1 for output, these control the sensor matrix rows.
 ;
-; It sets IO0 and IO1 for output, these set the sensor matrix rows.
-; It also sets IO3 for output, because if this is not set on the Music Module,
-; the DAC gets selected for sound output in stead of the Y8950. Just in case.
-;
-; Modifies: none
+; ix = this
+; Modifies: bc
 ;
 AudioMidi_SwitchToToshiba:
 	push af
