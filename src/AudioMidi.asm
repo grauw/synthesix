@@ -2,7 +2,7 @@
 ; MSX-AUDIO Keyboard MIDI
 ;
 ; The Philips NMS1160 61-key keyboard has a different key layout than the 49-key
-; Toshiba HX-MU901 and Yamaha YK-01 / YK-10 / YK-20 keyboards.
+; Toshiba HX-MU901.
 ;
 ; Additionally, the Toshiba keyboard has a “multi sensor” whose row selection is
 ; controlled by the IO0 and IO1 bits. On the Philips, IO0 is used to enable the
@@ -59,7 +59,7 @@ AudioMidi_Scan:
 ;
 ; ix = this
 ; de <- Note mapping
-; Modifies: af, bc
+; Modifies: af, bc, de, hl
 ;
 AudioMidi_GetNoteMapping:
 	call AudioMidi_CheckKeyboardType
@@ -72,8 +72,8 @@ AudioMidi_GetNoteMapping:
 ; Checks whether the keyboard is a Philips or Toshiba one.
 ;
 ; ix = this
-; f <- z: Philips, nz: Toshiba / Yamaha
-; Modifies: af, bc
+; f <- z: Philips, nz: Toshiba
+; Modifies: af, bc, de, hl
 ;
 AudioMidi_CheckKeyboardType:
 	bit 0,(ix + AudioMidi.toshiba)
@@ -90,10 +90,11 @@ AudioMidi_CheckKeyboardType:
 ; It sets IO0 and IO1 for output, these control the sensor matrix rows.
 ;
 ; ix = this
-; Modifies: bc
+; Modifies: bc, de, hl
 ;
 AudioMidi_SwitchToToshiba:
 	push af
+	call AudioMidi_ResetPhilipsNotes
 	ld (ix + AudioMidi.toshiba),-1
 	; set IO0 and IO1 for output
 	ld a,18H
@@ -107,6 +108,28 @@ AudioMidi_SwitchToToshiba:
 	out (0C1H),a
 	pop af
 	ret
+
+;
+; Resets notes that were pressed, to prevent hanging notes after switching.
+;
+; ix = this
+; Modifies: af, bc, de, hl
+;
+AudioMidi_ResetPhilipsNotes: PROC
+	ld de,AudioMidi_noteMappingPhilips
+	ld c,ixl
+	ld b,ixh
+	ld hl,AudioMidi.lastScan
+	add hl,bc
+	ld b,8
+Loop:
+	push bc
+	ld a,11111111B
+	call AudioMidi_ProcessRow
+	pop bc
+	djnz Loop
+	ret
+	ENDP
 
 ; bc = row mask
 ; a <- row bits
