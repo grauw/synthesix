@@ -34,11 +34,11 @@ AudioMidi_Constructor:
 AudioMidi_Scan:
 	bit 0,(ix + AudioMidi.found)
 	ret nz
-	ld e,ixl
-	ld d,ixh
-	ld hl,AudioMidi.lastScan
-	add hl,de
 	call AudioMidi_GetNoteMapping
+	ld c,ixl
+	ld b,ixh
+	ld hl,AudioMidi.lastScan
+	add hl,bc
 	REPT 8, ?row
 	ld bc,1 << ?row
 	call AudioMidi_ReadRow
