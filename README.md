@@ -31,6 +31,12 @@ System Requirements
   * 16kB Video RAM
 
 
+Supported output devices
+------------------------
+
+  * Konami SCC
+
+
 Supported input devices
 -----------------------
 
