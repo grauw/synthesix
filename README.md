@@ -21,6 +21,31 @@ Synthesix can be loaded on an MSX using a Konami Snatcher SCC+ cartridge,
 or compatible devices such as the MegaFlashROM SCC+ or the ESE Mega-SCC+
 (built into One Chip MSX).
 
+
+System Requirements
+-------------------
+
+  * MSX2, MSX2+, MSX turboR
+  * Certain MSX1 models with V9938 VDP
+  * 32kB Main RAM
+  * 16kB Video RAM
+
+
+Supported input devices
+-----------------------
+
+Synthesix currently supports the following input devices:
+
+  * Internal MSX-MIDI (turboR GT)
+  * External MSX-MIDI (µ-Pack), on all MSX models
+  * Philips NMS-1205 Music Module MIDI
+  * Yamaha SFG-01 / 05 FM Sound Synthesizer Unit MIDI
+  * Philips NMS-1160 Music Keyboard, connected to NMS-1205
+  * Toshiba HX-MU901 Music Keyboard, connected to HX-MU900 or FS-CA1
+  * Yamaha YK-01/10/20 Music Keyboard, connected to HX-MU900 or FS-CA1
+  * Computer alphanumeric keys
+
+
 Development information
 -----------------------
 
