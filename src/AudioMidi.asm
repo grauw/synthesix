@@ -18,6 +18,8 @@ AudioMidi: MACRO
 		db 0
 	toshiba:
 		db 0
+	lastScanAll:
+		db 11111111B
 	lastScan:
 		ds 10, 11111111B
 	ENDM
@@ -31,9 +33,18 @@ AudioMidi_Constructor:
 	ret
 
 ; ix = this
-AudioMidi_Scan:
+AudioMidi_Scan: PROC
 	bit 0,(ix + AudioMidi.found)
 	ret nz
+	ld bc,3FFH  ; combined scan of all bits
+	call AudioMidi_ReadRow
+	ld b,(ix + AudioMidi.lastScanAll)
+	ld (ix + AudioMidi.lastScanAll),a
+	inc b
+	jr nz,Continue
+	inc a
+	ret z  ; the fast path
+Continue:
 	call AudioMidi_GetNoteMapping
 	ld c,ixl
 	ld b,ixh
@@ -53,6 +64,7 @@ AudioMidi_Scan:
 	call AudioMidi_ReadRow
 	call AudioMidi_ProcessRow
 	ret
+	ENDP
 
 ;
 ; Returns the note mapping to use.
