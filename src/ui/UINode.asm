@@ -59,12 +59,10 @@ UINode_GetBufferPosition_HL:
 ; de = y / x coordinate
 ; hl = source buffer
 UINode_CopyToBuffer: PROC
-	push bc
 	push hl
 	call UINode_GetBufferPosition
 	ex de,hl
 	pop hl
-	pop bc
 Loop:
 	push bc
 	ld a,c
