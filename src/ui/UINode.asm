@@ -12,11 +12,11 @@ UINode: MACRO ?update
 ; iy = parent
 ; de = y / x coordinate
 ; hl <- UINode.buffer = buffer
-; Modifies: af, bc, de
+; Modifies: af, de
 UINode_SetBuffer:
-	ld c,(iy + UINode.buffer)
-	ld b,(iy + UINode.buffer + 1)
-	call UINode_GetBufferPosition_BC
+	ld l,(iy + UINode.buffer)
+	ld h,(iy + UINode.buffer + 1)
+	call UINode_GetBufferPosition_HL
 	ld (ix + UINode.buffer),l
 	ld (ix + UINode.buffer + 1),h
 	ret
@@ -24,32 +24,33 @@ UINode_SetBuffer:
 ; ix = this
 ; de = y / x coordinate
 ; hl <- buffer
-; Modifies: af, bc, de
+; Modifies: af, de
 UINode_GetBufferPosition:
-	ld c,(ix + UINode.buffer)
-	ld b,(ix + UINode.buffer + 1)
-	call UINode_GetBufferPosition_BC
+	ld l,(ix + UINode.buffer)
+	ld h,(ix + UINode.buffer + 1)
+	call UINode_GetBufferPosition_HL
 	ret
 
-; bc = buffer start (must be 26.5 x 80)
+; hl = buffer start (must be 26.5 x 80)
 ; de = y / x coordinate
 ; hl <- buffer
 ; Modifies: af, de
-UINode_GetBufferPosition_BC:
+UINode_GetBufferPosition_HL:
 	ld a,d  ; hl = d * 80
+	ld d,0  ; de = hl + e
+	add hl,de
+	ex de,hl
+	ld l,a
 	add a,a
 	add a,a
-	add a,d
+	add a,l
 	add a,a
 	ld l,a
-	ld h,0
 	rl h
 	add hl,hl
 	add hl,hl
 	add hl,hl
-	ld d,0
 	add hl,de
-	add hl,bc
 	ret
 
 ; ix = this
