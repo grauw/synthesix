@@ -1,19 +1,6 @@
 ;
 ; Display a signed decimal value (one’s complement)
 ;
-UIValue: MACRO
-	super: UINode UIValue_Update
-	size:
-	ENDM
-
-; ix = this
-UIValue_Constructor:
-	ret
-
-; ix = this
-UIValue_Update:
-	ret
-
 ; a = value
 ; hl = string buffer (4 characters)
 UIValue_Paint:
@@ -97,7 +84,3 @@ EmptySegment:
 	ld (hl),23
 	ret
 	ENDP
-
-;
-UIValue_instance:
-	UIValue

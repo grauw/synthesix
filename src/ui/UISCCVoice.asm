@@ -1,19 +1,6 @@
 ;
 ; Display an SCC voice
 ;
-UISCCVoice: MACRO
-	super: UINode UISCCVoice_Update
-	size:
-	ENDM
-
-; ix = this
-UISCCVoice_Constructor:
-	ret
-
-; ix = this
-UISCCVoice_Update:
-	ret
-
 ; iy = voice
 ; hl = buffer
 UISCCVoice_Paint:
