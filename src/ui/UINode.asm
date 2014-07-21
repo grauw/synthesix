@@ -16,7 +16,7 @@ UINode: MACRO ?update
 UINode_SetBuffer:
 	ld l,(iy + UINode.buffer)
 	ld h,(iy + UINode.buffer + 1)
-	call UINode_GetBufferPosition_HL
+	call UINode_GetRelativePosition
 	ld (ix + UINode.buffer),l
 	ld (ix + UINode.buffer + 1),h
 	ret
@@ -28,14 +28,14 @@ UINode_SetBuffer:
 UINode_GetBufferPosition:
 	ld l,(ix + UINode.buffer)
 	ld h,(ix + UINode.buffer + 1)
-	call UINode_GetBufferPosition_HL
+	call UINode_GetRelativePosition
 	ret
 
 ; hl = buffer start (must be 26.5 x 80)
 ; de = y / x coordinate
 ; hl <- buffer
 ; Modifies: af, de
-UINode_GetBufferPosition_HL:
+UINode_GetRelativePosition:
 	ld a,d  ; hl = d * 80
 	ld d,0  ; de = hl + e
 	add hl,de
