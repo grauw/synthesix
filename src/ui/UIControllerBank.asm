@@ -1,135 +1,113 @@
 ;
 ; Display a virtual keyboard
 ;
-UIControllerBank: MACRO
-	super: UINode UIControllerBank_Update
-	controllers:
-		dw 0
-	size:
-	ENDM
-
-	dw UIControllerBank.size
-UIControllerBank_class: UIControllerBank
-
-; ix = parent
-; de = y / x coordinate
-; hl = controller bank
-; ix <- instance
-UIControllerBank_New:
-	push ix
+; iy = controller bank
+; hl = buffer
+UIControllerBank_Paint:
 	push hl
-	push de
-	ld iy,UIControllerBank_class
-	call Class_New
-	pop de
-	pop hl
-	pop iy
-	call UIControllerBank_Constructor
-	ret
-
-; ix = parent
-; de = y / x coordinate
-; hl = controller bank
-; de <- instance
-UIControllerBank_New_DE:
-	call UIControllerBank_New
-	ld e,ixl
-	ld d,ixh
-	ret
-
-; ix = this
-; hl = controller bank
-UIControllerBank_Constructor:
-	ld (ix + UIControllerBank.controllers),l
-	ld (ix + UIControllerBank.controllers + 1),h
-	push hl
-	call UINode_SetBuffer
-	pop hl
-
-	push hl
+	ex de,hl
 	ld hl,UIControllerBank_background
-	ld de,0000H
 	ld bc,1010H
-	call UINode_CopyToBuffer
+	call UINode_CopyToBuffer_DE
 	pop hl
-	ret
 
-; ix = this
-UIControllerBank_Update:
-	ld e,(ix + UIControllerBank.controllers)
-	ld d,(ix + UIControllerBank.controllers + 1)
-	ld iyl,e
-	ld iyh,d
-
+	push hl
 	ld de,010AH
-	call UINode_GetBufferPosition
+	call UINode_GetRelativePosition
 	ld a,(iy + ControllerBank.controllers.1)
 	call UIValue_Paint
+	pop hl
 
+	push hl
 	ld de,020AH
-	call UINode_GetBufferPosition
+	call UINode_GetRelativePosition
 	ld a,(iy + ControllerBank.controllers.7)
 	call UIValue_Paint
+	pop hl
 
+	push hl
 	ld de,030AH
-	call UINode_GetBufferPosition
+	call UINode_GetRelativePosition
 	ld a,(iy + ControllerBank.controllers.11)
 	call UIValue_Paint
+	pop hl
 
+	push hl
 	ld de,040AH
-	call UINode_GetBufferPosition
+	call UINode_GetRelativePosition
 	ld a,(iy + ControllerBank.controllers.12)
 	call UIValue_Paint
+	pop hl
 
+	push hl
 	ld de,050AH
-	call UINode_GetBufferPosition
+	call UINode_GetRelativePosition
 	ld a,(iy + ControllerBank.controllers.13)
 	call UIValue_Paint
+	pop hl
 
+	push hl
 	ld de,060AH
-	call UINode_GetBufferPosition
+	call UINode_GetRelativePosition
 	ld a,(iy + ControllerBank.controllers.14)
 	call UIValue_Paint
+	pop hl
 
+	push hl
 	ld de,070AH
-	call UINode_GetBufferPosition
+	call UINode_GetRelativePosition
 	ld a,(iy + ControllerBank.controllers.15)
 	call UIValue_Paint
+	pop hl
 
+	push hl
 	ld de,080AH
-	call UINode_GetBufferPosition
+	call UINode_GetRelativePosition
 	ld a,(iy + ControllerBank.controllers.16)
 	call UIValue_Paint
+	pop hl
 
+	push hl
 	ld de,090AH
-	call UINode_GetBufferPosition
+	call UINode_GetRelativePosition
 	ld a,(iy + ControllerBank.controllers.17)
 	call UIValue_Paint
+	pop hl
 
+	push hl
 	ld de,0A0AH
-	call UINode_GetBufferPosition
+	call UINode_GetRelativePosition
 	ld a,(iy + ControllerBank.controllers.18)
 	call UIValue_Paint
+	pop hl
 
+	push hl
 	ld de,0B0AH
-	call UINode_GetBufferPosition
+	call UINode_GetRelativePosition
 	ld a,(iy + ControllerBank.controllers.19)
 	call UIValue_Paint
+	pop hl
 
+	push hl
 	ld de,0C0AH
-	call UINode_GetBufferPosition
+	call UINode_GetRelativePosition
 	ld a,(iy + ControllerBank.controllers.20)
 	call UIValue_Paint
+	pop hl
 
+	push hl
 	ld de,0D0AH
-	call UINode_GetBufferPosition
+	call UINode_GetRelativePosition
 	ld a,(iy + ControllerBank.controllers.21)
 	call UIValue_Paint
+	pop hl
 
+	push hl
 	ld de,0E0AH
-	call UINode_GetBufferPosition
+	call UINode_GetRelativePosition
 	ld a,(iy + ControllerBank.controllers.64)
 	call UIValue_Paint
+	pop hl
 	ret
 
 ;

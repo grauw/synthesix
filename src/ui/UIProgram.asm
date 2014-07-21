@@ -7,8 +7,6 @@ UIProgram: MACRO
 		dw 0
 	channel:
 		dw 0
-	controllers:
-		dw 0
 	size:
 	ENDM
 
@@ -60,31 +58,12 @@ UIProgram_Constructor:
 	pop ix
 	ld (ix + UIProgram.channel),e
 	ld (ix + UIProgram.channel + 1),d
-
-	push ix
-	push iy
-	ld e,(iy + Program.channel)
-	ld d,(iy + Program.channel + 1)
-	ld iyl,e
-	ld iyh,d
-	ld l,(iy + Channel.controllers)
-	ld h,(iy + Channel.controllers + 1)
-	ld de,0010H
-	call UIControllerBank_New_DE
-	pop iy
-	pop ix
-	ld (ix + UIProgram.controllers),e
-	ld (ix + UIProgram.controllers + 1),d
 	ret
 
 ; ix = this
 UIProgram_Update:
 	ld e,(ix + UIProgram.channel)
 	ld d,(ix + UIProgram.channel + 1)
-	call UINode_Update_DE
-
-	ld e,(ix + UIProgram.controllers)
-	ld d,(ix + UIProgram.controllers + 1)
 	call UINode_Update_DE
 
 	call UINode_GetBuffer
@@ -95,6 +74,23 @@ UIProgram_Update:
 	ld iyh,d
 
 	push hl
+	push iy
+	ld e,(iy + Program.channel)
+	ld d,(iy + Program.channel + 1)
+	ld iyl,e
+	ld iyh,d
+	ld e,(iy + Channel.controllers)
+	ld d,(iy + Channel.controllers + 1)
+	ld iyl,e
+	ld iyh,d
+	ld de,0010H
+	call UINode_GetRelativePosition
+	call UIControllerBank_Paint
+	pop iy
+	pop hl
+
+	push hl
+	push iy
 	ld e,(iy + Program.channel)
 	ld d,(iy + Program.channel + 1)
 	ld iyl,e
@@ -110,5 +106,6 @@ UIProgram_Update:
 	ld de,0020H
 	call UINode_GetRelativePosition
 	call UINote_Paint
+	pop iy
 	pop hl
 	ret
