@@ -61,7 +61,6 @@ UINode_GetRelativePosition:
 	ret
 
 ; ix = this
-; iy = parent
 ; bc = height / width
 ; de = y / x coordinate
 ; hl = source buffer
