@@ -9,14 +9,6 @@ UISynthesix: MACRO
 		dw 0
 	keyboard:
 		dw 0
-	voice1:
-		dw 0
-	voice2:
-		dw 0
-	voice3:
-		dw 0
-	voice4:
-		dw 0
 	size:
 	ENDM
 
@@ -58,54 +50,6 @@ UISynthesix_Constructor:
 	pop ix
 	ld (ix + UISynthesix.keyboard),e
 	ld (ix + UISynthesix.keyboard + 1),d
-
-	push ix
-	ld a,0
-	ld ix,(Synthesix_scc)
-	call SCC_GetVoice
-	pop ix
-	push ix
-	ld de,1300H
-	call UISCCVoice_New_DE
-	pop ix
-	ld (ix + UISynthesix.voice1),e
-	ld (ix + UISynthesix.voice1 + 1),d
-
-	push ix
-	ld a,1
-	ld ix,(Synthesix_scc)
-	call SCC_GetVoice
-	pop ix
-	push ix
-	ld de,1310H
-	call UISCCVoice_New_DE
-	pop ix
-	ld (ix + UISynthesix.voice2),e
-	ld (ix + UISynthesix.voice2 + 1),d
-
-	push ix
-	ld a,2
-	ld ix,(Synthesix_scc)
-	call SCC_GetVoice
-	pop ix
-	push ix
-	ld de,1320H
-	call UISCCVoice_New_DE
-	pop ix
-	ld (ix + UISynthesix.voice3),e
-	ld (ix + UISynthesix.voice3 + 1),d
-
-	push ix
-	ld a,3
-	ld ix,(Synthesix_scc)
-	call SCC_GetVoice
-	pop ix
-	push ix
-	ld de,1330H
-	call UISCCVoice_New_DE
-	pop ix
-	ld (ix + UISynthesix.voice4),e
-	ld (ix + UISynthesix.voice4 + 1),d
 	ret
 
 UISynthesix_Update:
@@ -119,21 +63,43 @@ UISynthesix_Update:
 	ld d,(ix + UISynthesix.keyboard + 1)
 	call UINode_Update_DE
 
-	ld e,(ix + UISynthesix.voice1)
-	ld d,(ix + UISynthesix.voice1 + 1)
-	call UINode_Update_DE
+	call UINode_GetBuffer
 
-	ld e,(ix + UISynthesix.voice2)
-	ld d,(ix + UISynthesix.voice2 + 1)
-	call UINode_Update_DE
+	push hl
+	ld a,0
+	ld iy,(Synthesix_scc)
+	call SCC_GetVoice_IY
+	ld de,1300H
+	call UINode_GetRelativePosition
+	call UISCCVoice_Paint
+	pop hl
 
-	ld e,(ix + UISynthesix.voice3)
-	ld d,(ix + UISynthesix.voice3 + 1)
-	call UINode_Update_DE
+	push hl
+	ld a,1
+	ld iy,(Synthesix_scc)
+	call SCC_GetVoice_IY
+	ld de,1310H
+	call UINode_GetRelativePosition
+	call UISCCVoice_Paint
+	pop hl
 
-	ld e,(ix + UISynthesix.voice4)
-	ld d,(ix + UISynthesix.voice4 + 1)
-	call UINode_Update_DE
+	push hl
+	ld a,2
+	ld iy,(Synthesix_scc)
+	call SCC_GetVoice_IY
+	ld de,1320H
+	call UINode_GetRelativePosition
+	call UISCCVoice_Paint
+	pop hl
+
+	push hl
+	ld a,3
+	ld iy,(Synthesix_scc)
+	call SCC_GetVoice_IY
+	ld de,1330H
+	call UINode_GetRelativePosition
+	call UISCCVoice_Paint
+	pop hl
 
 	call UISynthesix_Draw
 	ret

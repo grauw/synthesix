@@ -88,6 +88,11 @@ NoAdd:
 	ret
 	ENDP
 
+; bc = height / width
+; de = destination buffer
+; hl = source buffer
+UINode_CopyToBuffer_DE: equ UINode_CopyToBuffer.Loop
+
 ; ix = this
 UINode_Update:
 	ld l,(ix + UINode.update)

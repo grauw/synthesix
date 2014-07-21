@@ -139,6 +139,23 @@ SCC_GetVoice:
 	ld h,(ix + SCC.voices + 1)
 	ret
 
+; iy = this
+; a = voice number
+; iy <- voice
+; Modifies: bc, ix
+SCC_GetVoice_IY:
+	cp SCC_MAX_VOICES
+	call nc,System_ThrowException
+	add a,a
+	ld c,a
+	ld b,0
+	add iy,bc
+	ld c,(iy + SCC.voices)
+	ld b,(iy + SCC.voices + 1)
+	ld iyl,c
+	ld iyh,b
+	ret
+
 ; ix = this
 ; ix <- voice
 ; Modifies: de
