@@ -13,7 +13,7 @@ UIKeyboard_Paint:
 
 	push hl
 	ld de,0100H
-	call UINode_GetBufferPosition
+	call UINode_GetRelativePosition
 	ld a,(iy + Channel.pitchBendCoarse)
 	call UIValue_Paint
 	pop hl
