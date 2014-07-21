@@ -5,8 +5,6 @@ UIProgram: MACRO
 	super: UINode UIProgram_Update
 	program:
 		dw 0
-	channel:
-		dw 0
 	size:
 	ENDM
 
@@ -47,31 +45,28 @@ UIProgram_Constructor:
 	push hl
 	call UINode_SetBuffer
 	pop iy
-
-	push ix
-	push iy
-	ld l,(iy + Program.channel)
-	ld h,(iy + Program.channel + 1)
-	ld de,0000H
-	call UIChannel_New_DE
-	pop iy
-	pop ix
-	ld (ix + UIProgram.channel),e
-	ld (ix + UIProgram.channel + 1),d
 	ret
 
 ; ix = this
 UIProgram_Update:
-	ld e,(ix + UIProgram.channel)
-	ld d,(ix + UIProgram.channel + 1)
-	call UINode_Update_DE
-
 	call UINode_GetBuffer
 
 	ld e,(ix + UIProgram.program)
 	ld d,(ix + UIProgram.program + 1)
 	ld iyl,e
 	ld iyh,d
+
+	push hl
+	push iy
+	ld e,(iy + Program.channel)
+	ld d,(iy + Program.channel + 1)
+	ld iyl,e
+	ld iyh,d
+	ld de,0000H
+	call UINode_GetRelativePosition
+	call UIChannel_Paint
+	pop iy
+	pop hl
 
 	push hl
 	push iy
