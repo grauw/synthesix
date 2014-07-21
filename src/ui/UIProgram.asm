@@ -9,8 +9,6 @@ UIProgram: MACRO
 		dw 0
 	controllers:
 		dw 0
-	note:
-		dw 0
 	size:
 	ENDM
 
@@ -77,25 +75,6 @@ UIProgram_Constructor:
 	pop ix
 	ld (ix + UIProgram.controllers),e
 	ld (ix + UIProgram.controllers + 1),d
-
-	push ix
-	push iy
-	ld e,(iy + Program.channel)
-	ld d,(iy + Program.channel + 1)
-	ld iyl,e
-	ld iyh,d
-	ld e,(iy + Channel.notePools)
-	ld d,(iy + Channel.notePools + 1)
-	ld iyl,e
-	ld iyh,d
-	ld l,(iy + NotePool.notes + KeyNotePair.note)
-	ld h,(iy + NotePool.notes + KeyNotePair.note + 1)
-	ld de,0020H
-	call UINote_New_DE
-	pop iy
-	pop ix
-	ld (ix + UIProgram.note),e
-	ld (ix + UIProgram.note + 1),d
 	ret
 
 ; ix = this
@@ -108,7 +87,28 @@ UIProgram_Update:
 	ld d,(ix + UIProgram.controllers + 1)
 	call UINode_Update_DE
 
-	ld e,(ix + UIProgram.note)
-	ld d,(ix + UIProgram.note + 1)
-	call UINode_Update_DE
+	call UINode_GetBuffer
+
+	ld e,(ix + UIProgram.program)
+	ld d,(ix + UIProgram.program + 1)
+	ld iyl,e
+	ld iyh,d
+
+	push hl
+	ld e,(iy + Program.channel)
+	ld d,(iy + Program.channel + 1)
+	ld iyl,e
+	ld iyh,d
+	ld e,(iy + Channel.notePools)
+	ld d,(iy + Channel.notePools + 1)
+	ld iyl,e
+	ld iyh,d
+	ld e,(iy + NotePool.notes + KeyNotePair.note)
+	ld d,(iy + NotePool.notes + KeyNotePair.note + 1)
+	ld iyl,e
+	ld iyh,d
+	ld de,0020H
+	call UINode_GetRelativePosition
+	call UINote_Paint
+	pop hl
 	ret
