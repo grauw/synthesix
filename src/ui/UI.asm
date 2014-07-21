@@ -5,7 +5,6 @@
 	INCLUDE "Font.asm"
 	INCLUDE "UINode.asm"
 	INCLUDE "UIText.asm"
-	INCLUDE "UIPanel.asm"
 	INCLUDE "UIValue.asm"
 	INCLUDE "UISynthesix.asm"
 	INCLUDE "UIProgram.asm"
