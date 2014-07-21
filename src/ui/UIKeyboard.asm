@@ -1,85 +1,34 @@
 ;
 ; Display a virtual keyboard
 ;
-UIKeyboard: MACRO
-	super: UINode UIKeyboard_Update
-	channel:
-		dw 0
-	size:
-	ENDM
-
-	dw UIKeyboard.size
-UIKeyboard_class: UIKeyboard
-
-; ix = parent
-; de = y / x coordinate
-; hl = channel
-; ix <- instance
-UIKeyboard_New:
-	push ix
+; iy = channel
+; hl = buffer
+UIKeyboard_Paint:
 	push hl
-	push de
-	ld iy,UIKeyboard_class
-	call Class_New
-	pop de
-	pop hl
-	pop iy
-	call UIKeyboard_Constructor
-	ret
-
-; ix = parent
-; de = y / x coordinate
-; hl = channel
-; de <- instance
-UIKeyboard_New_DE:
-	call UIKeyboard_New
-	ld e,ixl
-	ld d,ixh
-	ret
-
-; ix = this
-; hl = channel
-UIKeyboard_Constructor:
-	ld (ix + UIKeyboard.channel),l
-	ld (ix + UIKeyboard.channel + 1),h
-	push hl
-	call UINode_SetBuffer
-	pop hl
-
-	push hl
+	ex de,hl
 	ld hl,UIKeyboard_background
-	ld de,0000H
 	ld bc,0250H
-	call UINode_CopyToBuffer
+	call UINode_CopyToBuffer_DE
 	pop hl
-	ret
 
-; ix = this
-UIKeyboard_Update:
-	ld e,(ix + UIKeyboard.channel)
-	ld d,(ix + UIKeyboard.channel + 1)
-	ld iyl,e
-	ld iyh,d
-
+	push hl
 	ld de,0100H
 	call UINode_GetBufferPosition
 	ld a,(iy + Channel.pitchBendCoarse)
 	call UIValue_Paint
+	pop hl
 
+	push hl
 	call UIKeyboard_UpdateKeys
+	pop hl
 	ret
 
-; ix = this
+; iy = channel
+; hl = buffer
 UIKeyboard_UpdateKeys: PROC
-	ld e,(ix + UIKeyboard.channel)
-	ld d,(ix + UIKeyboard.channel + 1)
-	ld iyl,e
-	ld iyh,d
 	ld c,(iy + Channel.keys)
 	ld b,(iy + Channel.keys + 1)
-	ld e,(ix + UINode.buffer)
-	ld d,(ix + UINode.buffer + 1)
-	ld hl,5
+	ld de,5
 	add hl,de
 	ex de,hl
 	ld hl,80

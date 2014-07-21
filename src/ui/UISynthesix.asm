@@ -7,8 +7,6 @@ UISynthesix: MACRO
 		dw 0
 	program:
 		dw 0
-	keyboard:
-		dw 0
 	size:
 	ENDM
 
@@ -42,14 +40,6 @@ UISynthesix_Constructor:
 	pop ix
 	ld (ix + UISynthesix.program),e
 	ld (ix + UISynthesix.program + 1),d
-
-	push ix
-	ld hl,Channel_channels.0
-	ld de,1900H
-	call UIKeyboard_New_DE
-	pop ix
-	ld (ix + UISynthesix.keyboard),e
-	ld (ix + UISynthesix.keyboard + 1),d
 	ret
 
 UISynthesix_Update:
@@ -59,11 +49,14 @@ UISynthesix_Update:
 	ld d,(ix + UISynthesix.program + 1)
 	call UINode_Update_DE
 
-	ld e,(ix + UISynthesix.keyboard)
-	ld d,(ix + UISynthesix.keyboard + 1)
-	call UINode_Update_DE
-
 	call UINode_GetBuffer
+
+	push hl
+	ld iy,Channel_channels.0
+	ld de,1900H
+	call UINode_GetRelativePosition
+	call UIKeyboard_Paint
+	pop hl
 
 	push hl
 	ld a,0
