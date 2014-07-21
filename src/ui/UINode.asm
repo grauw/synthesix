@@ -22,6 +22,13 @@ UINode_SetBuffer:
 	ret
 
 ; ix = this
+; hl <- buffer
+UINode_GetBuffer:
+	ld l,(ix + UINode.buffer)
+	ld h,(ix + UINode.buffer + 1)
+	ret
+
+; ix = this
 ; de = y / x coordinate
 ; hl <- buffer
 ; Modifies: af, de
