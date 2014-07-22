@@ -8,12 +8,12 @@ UISCCVoice_Paint:
 	ex de,hl
 	ld hl,UISCCVoice_background
 	ld bc,0610H
-	call UINode_CopyToBuffer
+	call UIBuffer_CopyToBuffer
 	pop hl
 
 	push hl
 	ld de,000DH
-	call UINode_GetRelativePosition
+	call UIBuffer_GetRelativePosition
 	call SCCVoice_GetNumber_IY
 	add a,"1"
 	ld (hl),a
@@ -21,7 +21,7 @@ UISCCVoice_Paint:
 
 	push hl
 	ld de,010AH
-	call UINode_GetRelativePosition
+	call UIBuffer_GetRelativePosition
 	ld e,(iy + SCCVoice.note)
 	ld d,(iy + SCCVoice.note + 1)
 	ld a,(de)
@@ -30,7 +30,7 @@ UISCCVoice_Paint:
 
 	push hl
 	ld de,020AH
-	call UINode_GetRelativePosition
+	call UIBuffer_GetRelativePosition
 	ld e,(iy + SCCVoice.detune)
 	ld d,(iy + SCCVoice.detune + 1)
 	ld a,(de)
@@ -39,7 +39,7 @@ UISCCVoice_Paint:
 
 	push hl
 	ld de,030AH
-	call UINode_GetRelativePosition
+	call UIBuffer_GetRelativePosition
 	ld e,(iy + SCCVoice.amplitude)
 	ld d,(iy + SCCVoice.amplitude + 1)
 	ld a,(de)
@@ -48,7 +48,7 @@ UISCCVoice_Paint:
 
 	push hl
 	ld de,040AH
-	call UINode_GetRelativePosition
+	call UIBuffer_GetRelativePosition
 	ld e,(iy + SCCVoice.wave)
 	ld d,(iy + SCCVoice.wave + 1)
 	ld a,(de)

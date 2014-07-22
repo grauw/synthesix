@@ -8,12 +8,12 @@ UIKeyboard_Paint:
 	ex de,hl
 	ld hl,UIKeyboard_background
 	ld bc,0250H
-	call UINode_CopyToBuffer
+	call UIBuffer_CopyToBuffer
 	pop hl
 
 	push hl
 	ld de,0100H
-	call UINode_GetRelativePosition
+	call UIBuffer_GetRelativePosition
 	ld a,(iy + Channel.pitchBendCoarse)
 	call UIValue_Paint
 	pop hl

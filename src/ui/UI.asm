@@ -3,7 +3,7 @@
 ;
 
 	INCLUDE "Font.asm"
-	INCLUDE "UINode.asm"
+	INCLUDE "UIBuffer.asm"
 	INCLUDE "UIValue.asm"
 	INCLUDE "UISynthesix.asm"
 	INCLUDE "UIProgram.asm"

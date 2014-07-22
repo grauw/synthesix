@@ -11,7 +11,7 @@ UIProgram_Paint:
 	ld iyl,e
 	ld iyh,d
 	ld de,0000H
-	call UINode_GetRelativePosition
+	call UIBuffer_GetRelativePosition
 	call UIChannel_Paint
 	pop iy
 	pop hl
@@ -27,7 +27,7 @@ UIProgram_Paint:
 	ld iyl,e
 	ld iyh,d
 	ld de,0010H
-	call UINode_GetRelativePosition
+	call UIBuffer_GetRelativePosition
 	call UIControllerBank_Paint
 	pop iy
 	pop hl
@@ -47,7 +47,7 @@ UIProgram_Paint:
 	ld iyl,e
 	ld iyh,d
 	ld de,0020H
-	call UINode_GetRelativePosition
+	call UIBuffer_GetRelativePosition
 	call UINote_Paint
 	pop iy
 	pop hl

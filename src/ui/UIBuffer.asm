@@ -1,11 +1,11 @@
 ;
-; Base class for all UI components
+; Screen drawing buffer
 ;
 ; hl = buffer start (must be 26.5 x 80)
 ; de = y / x coordinate
 ; hl <- buffer
 ; Modifies: af, de
-UINode_GetRelativePosition:
+UIBuffer_GetRelativePosition:
 	ld a,d  ; hl = d * 80
 	ld d,0  ; de = hl + e
 	add hl,de
@@ -26,7 +26,7 @@ UINode_GetRelativePosition:
 ; bc = height / width
 ; de = destination buffer
 ; hl = source buffer
-UINode_CopyToBuffer: PROC
+UIBuffer_CopyToBuffer: PROC
 Loop:
 	push bc
 	ld a,c

@@ -8,33 +8,33 @@ UINote_Paint:
 	ex de,hl
 	ld hl,UINote_background
 	ld bc,0610H
-	call UINode_CopyToBuffer
+	call UIBuffer_CopyToBuffer
 	pop hl
 
 	push hl
 	ld de,010AH
-	call UINode_GetRelativePosition
+	call UIBuffer_GetRelativePosition
 	ld a,(iy + Note.key)
 	call UIValue_Paint
 	pop hl
 
 	push hl
 	ld de,020AH
-	call UINode_GetRelativePosition
+	call UIBuffer_GetRelativePosition
 	ld a,(iy + Note.velocity)
 	call UIValue_Paint
 	pop hl
 
 	push hl
 	ld de,030AH
-	call UINode_GetRelativePosition
+	call UIBuffer_GetRelativePosition
 	ld a,(iy + Note.trigger)
 	call UIValue_Paint
 	pop hl
 
 	push hl
 	ld de,040AH
-	call UINode_GetRelativePosition
+	call UIBuffer_GetRelativePosition
 	ld a,(iy + Note.gate)
 	call UIValue_Paint
 	pop hl

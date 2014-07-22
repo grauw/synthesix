@@ -38,26 +38,26 @@ UISynthesix_Paint:
 	ex de,hl
 	ld hl,UISynthesix_template
 	ld bc,0150H
-	call UINode_CopyToBuffer
+	call UIBuffer_CopyToBuffer
 	pop hl
 
 	push hl
 	ld de,002FH
-	call UINode_GetRelativePosition
+	call UIBuffer_GetRelativePosition
 	call UISynthesix_PaintLiveIndicator
 	pop hl
 
 	push hl
 	ld iy,(Synthesix_program)
 	ld de,0100H
-	call UINode_GetRelativePosition
+	call UIBuffer_GetRelativePosition
 	call UIProgram_Paint
 	pop hl
 
 	push hl
 	ld iy,Channel_channels.0
 	ld de,1900H
-	call UINode_GetRelativePosition
+	call UIBuffer_GetRelativePosition
 	call UIKeyboard_Paint
 	pop hl
 
@@ -66,7 +66,7 @@ UISynthesix_Paint:
 	ld iy,(Synthesix_scc)
 	call SCC_GetVoice_IY
 	ld de,1300H
-	call UINode_GetRelativePosition
+	call UIBuffer_GetRelativePosition
 	call UISCCVoice_Paint
 	pop hl
 
@@ -75,7 +75,7 @@ UISynthesix_Paint:
 	ld iy,(Synthesix_scc)
 	call SCC_GetVoice_IY
 	ld de,1310H
-	call UINode_GetRelativePosition
+	call UIBuffer_GetRelativePosition
 	call UISCCVoice_Paint
 	pop hl
 
@@ -84,7 +84,7 @@ UISynthesix_Paint:
 	ld iy,(Synthesix_scc)
 	call SCC_GetVoice_IY
 	ld de,1320H
-	call UINode_GetRelativePosition
+	call UIBuffer_GetRelativePosition
 	call UISCCVoice_Paint
 	pop hl
 
@@ -93,7 +93,7 @@ UISynthesix_Paint:
 	ld iy,(Synthesix_scc)
 	call SCC_GetVoice_IY
 	ld de,1330H
-	call UINode_GetRelativePosition
+	call UIBuffer_GetRelativePosition
 	call UISCCVoice_Paint
 	pop hl
 
