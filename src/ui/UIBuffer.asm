@@ -1,7 +1,7 @@
 ;
 ; Screen drawing buffer
 ;
-; hl = buffer start (must be 26.5 x 80)
+; hl = current buffer position
 ; de = y / x coordinate
 ; hl <- buffer
 ; Modifies: af, de
