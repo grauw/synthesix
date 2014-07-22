@@ -54,6 +54,48 @@ VDP_Enable60Hz:
 	call VDP_SetRegister
 	ret
 
+VDP_EnableBlink: PROC
+	xor a
+	ld hl,0C00H
+	call VDP_SetColorTableBase
+	ld a,0F8H
+	ld (VDP_MIRROR_8 + 12),a
+	ld b,12
+	call VDP_SetRegister
+	ld a,0F0H
+	ld (VDP_MIRROR_8 + 13),a
+	ld b,13
+	call VDP_SetRegister
+	xor a
+	ld hl,0C00H
+	call VDP_SetWriteAddress
+	xor a
+	ld bc,0E02H
+ClearLoop:
+	out (98H),a
+	djnz ClearLoop
+	dec c
+	jp nz,ClearLoop
+	ret
+	ENDP
+
+; ahl = base address (17-bit, multiples of 200H)
+VDP_SetColorTableBase:
+	ld (TXTCOL),hl
+	add hl,hl
+	adc a,a
+	add hl,hl
+	adc a,a
+	ld (VDP_MIRROR_8 + 10),a
+	ld b,10
+	call VDP_SetRegister
+	ld a,h
+	or 00000111B
+	ld (VDP_MIRROR_0 + 3),a
+	ld b,3
+	call VDP_SetRegister
+	ret
+
 ;
 ; Detect VDP version
 ;
