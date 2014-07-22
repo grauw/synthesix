@@ -5,8 +5,6 @@ UISynthesix: MACRO
 	super: UINode UISynthesix_Update
 	title:
 		dw 0
-	program:
-		dw 0
 	size:
 	ENDM
 
@@ -32,24 +30,19 @@ UISynthesix_Constructor:
 	pop ix
 	ld (ix + UISynthesix.title),e
 	ld (ix + UISynthesix.title + 1),d
-
-	push ix
-	ld hl,(Synthesix_program)
-	ld de,0100H
-	call UIProgram_New_DE
-	pop ix
-	ld (ix + UISynthesix.program),e
-	ld (ix + UISynthesix.program + 1),d
 	ret
 
 UISynthesix_Update:
 	call UISynthesix_UpdateLiveIndicator
 
-	ld e,(ix + UISynthesix.program)
-	ld d,(ix + UISynthesix.program + 1)
-	call UINode_Update_DE
-
 	call UINode_GetBuffer
+
+	push hl
+	ld iy,(Synthesix_program)
+	ld de,0100H
+	call UINode_GetRelativePosition
+	call UIProgram_Paint
+	pop hl
 
 	push hl
 	ld iy,Channel_channels.0

@@ -1,61 +1,9 @@
 ;
 ; Display a program
 ;
-UIProgram: MACRO
-	super: UINode UIProgram_Update
-	program:
-		dw 0
-	size:
-	ENDM
-
-	dw UIProgram.size
-UIProgram_class: UIProgram
-
-; ix = parent
-; de = y / x coordinate
-; hl = program
-; ix <- instance
-UIProgram_New:
-	push ix
-	push hl
-	push de
-	ld iy,UIProgram_class
-	call Class_New
-	pop de
-	pop hl
-	pop iy
-	call UIProgram_Constructor
-	ret
-
-; ix = parent
-; de = y / x coordinate
-; hl = program
-; de <- instance
-UIProgram_New_DE:
-	call UIProgram_New
-	ld e,ixl
-	ld d,ixh
-	ret
-
-; ix = this
-; hl = program
-UIProgram_Constructor:
-	ld (ix + UIProgram.program),l
-	ld (ix + UIProgram.program + 1),h
-	push hl
-	call UINode_SetBuffer
-	pop iy
-	ret
-
-; ix = this
-UIProgram_Update:
-	call UINode_GetBuffer
-
-	ld e,(ix + UIProgram.program)
-	ld d,(ix + UIProgram.program + 1)
-	ld iyl,e
-	ld iyh,d
-
+; iy = program
+; hl = buffer
+UIProgram_Paint:
 	push hl
 	push iy
 	ld e,(iy + Program.channel)
