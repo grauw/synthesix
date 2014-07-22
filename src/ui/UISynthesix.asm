@@ -28,9 +28,13 @@ UISynthesix_Constructor:
 	ret
 
 UISynthesix_Update:
+	push ix
 	ld l,(ix + UISynthesix.buffer)
 	ld h,(ix + UISynthesix.buffer + 1)
 	call UISynthesix_Paint
+	pop ix
+
+	call UISynthesix_Draw
 	ret
 
 UISynthesix_Paint:
@@ -96,8 +100,6 @@ UISynthesix_Paint:
 	call UIBuffer_GetRelativePosition
 	call UISCCVoice_Paint
 	pop hl
-
-	call UISynthesix_Draw
 	ret
 
 UISynthesix_PaintLiveIndicator:
