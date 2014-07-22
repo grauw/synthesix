@@ -3,8 +3,6 @@
 ;
 UISynthesix: MACRO
 	super: UINode UISynthesix_Update
-	title:
-		dw 0
 	size:
 	ENDM
 
@@ -13,29 +11,39 @@ UISynthesix_class: UISynthesix
 
 ; ix = this
 UISynthesix_Constructor:
-	ld bc,UISynthesix_template_size
+	ld bc,27 * 80
 	push ix
 	ld ix,Heap_heap
 	call Heap_Allocate
 	pop ix
 	ld (ix + UISynthesix.super.buffer),e
 	ld (ix + UISynthesix.super.buffer + 1),d
-	ld hl,UISynthesix_template
+	ld l,e
+	ld h,d
+	ld (hl)," "
+	inc hl
+	dec bc
 	ldir
-
-	push ix
-	ld de,001EH
-	ld hl,UISynthesix_titleText
-	call UIText_New_DE
-	pop ix
-	ld (ix + UISynthesix.title),e
-	ld (ix + UISynthesix.title + 1),d
 	ret
 
 UISynthesix_Update:
-	call UISynthesix_UpdateLiveIndicator
-
 	call UINode_GetBuffer
+	call UISynthesix_Paint
+	ret
+
+UISynthesix_Paint:
+	push hl
+	ex de,hl
+	ld hl,UISynthesix_template
+	ld bc,0150H
+	call UINode_CopyToBuffer_DE
+	pop hl
+
+	push hl
+	ld de,002FH
+	call UINode_GetRelativePosition
+	call UISynthesix_PaintLiveIndicator
+	pop hl
 
 	push hl
 	ld iy,(Synthesix_program)
@@ -90,9 +98,7 @@ UISynthesix_Update:
 	call UISynthesix_Draw
 	ret
 
-UISynthesix_UpdateLiveIndicator:
-	ld de,002FH
-	call UINode_GetBufferPosition
+UISynthesix_PaintLiveIndicator:
 	ld a,(JIFFY)
 	bit 5,a
 	ld (hl),'x'
@@ -106,40 +112,12 @@ UISynthesix_Draw:
 	call VDP_SetWriteAddress
 	ld l,(ix + UISynthesix.super.buffer)
 	ld h,(ix + UISynthesix.super.buffer + 1)
-	ld bc,UISynthesix_template_size
+	ld bc,27 * 80
 	call VDP_Write
 	ret
 
 ;
-UISynthesix_titleText:
-	db " S y n t h e s i x ",0
-
 UISynthesix_template:
-	ds 80,23
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-	db "                                                                                "
-UISynthesix_template_size: equ $ - UISynthesix_template
+	ds 30,23
+	db " S y n t h e s i x "
+	ds 29,23
