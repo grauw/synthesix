@@ -8,7 +8,7 @@ UISCCVoice_Paint:
 	ex de,hl
 	ld hl,UISCCVoice_background
 	ld bc,0610H
-	call UINode_CopyToBuffer_DE
+	call UINode_CopyToBuffer
 	pop hl
 
 	push hl

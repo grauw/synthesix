@@ -8,7 +8,7 @@ UIKeyboard_Paint:
 	ex de,hl
 	ld hl,UIKeyboard_background
 	ld bc,0250H
-	call UINode_CopyToBuffer_DE
+	call UINode_CopyToBuffer
 	pop hl
 
 	push hl

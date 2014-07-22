@@ -26,7 +26,7 @@ UINode_GetRelativePosition:
 ; bc = height / width
 ; de = destination buffer
 ; hl = source buffer
-UINode_CopyToBuffer_DE: PROC
+UINode_CopyToBuffer: PROC
 Loop:
 	push bc
 	ld a,c

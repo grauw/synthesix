@@ -38,7 +38,7 @@ UISynthesix_Paint:
 	ex de,hl
 	ld hl,UISynthesix_template
 	ld bc,0150H
-	call UINode_CopyToBuffer_DE
+	call UINode_CopyToBuffer
 	pop hl
 
 	push hl

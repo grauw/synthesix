@@ -8,7 +8,7 @@ UIControllerBank_Paint:
 	ex de,hl
 	ld hl,UIControllerBank_background
 	ld bc,1010H
-	call UINode_CopyToBuffer_DE
+	call UINode_CopyToBuffer
 	pop hl
 
 	push hl
