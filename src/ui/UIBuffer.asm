@@ -1,6 +1,62 @@
 ;
 ; Screen drawing buffer
 ;
+UIBuffer: MACRO
+	WIDTH: equ 80
+	HEIGHT: equ 27
+	buffer:
+		dw 0
+	size:
+	ENDM
+
+	dw UIBuffer.size
+UIBuffer_class: UIBuffer
+
+; ix <- this
+UIBuffer_New:
+	push af
+	push bc
+	push de
+	ld iy,UIBuffer_class
+	call Class_New
+	pop de
+	pop bc
+	pop af
+	jp UIBuffer_Constructor
+
+; ix = this
+UIBuffer_Constructor:
+	ld bc,UIBuffer.HEIGHT * UIBuffer.WIDTH
+	push ix
+	ld ix,Heap_heap
+	call Heap_Allocate
+	pop ix
+	ld (ix + UIBuffer.buffer),e
+	ld (ix + UIBuffer.buffer + 1),d
+	ld l,e
+	ld h,d
+	ld (hl)," "
+	inc hl
+	dec bc
+	ldir
+	ret
+
+; hl <- buffer
+UIBuffer_GetBuffer:
+	ld l,(ix + UIBuffer.buffer)
+	ld h,(ix + UIBuffer.buffer + 1)
+	ret
+
+; ix = this
+; de = y / x coordinate
+; hl <- buffer
+; Modifies: af, bc, de
+UIBuffer_GetPosition:
+	ld l,(ix + UIBuffer.buffer)
+	ld h,(ix + UIBuffer.buffer + 1)
+	call UIBuffer_GetRelativePosition
+	ret
+
 ; hl = current buffer position
 ; de = y / x coordinate
 ; hl <- buffer
@@ -45,3 +101,14 @@ NoAdd:
 	djnz Loop
 	ret
 	ENDP
+
+; ix = this
+UIBuffer_Draw:
+	ld a,0
+	ld hl,0
+	call VDP_SetWriteAddress
+	ld l,(ix + UIBuffer.buffer)
+	ld h,(ix + UIBuffer.buffer + 1)
+	ld bc,UIBuffer.HEIGHT * UIBuffer.WIDTH
+	call VDP_Write
+	ret

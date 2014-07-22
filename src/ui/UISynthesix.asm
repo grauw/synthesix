@@ -12,31 +12,28 @@ UISynthesix_class: UISynthesix
 
 ; ix = this
 UISynthesix_Constructor:
-	ld bc,27 * 80
 	push ix
-	ld ix,Heap_heap
-	call Heap_Allocate
+	call UIBuffer_New
+	ld e,ixl
+	ld d,ixh
 	pop ix
 	ld (ix + UISynthesix.buffer),e
 	ld (ix + UISynthesix.buffer + 1),d
-	ld l,e
-	ld h,d
-	ld (hl)," "
-	inc hl
-	dec bc
-	ldir
 	ret
 
 UISynthesix_Update:
 	push ix
-	ld l,(ix + UISynthesix.buffer)
-	ld h,(ix + UISynthesix.buffer + 1)
+	ld e,(ix + UISynthesix.buffer)
+	ld d,(ix + UISynthesix.buffer + 1)
+	ld ixl,e
+	ld ixh,d
+	call UIBuffer_GetBuffer
 	call UISynthesix_Paint
+	call UIBuffer_Draw
 	pop ix
-
-	call UISynthesix_Draw
 	ret
 
+; hl = buffer
 UISynthesix_Paint:
 	push hl
 	ex de,hl
@@ -108,16 +105,6 @@ UISynthesix_PaintLiveIndicator:
 	ld (hl),'x'
 	ret z
 	ld (hl),'X'
-	ret
-
-UISynthesix_Draw:
-	ld a,0
-	ld hl,0
-	call VDP_SetWriteAddress
-	ld l,(ix + UISynthesix.buffer)
-	ld h,(ix + UISynthesix.buffer + 1)
-	ld bc,27 * 80
-	call VDP_Write
 	ret
 
 ;

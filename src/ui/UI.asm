@@ -22,7 +22,7 @@ UI_Init:
 	call Class_New
 	ld (UI_root),ix
 	call UISynthesix_Constructor
-	call UISynthesix_Draw
+	call UISynthesix_Update
 	ret
 
 UI_Update:
