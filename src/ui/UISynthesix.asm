@@ -2,7 +2,8 @@
 ;
 ;
 UISynthesix: MACRO
-	super: UINode UISynthesix_Update
+	buffer:
+		dw 0
 	size:
 	ENDM
 
@@ -16,8 +17,8 @@ UISynthesix_Constructor:
 	ld ix,Heap_heap
 	call Heap_Allocate
 	pop ix
-	ld (ix + UISynthesix.super.buffer),e
-	ld (ix + UISynthesix.super.buffer + 1),d
+	ld (ix + UISynthesix.buffer),e
+	ld (ix + UISynthesix.buffer + 1),d
 	ld l,e
 	ld h,d
 	ld (hl)," "
@@ -27,7 +28,8 @@ UISynthesix_Constructor:
 	ret
 
 UISynthesix_Update:
-	call UINode_GetBuffer
+	ld l,(ix + UISynthesix.buffer)
+	ld h,(ix + UISynthesix.buffer + 1)
 	call UISynthesix_Paint
 	ret
 
@@ -110,8 +112,8 @@ UISynthesix_Draw:
 	ld a,0
 	ld hl,0
 	call VDP_SetWriteAddress
-	ld l,(ix + UISynthesix.super.buffer)
-	ld h,(ix + UISynthesix.super.buffer + 1)
+	ld l,(ix + UISynthesix.buffer)
+	ld h,(ix + UISynthesix.buffer + 1)
 	ld bc,27 * 80
 	call VDP_Write
 	ret
