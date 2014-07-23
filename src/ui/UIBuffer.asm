@@ -36,7 +36,7 @@ UIBuffer_Constructor:
 	ld l,e
 	ld h,d
 	ld (hl)," "
-	inc hl
+	inc de
 	dec bc
 	ldir
 	ret
