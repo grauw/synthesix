@@ -6,6 +6,8 @@ UIBuffer: MACRO
 	HEIGHT: equ 27
 	buffer:
 		dw 0
+	blinkBuffer:
+		dw 0
 	size:
 	ENDM
 
@@ -39,12 +41,56 @@ UIBuffer_Constructor:
 	inc de
 	dec bc
 	ldir
+	ld bc,UIBuffer.HEIGHT * UIBuffer.WIDTH / 8
+	push ix
+	ld ix,Heap_heap
+	call Heap_Allocate
+	pop ix
+	ld (ix + UIBuffer.blinkBuffer),e
+	ld (ix + UIBuffer.blinkBuffer + 1),d
+	ld l,e
+	ld h,d
+	ld (hl),0
+	inc de
+	dec bc
+	ldir
 	ret
 
 ; hl <- buffer
 UIBuffer_GetBuffer:
 	ld l,(ix + UIBuffer.buffer)
 	ld h,(ix + UIBuffer.buffer + 1)
+	ret
+
+; hl <- blink buffer
+UIBuffer_GetBlinkBuffer:
+	ld l,(ix + UIBuffer.blinkBuffer)
+	ld h,(ix + UIBuffer.blinkBuffer + 1)
+	ret
+
+; hl = buffer address
+; hl <- blink buffer address
+; a <- blink position
+UIBuffer_GetBlinkByBuffer:
+	ld e,(ix + UIBuffer.buffer)
+	ld d,(ix + UIBuffer.buffer + 1)
+	xor a
+	sbc hl,de
+	rr h
+	rr l
+	rra
+	rr h
+	rr l
+	rra
+	rr h
+	rr l
+	rra
+	rlca
+	rlca
+	rlca
+	ld e,(ix + UIBuffer.blinkBuffer)
+	ld d,(ix + UIBuffer.blinkBuffer + 1)
+	add hl,de
 	ret
 
 ; ix = this
@@ -110,5 +156,12 @@ UIBuffer_Draw:
 	ld l,(ix + UIBuffer.buffer)
 	ld h,(ix + UIBuffer.buffer + 1)
 	ld bc,UIBuffer.HEIGHT * UIBuffer.WIDTH
+	call VDP_Write
+	ld a,0
+	ld hl,(TXTCOL)
+	call VDP_SetWriteAddress
+	ld l,(ix + UIBuffer.blinkBuffer)
+	ld h,(ix + UIBuffer.blinkBuffer + 1)
+	ld bc,UIBuffer.HEIGHT * UIBuffer.WIDTH / 8
 	call VDP_Write
 	ret
