@@ -50,6 +50,7 @@ ROM_BANK_A000_CHANGE: equ 0B000H
 	INCLUDE "BIOS.asm"
 	INCLUDE "System.asm"
 	INCLUDE "Memory.asm"
+	INCLUDE "ArrayList.asm"
 	INCLUDE "VDP.asm"
 	INCLUDE "Math.asm"
 	INCLUDE "Heap.asm"
