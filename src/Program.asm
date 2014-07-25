@@ -13,7 +13,7 @@ Program: MACRO
 Program_class: Program
 
 ; hl = channel
-; ix <- new class
+; ix <- new object
 Program_New:
 	push hl
 	ld iy,Program_class

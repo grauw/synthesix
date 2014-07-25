@@ -10,7 +10,7 @@ Value: MACRO ?value
 	dw Value.size
 Value_class: Value 0
 
-; ix <- new class
+; ix <- new object
 Value_New:
 	ld iy,Value_class
 	call Class_New

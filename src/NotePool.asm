@@ -48,7 +48,7 @@ QueuedNote: MACRO
 	dw NotePool.size
 NotePool_class: NotePool
 
-; ix <- new class
+; ix <- new object
 NotePool_New:
 	ld iy,NotePool_class
 	call Class_New

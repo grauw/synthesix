@@ -16,7 +16,7 @@ Or: MACRO
 	dw Or.size
 Or_class: Or
 
-; ix <- new class
+; ix <- new object
 Or_New:
 	ld iy,Or_class
 	call Class_New

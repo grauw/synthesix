@@ -20,7 +20,7 @@ AddPitch: MACRO
 	dw AddPitch.size
 AddPitch_class: Value 0
 
-; ix <- new class
+; ix <- new object
 AddPitch_New:
 	ld iy,AddPitch_class
 	call Class_New

@@ -22,7 +22,7 @@ EnvelopeAD: MACRO
 	dw EnvelopeAD.size
 EnvelopeAD_class: EnvelopeAD
 
-; ix <- new class
+; ix <- new object
 EnvelopeAD_New:
 	ld iy,EnvelopeAD_class
 	call Class_New

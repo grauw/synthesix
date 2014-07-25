@@ -14,7 +14,7 @@ Attenuate: MACRO
 	dw Attenuate.size
 Attenuate_class: Attenuate
 
-; ix <- new class
+; ix <- new object
 Attenuate_New:
 	ld iy,Attenuate_class
 	call Class_New

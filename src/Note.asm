@@ -18,7 +18,7 @@ Note: MACRO
 	dw Note.size
 Note_class: Note
 
-; ix <- new class
+; ix <- new object
 Note_New:
 	ld iy,Note_class
 	call Class_New

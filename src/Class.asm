@@ -17,7 +17,7 @@ Cont:
 	ret
 	ENDP
 
-; Allocate a new class in the upper memory heap.
+; Allocate a new object in the upper memory heap.
 ; Parameters are the same as New.
 Class_NewUpper:
 	ld ix,Heap_heapUpper
@@ -25,9 +25,9 @@ Class_NewUpper:
 
 ; iy = class template
 ; de = destination address
-; ix <- new class
+; ix <- new object
 ; iy <- class template
-; de <- new class end address
+; de <- new object end address
 ; Modifies: bc, de, hl, ix
 Class_Copy:
 	ld c,(iy - 2)

@@ -16,7 +16,7 @@ Patch: MACRO
 	dw Patch.size
 Patch_class: Patch
 
-; ix <- new class
+; ix <- new object
 Patch_New:
 	ld iy,Patch_class
 	call Class_New

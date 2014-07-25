@@ -20,7 +20,7 @@ PitchBend: MACRO
 	dw PitchBend.size
 PitchBend_class: PitchBend
 
-; ix <- new class
+; ix <- new object
 PitchBend_New:
 	ld iy,PitchBend_class
 	call Class_New

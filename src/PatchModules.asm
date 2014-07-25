@@ -13,7 +13,7 @@ PatchModules: MACRO
 	dw PatchModules.size
 PatchModules_class: PatchModules
 
-; ix <- new class
+; ix <- new object
 PatchModules_New:
 	ld iy,PatchModules_class
 	call Class_New

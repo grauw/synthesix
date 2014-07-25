@@ -29,7 +29,7 @@ Channel: MACRO
 	dw Channel.size
 Channel_class: Channel
 
-; ix <- new class
+; ix <- new object
 Channel_New:
 	ld iy,Channel_class
 	call Class_New
