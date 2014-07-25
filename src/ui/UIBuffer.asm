@@ -28,32 +28,22 @@ UIBuffer_New:
 
 ; ix = this
 UIBuffer_Constructor:
-	ld bc,UIBuffer.HEIGHT * UIBuffer.WIDTH
 	push ix
+	ld a," "
+	ld bc,UIBuffer.HEIGHT * UIBuffer.WIDTH
 	ld ix,Heap_heap
-	call Heap_Allocate
+	call Heap_AllocateClear
 	pop ix
 	ld (ix + UIBuffer.buffer),e
 	ld (ix + UIBuffer.buffer + 1),d
-	ld l,e
-	ld h,d
-	ld (hl)," "
-	inc de
-	dec bc
-	ldir
-	ld bc,UIBuffer.HEIGHT * UIBuffer.WIDTH / 8
 	push ix
+	ld a,0
+	ld bc,UIBuffer.HEIGHT * UIBuffer.WIDTH / 8
 	ld ix,Heap_heap
-	call Heap_Allocate
+	call Heap_AllocateClear
 	pop ix
 	ld (ix + UIBuffer.blinkBuffer),e
 	ld (ix + UIBuffer.blinkBuffer + 1),d
-	ld l,e
-	ld h,d
-	ld (hl),0
-	inc de
-	dec bc
-	ldir
 	ret
 
 ; hl <- buffer
