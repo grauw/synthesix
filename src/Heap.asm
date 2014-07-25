@@ -14,7 +14,7 @@ Heap: MACRO ?start, ?size
 ; bc <- allocated space
 ; de <- allocated memory start address
 ; hl <- allocated memory end address
-; Modifies: bc, de, hl
+; Modifies: f, bc, de, hl
 ; Throws out of memory exception
 Heap_Allocate: PROC
 	ld l,(ix + Heap.capacity)
