@@ -81,8 +81,6 @@ SCC_Constructor:
 	ld c,SCC_FREQUENCY_1
 	ld d,SCC_AMPLITUDE_1
 	call SCCVoice_New
-	ld e,ixl
-	ld d,ixh
 	pop ix
 	ld (ix + SCC.voices),e
 	ld (ix + SCC.voices + 1),d
@@ -93,8 +91,6 @@ SCC_Constructor:
 	ld c,SCC_FREQUENCY_2
 	ld d,SCC_AMPLITUDE_2
 	call SCCVoice_New
-	ld e,ixl
-	ld d,ixh
 	pop ix
 	ld (ix + SCC.voices + 2),e
 	ld (ix + SCC.voices + 3),d
@@ -105,8 +101,6 @@ SCC_Constructor:
 	ld c,SCC_FREQUENCY_3
 	ld d,SCC_AMPLITUDE_3
 	call SCCVoice_New
-	ld e,ixl
-	ld d,ixh
 	pop ix
 	ld (ix + SCC.voices + 4),e
 	ld (ix + SCC.voices + 5),d
@@ -117,8 +111,6 @@ SCC_Constructor:
 	ld c,SCC_FREQUENCY_4
 	ld d,SCC_AMPLITUDE_4
 	call SCCVoice_New
-	ld e,ixl
-	ld d,ixh
 	pop ix
 	ld (ix + SCC.voices + 6),e
 	ld (ix + SCC.voices + 7),d
