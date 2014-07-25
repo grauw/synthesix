@@ -22,6 +22,7 @@ Listener: MACRO
 ; ix = this
 ; de = object
 ; hl = callback
+; Modifies: af, bc, ix
 Listeners_AddListener: PROC
 	ld a,(ix + Listeners.size)
 	cp (ix + Listeners.maxSize)
@@ -44,7 +45,7 @@ First:
 ; ix = this
 ; a = listener number
 ; ix <- listener
-; Modifies: bc
+; Modifies: bc, ix
 Listeners_GetListener:
 	ld bc,Listeners.Update
 	add ix,bc
