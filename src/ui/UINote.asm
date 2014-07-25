@@ -14,29 +14,29 @@ UINote_Paint:
 	push hl
 	ld de,010AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + Note.key)
-	call UIValue_Paint
+	ld a,Note.key
+	call UIOutput_Paint
 	pop hl
 
 	push hl
 	ld de,020AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + Note.velocity)
-	call UIValue_Paint
+	ld a,Note.velocity
+	call UIOutput_Paint
 	pop hl
 
 	push hl
 	ld de,030AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + Note.trigger)
-	call UIValue_Paint
+	ld a,Note.trigger
+	call UIOutput_Paint
 	pop hl
 
 	push hl
 	ld de,040AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + Note.gate)
-	call UIValue_Paint
+	ld a,Note.gate
+	call UIOutput_Paint
 	pop hl
 	ret
 

@@ -14,29 +14,29 @@ UIChannel_Paint:
 	push hl
 	ld de,010AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + Channel.program)
-	call UIValue_Paint
+	ld a,Channel.program
+	call UIOutput_Paint
 	pop hl
 
 	push hl
 	ld de,020AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + Channel.channelPressure)
-	call UIValue_Paint
+	ld a,Channel.channelPressure
+	call UIOutput_Paint
 	pop hl
 
 	push hl
 	ld de,030AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + Channel.pitchBendCoarse)
-	call UIValue_Paint
+	ld a,Channel.pitchBendCoarse
+	call UIOutput_Paint
 	pop hl
 
 	push hl
 	ld de,040AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + Channel.pitchBendFine)
-	call UIValue_Paint
+	ld a,Channel.pitchBendFine
+	call UIOutput_Paint
 	pop hl
 	ret
 

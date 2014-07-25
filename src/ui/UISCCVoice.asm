@@ -22,37 +22,29 @@ UISCCVoice_Paint:
 	push hl
 	ld de,010AH
 	call UIBuffer_GetRelativePosition
-	ld e,(iy + SCCVoice.note)
-	ld d,(iy + SCCVoice.note + 1)
-	ld a,(de)
-	call UIValue_Paint
+	ld a,SCCVoice.note
+	call UIInput_Paint
 	pop hl
 
 	push hl
 	ld de,020AH
 	call UIBuffer_GetRelativePosition
-	ld e,(iy + SCCVoice.detune)
-	ld d,(iy + SCCVoice.detune + 1)
-	ld a,(de)
-	call UIValue_Paint
+	ld a,SCCVoice.detune
+	call UIInput_Paint
 	pop hl
 
 	push hl
 	ld de,030AH
 	call UIBuffer_GetRelativePosition
-	ld e,(iy + SCCVoice.amplitude)
-	ld d,(iy + SCCVoice.amplitude + 1)
-	ld a,(de)
-	call UIValue_Paint
+	ld a,SCCVoice.amplitude
+	call UIInput_Paint
 	pop hl
 
 	push hl
 	ld de,040AH
 	call UIBuffer_GetRelativePosition
-	ld e,(iy + SCCVoice.wave)
-	ld d,(iy + SCCVoice.wave + 1)
-	ld a,(de)
-	call UIValue_Paint
+	ld a,SCCVoice.wave
+	call UIInput_Paint
 	pop hl
 	ret
 

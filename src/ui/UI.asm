@@ -5,6 +5,8 @@
 	INCLUDE "Font.asm"
 	INCLUDE "UIBuffer.asm"
 	INCLUDE "UIValue.asm"
+	INCLUDE "UIInput.asm"
+	INCLUDE "UIOutput.asm"
 	INCLUDE "UISynthesix.asm"
 	INCLUDE "UIProgram.asm"
 	INCLUDE "UIChannel.asm"

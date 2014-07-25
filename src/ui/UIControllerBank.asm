@@ -14,99 +14,99 @@ UIControllerBank_Paint:
 	push hl
 	ld de,010AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + ControllerBank.controllers.1)
-	call UIValue_Paint
+	ld a,ControllerBank.controllers.1
+	call UIOutput_Paint
 	pop hl
 
 	push hl
 	ld de,020AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + ControllerBank.controllers.7)
-	call UIValue_Paint
+	ld a,ControllerBank.controllers.7
+	call UIOutput_Paint
 	pop hl
 
 	push hl
 	ld de,030AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + ControllerBank.controllers.11)
-	call UIValue_Paint
+	ld a,ControllerBank.controllers.11
+	call UIOutput_Paint
 	pop hl
 
 	push hl
 	ld de,040AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + ControllerBank.controllers.12)
-	call UIValue_Paint
+	ld a,ControllerBank.controllers.12
+	call UIOutput_Paint
 	pop hl
 
 	push hl
 	ld de,050AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + ControllerBank.controllers.13)
-	call UIValue_Paint
+	ld a,ControllerBank.controllers.13
+	call UIOutput_Paint
 	pop hl
 
 	push hl
 	ld de,060AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + ControllerBank.controllers.14)
-	call UIValue_Paint
+	ld a,ControllerBank.controllers.14
+	call UIOutput_Paint
 	pop hl
 
 	push hl
 	ld de,070AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + ControllerBank.controllers.15)
-	call UIValue_Paint
+	ld a,ControllerBank.controllers.15
+	call UIOutput_Paint
 	pop hl
 
 	push hl
 	ld de,080AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + ControllerBank.controllers.16)
-	call UIValue_Paint
+	ld a,ControllerBank.controllers.16
+	call UIOutput_Paint
 	pop hl
 
 	push hl
 	ld de,090AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + ControllerBank.controllers.17)
-	call UIValue_Paint
+	ld a,ControllerBank.controllers.17
+	call UIOutput_Paint
 	pop hl
 
 	push hl
 	ld de,0A0AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + ControllerBank.controllers.18)
-	call UIValue_Paint
+	ld a,ControllerBank.controllers.18
+	call UIOutput_Paint
 	pop hl
 
 	push hl
 	ld de,0B0AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + ControllerBank.controllers.19)
-	call UIValue_Paint
+	ld a,ControllerBank.controllers.19
+	call UIOutput_Paint
 	pop hl
 
 	push hl
 	ld de,0C0AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + ControllerBank.controllers.20)
-	call UIValue_Paint
+	ld a,ControllerBank.controllers.20
+	call UIOutput_Paint
 	pop hl
 
 	push hl
 	ld de,0D0AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + ControllerBank.controllers.21)
-	call UIValue_Paint
+	ld a,ControllerBank.controllers.21
+	call UIOutput_Paint
 	pop hl
 
 	push hl
 	ld de,0E0AH
 	call UIBuffer_GetRelativePosition
-	ld a,(iy + ControllerBank.controllers.64)
-	call UIValue_Paint
+	ld a,ControllerBank.controllers.64
+	call UIOutput_Paint
 	pop hl
 	ret
 
