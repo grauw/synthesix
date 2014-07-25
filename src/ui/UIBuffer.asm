@@ -14,7 +14,7 @@ UIBuffer: MACRO
 	dw UIBuffer.size
 UIBuffer_class: UIBuffer
 
-; ix <- this
+; ix, de <- this
 UIBuffer_New:
 	push af
 	push bc
@@ -27,6 +27,7 @@ UIBuffer_New:
 	jp UIBuffer_Constructor
 
 ; ix = this
+; ix, de <- this
 UIBuffer_Constructor:
 	push ix
 	ld a," "
@@ -44,6 +45,8 @@ UIBuffer_Constructor:
 	pop ix
 	ld (ix + UIBuffer.blinkBuffer),e
 	ld (ix + UIBuffer.blinkBuffer + 1),d
+	ld e,ixl
+	ld d,ixh
 	ret
 
 ; hl <- buffer

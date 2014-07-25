@@ -14,8 +14,6 @@ UISynthesix_class: UISynthesix
 UISynthesix_Constructor:
 	push ix
 	call UIBuffer_New
-	ld e,ixl
-	ld d,ixh
 	pop ix
 	ld (ix + UISynthesix.buffer),e
 	ld (ix + UISynthesix.buffer + 1),d
