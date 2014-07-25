@@ -22,10 +22,8 @@ UI_Init:
 	call VDP_Enable60Hz
 	call VDP_EnableBlink
 	call Font_Install
-	ld iy,UISynthesix_class
-	call Class_New
+	call UISynthesix_New
 	ld (UI_root),ix
-	call UISynthesix_Constructor
 	call UISynthesix_Update
 	ret
 

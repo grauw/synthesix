@@ -10,13 +10,22 @@ UISynthesix: MACRO
 	dw UISynthesix.size
 UISynthesix_class: UISynthesix
 
+; ix, de <- new object
+UISynthesix_New:
+	ld iy,UISynthesix_class
+	call Class_New
+	jp UISynthesix_Constructor
+
 ; ix = this
+; ix, de <- this
 UISynthesix_Constructor:
 	push ix
 	call UIBuffer_New
 	pop ix
 	ld (ix + UISynthesix.buffer),e
 	ld (ix + UISynthesix.buffer + 1),d
+	ld e,ixl
+	ld d,ixh
 	ret
 
 UISynthesix_Update:
