@@ -27,15 +27,31 @@ Patch_New:
 
 ; ix = this
 ; ix <- this
-Patch_Constructor:
+Patch_Constructor: PROC
 	ld bc,Patch.MAX_MODULES
 	push ix
 	call ArrayList_New
 	pop ix
 	ld (ix + Patch.modules),e
 	ld (ix + Patch.modules + 1),d
+	push ix
+	ld b,(ix + Patch.polyphony)
+Loop:
+	push bc
+	push ix
+	call PatchModules_New
+	ex (sp),ix
+	pop bc
+	ld (ix + Patch.moduleLists),c
+	ld (ix + Patch.moduleLists + 1),b
+	inc ix
+	inc ix
+	pop bc
+	djnz Loop
+	pop ix
 	call Patch_Load
 	ret
+	ENDP
 
 ; ix = this
 ; ix <- this
@@ -45,9 +61,6 @@ Patch_Load: PROC
 	pop ix
 	ld (ix + Patch.notePool),e
 	ld (ix + Patch.notePool + 1),d
-	push ix
-	call Patch_InitModuleLists
-	pop ix
 	ld hl,Module_values
 	call Patch_AddModule                ; module 0
 	ld hl,Module_channel
@@ -173,24 +186,6 @@ Patch_GetNotePool:
 	ld ixl,e
 	ld ixh,d
 	ret
-
-; ix = this
-Patch_InitModuleLists: PROC
-	ld b,(ix + Patch.polyphony)
-Loop:
-	push bc
-	push ix
-	call PatchModules_New
-	ex (sp),ix
-	pop bc
-	ld (ix + Patch.moduleLists),c
-	ld (ix + Patch.moduleLists + 1),b
-	inc ix
-	inc ix
-	pop bc
-	djnz Loop
-	ret
-	ENDP
 
 ; ix = this
 ; hl = module factory
