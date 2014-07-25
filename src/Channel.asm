@@ -41,15 +41,11 @@ Channel_New:
 Channel_Constructor: PROC
 	push ix
 	call ControllerBank_New
-	ld e,ixl
-	ld d,ixh
 	pop ix
 	ld (ix + Channel.keys),e
 	ld (ix + Channel.keys + 1),d
 	push ix
 	call ControllerBank_New
-	ld e,ixl
-	ld d,ixh
 	pop ix
 	ld (ix + Channel.controllers),e
 	ld (ix + Channel.controllers + 1),d
