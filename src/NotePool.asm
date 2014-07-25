@@ -48,10 +48,17 @@ QueuedNote: MACRO
 	dw NotePool.size
 NotePool_class: NotePool
 
-; ix <- new object
+; ix, de <- new object
 NotePool_New:
 	ld iy,NotePool_class
 	call Class_New
+	jp NotePool_Constructor
+
+; ix = this
+; ix, de <- this
+NotePool_Constructor:
+	ld e,ixl
+	ld d,ixh
 	ret
 
 ; ix = this

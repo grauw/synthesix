@@ -27,8 +27,6 @@ Patch_New:
 Patch_Constructor: PROC
 	push ix
 	call NotePool_New
-	ld e,ixl
-	ld d,ixh
 	pop ix
 	ld (ix + Patch.notePool),e
 	ld (ix + Patch.notePool + 1),d
