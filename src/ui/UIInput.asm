@@ -15,7 +15,8 @@ UIInput_Paint:
 	ld c,(hl)
 	inc hl
 	ld b,(hl)
-	ld a,(bc)
 	ex de,hl
+	call UIFocus_Paint
+	ld a,(bc)
 	call UIValue_Paint
 	ret

@@ -11,6 +11,7 @@ UIOutput_Paint:
 	ld a,0
 	adc a,iyh
 	ld b,a
+	call UIFocus_Paint
 	ld a,(bc)
 	call UIValue_Paint
 	ret

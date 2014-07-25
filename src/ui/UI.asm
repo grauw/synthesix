@@ -4,6 +4,7 @@
 
 	INCLUDE "Font.asm"
 	INCLUDE "UIBuffer.asm"
+	INCLUDE "UIFocus.asm"
 	INCLUDE "UIValue.asm"
 	INCLUDE "UIInput.asm"
 	INCLUDE "UIOutput.asm"

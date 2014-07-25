@@ -71,6 +71,7 @@ UIBuffer_GetBlinkBuffer:
 ; hl = buffer address
 ; hl <- blink buffer address
 ; a <- blink position
+; Modifies: af, de, hl
 UIBuffer_GetBlinkByBuffer:
 	ld e,(ix + UIBuffer.buffer)
 	ld d,(ix + UIBuffer.buffer + 1)
@@ -148,6 +149,31 @@ NoAdd:
 	ret
 	ENDP
 
+; hl = buffer address
+; Modifies: af, de, hl
+UIBuffer_SetBlinkBit:
+	call UIBuffer_GetBlinkByBuffer
+	ld d,UIBuffer_blinkBits >> 8
+	add a,UIBuffer_blinkBits & 0FFH
+	ld e,a
+	ld a,(de)
+	or (hl)
+	ld (hl),a
+	ret
+
+; hl = buffer address
+; Modifies: af, de, hl
+UIBuffer_ResetBlinkBit:
+	call UIBuffer_GetBlinkByBuffer
+	ld d,UIBuffer_blinkBits >> 8
+	add a,UIBuffer_blinkBits & 0FFH
+	ld e,a
+	ld a,(de)
+	cpl
+	and (hl)
+	ld (hl),a
+	ret
+
 ; ix = this
 UIBuffer_Draw:
 	ld a,0
@@ -165,3 +191,15 @@ UIBuffer_Draw:
 	ld bc,UIBuffer.HEIGHT * UIBuffer.WIDTH / 8
 	call VDP_Write
 	ret
+
+	ALIGN 8
+UIBuffer_blinkBits:
+	db 10000000B
+	db 01000000B
+	db 00100000B
+	db 00010000B
+	db 00001000B
+	db 00000100B
+	db 00000010B
+	db 00000001B
+
