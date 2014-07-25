@@ -2,6 +2,7 @@
 ; A patch
 ;
 Patch: MACRO
+	MAX_MODULES: equ 128
 	polyphony:
 		db 4
 	notePool:
@@ -10,6 +11,8 @@ Patch: MACRO
 		REPT NotePool.MAX_NOTES
 		dw 0
 		ENDM
+	modules:
+		dw 0
 	size:
 	ENDM
 
@@ -24,7 +27,19 @@ Patch_New:
 
 ; ix = this
 ; ix <- this
-Patch_Constructor: PROC
+Patch_Constructor:
+	ld bc,Patch.MAX_MODULES
+	push ix
+	call ArrayList_New
+	pop ix
+	ld (ix + Patch.modules),e
+	ld (ix + Patch.modules + 1),d
+	call Patch_Load
+	ret
+
+; ix = this
+; ix <- this
+Patch_Load: PROC
 	push ix
 	call NotePool_New
 	pop ix
@@ -180,6 +195,15 @@ Loop:
 ; ix = this
 ; hl = module factory
 Patch_AddModule: PROC
+	push ix
+	ld e,(ix + Patch.modules)
+	ld d,(ix + Patch.modules + 1)
+	ld ixl,e
+	ld ixh,d
+	ex de,hl
+	call ArrayList_Add
+	ex de,hl
+	pop ix
 	push ix
 	pop iy
 	ld b,(ix + Patch.polyphony)
