@@ -40,10 +40,9 @@ Loop:
 	push bc
 	push ix
 	call PatchModules_New
-	ex (sp),ix
-	pop bc
-	ld (ix + Patch.moduleLists),c
-	ld (ix + Patch.moduleLists + 1),b
+	pop ix
+	ld (ix + Patch.moduleLists),e
+	ld (ix + Patch.moduleLists + 1),d
 	inc ix
 	inc ix
 	pop bc
