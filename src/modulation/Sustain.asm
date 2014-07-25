@@ -17,7 +17,7 @@ Sustain: MACRO
 	dw Sustain.size
 Sustain_class: Sustain
 
-; ix <- new object
+; ix, de <- new object
 Sustain_New:
 	ld iy,Sustain_class
 	call Class_New
@@ -25,6 +25,7 @@ Sustain_New:
 	ret
 
 ; ix = this
+; ix, de <- this
 Sustain_Constructor:
 	push ix
 	ld e,ixl

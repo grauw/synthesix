@@ -16,7 +16,7 @@ LFOTriangle: MACRO
 	dw LFOTriangle.size
 LFOTriangle_class: LFOTriangle
 
-; ix <- new object
+; ix, de <- new object
 LFOTriangle_New:
 	ld iy,LFOTriangle_class
 	call Class_New
@@ -24,6 +24,7 @@ LFOTriangle_New:
 	ret
 
 ; ix = this
+; ix, de <- this
 LFOTriangle_Constructor:
 	push ix
 	ld e,ixl

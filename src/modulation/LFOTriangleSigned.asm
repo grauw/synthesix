@@ -18,7 +18,7 @@ LFOTriangleSigned: MACRO
 	dw LFOTriangleSigned.size
 LFOTriangleSigned_class: LFOTriangleSigned
 
-; ix <- new object
+; ix, de <- new object
 LFOTriangleSigned_New:
 	ld iy,LFOTriangleSigned_class
 	call Class_New
@@ -26,6 +26,7 @@ LFOTriangleSigned_New:
 	ret
 
 ; ix = this
+; ix, de <- this
 LFOTriangleSigned_Constructor:
 	push ix
 	ld e,ixl

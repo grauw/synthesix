@@ -18,7 +18,7 @@ Note: MACRO
 	dw Note.size
 Note_class: Note
 
-; ix <- new object
+; ix, de <- new object
 Note_New:
 	ld iy,Note_class
 	call Class_New
@@ -26,7 +26,7 @@ Note_New:
 	ret
 
 ; ix = this
-; ix <- this
+; ix, de <- this
 Note_Constructor: PROC
 	push ix
 	ld e,ixl

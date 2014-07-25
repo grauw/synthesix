@@ -16,7 +16,7 @@ Or: MACRO
 	dw Or.size
 Or_class: Or
 
-; ix <- new object
+; ix, de <- new object
 Or_New:
 	ld iy,Or_class
 	call Class_New
@@ -24,6 +24,7 @@ Or_New:
 	ret
 
 ; ix = this
+; ix, de <- this
 Or_Constructor:
 	push ix
 	ld e,ixl

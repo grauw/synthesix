@@ -16,7 +16,7 @@ AttenuateAdd: MACRO
 	dw AttenuateAdd.size
 AttenuateAdd_class: AttenuateAdd
 
-; ix <- new object
+; ix, de <- new object
 AttenuateAdd_New:
 	ld iy,AttenuateAdd_class
 	call Class_New
@@ -24,6 +24,7 @@ AttenuateAdd_New:
 	ret
 
 ; ix = this
+; ix, de <- this
 AttenuateAdd_Constructor:
 	push ix
 	ld e,ixl

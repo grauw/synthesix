@@ -22,7 +22,7 @@ EnvelopeAD: MACRO
 	dw EnvelopeAD.size
 EnvelopeAD_class: EnvelopeAD
 
-; ix <- new object
+; ix, de <- new object
 EnvelopeAD_New:
 	ld iy,EnvelopeAD_class
 	call Class_New
@@ -30,6 +30,7 @@ EnvelopeAD_New:
 	ret
 
 ; ix = this
+; ix, de <- this
 EnvelopeAD_Constructor:
 	push ix
 	ld e,ixl

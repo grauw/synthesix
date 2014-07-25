@@ -22,7 +22,7 @@ EnvelopeAR: MACRO
 	dw EnvelopeAR.size
 EnvelopeAR_class: EnvelopeAR
 
-; ix <- new object
+; ix, de <- new object
 EnvelopeAR_New:
 	ld iy,EnvelopeAR_class
 	call Class_New
@@ -30,6 +30,7 @@ EnvelopeAR_New:
 	ret
 
 ; ix = this
+; ix, de <- this
 EnvelopeAR_Constructor:
 	push ix
 	ld e,ixl
