@@ -36,7 +36,7 @@ SCC: MACRO
 SCC_class: SCC
 
 ; a = slot
-; ix <- this
+; ix <- new object
 SCC_New:
 	push af
 	ld iy,SCC_class

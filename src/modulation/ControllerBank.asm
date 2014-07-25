@@ -8,6 +8,7 @@ ControllerBank: MACRO
 	dw ControllerBank.size
 ControllerBank_class: ControllerBank
 
+; ix <- new object
 ControllerBank_New:
 	ld iy,ControllerBank_class
 	call Class_New

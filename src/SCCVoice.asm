@@ -40,7 +40,7 @@ SCCVoice_class: SCCVoice
 ; b = wave register
 ; c = frequency register
 ; d = amplitude register
-; ix <- this
+; ix <- new object
 SCCVoice_New:
 	push af
 	push bc
