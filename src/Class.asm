@@ -2,7 +2,7 @@
 ; ix <- newly allocated class
 ; iy <- class template
 ; de <- newly allocated class end address
-; Modifies: bc, de, hl, ix
+; Modifies: f, bc, de, hl, ix
 Class_New: PROC
 	ld ix,Heap_heap
 Cont:
