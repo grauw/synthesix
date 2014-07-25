@@ -50,14 +50,13 @@ ArrayList_GetSize:
 
 ; bc = index
 ; ix = this
-; hl <- value
-; Modifies: af, hl
+; de <- value
+; Modifies: f, de, hl
 ArrayList_Get:
 	call ArrayList_GetElement
-	ld a,(hl)
+	ld e,(hl)
 	inc hl
-	ld h,(hl)
-	ld l,a
+	ld d,(hl)
 	ret
 
 ; bc = index
