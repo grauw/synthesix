@@ -45,6 +45,7 @@ Heap_outOfHeapException:
 ; Remaining parameters are the same as Allocate
 Heap_AllocateClear: PROC
 	call Heap_Allocate
+	push af
 	push bc
 	push de
 	push hl
@@ -53,12 +54,15 @@ Heap_AllocateClear: PROC
 	ld (de),a
 	inc de
 	dec bc
+	ld a,b
+	or c
 	jr z,Skip
 	ldir
 Skip:
 	pop hl
 	pop de
 	pop bc
+	pop af
 	ret
 	ENDP
 
