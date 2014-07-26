@@ -275,6 +275,23 @@ CoalescePreviousRoot:
 	jp CoalescePreviousRootContinue
 	ENDP
 
+; de = memory address
+; ix = this
+; f <- c: in this heap
+; Modifies: af, hl
+Heap_IsInHeap:
+	ld l,(ix + Heap.start)
+	ld h,(ix + Heap.start + 1)
+	scf
+	sbc hl,de
+	ret nc
+	ld a,l
+	add a,(ix + Heap.capacity)
+	ld l,a
+	ld a,h
+	adc a,(ix + Heap.capacity + 1)
+	ret
+
 ; Round bc up to a multiple of 4
 ; bc = value
 ; bc <- rounded value
