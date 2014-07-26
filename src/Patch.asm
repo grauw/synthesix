@@ -187,6 +187,21 @@ Patch_GetNotePool:
 	ld ixh,d
 	ret
 
+; a = note index
+; ix = this
+; ix <- module list
+; Modifies: af, bc, ix
+Patch_GetModuleList:
+	add a,a
+	ld c,a
+	ld b,0
+	add ix,bc
+	ld c,(ix + Patch.moduleLists)
+	ld b,(ix + Patch.moduleLists + 1)
+	ld ixl,c
+	ld ixh,b
+	ret
+
 ; ix = this
 ; hl = module factory
 Patch_AddModule: PROC
@@ -199,31 +214,25 @@ Patch_AddModule: PROC
 	call ArrayList_Add
 	ex de,hl
 	pop ix
-	push ix
-	pop iy
-	ld b,(ix + Patch.polyphony)
+	ld a,0
 Loop:
-	push bc
+	push af
 	push hl
 	push ix
-	push iy
+	push ix
+	call Patch_GetModuleList
+	ex (sp),ix
 	call Module_Acquire_HL
-	pop iy
-	push iy
 	ld e,ixl
 	ld d,ixh
-	ld c,(iy + Patch.moduleLists)
-	ld b,(iy + Patch.moduleLists + 1)
-	ld ixl,c
-	ld ixh,b
+	pop ix
 	call ArrayList_Add
-	pop iy
 	pop ix
 	pop hl
-	pop bc
-	inc iy
-	inc iy
-	djnz Loop
+	pop af
+	inc a
+	cp (ix + Patch.polyphony)
+	jp nz,Loop
 	ret
 	ENDP
 
@@ -231,17 +240,13 @@ Loop:
 ; hl = link source (h: module, l: offset)
 ; de = link destination (d: module, e: offset)
 Patch_AddLink: PROC
-	push ix
-	ld b,(ix + Patch.polyphony)
+	ld a,0
 Loop:
-	push bc
+	push af
 	push de
 	push hl
 	push ix
-	ld c,(ix + Patch.moduleLists)
-	ld b,(ix + Patch.moduleLists + 1)
-	ld ixl,c
-	ld ixh,b
+	call Patch_GetModuleList
 	ex de,hl
 	call Patch_GetModuleJack
 	ex de,hl
@@ -252,11 +257,10 @@ Loop:
 	pop ix
 	pop hl
 	pop de
-	pop bc
-	inc ix
-	inc ix
-	djnz Loop
-	pop ix
+	pop af
+	inc a
+	cp (ix + Patch.polyphony)
+	jp nz,Loop
 	ret
 	ENDP
 
