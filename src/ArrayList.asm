@@ -23,6 +23,10 @@ ArrayList_New:
 	pop bc
 	jp ArrayList_Constructor
 
+; ix = this
+ArrayList_Destroy:
+	ret
+
 ; bc = capacity
 ; ix = this
 ; ix, de <- this
@@ -66,7 +70,6 @@ ArrayList_Get:
 ArrayList_GetElement:
 	ld l,(ix + ArrayList.size)
 	ld h,(ix + ArrayList.size + 1)
-	dec hl
 	scf
 	sbc hl,bc
 	call c,System_ThrowException
@@ -117,13 +120,15 @@ Found:
 ArrayList_Add:
 	ld c,(ix + ArrayList.size)
 	ld b,(ix + ArrayList.size + 1)
-	push bc
 	inc bc
+	ld (ix + ArrayList.size),c
+	ld (ix + ArrayList.size + 1),b
 	ld l,(ix + ArrayList.capacity)
 	ld h,(ix + ArrayList.capacity + 1)
 	and a
 	sbc hl,bc
 	call c,System_ThrowException
+	dec bc
 	ld l,(ix + ArrayList.buffer)
 	ld h,(ix + ArrayList.buffer + 1)
 	add hl,bc
@@ -131,7 +136,6 @@ ArrayList_Add:
 	ld (hl),e
 	inc hl
 	ld (hl),d
-	pop bc
 	ret
 
 ; ix = this
@@ -159,4 +163,94 @@ ArrayList_Remove:
 	inc hl
 	pop bc
 	ldir
+	ret
+
+;
+ArrayList_UnitTest:
+	ld bc,4
+	call ArrayList_New
+
+	; add a value
+	ld de,1234H
+	call ArrayList_Add
+	and a
+	ld hl,0
+	sbc hl,bc
+	call nz,System_ThrowException
+	call ArrayList_GetSize
+	and a
+	ld hl,1
+	sbc hl,bc
+	call nz,System_ThrowException
+	ld bc,0
+	call ArrayList_Get
+	and a
+	ld hl,1234H
+	sbc hl,de
+	call nz,System_ThrowException
+
+	; Add another value
+	ld de,5678H
+	call ArrayList_Add
+	and a
+	ld hl,1
+	sbc hl,bc
+	call nz,System_ThrowException
+	call ArrayList_GetSize
+	and a
+	ld hl,2
+	sbc hl,bc
+	call nz,System_ThrowException
+	ld bc,1
+	call ArrayList_Get
+	and a
+	ld hl,5678H
+	sbc hl,de
+	call nz,System_ThrowException
+	ld bc,0
+	call ArrayList_Get
+	and a
+	ld hl,1234H
+	sbc hl,de
+	call nz,System_ThrowException
+
+	; Add another value then remove the second one
+	ld de,9ABCH
+	call ArrayList_Add
+	ld bc,1
+	call ArrayList_Remove
+	call ArrayList_GetSize
+	and a
+	ld hl,2
+	sbc hl,bc
+	call nz,System_ThrowException
+	ld bc,0
+	call ArrayList_Get
+	and a
+	ld hl,1234H
+	sbc hl,de
+	call nz,System_ThrowException
+	ld bc,1
+	call ArrayList_Get
+	and a
+	ld hl,9ABCH
+	sbc hl,de
+	call nz,System_ThrowException
+
+	; Remove the second (last) value
+	ld bc,1
+	call ArrayList_Remove
+	call ArrayList_GetSize
+	and a
+	ld hl,1
+	sbc hl,bc
+	call nz,System_ThrowException
+	ld bc,0
+	call ArrayList_Get
+	and a
+	ld hl,1234H
+	sbc hl,de
+	call nz,System_ThrowException
+
+	call ArrayList_Destroy
 	ret

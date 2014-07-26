@@ -12,6 +12,7 @@ Synthesix_Main:
 
 	call Memory_UnitTest
 	call Math_UnitTest
+	call ArrayList_UnitTest
 
 	ld ix,KeyMidi_instance
 	call KeyMidi_Constructor
