@@ -1,8 +1,6 @@
 ; iy = class template
-; ix <- newly allocated class
-; iy <- class template
-; de <- newly allocated class end address
-; Modifies: f, bc, de, hl, ix
+; ix <- new object
+; Modifies: af, bc, de, hl, ix
 Class_New: PROC
 	ld ix,Heap_heap
 Cont:
@@ -26,8 +24,6 @@ Class_NewUpper:
 ; iy = class template
 ; de = destination address
 ; ix <- new object
-; iy <- class template
-; de <- new object end address
 ; Modifies: bc, de, hl, ix
 Class_Copy:
 	ld c,(iy - 2)
