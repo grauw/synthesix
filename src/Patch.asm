@@ -249,9 +249,9 @@ Loop:
 	push ix
 	call Patch_GetModuleList
 	ex de,hl
-	call Patch_GetModuleJack
+	call Patch_ModuleList_GetModuleJack
 	ex de,hl
-	call Patch_GetModuleJack
+	call Patch_ModuleList_GetModuleJack
 	ld (hl),e
 	inc hl
 	ld (hl),d
@@ -270,7 +270,7 @@ Loop:
 ; l = module offset
 ; hl <- module jack point
 ; Modifies: f, bc, hl
-Patch_GetModuleJack:
+Patch_ModuleList_GetModuleJack:
 	push de
 	push hl
 	ld c,h
