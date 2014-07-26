@@ -221,7 +221,8 @@ Loop:
 	push ix
 	push ix
 	call Patch_GetModuleList
-	ex (sp),ix
+	pop iy
+	push ix
 	call Module_Acquire_HL
 	ld e,ixl
 	ld d,ixh

@@ -7,16 +7,20 @@ Module: MACRO ?acquirer
 	size:
 	ENDM
 
+; ix = this
+; iy = patch
 Module_Acquire:
 	ld l,(ix + Module.acquirer)
 	ld h,(ix + Module.acquirer + 1)
 	jp hl
 
+; hl = this
+; iy = patch
 Module_Acquire_HL:
 	push hl
-	pop iy
-	ld l,(iy + Module.acquirer)
-	ld h,(iy + Module.acquirer + 1)
+	pop ix
+	ld l,(ix + Module.acquirer)
+	ld h,(ix + Module.acquirer + 1)
 	jp hl
 
 ;
@@ -43,10 +47,10 @@ Module_ControllerBankFactory:
 
 Module_note: Module Module_NoteFactory
 
-; ix = Patch
+; iy = Patch
 Module_NoteFactory:
-	ld l,(ix + Patch.notePool)
-	ld h,(ix + Patch.notePool + 1)
+	ld l,(iy + Patch.notePool)
+	ld h,(iy + Patch.notePool + 1)
 	push hl
 	call Note_New
 	ex (sp),ix
