@@ -70,7 +70,6 @@ ROM_BANK_A000_CHANGE: equ 0B000H
 	INCLUDE "SCCVoice.asm"
 	INCLUDE "Program.asm"
 	INCLUDE "Patch.asm"
-	INCLUDE "PatchModules.asm"
 	INCLUDE "Module.asm"
 	INCLUDE "Listeners.asm"
 	INCLUDE "Clock.asm"

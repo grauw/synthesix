@@ -39,7 +39,8 @@ Patch_Constructor: PROC
 Loop:
 	push bc
 	push ix
-	call PatchModules_New
+	ld bc,Patch.MAX_MODULES
+	call ArrayList_New
 	pop ix
 	ld (ix + Patch.moduleLists),e
 	ld (ix + Patch.moduleLists + 1),d
@@ -209,12 +210,13 @@ Loop:
 	call Module_Acquire_HL
 	pop iy
 	push iy
-	ld l,(iy + Patch.moduleLists)
-	ld h,(iy + Patch.moduleLists + 1)
-	push hl
-	ex (sp),ix
-	pop hl
-	call PatchModules_AddModule
+	ld e,ixl
+	ld d,ixh
+	ld c,(iy + Patch.moduleLists)
+	ld b,(iy + Patch.moduleLists + 1)
+	ld ixl,c
+	ld ixh,b
+	call ArrayList_Add
 	pop iy
 	pop ix
 	pop hl
@@ -240,7 +242,13 @@ Loop:
 	ld b,(ix + Patch.moduleLists + 1)
 	ld ixl,c
 	ld ixh,b
-	call PatchModules_AddLink
+	ex de,hl
+	call Patch_GetModuleJack
+	ex de,hl
+	call Patch_GetModuleJack
+	ld (hl),e
+	inc hl
+	ld (hl),d
 	pop ix
 	pop hl
 	pop de
@@ -251,6 +259,23 @@ Loop:
 	pop ix
 	ret
 	ENDP
+
+; ix = module list
+; h = module index
+; l = module offset
+; hl <- module jack point
+; Modifies: f, bc, hl
+Patch_GetModuleJack:
+	push de
+	push hl
+	ld c,h
+	ld b,0
+	call ArrayList_Get
+	pop hl
+	ld h,0
+	add hl,de
+	pop de
+	ret
 
 ; hl <- controller
 Patch_GetController:
