@@ -17,6 +17,10 @@ Heap: MACRO ?start, ?size
 ; Modifies: f, bc, de, hl
 ; Throws out of memory exception
 Heap_Allocate: PROC
+	and a
+	ld hl,0
+	sbc hl,bc
+	call z,System_ThrowException
 	ld l,(ix + Heap.capacity)
 	ld h,(ix + Heap.capacity + 1)
 	and a
