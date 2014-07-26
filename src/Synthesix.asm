@@ -10,6 +10,9 @@ Synthesix_Main:
 	call Memory_EnableRAMInPage2
 	call RAM_Init
 
+	call Memory_UnitTest
+	call Math_UnitTest
+
 	ld ix,KeyMidi_instance
 	call KeyMidi_Constructor
 	call Channels_Init
@@ -20,9 +23,6 @@ Synthesix_Main:
 	ld hl,Channel_channels.0
 	call Program_New
 	ld (Synthesix_program),ix
-
-	call Memory_UnitTest
-	call Math_UnitTest
 
 	call UI_Init
 
