@@ -23,10 +23,6 @@ ArrayList_New:
 	pop bc
 	jp ArrayList_Constructor
 
-; ix = this
-ArrayList_Destroy:
-	ret
-
 ; bc = capacity
 ; ix = this
 ; ix, de <- this
@@ -43,6 +39,28 @@ ArrayList_Constructor:
 	ld (ix + ArrayList.buffer + 1),d
 	ld e,ixl
 	ld d,ixh
+	ret
+
+; ix = this
+ArrayList_Destroy:
+	call ArrayList_Destructor
+	ld iy,ArrayList_class
+	call Class_Destroy
+	ret
+
+; ix = this
+; ix <- this
+ArrayList_Destructor:
+	ld e,(ix + ArrayList.buffer)
+	ld d,(ix + ArrayList.buffer + 1)
+	ld c,(ix + ArrayList.capacity)
+	ld b,(ix + ArrayList.capacity + 1)
+	sla c
+	rl b
+	push ix
+	ld ix,Heap_heap
+	call Heap_Free
+	pop ix
 	ret
 
 ; ix = this
