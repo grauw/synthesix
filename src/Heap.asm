@@ -58,6 +58,7 @@ Heap_Constructor:
 
 ; ix = this
 ; bc = space
+; f <- c: can allocate
 ; Modifies: af, bc, de, hl, ix
 Heap_CanAllocate: PROC
 	call Heap_RoundBC
@@ -220,6 +221,9 @@ CoalesceNextContinue:
 	push hl  ; check if block connects to previous block
 	ld c,(ix + HeapBlock.space)
 	ld b,(ix + HeapBlock.space + 1)
+	ld a,b
+	or c
+	jp z,CoalescePreviousRoot     ; if root, do not coalesce
 	and a
 	sbc hl,bc
 	ld c,ixl
@@ -229,6 +233,7 @@ CoalesceNextContinue:
 	pop bc
 	jp z,CoalescePrevious
 	call c,System_ThrowException  ; already partially free (previous block)
+CoalescePreviousRootContinue:
 	ld (ix + HeapBlock.next),l
 	ld (ix + HeapBlock.next + 1),h
 CoalescePreviousContinue:
@@ -264,6 +269,10 @@ CoalescePrevious:
 	adc a,(ix + HeapBlock.space + 1)
 	ld b,a
 	jp CoalescePreviousContinue
+CoalescePreviousRoot:
+	pop hl
+	pop bc
+	jp CoalescePreviousRootContinue
 	ENDP
 
 ; Round bc up to a multiple of 4
@@ -301,6 +310,7 @@ Heap_UnitTest:
 	call Heap_TestAllocationSimple
 	call Heap_TestAllocationRounding
 	call Heap_TestAllocationFragmented
+	call Heap_TestAllocationLowerHeap
 	ret
 
 Heap_TestCanAllocate:
@@ -432,4 +442,12 @@ Heap_TestAllocationFragmented:
 	ld ix,Heap_heapUpper
 	call Heap_CanAllocate
 	call nc,System_ThrowException
+	ret
+
+Heap_TestAllocationLowerHeap:
+	ld bc,8
+	ld ix,Heap_heap
+	call Heap_Allocate
+	ld ix,Heap_heap
+	call Heap_Free
 	ret
