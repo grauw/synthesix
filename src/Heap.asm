@@ -1,40 +1,153 @@
 ;
 ; A heap
 ;
+; Heaps must be aligned to 4 bytes, the heap size must also be multiple of 4.
+; Space on the heap is allocated in multitudes of 4 bytes to coalesce slightly
+; differently sized objects and reduce fragmentation, and to keep room for the
+; information blocks.
+;
+; Free space is administered using 4-byte heap information blocks (HeapBlock),
+; which contain the size of the free space and a reference to the next block.
+; These form a linked list which is updated as space is allocated and freed.
+;
 Heap: MACRO ?start, ?size
-	position:
+	start:
 		dw ?start
 	capacity:
 		dw ?size
+	rootBlock: HeapBlock
 	size:
 	ENDM
+
+HeapBlock: MACRO
+	space:
+		dw 0
+	next:
+		dw 0
+	ENDM
+
+; ix = this
+Heap_Constructor:
+	ld l,(ix + Heap.start)
+	ld h,(ix + Heap.start + 1)
+	ld c,(ix + Heap.capacity)
+	ld b,(ix + Heap.capacity + 1)
+	ld a,b
+	or c
+	call z,System_ThrowException   ; capacity must not be 0
+	ld a,l
+	and 3
+	call nz,System_ThrowException  ; start position must be multiple of 4
+	ld a,c
+	and 3
+	call nz,System_ThrowException  ; capacity must be multiple of 4
+	push hl
+	add hl,bc
+	pop hl
+	call c,System_ThrowException   ; end position must not exceed 64k
+	ld (ix + Heap.rootBlock.next),l
+	ld (ix + Heap.rootBlock.next + 1),h
+	ld (hl),c
+	inc hl
+	ld (hl),b
+	inc hl
+	ld (hl),0
+	inc hl
+	ld (hl),0
+	ret
+
+; ix = this
+; bc = space
+; Modifies: af, bc, de, hl, ix
+Heap_CanAllocate: PROC
+	call Heap_RoundBC
+	ld de,Heap.rootBlock
+	add ix,de
+Loop:
+	ld a,(ix + HeapBlock.next)
+	ld d,(ix + HeapBlock.next + 1)
+	ld ixl,a
+	ld ixh,d
+	or d       ; if end reached (null pointer)
+	ret z
+	ld l,(ix + HeapBlock.space)
+	ld h,(ix + HeapBlock.space + 1)
+	sbc hl,bc
+	jp c,Loop
+	scf
+	ret
+	ENDP
+
+; ix = this
+; bc <- space
+; Modifies: af, bc, d, ix
+Heap_GetFreeSpace: PROC
+	ld bc,0
+	ld de,Heap.rootBlock
+	add ix,de
+Loop:
+	ld a,(ix + HeapBlock.next)
+	ld d,(ix + HeapBlock.next + 1)
+	ld ixl,a
+	ld ixh,d
+	or d       ; if end reached (null pointer)
+	ret z
+	ld a,c
+	add a,(ix + HeapBlock.space)
+	ld c,a
+	ld a,b
+	adc a,(ix + HeapBlock.space + 1)
+	ld b,a
+	jp Loop
+	ENDP
 
 ; ix = this
 ; bc = number of bytes to allocate
 ; bc <- allocated space
-; de <- allocated memory start address
-; hl <- allocated memory end address
-; Modifies: f, bc, de, hl
+; de <- allocated memory address
+; Modifies: af, bc, de, hl, ix
 ; Throws out of memory exception
 Heap_Allocate: PROC
-	and a
-	ld hl,0
+	call Heap_RoundBC
+	ld de,Heap.rootBlock
+	add ix,de
+	push de    ; dummy value
+Loop:
+	pop de     ; discard last value
+	push ix
+	ld a,(ix + HeapBlock.next)
+	ld d,(ix + HeapBlock.next + 1)
+	ld ixl,a
+	ld ixh,d
+	or d       ; if end reached (null pointer)
+	jr z,Throw
+	ld l,(ix + HeapBlock.space)
+	ld h,(ix + HeapBlock.space + 1)
 	sbc hl,bc
-	call z,System_ThrowException
-	ld l,(ix + Heap.capacity)
-	ld h,(ix + Heap.capacity + 1)
-	and a
-	sbc hl,bc
-	jr c,Throw
-	ld (ix + Heap.capacity),l
-	ld (ix + Heap.capacity + 1),h
-	ld e,(ix + Heap.position)
-	ld d,(ix + Heap.position + 1)
-	ld l,e
-	ld h,d
-	add hl,bc
-	ld (ix + Heap.position),l
-	ld (ix + Heap.position + 1),h
+	jp c,Loop
+	jp z,ExactFit
+Fit:
+	ld e,(ix + HeapBlock.next)
+	ld d,(ix + HeapBlock.next + 1)
+	add ix,bc
+	ld (ix + HeapBlock.space),l
+	ld (ix + HeapBlock.space + 1),h
+	ld (ix + HeapBlock.next),e
+	ld (ix + HeapBlock.next + 1),d
+	ex (sp),ix  ; ix = previous block
+	pop hl      ; hl = new block
+	ld (ix + HeapBlock.next),l
+	ld (ix + HeapBlock.next + 1),h
+	sbc hl,bc   ; de = removed block
+	ex de,hl
+	ret
+ExactFit:
+	ld l,(ix + HeapBlock.next)
+	ld h,(ix + HeapBlock.next + 1)
+	ex (sp),ix  ; ix = previous block
+	pop de      ; de = removed block
+	ld (ix + HeapBlock.next),l
+	ld (ix + HeapBlock.next + 1),h
 	ret
 Throw:
 	ld hl,Heap_outOfHeapException
@@ -48,11 +161,11 @@ Heap_outOfHeapException:
 ; a = clear value
 ; Remaining parameters are the same as Allocate
 Heap_AllocateClear: PROC
-	call Heap_Allocate
 	push af
+	call Heap_Allocate
+	pop af
 	push bc
 	push de
-	push hl
 	ld l,e
 	ld h,d
 	ld (de),a
@@ -63,12 +176,106 @@ Heap_AllocateClear: PROC
 	jr z,Skip
 	ldir
 Skip:
-	pop hl
 	pop de
 	pop bc
-	pop af
 	ret
 	ENDP
+
+; ix = this
+; bc = number of bytes to free
+; de = memory address to free
+; Modifies: af, bc, de, hl, ix
+Heap_Free: PROC
+	ex de,hl   ; hl = memory address
+	call Heap_RoundBC
+	ld de,Heap.rootBlock
+	add ix,de
+Loop:
+	ld e,(ix + HeapBlock.next)
+	ld d,(ix + HeapBlock.next + 1)
+	ld a,e
+	or d       ; if end reached (null pointer)
+	jp z,PassedEnd
+	sbc hl,de
+	call z,System_ThrowException  ; already free
+	jp c,Passed
+	add hl,de  ; restore hl value
+	ld ixl,e   ; move to next block
+	ld ixh,d
+	jp Loop
+Passed:
+	add hl,de
+	push hl    ; check if block connects to next block
+	add hl,bc
+	sbc hl,de
+	pop hl
+	jp z,CoalesceNext
+	call nc,System_ThrowException  ; already partially free (next block)
+PassedEnd:
+CoalesceNextContinue:
+	push bc
+	push hl  ; check if block connects to previous block
+	ld c,(ix + HeapBlock.space)
+	ld b,(ix + HeapBlock.space + 1)
+	and a
+	sbc hl,bc
+	ld c,ixl
+	ld b,ixh
+	sbc hl,bc
+	pop hl
+	pop bc
+	jp z,CoalescePrevious
+	call c,System_ThrowException  ; already partially free (previous block)
+	ld (ix + HeapBlock.next),l
+	ld (ix + HeapBlock.next + 1),h
+CoalescePreviousContinue:
+	ld (hl),c  ; write new block
+	inc hl
+	ld (hl),b
+	inc hl
+	ld (hl),e
+	inc hl
+	ld (hl),d
+	ret
+CoalesceNext:
+	push ix
+	ld ixl,e
+	ld ixh,d
+	ld e,(ix + HeapBlock.next)
+	ld d,(ix + HeapBlock.next + 1)
+	ld a,c     ; add coalesced block’s space to this one
+	add a,(ix + HeapBlock.space)
+	ld c,a
+	ld a,b
+	adc a,(ix + HeapBlock.space + 1)
+	ld b,a
+	pop ix
+	jp CoalesceNextContinue
+CoalescePrevious:
+	push ix
+	pop hl
+	ld a,c
+	add a,(ix + HeapBlock.space)
+	ld c,a
+	ld a,b
+	adc a,(ix + HeapBlock.space + 1)
+	ld b,a
+	jp CoalescePreviousContinue
+	ENDP
+
+; Round bc up to a multiple of 4
+; bc = value
+; bc <- rounded value
+Heap_RoundBC:
+	ld a,c
+	or b
+	call z,System_ThrowException
+	dec bc
+	ld a,c
+	or 3
+	ld c,a
+	inc bc
+	ret
 
 ;
 	SECTION RAM
@@ -79,7 +286,147 @@ Heap_heap:
 Heap_heapUpper:
 	Heap Heap_heapUpperSpace, 100H
 
+	ALIGN 4
 Heap_heapUpperSpace:
 	ds 100H
 
 	ENDS
+
+;
+Heap_UnitTest:
+	call Heap_TestCanAllocate
+	call Heap_TestAllocationSimple
+	call Heap_TestAllocationRounding
+	call Heap_TestAllocationFragmented
+	ret
+
+Heap_TestCanAllocate:
+	; check available space
+	ld bc,(Heap_heapUpper + Heap.capacity)
+	ld ix,Heap_heapUpper
+	call Heap_CanAllocate
+	call nc,System_ThrowException
+	ld bc,(Heap_heapUpper + Heap.capacity)
+	inc bc
+	ld ix,Heap_heapUpper
+	call Heap_CanAllocate
+	call c,System_ThrowException
+	ret
+
+Heap_TestAllocationSimple:
+	; allocate entire heap
+	ld bc,(Heap_heapUpper + Heap.capacity)
+	ld ix,Heap_heapUpper
+	call Heap_Allocate
+	ld hl,Heap_heapUpperSpace
+	and a
+	sbc hl,de
+	call nz,System_ThrowException
+	push bc
+	push de
+	ld ix,Heap_heapUpper
+	call Heap_GetFreeSpace
+	ld a,b
+	or c
+	call nz,System_ThrowException
+	pop de
+	pop bc
+
+	; free allocated space
+	ld ix,Heap_heapUpper
+	call Heap_Free
+	ld ix,Heap_heapUpper
+	call Heap_GetFreeSpace
+	and a
+	ld hl,(Heap_heapUpper + Heap.capacity)
+	sbc hl,bc
+	call nz,System_ThrowException
+	ld bc,(Heap_heapUpper + Heap.capacity)
+	ld ix,Heap_heapUpper
+	call Heap_CanAllocate
+	call nc,System_ThrowException
+	ret
+
+Heap_TestAllocationRounding:
+	ld bc,1
+	ld ix,Heap_heapUpper
+	call Heap_Allocate
+	push bc
+	push de
+	and a
+	ld hl,4
+	sbc hl,bc
+	call nz,System_ThrowException
+	ld ix,Heap_heapUpper
+	call Heap_GetFreeSpace
+	and a
+	ld hl,(Heap_heapUpper + Heap.capacity)
+	ld de,4
+	sbc hl,de
+	sbc hl,bc
+	call nz,System_ThrowException
+	pop de
+	pop bc
+	ld ix,Heap_heapUpper
+	call Heap_Free
+	ld ix,Heap_heapUpper
+	call Heap_GetFreeSpace
+	and a
+	ld hl,(Heap_heapUpper + Heap.capacity)
+	sbc hl,bc
+	call nz,System_ThrowException
+	ret
+
+Heap_TestAllocationFragmented:
+	; allocate two objects and then free the first
+	ld bc,8
+	ld ix,Heap_heapUpper
+	call Heap_Allocate
+	exx
+	ld bc,8
+	ld ix,Heap_heapUpper
+	call Heap_Allocate
+	push bc
+	push de
+	exx
+	ld ix,Heap_heapUpper
+	call Heap_Free
+	ld ix,Heap_heapUpper
+	call Heap_GetFreeSpace
+	and a
+	ld hl,(Heap_heapUpper + Heap.capacity)
+	ld de,8
+	sbc hl,de
+	sbc hl,bc
+	call nz,System_ThrowException
+
+	; allocate and free remaining space
+	ld hl,-8
+	add hl,bc
+	ld c,l
+	ld b,h
+	ld ix,Heap_heapUpper
+	call Heap_Allocate
+	push bc
+	push de
+	ld ix,Heap_heapUpper
+	call Heap_GetFreeSpace
+	and a
+	ld hl,8
+	sbc hl,bc
+	call nz,System_ThrowException
+	pop de
+	pop bc
+	ld ix,Heap_heapUpper
+	call Heap_Free
+
+	; free the last object
+	pop de
+	pop bc
+	ld ix,Heap_heapUpper
+	call Heap_Free
+	ld bc,(Heap_heapUpper + Heap.capacity)
+	ld ix,Heap_heapUpper
+	call Heap_CanAllocate
+	call nc,System_ThrowException
+	ret

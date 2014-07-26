@@ -10,7 +10,13 @@ Synthesix_Main:
 	call Memory_EnableRAMInPage2
 	call RAM_Init
 
+	ld ix,Heap_heap
+	call Heap_Constructor
+	ld ix,Heap_heapUpper
+	call Heap_Constructor
+
 	call Memory_UnitTest
+	call Heap_UnitTest
 	call Math_UnitTest
 	call ArrayList_UnitTest
 
