@@ -16,14 +16,8 @@ UIBuffer_class: UIBuffer
 
 ; ix, de <- this
 UIBuffer_New:
-	push af
-	push bc
-	push de
 	ld iy,UIBuffer_class
 	call Class_New
-	pop de
-	pop bc
-	pop af
 	jp UIBuffer_Constructor
 
 ; ix = this
