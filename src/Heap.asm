@@ -64,10 +64,11 @@ Heap_CanAllocate: PROC
 	ld de,Heap.rootBlock
 	add ix,de
 Loop:
-	ld a,(ix + HeapBlock.next)
+	ld e,(ix + HeapBlock.next)
 	ld d,(ix + HeapBlock.next + 1)
-	ld ixl,a
+	ld ixl,e
 	ld ixh,d
+	ld a,e
 	or d       ; if end reached (null pointer)
 	ret z
 	ld l,(ix + HeapBlock.space)
@@ -86,10 +87,11 @@ Heap_GetFreeSpace: PROC
 	ld de,Heap.rootBlock
 	add ix,de
 Loop:
-	ld a,(ix + HeapBlock.next)
+	ld e,(ix + HeapBlock.next)
 	ld d,(ix + HeapBlock.next + 1)
-	ld ixl,a
+	ld ixl,e
 	ld ixh,d
+	ld a,e
 	or d       ; if end reached (null pointer)
 	ret z
 	ld a,c
@@ -115,10 +117,11 @@ Heap_Allocate: PROC
 Loop:
 	pop de     ; discard last value
 	push ix
-	ld a,(ix + HeapBlock.next)
+	ld e,(ix + HeapBlock.next)
 	ld d,(ix + HeapBlock.next + 1)
-	ld ixl,a
+	ld ixl,e
 	ld ixh,d
+	ld a,e
 	or d       ; if end reached (null pointer)
 	jr z,Throw
 	ld l,(ix + HeapBlock.space)
