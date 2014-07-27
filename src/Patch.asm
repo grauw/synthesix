@@ -61,33 +61,33 @@ Patch_Load: PROC
 	pop ix
 	ld (ix + Patch.notePool),e
 	ld (ix + Patch.notePool + 1),d
-	ld hl,Module_values
+	ld hl,ModuleType_values
 	call Patch_AddModule                ; module 0
-	ld hl,Module_channel
+	ld hl,ModuleType_channel
 	call Patch_AddModule                ; module 1
-	ld hl,Module_controllerBank
+	ld hl,ModuleType_controllerBank
 	call Patch_AddModule                ; module 2
-	ld hl,Module_note
+	ld hl,ModuleType_note
 	call Patch_AddModule                ; module 3
-	ld hl,Module_envelopeAD
+	ld hl,ModuleType_envelopeAD
 	call Patch_AddModule                ; module 4
-	ld hl,Module_envelopeAR
+	ld hl,ModuleType_envelopeAR
 	call Patch_AddModule                ; module 5
-	ld hl,Module_sustain
+	ld hl,ModuleType_sustain
 	call Patch_AddModule                ; module 6
-	ld hl,Module_lfoTriangleSigned
+	ld hl,ModuleType_lfoTriangleSigned
 	call Patch_AddModule                ; module 7
-	ld hl,Module_attenuate
+	ld hl,ModuleType_attenuate
 	call Patch_AddModule                ; module 8
-	ld hl,Module_pitchBend
+	ld hl,ModuleType_pitchBend
 	call Patch_AddModule                ; module 9
-	ld hl,Module_addPitch
+	ld hl,ModuleType_addPitch
 	call Patch_AddModule                ; module 10
-	ld hl,Module_lfoTriangle
+	ld hl,ModuleType_lfoTriangle
 	call Patch_AddModule                ; module 11
-	ld hl,Module_attenuateAdd
+	ld hl,ModuleType_attenuateAdd
 	call Patch_AddModule                ; module 12
-	ld hl,Module_sccVoice
+	ld hl,ModuleType_sccVoice
 	call Patch_AddModule                ; module 13
 	ld hl,13 << 8 | SCCVoice.note
 	ld de,3 << 8 | Note.key
@@ -203,7 +203,7 @@ Patch_GetModuleList:
 	ret
 
 ; ix = this
-; hl = module factory
+; hl = module type
 Patch_AddModule: PROC
 	push ix
 	ld e,(ix + Patch.modules)
@@ -223,7 +223,7 @@ Loop:
 	call Patch_GetModuleList
 	pop iy
 	push ix
-	call Module_Acquire_HL
+	call ModuleType_Acquire_HL
 	ld e,ixl
 	ld d,ixh
 	pop ix
