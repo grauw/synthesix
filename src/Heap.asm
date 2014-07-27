@@ -1,5 +1,5 @@
 ;
-; A heap
+; A heap with allocatable space.
 ;
 ; Heaps must be aligned to 4 bytes, the heap size must also be multiple of 4.
 ; Space on the heap is allocated in multitudes of 4 bytes to coalesce slightly
@@ -58,10 +58,15 @@ Heap_Constructor:
 	ld (hl),0
 	ret
 
+;
+; Check whether the specified space can be allocated.
+; I.e. whether a subsequent Allocate call will fail or no.
+;
 ; ix = this
 ; bc = space
 ; f <- c: can allocate
 ; Modifies: af, bc, de, hl, ix
+;
 Heap_CanAllocate: PROC
 	call Heap_CheckIntegrity
 	call Heap_RoundBC
@@ -83,9 +88,14 @@ Loop:
 	ret
 	ENDP
 
+;
+; Get the total amount of free heap space.
+; Note that this space may be fragmented and not allocatable in one block.
+;
 ; ix = this
 ; bc <- space
 ; Modifies: af, bc, d, ix
+;
 Heap_GetFreeSpace: PROC
 	call Heap_CheckIntegrity
 	ld bc,0
@@ -108,12 +118,16 @@ Loop:
 	jp Loop
 	ENDP
 
+;
+; Allocate a block of memory on the heap.
+;
 ; ix = this
 ; bc = number of bytes to allocate
 ; bc <- allocated space
 ; de <- allocated memory address
 ; Modifies: af, bc, de, hl, ix
 ; Throws out of memory exception
+;
 Heap_Allocate: PROC
 	call Heap_CheckIntegrity
 	call Heap_RoundBC
@@ -166,9 +180,12 @@ Throw:
 Heap_outOfHeapException:
 	db "Out of heap space.",0
 
+;
 ; Allocates, then clears the allocated space.
+;
 ; a = clear value
 ; Remaining parameters are the same as Allocate
+;
 Heap_AllocateClear: PROC
 	push af
 	call Heap_Allocate
@@ -190,10 +207,16 @@ Skip:
 	ret
 	ENDP
 
+;
+; Free a block of previously allocated space.
+; Please be careful to specify exactly the address and amount of memory.
+; The return values of Allocate can directly be fed into Free.
+;
 ; ix = this
 ; bc = number of bytes to free
 ; de = memory address to free
 ; Modifies: af, bc, de, hl, ix
+;
 Heap_Free: PROC
 	call Heap_CheckIntegrity
 	ex de,hl   ; hl = memory address
@@ -352,10 +375,14 @@ Throw:
 Heap_integrityCheckException:
 	db "Heap integrity check failed.",0
 
+;
+; Checks whether the specified address lies inside this heap.
+;
 ; de = memory address
 ; ix = this
 ; f <- c: in this heap
 ; Modifies: af, hl
+;
 Heap_IsInHeap:
 	ld l,(ix + Heap.start)
 	ld h,(ix + Heap.start + 1)
