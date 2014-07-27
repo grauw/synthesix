@@ -4,7 +4,7 @@
 ; Heaps must be aligned to 4 bytes, the heap size must also be multiple of 4.
 ; Space on the heap is allocated in multitudes of 4 bytes to coalesce slightly
 ; differently sized objects and reduce fragmentation, and to keep room for the
-; information blocks.
+; information blocks. Additionally, this is used by integrity checks.
 ;
 ; Free space is administered using 4-byte heap information blocks (HeapBlock),
 ; which contain the size of the free space and a reference to the next block.
@@ -15,6 +15,8 @@ Heap: MACRO ?start, ?size
 		dw ?start
 	capacity:
 		dw ?size
+	end:
+		dw ?start + ?size
 	rootBlock: HeapBlock
 	size:
 	ENDM
@@ -61,6 +63,7 @@ Heap_Constructor:
 ; f <- c: can allocate
 ; Modifies: af, bc, de, hl, ix
 Heap_CanAllocate: PROC
+	call Heap_CheckIntegrity
 	call Heap_RoundBC
 	ld de,Heap.rootBlock
 	add ix,de
@@ -84,6 +87,7 @@ Loop:
 ; bc <- space
 ; Modifies: af, bc, d, ix
 Heap_GetFreeSpace: PROC
+	call Heap_CheckIntegrity
 	ld bc,0
 	ld de,Heap.rootBlock
 	add ix,de
@@ -111,6 +115,7 @@ Loop:
 ; Modifies: af, bc, de, hl, ix
 ; Throws out of memory exception
 Heap_Allocate: PROC
+	call Heap_CheckIntegrity
 	call Heap_RoundBC
 	ld de,Heap.rootBlock
 	add ix,de
@@ -190,6 +195,7 @@ Skip:
 ; de = memory address to free
 ; Modifies: af, bc, de, hl, ix
 Heap_Free: PROC
+	call Heap_CheckIntegrity
 	ex de,hl   ; hl = memory address
 	call Heap_RoundBC
 	ld de,Heap.rootBlock
@@ -274,6 +280,77 @@ CoalescePreviousRoot:
 	pop bc
 	jp CoalescePreviousRootContinue
 	ENDP
+
+;
+; Checks heap integrity to guard against overflow or otherwise corrupted data.
+;
+; ix = this
+; Modifies: none
+;
+Heap_CheckIntegrity: PROC
+	push af
+	push bc
+	push de
+	push hl
+	push ix
+	ld l,(ix + Heap.start)
+	ld h,(ix + Heap.start + 1)
+	ld c,(ix + Heap.end)
+	ld b,(ix + Heap.end + 1)
+	ld de,Heap.rootBlock
+	add ix,de
+	ld e,(ix + HeapBlock.next)
+	ld d,(ix + HeapBlock.next + 1)
+	ld a,e
+	or d       ; done if end reached (null pointer)
+	jp z,End
+	scf
+	sbc hl,de  ; check if it next comes after heap start
+	call nc,Throw
+Loop:
+	ld a,e     ; check if next is multiple of four
+	and 3
+	call nz,Throw
+	ld ixl,e
+	ld ixh,d
+	ld l,(ix + HeapBlock.space)
+	ld h,(ix + HeapBlock.space + 1)
+	ld a,l     ; check if space is not zero
+	or h
+	call z,Throw
+	ld a,l     ; check if space is multiple of four
+	and 3
+	call nz,Throw
+	and a
+	adc hl,de  ; check if space does not wrap around memory
+	call c,Throw
+	scf
+	sbc hl,bc  ; check if space end does not pass heap end
+	call nc,Throw
+	adc hl,bc
+	ld e,(ix + HeapBlock.next)
+	ld d,(ix + HeapBlock.next + 1)
+	ld a,e
+	or d       ; done stop if end reached (null pointer)
+	jp z,End
+	and a
+	sbc hl,de  ; check if next block comes after space end + 1
+	call nc,Throw
+	jp Loop
+End:
+	pop ix
+	pop hl
+	pop de
+	pop bc
+	pop af
+	ret
+Throw:
+	ld hl,Heap_integrityCheckException
+	jp System_ThrowExceptionWithMessage
+	ENDP
+
+Heap_integrityCheckException:
+	db "Heap integrity check failed.",0
 
 ; de = memory address
 ; ix = this
