@@ -1,5 +1,27 @@
 	SECTION ROM_BANK0
 
+; Add the signed value A to DE.
+; a = value (one’s complement)
+; de = value
+; de <- value + product
+; Modifies: af
+Math_AddSigned: PROC
+	and a
+	jp m,Subtract
+	add a,e
+	ld e,a
+	ret nc
+	inc d
+	ret
+Subtract:
+	inc e
+	add a,e
+	ld e,a
+	ret c
+	dec d
+	ret
+	ENDP
+
 ; Multiply a 7-bit integer with a 7-bit number which represents the range 0..1.
 ; Bit 7 of a must be 0, bit 7 of l is ignored.
 ; a = multiplicand
@@ -76,28 +98,6 @@ NegativeAugend:
 	ld a,h
 	cpl
 	jp Math_Multiply127x127
-	ret
-	ENDP
-
-; Add the signed value A to DE.
-; a = value (one’s complement)
-; de = value
-; de <- value + product
-; Modifies: af
-Math_AddSigned: PROC
-	and a
-	jp m,Subtract
-	add a,e
-	ld e,a
-	ret nc
-	inc d
-	ret
-Subtract:
-	inc e
-	add a,e
-	ld e,a
-	ret c
-	dec d
 	ret
 	ENDP
 
