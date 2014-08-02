@@ -29,12 +29,12 @@ Subtract:
 ; a <- product
 ; Modifies: hl
 ; Clock ticks: 132
-Math_Multiply127x127:
-	bit 6,a
-	jp nz,Math_Multiply127x127_Inverse
+Math_Multiply127x127: PROC
 	rl l
 	rra
 	rr l
+	bit 5,a
+	jp nz,Bank2
 	add a,Math_multiply127x127Table / 100H
 	ld h,ROM_BANK_6000_CHANGE / 100H
 	di
@@ -45,11 +45,8 @@ Math_Multiply127x127:
 	ei
 	ld (hl),l
 	ret
-Math_Multiply127x127_Inverse:
-	rl l
-	rra
-	rr l
-	add a,Math_multiply127x127Table / 100H - 00100000B  ; cancel out bit 5
+Bank2:
+	add a,Math_multiply127x127Table / 100H - (1 << 5)  ; cancel out bit 5
 	ld h,ROM_BANK_6000_CHANGE / 100H
 	di
 	ld (hl),ROM_MultiplyTableBank2
@@ -59,6 +56,7 @@ Math_Multiply127x127_Inverse:
 	ei
 	ld (hl),l
 	ret
+	ENDP
 
 	ENDS
 
