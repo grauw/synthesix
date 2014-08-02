@@ -1,35 +1,47 @@
 /*
- * An experiment of multiplication arithmetic.
- * This experiment kind of failed, as the values are not nicely distributed.
- * See output of value 47.
+ * Tests efficient fraction multiplication by just adding / shifting in an 8-bit
+ * register.
  */
 
-function mult(a, b) {
-	var v = 0;
-	for (var i = 1; i < 8; i++)
-		v += a & (1 << (7 - i)) ? (b >> i) + ((b >> (i - 1)) & 1) : 0;
-	return v;
+for (var a = 0; a < 256; a++) {
+	multAll(a, true);
 }
 
-function multAll(b) {
+function multAll(a, debug) {
 	var arr = [];
-	for (var a = 0; a < 128; a++)
-		arr.push(mult(a, b));
+	for (var b = 0; b < 256; b++)
+		arr.push(multSigned(a, b));
+	if (debug) {
+		console.log("Multiplying " + a + ":");
+		for (var l = 0; l < arr.length; l += 16)
+			console.log("\t" + arr.slice(l, l + 16).join(", "));
+	}
 	return arr;
 }
 
-console.log(multAll(47).join(", "));
+/**
+ * Handles multiplications with negative (1’s complement) values.
+ */
+function multSigned(a, b, debug) {
+	if (b >= 128)
+		return 255 - multSigned(a, 255 - b, debug);
+	if (a >= 128)
+		return 255 - multSigned(255 - a, b, debug);
+	return mult(a, b, debug);
+}
 
-/*
-	add a,a
-	sra b
-	jr c,skip1
-	adc a,b
-skip1:
-	add a,a
-	sra b
-	jr c,skip2
-	adc a,b
-skip2:
-	;...
-*/
+/**
+ * This multiplication rounds values.
+ */
+function mult(a, b, debug) {
+	var v = a >> 1;
+	for (var i = 0; i < 7; i++) {
+		if ((b >> i) & 1 == 1)
+			v += a;
+		if (debug)
+			console.log(i + ": " + v);
+		var rounding = v & 1;
+		v = v >> 1;
+	}
+	return v + rounding;
+}
