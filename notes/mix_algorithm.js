@@ -42,6 +42,42 @@ function mixer_round(a, b, mix, debug) {
 }
 
 /**
+ * This mixer floors values exclusively, 0..127 = [0..1).
+ * Suitable for interpolation. See mixAll(3, 0, mixer_floor, true).
+ */
+function mixer_floor(a, b, mix, debug) {
+	var v = a;
+	for (var i = 0; i < 7; i++) {
+		if ((mix >> i) & 1)
+			v += b;
+		else
+			v += a;
+		if (debug)
+			console.log(i + ": " + v);
+		v = v >> 1;
+	}
+	return v;
+}
+
+/**
+ * This mixer ceils values exclusively, 0..127 = [0..1).
+ * Suitable for interpolation. See mixAll(4, 0, mixer_ceil, true).
+ */
+function mixer_ceil(a, b, mix, debug) {
+	var v = a;
+	for (var i = 0; i < 7; i++) {
+		if ((mix >> i) & 1)
+			v += b;
+		else
+			v += a;
+		if (debug)
+			console.log(i + ": " + v);
+		v = (v >> 1) + (v & 1);
+	}
+	return v;
+}
+
+/**
  * This mixer floors values inclusively, 0..127 = [0..1].
  * Suitable for mixing. See mixAll(3, 0, mixer_inclusive, true).
  */
