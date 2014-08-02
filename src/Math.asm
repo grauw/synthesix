@@ -111,17 +111,18 @@ Subtract:
 ; h <- product
 ; Clock ticks: 270 - 348
 ; Modifies: af, b, l
-Math_Multiply127x127Alt:
+Math_Multiply127x127Alt: PROC
 	bit 6,c
-	jr z,Math_Multiply127x127Alt_Cont
+	jr z,Continue
 	inc c
-Math_Multiply127x127Alt_Cont:
+Continue:
 	add a,a
 	call Math_Multiply8x8
 	bit 7,l
 	ret z
 	inc h
 	ret
+	ENDP
 
 ; Multiply two 8-bit values
 ; a = factor 1
