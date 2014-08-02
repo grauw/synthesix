@@ -24,7 +24,7 @@ function mixAll(a, b, mixer, debug) {
 
 /**
  * This mixer rounds values.
- * Suitable for interpolation. See mixAll(2, 0, mixer_round, true).
+ * See mixAll(2, 0, mixer_round, true).
  */
 function mixer_round(a, b, mix, debug) {
 	var v = a >> 1;
@@ -43,7 +43,7 @@ function mixer_round(a, b, mix, debug) {
 
 /**
  * This mixer floors values exclusively, 0..127 = [0..1).
- * Suitable for interpolation. See mixAll(3, 0, mixer_floor, true).
+ * See mixAll(3, 0, mixer_floor, true).
  */
 function mixer_floor(a, b, mix, debug) {
 	var v = a;
@@ -61,7 +61,7 @@ function mixer_floor(a, b, mix, debug) {
 
 /**
  * This mixer ceils values exclusively, 0..127 = [0..1).
- * Suitable for interpolation. See mixAll(4, 0, mixer_ceil, true).
+ * See mixAll(4, 0, mixer_ceil, true).
  */
 function mixer_ceil(a, b, mix, debug) {
 	var v = a;
@@ -78,8 +78,12 @@ function mixer_ceil(a, b, mix, debug) {
 }
 
 /**
- * This mixer floors values inclusively, 0..127 = [0..1].
- * Suitable for mixing. See mixAll(3, 0, mixer_inclusive, true).
+ * This mixer is a bit of a failure. Between mixing downwards and upwards, it is
+ * inconsistent in how it rounds and whether or not it is actually inclusive.
+ * As such the reverse does not match and it is not suitable for interpolation.
+ * However, the downward range code path could be useful for multiplication,
+ * because it distributes the values evenly (rather than rounding).
+ * See mixAll(3, 0, mixer_inclusive, true).
  */
 function mixer_inclusive(a, b, mix, debug) {
 	a++;
