@@ -1,6 +1,6 @@
 /*
  * Tests efficient fraction multiplication by just adding / shifting in an 8-bit
- * register.
+ * register. There is also a second algorithm with different value distribution.
  */
 
 for (var a = 0; a < 256; a++) {
@@ -44,4 +44,22 @@ function mult(a, b, debug) {
 		v = v >> 1;
 	}
 	return v + rounding;
+}
+
+/**
+ * This multiplication evenly distributes the value space.
+ * When multiplying two, values 0, 1 and 2 will all have 1/3rd of the results.
+ * In other words, floored multiplication with a + 1.
+ */
+function mult_distribute(a, b, debug) {
+	a++;
+	var v = a >> 1;
+	for (var i = 0; i < 7; i++) {
+		if ((b >> i) & 1 == 1)
+			v += a;
+		if (debug)
+			console.log(i + ": " + v);
+		v = v >> 1;
+	}
+	return v;
 }
