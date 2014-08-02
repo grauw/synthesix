@@ -101,6 +101,21 @@ Subtract:
 	ret
 	ENDP
 
+; Parameters identical to Math_Multiply127x127
+; Clock ticks: 228
+Math_Multiply127x127Alt:
+	ld h,a
+	srl a
+	REPT 7
+	rr l
+	jr nc,Next
+	add a,h
+Next:
+	rra
+	ENDM
+	adc a,0
+	ret
+
 ; Multiply a 7-bit integer with a 7-bit number which represents the range 0..1.
 ; Implementation without lookup table. Has a miniscule rounding deviation.
 ; Note: Value range is suitable for use of David Heremans’ multiplication code.
@@ -111,7 +126,7 @@ Subtract:
 ; h <- product
 ; Clock ticks: 270 - 348
 ; Modifies: af, b, l
-Math_Multiply127x127Alt: PROC
+Math_Multiply127x127Alt2: PROC
 	bit 6,c
 	jr z,Continue
 	inc c
