@@ -28,7 +28,7 @@ Subtract:
 ; l = multiplier
 ; a <- product
 ; Modifies: hl
-; Clock ticks: 77 / 98 + 54 cycles for bank switching :(
+; Clock ticks: 129 / 160
 Math_Multiply127x127:
 	bit 6,a
 	jr nz,Math_Multiply127x127_Inverse
