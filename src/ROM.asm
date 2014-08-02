@@ -8,15 +8,18 @@
 
 ROM_CodeBank1: equ 0
 ROM_CodeBank2: equ 1
-ROM_RAMInitBank: equ 2
-ROM_MultiplyTableBank: equ 3
-ROM_WaveTableBank: equ 4
+ROM_MultiplyTableBank1: equ 2
+ROM_MultiplyTableBank2: equ 3
+ROM_RAMInitBank: equ 4
+ROM_WaveTableBank: equ 5
 ROM_SCCBank: equ 3FH
 
 	org 4000H
 ROM_HEADER: ds 10H
 ROM_BANK0: ds 1F0H
 ROM: ds 3E00H
+	org 06000H
+ROM_MULTIPLYTABLE: ds 4000H
 	org 6000H
 RAM_sourceAddress:
 	org 0C000H
@@ -24,8 +27,6 @@ RAM_startAddress:
 RAM: ds 1800H
 RAM_endAddress:
 	ds 800H
-	org 06000H
-ROM_MULTIPLYTABLE: ds 2000H
 	org 06000H
 ROM_WAVETABLES: ds 2000H
 
@@ -96,9 +97,9 @@ ROM_Init:
 	ld (ROM_BANK_4000_CHANGE),a
 	ld a,ROM_CodeBank2
 	ld (ROM_BANK_6000_CHANGE),a
-	ld a,ROM_RAMInitBank
+	ld a,ROM_MultiplyTableBank1
 	ld (ROM_BANK_8000_CHANGE),a
-	ld a,ROM_MultiplyTableBank
+	ld a,ROM_MultiplyTableBank2
 	ld (ROM_BANK_A000_CHANGE),a
 	ret
 
@@ -156,8 +157,8 @@ ROM_bank4000:
 ROM_bank6000:
 	dw ROM_BANK_6000_CHANGE | ROM_CodeBank2
 ROM_bank8000:
-	dw ROM_BANK_8000_CHANGE | ROM_RAMInitBank
+	dw ROM_BANK_8000_CHANGE | ROM_MultiplyTableBank1
 ROM_bankA000:
-	dw ROM_BANK_A000_CHANGE | ROM_MultiplyTableBank
+	dw ROM_BANK_A000_CHANGE | ROM_MultiplyTableBank2
 
 	ENDS

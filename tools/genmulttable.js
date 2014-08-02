@@ -1,5 +1,5 @@
 var arr = [];
-for (var i = 0; i < 64; i++) {
+for (var i = 0; i < 128; i++) {
 	for (var j = 0; j < 128; j++) {
 		arr.push(Math.round(i * j / 127));
 	}
