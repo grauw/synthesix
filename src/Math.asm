@@ -28,10 +28,10 @@ Subtract:
 ; l = multiplier
 ; a <- product
 ; Modifies: hl
-; Clock ticks: 129 / 134
+; Clock ticks: 132
 Math_Multiply127x127:
 	bit 6,a
-	jr nz,Math_Multiply127x127_Inverse
+	jp nz,Math_Multiply127x127_Inverse
 	rl l
 	rra
 	rr l
