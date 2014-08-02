@@ -76,26 +76,3 @@ function mixer_ceil(a, b, mix, debug) {
 	}
 	return v;
 }
-
-/**
- * This mixer is a bit of a failure. Between mixing downwards and upwards, it is
- * inconsistent in how it rounds and whether or not it is actually inclusive.
- * As such the reverse does not match and it is not suitable for interpolation.
- * However, the downward range code path could be useful for multiplication,
- * because it distributes the values evenly (rather than rounding).
- * See mixAll(3, 0, mixer_inclusive, true).
- */
-function mixer_inclusive(a, b, mix, debug) {
-	a++;
-	var v = a >> 1;
-	for (var i = 0; i < 7; i++) {
-		if ((mix >> i) & 1)
-			v += b;
-		else
-			v += a;
-		if (debug)
-			console.log(i + ": " + v);
-		v = v >> 1;
-	}
-	return v;
-}
