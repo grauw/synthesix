@@ -28,7 +28,7 @@ Subtract:
 ; l = multiplier
 ; a <- product
 ; Modifies: hl
-; Clock ticks: 129 / 142
+; Clock ticks: 129 / 134
 Math_Multiply127x127:
 	bit 6,a
 	jr nz,Math_Multiply127x127_Inverse
@@ -49,8 +49,7 @@ Math_Multiply127x127_Inverse:
 	rl l
 	rra
 	rr l
-	and 00011111B
-	add a,Math_multiply127x127Table / 100H
+	add a,Math_multiply127x127Table / 100H - 00100000B  ; cancel out bit 5
 	ld h,ROM_BANK_6000_CHANGE / 100H
 	di
 	ld (hl),ROM_MultiplyTableBank2
