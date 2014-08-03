@@ -129,29 +129,22 @@ SCCVoice_PrepareWave:
 	ret
 
 ; ix = this
-; bc = amplitude address
-; de = wave address
-; hl = deformation address
-; iy = frequency address
 ; SCC must be selected in page 2
-SCCVoice_Apply: PROC
+SCCVoice_Apply: MACRO ?amplitude, ?frequency, ?deformation, ?wave
 	ld a,(ix + SCCVoice.sccAmplitude)
 	and a
 	jp z,FastPath
 	ex af,af'
 	ld a,(ix + SCCVoice.sccDeformation)
-	ld (hl),a
-	push bc
-	push de
+	ld (?deformation),a
+	ld iy,?frequency
 	call SCCVoice_ApplyFrequency
-	pop de
+	ld de,?wave
 	call SCCVoice_ApplyWave
-	pop bc
 	ex af,af'
 FastPath:
-	ld (bc),a
-	ret
-	ENDP
+	ld (?amplitude),a
+	ENDM
 
 ; ix = this
 ; Modifies: f, de, hl

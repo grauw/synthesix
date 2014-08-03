@@ -116,11 +116,7 @@ SCC_UpdateLate:
 	ld d,(ix + SCC.voices + 2 * ?voice + 1)
 	ld ixl,e
 	ld ixh,d
-	ld bc,SCC_AMPLITUDE + ?voice
-	ld de,SCC_WAVE + 32 * ?voice
-	ld hl,SCC_DEFORMATION
-	ld iy,SCC_FREQUENCY + 2 * ?voice
-	call SCCVoice_Apply
+	SCCVoice_Apply SCC_AMPLITUDE + ?voice, SCC_FREQUENCY + 2 * ?voice, SCC_DEFORMATION, SCC_WAVE + 32 * ?voice
 	pop ix
 	ENDM
 
