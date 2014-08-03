@@ -2,10 +2,6 @@
 ; An SCC voice (channel)
 ;
 SCCVoice: MACRO
-	slot:
-		db 0
-	preparedSlot:
-		ds 4
 	waveRegister:
 		db SCC_WAVE_1
 	frequencyRegister:
@@ -46,51 +42,34 @@ SCCVoice: MACRO
 	dw SCCVoice.size
 SCCVoice_class: SCCVoice
 
-; a = slot
 ; b = wave register
 ; c = frequency register
 ; d = amplitude register
 ; ix, de <- new object
 SCCVoice_New:
-	push af
 	push bc
 	push de
 	ld iy,SCCVoice_class
 	call Class_NewUpper
 	pop de
 	pop bc
-	pop af
 	jp SCCVoice_Constructor
 
 ; ix = this
-; a = slot
 ; b = wave register
 ; c = frequency register
 ; d = amplitude register
 ; ix, de <- this
 SCCVoice_Constructor:
-	ld (ix + SCCVoice.slot),a
 	ld (ix + SCCVoice.waveRegister),b
 	ld (ix + SCCVoice.frequencyRegister),c
 	ld (ix + SCCVoice.amplitudeRegister),d
-
-	call Memory_PrepareSlotPage2
-	ld (ix + SCCVoice.preparedSlot),b
-	ld (ix + SCCVoice.preparedSlot + 1),c
-	ld (ix + SCCVoice.preparedSlot + 2),d
-	ld (ix + SCCVoice.preparedSlot + 3),e
-
 	ld e,ixl
 	ld d,ixh
 	ret
 
 ; ix = this
 SCCVoice_Update:
-	call SCCVoice_Prepare
-	call SCCVoice_Apply
-	ret
-
-SCCVoice_Prepare:
 	call SCCVoice_PrepareAmplitude
 	ret z  ; the fast path
 	call SCCVoice_PrepareFrequency
@@ -171,13 +150,8 @@ SCCVoice_PrepareWave:
 	ret
 
 ; ix = this
+; SCC must be selected in page 2
 SCCVoice_Apply: PROC
-	ld b,(ix + SCCVoice.preparedSlot)
-	ld c,(ix + SCCVoice.preparedSlot + 1)
-	ld d,(ix + SCCVoice.preparedSlot + 2)
-	ld e,(ix + SCCVoice.preparedSlot + 3)
-	call Memory_SetPreparedSlotPage2
-	exx
 	ld a,(ix + SCCVoice.sccAmplitude)
 	and a
 	jp z,FastPath
@@ -193,8 +167,6 @@ FastPath:
 	ld h,SCC_BASE_MSB
 	ld l,(ix + SCCVoice.amplitudeRegister)
 	ld (hl),a
-	exx
-	call Memory_SetPreparedSlotPage2
 	ret
 	ENDP
 

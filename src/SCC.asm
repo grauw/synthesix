@@ -25,6 +25,8 @@ SCC_MAX_VOICES: equ 4
 SCC: MACRO
 	slot:
 		db 0
+	preparedSlot:
+		ds 4
 	mixerCopy:
 		db 0
 	voices:
@@ -50,6 +52,13 @@ SCC_Constructor:
 	call nc,System_ThrowException
 
 	ld (ix + SCC.slot),a
+	push af
+	call Memory_PrepareSlotPage2
+	ld (ix + SCC.preparedSlot),b
+	ld (ix + SCC.preparedSlot + 1),c
+	ld (ix + SCC.preparedSlot + 2),d
+	ld (ix + SCC.preparedSlot + 3),e
+	pop af
 
 	call Memory_GetSlotPage2
 	push af
@@ -74,7 +83,6 @@ SCC_Constructor:
 	call Memory_SetSlotPage2
 
 	push ix
-	ld a,(ix + SCC.slot)
 	ld b,SCC_WAVE_1
 	ld c,SCC_FREQUENCY_1
 	ld d,SCC_AMPLITUDE_1
@@ -84,7 +92,6 @@ SCC_Constructor:
 	ld (ix + SCC.voices + 1),d
 
 	push ix
-	ld a,(ix + SCC.slot)
 	ld b,SCC_WAVE_2
 	ld c,SCC_FREQUENCY_2
 	ld d,SCC_AMPLITUDE_2
@@ -94,7 +101,6 @@ SCC_Constructor:
 	ld (ix + SCC.voices + 3),d
 
 	push ix
-	ld a,(ix + SCC.slot)
 	ld b,SCC_WAVE_3
 	ld c,SCC_FREQUENCY_3
 	ld d,SCC_AMPLITUDE_3
@@ -104,7 +110,6 @@ SCC_Constructor:
 	ld (ix + SCC.voices + 5),d
 
 	push ix
-	ld a,(ix + SCC.slot)
 	ld b,SCC_WAVE_4_5
 	ld c,SCC_FREQUENCY_4
 	ld d,SCC_AMPLITUDE_4
@@ -112,6 +117,36 @@ SCC_Constructor:
 	pop ix
 	ld (ix + SCC.voices + 6),e
 	ld (ix + SCC.voices + 7),d
+
+	push ix
+	ld e,ixl
+	ld d,ixh
+	ld ix,Clock_60HzLate
+	ld hl,SCC_UpdateLate
+	call Clock_AddListener
+	pop ix
+	ret
+
+SCC_UpdateLate:
+	ld b,(ix + SCC.preparedSlot)
+	ld c,(ix + SCC.preparedSlot + 1)
+	ld d,(ix + SCC.preparedSlot + 2)
+	ld e,(ix + SCC.preparedSlot + 3)
+	call Memory_SetPreparedSlotPage2
+	exx
+
+	push ix
+	pop iy
+	REPT SCC_MAX_VOICES, ?voice
+	ld e,(iy + SCC.voices + 2 * ?voice)
+	ld d,(iy + SCC.voices + 2 * ?voice + 1)
+	ld ixl,e
+	ld ixh,d
+	call SCCVoice_Apply
+	ENDM
+
+	exx
+	call Memory_SetPreparedSlotPage2
 	ret
 
 ; ix = this
