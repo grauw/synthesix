@@ -12,14 +12,6 @@ UISCCVoice_Paint:
 	pop hl
 
 	push hl
-	ld de,000DH
-	call UIBuffer_GetRelativePosition
-	call SCCVoice_GetNumber_IY
-	add a,"1"
-	ld (hl),a
-	pop hl
-
-	push hl
 	ld de,010AH
 	call UIBuffer_GetRelativePosition
 	ld a,SCCVoice.note
@@ -50,7 +42,7 @@ UISCCVoice_Paint:
 
 ;
 UISCCVoice_background:
-	db 24," SCC Voice  0 ",25
+	db 24,23,23," SCC Voice ",23,25
 	db 29," Note    0000 ",22
 	db 29," Detune  0000 ",22
 	db 29," Amplitu 0000 ",22
