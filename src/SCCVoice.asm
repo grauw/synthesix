@@ -147,6 +147,7 @@ FastPath:
 	ENDM
 
 ; ix = this
+; iy = frequency register address
 ; Modifies: f, de, hl
 SCCVoice_ApplyFrequency: PROC
 	ld e,(ix + SCCVoice.sccFrequency)
@@ -170,6 +171,7 @@ FrequencyChanged:
 	SECTION ROM_BANK0
 
 ; ix = this
+; de = wave register address
 ; Modifies: af, bc, de, hl
 SCCVoice_ApplyWave:
 	ld a,(ix + SCCVoice.sccWave)
