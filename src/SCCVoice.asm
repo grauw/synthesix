@@ -137,7 +137,7 @@ SCCVoice_Apply: MACRO ?amplitude, ?frequency, ?deformation, ?wave
 	ex af,af'
 	ld a,(ix + SCCVoice.sccDeformation)
 	ld (?deformation),a
-	ld iy,?frequency
+	ld de,?frequency
 	call SCCVoice_ApplyFrequency
 	ld de,?wave
 	call SCCVoice_ApplyWave
@@ -147,24 +147,27 @@ FastPath:
 	ENDM
 
 ; ix = this
-; iy = frequency register address
-; Modifies: f, de, hl
+; de = frequency register address
+; Modifies: f, bc, de, hl
 SCCVoice_ApplyFrequency: PROC
-	ld e,(ix + SCCVoice.sccFrequency)
-	ld d,(ix + SCCVoice.sccFrequency + 1)
+	ld c,(ix + SCCVoice.sccFrequency)
+	ld b,(ix + SCCVoice.sccFrequency + 1)
 	bit 5,(ix + SCCVoice.sccDeformation)
 	jr nz,FrequencyChanged
 	ld l,(ix + SCCVoice.lastFrequency)
 	ld h,(ix + SCCVoice.lastFrequency + 1)
 	and a
-	sbc hl,de
+	sbc hl,bc
 	ret z
 FrequencyChanged:
-	ld (ix + SCCVoice.lastFrequency),e
-	ld (ix + SCCVoice.lastFrequency + 1),d
-	ld (iy + 0),0FFH
-	ld (iy + 1),d
-	ld (iy + 0),e
+	ld (ix + SCCVoice.lastFrequency),c
+	ld (ix + SCCVoice.lastFrequency + 1),b
+	ex de,hl
+	ld (hl),0FFH
+	inc l
+	ld (hl),b
+	dec l
+	ld (hl),c
 	ret
 	ENDP
 
