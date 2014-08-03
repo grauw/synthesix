@@ -2,14 +2,6 @@
 ; An SCC voice (channel)
 ;
 SCCVoice: MACRO
-	waveRegister:
-		db SCC_WAVE_1
-	frequencyRegister:
-		db SCC_FREQUENCY_1
-	amplitudeRegister:
-		db SCC_AMPLITUDE_1
-	deformationRegister:
-		db SCC_DEFORMATION
 	amplitude:
 		dw Value_values.0
 	note:
@@ -42,28 +34,15 @@ SCCVoice: MACRO
 	dw SCCVoice.size
 SCCVoice_class: SCCVoice
 
-; b = wave register
-; c = frequency register
-; d = amplitude register
 ; ix, de <- new object
 SCCVoice_New:
-	push bc
-	push de
 	ld iy,SCCVoice_class
 	call Class_NewUpper
-	pop de
-	pop bc
 	jp SCCVoice_Constructor
 
 ; ix = this
-; b = wave register
-; c = frequency register
-; d = amplitude register
 ; ix, de <- this
 SCCVoice_Constructor:
-	ld (ix + SCCVoice.waveRegister),b
-	ld (ix + SCCVoice.frequencyRegister),c
-	ld (ix + SCCVoice.amplitudeRegister),d
 	ld e,ixl
 	ld d,ixh
 	ret
@@ -150,6 +129,10 @@ SCCVoice_PrepareWave:
 	ret
 
 ; ix = this
+; bc = amplitude address
+; de = wave address
+; hl = deformation address
+; iy = frequency address
 ; SCC must be selected in page 2
 SCCVoice_Apply: PROC
 	ld a,(ix + SCCVoice.sccAmplitude)
@@ -157,20 +140,21 @@ SCCVoice_Apply: PROC
 	jp z,FastPath
 	ex af,af'
 	ld a,(ix + SCCVoice.sccDeformation)
-	ld h,SCC_BASE_MSB
-	ld l,(ix + SCCVoice.deformationRegister)
 	ld (hl),a
+	push bc
+	push de
 	call SCCVoice_ApplyFrequency
+	pop de
 	call SCCVoice_ApplyWave
+	pop bc
 	ex af,af'
 FastPath:
-	ld h,SCC_BASE_MSB
-	ld l,(ix + SCCVoice.amplitudeRegister)
-	ld (hl),a
+	ld (bc),a
 	ret
 	ENDP
 
 ; ix = this
+; Modifies: f, de, hl
 SCCVoice_ApplyFrequency: PROC
 	ld e,(ix + SCCVoice.sccFrequency)
 	ld d,(ix + SCCVoice.sccFrequency + 1)
@@ -184,19 +168,16 @@ SCCVoice_ApplyFrequency: PROC
 FrequencyChanged:
 	ld (ix + SCCVoice.lastFrequency),e
 	ld (ix + SCCVoice.lastFrequency + 1),d
-	ld h,SCC_BASE_MSB
-	ld l,(ix + SCCVoice.frequencyRegister)
-	ld (hl),0FFH
-	inc l
-	ld (hl),d
-	dec l
-	ld (hl),e
+	ld (iy + 0),0FFH
+	ld (iy + 1),d
+	ld (iy + 0),e
 	ret
 	ENDP
 
 	SECTION ROM_BANK0
 
 ; ix = this
+; Modifies: af, bc, de, hl
 SCCVoice_ApplyWave:
 	ld a,(ix + SCCVoice.sccWave)
 	cp (ix + SCCVoice.lastWave)
@@ -213,8 +194,6 @@ SCCVoice_ApplyWave:
 	add hl,hl
 	ld bc,SCCWaveTable_table1
 	add hl,bc
-	ld e,(ix + SCCVoice.waveRegister)
-	ld d,SCC_BASE_MSB
 	REPT 32
 	ldi
 	ENDM
