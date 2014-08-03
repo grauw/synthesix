@@ -24,6 +24,16 @@ SCCVoice: MACRO
 		dw Value_values.0
 	phaseReset:
 		dw Value_values.0
+	sccAmplitude:
+		db 0
+	sccFrequency:
+		dw 0
+	sccDeformation:
+		db 0
+	sccWave:
+		db 0
+	sccWaveAddress:
+		dw 0
 	lastFrequency:
 		dw 0
 	lastWave:
@@ -75,63 +85,41 @@ SCCVoice_Constructor:
 	ret
 
 ; ix = this
-SCCVoice_Update: PROC
+SCCVoice_Update:
+	call SCCVoice_Prepare
+	call SCCVoice_Apply
+	ret
+
+SCCVoice_Prepare:
+	call SCCVoice_PrepareAmplitude
+	ret z  ; the fast path
+	call SCCVoice_PrepareFrequency
+	call SCCVoice_PrepareDeformation
+	call SCCVoice_PrepareWave
+	ret
+
+; ix = this
+; a = amplitude (one’s complement)
+; f <- z: amplitude zero
+SCCVoice_PrepareAmplitude:
 	ld l,(ix + SCCVoice.amplitude)
 	ld h,(ix + SCCVoice.amplitude + 1)
 	ld a,(hl)
-	and a
-	push af
-	jp z,FastPath
-	ld l,(ix + SCCVoice.wave)
-	ld h,(ix + SCCVoice.wave + 1)
-	ld a,(hl)
-	cp (ix + SCCVoice.lastWave)
-	push af
+	rrca
+	rrca
+	rrca
+	and 0FH
+	ld (ix + SCCVoice.sccAmplitude),a
+	ret
+
+; ix = this
+SCCVoice_PrepareFrequency: PROC
 	ld l,(ix + SCCVoice.note)
 	ld h,(ix + SCCVoice.note + 1)
 	ld a,(hl)
 	ld l,(ix + SCCVoice.detune)
 	ld h,(ix + SCCVoice.detune + 1)
 	ld b,(hl)
-	ld l,(ix + SCCVoice.phaseReset)
-	ld h,(ix + SCCVoice.phaseReset + 1)
-	ld c,(hl)
-	ex af,af'
-	exx
-	ld b,(ix + SCCVoice.preparedSlot)
-	ld c,(ix + SCCVoice.preparedSlot + 1)
-	ld d,(ix + SCCVoice.preparedSlot + 2)
-	ld e,(ix + SCCVoice.preparedSlot + 3)
-	call Memory_SetPreparedSlotPage2
-	exx
-	ex af,af'
-	call SCCVoice_SetPitch
-	pop af
-	call nz,SCCVoice_SetWave
-	pop af
-	call SCCVoice_SetAmplitude
-	exx
-	call Memory_SetPreparedSlotPage2
-	ret
-FastPath:
-	ld b,(ix + SCCVoice.preparedSlot)
-	ld c,(ix + SCCVoice.preparedSlot + 1)
-	ld d,(ix + SCCVoice.preparedSlot + 2)
-	ld e,(ix + SCCVoice.preparedSlot + 3)
-	call Memory_SetPreparedSlotPage2
-	exx
-	pop af
-	call SCCVoice_SetAmplitude
-	exx
-	call Memory_SetPreparedSlotPage2
-	ret
-	ENDP
-
-; ix = this
-; a = note
-; b = detune (one’s complement)
-; c = phase reset
-SCCVoice_SetPitch: PROC
 	ld h,PSG_frequencyTable / 100H
 	add a,a
 	ld l,a
@@ -157,13 +145,69 @@ Continue:
 	call Math_Multiply127x127Signed
 	cpl
 	call Math_AddSigned
-	bit 6,c
-	jr nz,PhaseReset
-	ld a,(ix + SCCVoice.lastFrequency)
-	cp e
+	ld (ix + SCCVoice.sccFrequency),e
+	ld (ix + SCCVoice.sccFrequency + 1),d
+	ret
+	ENDP
+
+; ix = this
+SCCVoice_PrepareDeformation:
+	ld l,(ix + SCCVoice.phaseReset)
+	ld h,(ix + SCCVoice.phaseReset + 1)
+	ld a,(hl)
+	and 1 << 6
+	rrca
+	ld (ix + SCCVoice.sccDeformation),a
+	ret
+
+; ix = this
+; a = wave number (one’s complement)
+; Modifies: af, bc, de, hl
+SCCVoice_PrepareWave:
+	ld l,(ix + SCCVoice.wave)
+	ld h,(ix + SCCVoice.wave + 1)
+	ld a,(hl)
+	ld (ix + SCCVoice.sccWave),a
+	ret
+
+; ix = this
+SCCVoice_Apply: PROC
+	ld b,(ix + SCCVoice.preparedSlot)
+	ld c,(ix + SCCVoice.preparedSlot + 1)
+	ld d,(ix + SCCVoice.preparedSlot + 2)
+	ld e,(ix + SCCVoice.preparedSlot + 3)
+	call Memory_SetPreparedSlotPage2
+	exx
+	ld a,(ix + SCCVoice.sccAmplitude)
+	and a
+	jp z,FastPath
+	ex af,af'
+	ld a,(ix + SCCVoice.sccDeformation)
+	ld h,SCC_BASE_MSB
+	ld l,(ix + SCCVoice.deformationRegister)
+	ld (hl),a
+	call SCCVoice_ApplyFrequency
+	call SCCVoice_ApplyWave
+	ex af,af'
+FastPath:
+	ld h,SCC_BASE_MSB
+	ld l,(ix + SCCVoice.amplitudeRegister)
+	ld (hl),a
+	exx
+	call Memory_SetPreparedSlotPage2
+	ret
+	ENDP
+
+; ix = this
+SCCVoice_ApplyFrequency: PROC
+	ld e,(ix + SCCVoice.sccFrequency)
+	ld d,(ix + SCCVoice.sccFrequency + 1)
+	bit 5,(ix + SCCVoice.sccDeformation)
 	jr nz,FrequencyChanged
-	ld a,(ix + SCCVoice.lastFrequency + 1)
-	cp d
+	ld l,(ix + SCCVoice.lastFrequency)
+	ld h,(ix + SCCVoice.lastFrequency + 1)
+	and a
+	sbc hl,de
 	ret z
 FrequencyChanged:
 	ld (ix + SCCVoice.lastFrequency),e
@@ -176,35 +220,15 @@ FrequencyChanged:
 	dec l
 	ld (hl),e
 	ret
-PhaseReset:
-	ld h,SCC_BASE_MSB
-	ld l,(ix + SCCVoice.deformationRegister)
-	ld (hl),00100000B
-	push hl
-	call FrequencyChanged
-	pop hl
-	ld (hl),0
-	ret
 	ENDP
-
-; ix = this
-; a = amplitude (one’s complement)
-SCCVoice_SetAmplitude:
-	rrca
-	rrca
-	rrca
-	and 0FH
-	ld h,SCC_BASE_MSB
-	ld l,(ix + SCCVoice.amplitudeRegister)
-	ld (hl),a
-	ret
 
 	SECTION ROM_BANK0
 
 ; ix = this
-; a = wave number (one’s complement)
-; Modifies: af, bc, de, hl
-SCCVoice_SetWave:
+SCCVoice_ApplyWave:
+	ld a,(ix + SCCVoice.sccWave)
+	cp (ix + SCCVoice.lastWave)
+	ret z
 	ld (ix + SCCVoice.lastWave),a
 	ld h,ROM_BANK_6000_CHANGE / 100H
 	ld (hl),ROM_WaveTableBank
