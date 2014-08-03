@@ -35,7 +35,6 @@ SCC: MACRO
 	dw SCC.size
 SCC_class: SCC
 
-; a = slot
 ; ix <- new object
 SCC_New:
 	push af
@@ -45,7 +44,6 @@ SCC_New:
 	jp SCC_Constructor
 
 ; ix = this
-; a = slot
 ; ix <- this
 SCC_Constructor:
 	call SCC_Detect
