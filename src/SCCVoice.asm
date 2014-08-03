@@ -190,10 +190,10 @@ PhaseReset:
 ; ix = this
 ; a = amplitude (one’s complement)
 SCCVoice_SetAmplitude:
-	and 7FH
 	rrca
 	rrca
 	rrca
+	and 0FH
 	ld h,SCC_BASE_MSB
 	ld l,(ix + SCCVoice.amplitudeRegister)
 	ld (hl),a
