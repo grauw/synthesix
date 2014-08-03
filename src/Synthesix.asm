@@ -24,7 +24,6 @@ Synthesix_Main:
 	call KeyMidi_Constructor
 	call Channels_Init
 	call PSG_Init
-	call Memory_GetSlotPage1
 	call SCC_New
 	ld (Synthesix_scc),ix
 	ld hl,Channel_channels.0
