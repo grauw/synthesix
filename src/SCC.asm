@@ -69,29 +69,13 @@ SCC_Constructor:
 	pop af
 	call Memory_SetSlotPage2
 
+	REPT SCC_MAX_VOICES, ?voice
 	push ix
 	call SCCVoice_New
 	pop ix
-	ld (ix + SCC.voices),e
-	ld (ix + SCC.voices + 1),d
-
-	push ix
-	call SCCVoice_New
-	pop ix
-	ld (ix + SCC.voices + 2),e
-	ld (ix + SCC.voices + 3),d
-
-	push ix
-	call SCCVoice_New
-	pop ix
-	ld (ix + SCC.voices + 4),e
-	ld (ix + SCC.voices + 5),d
-
-	push ix
-	call SCCVoice_New
-	pop ix
-	ld (ix + SCC.voices + 6),e
-	ld (ix + SCC.voices + 7),d
+	ld (ix + SCC.voices + 2 * ?voice),e
+	ld (ix + SCC.voices + 2 * ?voice + 1),d
+	ENDM
 
 	push ix
 	ld e,ixl
