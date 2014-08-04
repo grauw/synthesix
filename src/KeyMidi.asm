@@ -160,10 +160,8 @@ KeyMidi_PressDecreaseVelocity:
 ; ix = this
 KeyMidi_PressIncreaseVolume:
 	ld a,7
-	push ix
 	ld ix,Channel_channels.0
 	call Channel_GetController
-	pop ix
 	ld a,(hl)
 	inc a
 	and 7FH
@@ -176,10 +174,8 @@ KeyMidi_PressIncreaseVolume:
 ; ix = this
 KeyMidi_PressDecreaseVolume:
 	ld a,7
-	push ix
 	ld ix,Channel_channels.0
 	call Channel_GetController
-	pop ix
 	ld a,(hl)
 	dec a
 	and 7FH
