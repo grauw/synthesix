@@ -57,6 +57,15 @@ VDP_Enable60Hz:
 	call VDP_SetRegister
 	ret
 
+VDP_SetColor:
+	di
+	out (VDP_PORT_1),a
+	ld a,7 | VDP_REGISTER
+	ei
+	out (VDP_PORT_1),a
+	ret
+
+
 VDP_EnableBlink: PROC
 	xor a
 	ld hl,0C00H

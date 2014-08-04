@@ -65,8 +65,7 @@ Synthesix_MainLoop:
 
 Synthesix_Interrupt:
 	ld a,0F5H
-	ld b,7
-	call VDP_SetRegister
+	call VDP_SetColor
 
 	ld ix,MSXMidi_instance
 	call MSXMidi_CheckOverrun
@@ -90,8 +89,7 @@ Synthesix_Interrupt:
 	call Clock_Update
 
 	ld a,0F4H
-	ld b,7
-	call VDP_SetRegister
+	call VDP_SetColor
 	ret
 
 ;
