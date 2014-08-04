@@ -8,8 +8,12 @@ MidiIn: MACRO ?buffer  ; buffer must be aligned to 100H
 		dw ?buffer
 	runningStatus:
 		db -1
+	clock:
+		db 0
 
 	WriteByte: PROC
+		cp 0F8H
+		jr nc,RealTime
 		ld hl,(bufferHead)
 		ld (hl),a
 		inc l
@@ -18,6 +22,11 @@ MidiIn: MACRO ?buffer  ; buffer must be aligned to 100H
 		cp l
 		ret nz
 		call System_ThrowException
+	RealTime:
+		ret nz  ; not clock
+		ld hl,clock
+		inc (hl)
+		ret
 		ENDP
 	ENDM
 
