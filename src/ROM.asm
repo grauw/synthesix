@@ -6,6 +6,8 @@
 
 	INCLUDE "Macros.asm"
 
+DEBUG: equ 1
+
 ROM_CodeBank1: equ 0
 ROM_CodeBank2: equ 1
 ROM_MultiplyTableBank1: equ 2

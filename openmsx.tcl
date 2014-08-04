@@ -1,4 +1,7 @@
 plug msx-midi-in Virtual\ IN
+ext debugdevice
+set debugoutput stdout
+debug set_watchpoint read_io 0x2E
 
 proc dumpwave {nr} {
 	set str [ debug read_block Konami\ SD-Snatcher\ SCC+\ Cartridge\ SCC [ expr $nr * 32] 32 ]

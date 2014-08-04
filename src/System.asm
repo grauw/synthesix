@@ -86,12 +86,18 @@ System_Stop:
 	jp System_Stop
 
 System_ThrowException:
+	IF DEBUG
+	in a,(02EH)
+	ENDIF
 	pop de
 	call System_PrintExceptionMessage
 	jp System_Stop
 
 ; hl = message
 System_ThrowExceptionWithMessage:
+	IF DEBUG
+	in a,(02EH)
+	ENDIF
 	pop de
 	push hl
 	call System_PrintExceptionMessage
