@@ -5,6 +5,8 @@ RDSLT: equ 0CH
 WRSLT: equ 14H
 CALSLT: equ 1CH
 ENASLT: equ 24H
+IDBYT0: equ 2BH
+IDBYT1: equ 2CH
 IDBYT2: equ 2DH
 IDBYT3: equ 2EH
 INITXT: equ 6CH
