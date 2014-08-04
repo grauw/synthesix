@@ -147,6 +147,7 @@ MidiIn_PitchBend:
 MidiIn_ProcessMessages: PROC
 	ld l,(ix + MidiIn.bufferTail)
 	ld h,(ix + MidiIn.bufferTail + 1)
+NextMessage:
 	ld a,(ix + MidiIn.bufferHead)
 	sub l
 	ret z  ; no messages
@@ -222,7 +223,7 @@ ProcessStatus_1111:
 ProcessStatus_111100:
 ProcessStatus_Skip:
 	ld (ix + MidiIn.bufferTail),l
-	jp MidiIn_ProcessMessages
+	jp NextMessage
 
 call_channel: MACRO ?length, ?method
 	ex af,af'
@@ -246,9 +247,11 @@ call_channel: MACRO ?length, ?method
 	ld (ix + MidiIn.bufferTail),l
 	ld ixl,a
 	ld ixh,Channel_channels >> 8
+	push hl
 	call ?method
+	pop hl
 	pop ix
-	jp MidiIn_ProcessMessages  ; next message
+	jp NextMessage
 	ENDM
 
 ; if value is out of bounds, skip it
@@ -256,10 +259,10 @@ NotADataByte:
 	dec l
 	ld (ix + MidiIn.bufferTail),l
 	bit 7,b
-	jp z,MidiIn_ProcessMessages
+	jp z,NextMessage
 	dec l
 	ld (ix + MidiIn.bufferTail),l
-	jp MidiIn_ProcessMessages
+	jp NextMessage
 	ENDP
 
 MidiIn_overrunErrorMessage:
