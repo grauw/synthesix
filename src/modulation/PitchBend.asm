@@ -7,9 +7,9 @@ PitchBend: MACRO
 	detune:
 		Value 0
 	pitchCoarse:
-		dw 0
+		dw Value_values.0
 	pitchFine:
-		dw 0
+		dw Value_values.0
 	upRange:    ;max range is 31 notes
 		db 2
 	downRange:  ;max range is 31 notes
