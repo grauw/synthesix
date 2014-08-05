@@ -5,12 +5,16 @@
 ; A value between 0 and 63 is considered low.
 ;
 Sustain: MACRO
+	outputs:
 	value:
 		Value 0
+	outputsEnd:
+	inputs:
 	gate:
 		dw Value_values.0
 	hold:
 		dw Value_values.0
+	inputsEnd:
 	_size:
 	ENDM
 

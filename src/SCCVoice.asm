@@ -2,6 +2,9 @@
 ; An SCC voice (channel)
 ;
 SCCVoice: MACRO
+	outputs:
+	outputsEnd:
+	inputs:
 	amplitude:
 		dw Value_values.0
 	note:
@@ -12,6 +15,7 @@ SCCVoice: MACRO
 		dw Value_values.0
 	phaseReset:
 		dw Value_values.0
+	inputsEnd:
 	sccAmplitude:
 		db 0
 	sccFrequency:

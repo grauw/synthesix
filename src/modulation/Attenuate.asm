@@ -2,12 +2,16 @@
 ; Attenuate a value
 ;
 Attenuate: MACRO
+	outputs:
 	value:
 		Value 0
+	outputsEnd:
+	inputs:
 	multiplicand:
 		dw Value_values.127
 	multiplier:
 		dw Value_values.127
+	inputsEnd:
 	_size:
 	ENDM
 

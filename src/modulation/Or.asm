@@ -4,12 +4,16 @@
 ; A value between 0 and 63 is considered false. Short-circuits.
 ;
 Or: MACRO
+	outputs:
 	value:
 		Value 0
+	outputsEnd:
+	inputs:
 	term1:
 		dw Value_values.0
 	term2:
 		dw Value_values.0
+	inputsEnd:
 	_size:
 	ENDM
 

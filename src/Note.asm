@@ -2,6 +2,7 @@
 ; A note
 ;
 Note: MACRO
+	outputs:
 	key:
 		Value 0
 	velocity:
@@ -12,6 +13,9 @@ Note: MACRO
 		Value 0
 	gate:
 		Value 0
+	outputsEnd:
+	inputs:
+	inputsEnd:
 	_size:
 	ENDM
 

@@ -2,8 +2,12 @@
 ; A fixed value
 ;
 Value: MACRO ?value
+	outputs:
 	value:
 		db ?value
+	outputsEnd:
+	inputs:
+	inputsEnd:
 	_size:
 	ENDM
 

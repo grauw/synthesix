@@ -2,14 +2,18 @@
 ; An attack-decay envelope
 ;
 EnvelopeAD: MACRO
+	outputs:
 	value:
 		Value 0
+	outputsEnd:
+	inputs:
 	attack:
 		dw Value_values.127
 	decay:
 		dw Value_values.4
 	trigger:
 		dw Value_values.0
+	inputsEnd:
 	sign:
 		db 0
 	phase:

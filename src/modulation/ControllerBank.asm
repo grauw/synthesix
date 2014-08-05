@@ -1,7 +1,11 @@
 ControllerBank: MACRO
+	outputs:
 	controllers: REPT 128
 		Value 0
 		ENDM
+	outputsEnd:
+	inputs:
+	inputsEnd:
 	_size:
 	ENDM
 

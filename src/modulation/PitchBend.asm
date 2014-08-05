@@ -2,14 +2,18 @@
 ; A pitch bend
 ;
 PitchBend: MACRO
+	outputs:
 	note:
 		Value 0
 	detune:
 		Value 0
+	outputsEnd:
+	inputs:
 	pitchCoarse:
 		dw Value_values.0
 	pitchFine:
 		dw Value_values.0
+	inputsEnd:
 	upRange:    ;max range is 31 notes
 		db 2
 	downRange:  ;max range is 31 notes

@@ -11,6 +11,7 @@ Channel: MACRO
 		dw 0
 	controllers:
 		dw 0
+	outputs:
 	program:
 		Value 0
 	channelPressure:
@@ -19,6 +20,9 @@ Channel: MACRO
 		Value 0
 	pitchBendCoarse:
 		Value 0
+	outputsEnd:
+	inputs:
+	inputsEnd:
 	notePools:
 		REPT MAX_NOTE_POOLS
 		dw 0

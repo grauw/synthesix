@@ -2,14 +2,18 @@
 ; Attenuate and add a value
 ;
 AttenuateAdd: MACRO
+	outputs:
 	value:
 		Value 0
+	outputsEnd:
+	inputs:
 	multiplicand:
 		dw Value_values.127
 	multiplier:
 		dw Value_values.127
 	addend:
 		dw Value_values.0
+	inputsEnd:
 	_size:
 	ENDM
 

@@ -2,8 +2,11 @@
 ; An attack-release envelope
 ;
 EnvelopeAR: MACRO
+	outputs:
 	value:
 		Value 0
+	outputsEnd:
+	inputs:
 	attack:
 		dw Value_values.32
 	release:
@@ -12,6 +15,7 @@ EnvelopeAR: MACRO
 		dw Value_values.0
 	trigger:
 		dw Value_values.0
+	inputsEnd:
 	sign:
 		db 0
 	counter:

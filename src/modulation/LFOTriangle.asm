@@ -2,12 +2,16 @@
 ; A triangle LFO
 ;
 LFOTriangle: MACRO
+	outputs:
 	value:
 		Value 0
+	outputsEnd:
 	speed:
 		db 2
+	inputs:
 	trigger:
 		dw Value_values.0
+	inputsEnd:
 	counter:
 		db 0
 	_size:

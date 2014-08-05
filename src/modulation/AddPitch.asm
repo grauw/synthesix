@@ -2,10 +2,13 @@
 ; A pitch bend
 ;
 AddPitch: MACRO
+	outputs:
 	note:
 		Value 0
 	detune:
 		Value 0
+	outputsEnd:
+	inputs:
 	augendNote:
 		dw Value_values.0
 	augendDetune:
@@ -14,6 +17,7 @@ AddPitch: MACRO
 		dw Value_values.0
 	addendDetune:
 		dw Value_values.0
+	inputsEnd:
 	_size:
 	ENDM
 
