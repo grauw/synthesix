@@ -192,6 +192,8 @@ Patch_GetNotePool:
 ; ix <- module list
 ; Modifies: af, bc, ix
 Patch_GetModuleList:
+	cp (ix + Patch.polyphony)
+	call nc,System_ThrowException
 	add a,a
 	ld c,a
 	ld b,0
