@@ -89,11 +89,11 @@ Patch_Load: PROC
 	call Patch_AddModule                ; module 12
 	ld hl,ModuleType_sccVoice
 	call Patch_AddModule                ; module 13
-	ld hl,13 << 8 | SCCVoice.note
-	ld de,3 << 8 | Note.key
+	ld hl,13 << 8 | 0  ; SCCVoice.note
+	ld de,3  << 8 | 0  ; Note.key
 	call Patch_AddLink
-	ld hl,13 << 8 | SCCVoice.amplitude
-	ld de,3 << 8 | Note.gate
+	ld hl,13 << 8 | 2  ; SCCVoice.amplitude
+	ld de,3  << 8 | 2  ; Note.gate
 	call Patch_AddLink
 	; AR envelope
 	ld a,93
@@ -102,78 +102,78 @@ Patch_Load: PROC
 	ld a,94
 	call Patch_GetController
 	ld (hl),8
-	ld hl,5 << 8 | EnvelopeAR.attack
-	ld de,2 << 8 | 93
+	ld hl,5 << 8 | 0   ; EnvelopeAR.attack
+	ld de,2 << 8 | 93  ; Controller 93
 	call Patch_AddLink
-	ld hl,5 << 8 | EnvelopeAR.release
-	ld de,2 << 8 | 94
+	ld hl,5 << 8 | 1   ; EnvelopeAR.release
+	ld de,2 << 8 | 94  ; Controller 94
 	call Patch_AddLink
-	ld hl,5 << 8 | EnvelopeAR.trigger
-	ld de,3 << 8 | Note.trigger
+	ld hl,5 << 8 | 3  ; EnvelopeAR.trigger
+	ld de,3 << 8 | 3  ; Note.trigger
 	call Patch_AddLink
-	ld hl,6 << 8 | Sustain.gate
-	ld de,3 << 8 | Note.gate
+	ld hl,6 << 8 | 0  ; Sustain.gate
+	ld de,3 << 8 | 2  ; Note.gate
 	call Patch_AddLink
-	ld hl,6 << 8 | Sustain.hold
-	ld de,2 << 8 | 64
+	ld hl,6 << 8 | 1   ; Sustain.hold
+	ld de,2 << 8 | 64  ; Controller 64
 	call Patch_AddLink
-	ld hl,5 << 8 | EnvelopeAR.gate
-	ld de,6 << 8 | Sustain.value
+	ld hl,5 << 8 | 2  ; EnvelopeAR.gate
+	ld de,6 << 8 | 0  ; Sustain.value
 	call Patch_AddLink
-	ld hl,13 << 8 | SCCVoice.amplitude
-	ld de,5 << 8 | EnvelopeAR.value
+	ld hl,13 << 8 | 2  ; SCCVoice.amplitude
+	ld de,5  << 8 | 0  ; EnvelopeAR.value
 	call Patch_AddLink
 	; After touch vibrato
-	ld hl,8 << 8 | Attenuate.multiplicand
-	ld de,7 << 8 | LFOTriangleSigned.value
+	ld hl,8 << 8 | 0  ; Attenuate.multiplicand
+	ld de,7 << 8 | 0  ; LFOTriangleSigned.value
 	call Patch_AddLink
-	ld hl,8 << 8 | Attenuate.multiplier
-	ld de,2 << 8 | 1
+	ld hl,8 << 8 | 1  ; Attenuate.multiplier
+	ld de,2 << 8 | 1  ; Controller 1
 	call Patch_AddLink
-	ld hl,13 << 8 | SCCVoice.detune
-	ld de,8 << 8 | Attenuate.value
+	ld hl,13 << 8 | 1  ; SCCVoice.detune
+	ld de,8  << 8 | 0  ; Attenuate.value
 	call Patch_AddLink
 	; Pitch bend
-	ld hl,9 << 8 | PitchBend.pitchFine
-	ld de,1 << 8 | Channel.pitchBendFine
+	ld hl,9 << 8 | 0  ; PitchBend.pitchCoarse
+	ld de,1 << 8 | 2  ; Channel.pitchBendCoarse
 	call Patch_AddLink
-	ld hl,9 << 8 | PitchBend.pitchCoarse
-	ld de,1 << 8 | Channel.pitchBendCoarse
+	ld hl,9 << 8 | 1  ; PitchBend.pitchFine
+	ld de,1 << 8 | 3  ; Channel.pitchBendFine
 	call Patch_AddLink
-	ld hl,10 << 8 | AddPitch.augendNote
-	ld de,9 << 8 | PitchBend.note
+	ld hl,10 << 8 | 0  ; AddPitch.augendNote
+	ld de,9  << 8 | 0  ; PitchBend.note
 	call Patch_AddLink
-	ld hl,10 << 8 | AddPitch.augendDetune
-	ld de,9 << 8 | PitchBend.detune
+	ld hl,10 << 8 | 1  ; AddPitch.augendDetune
+	ld de,9  << 8 | 1  ; PitchBend.detune
 	call Patch_AddLink
-	ld hl,10 << 8 | AddPitch.addendNote
-	ld de,3 << 8 | Note.key
+	ld hl,10 << 8 | 2  ; AddPitch.addendNote
+	ld de,3  << 8 | 0  ; Note.key
 	call Patch_AddLink
-	ld hl,10 << 8 | AddPitch.addendDetune
-	ld de,8 << 8 | Attenuate.value
+	ld hl,10 << 8 | 3  ; AddPitch.addendDetune
+	ld de,8  << 8 | 0  ; Attenuate.value
 	call Patch_AddLink
-	ld hl,13 << 8 | SCCVoice.note
-	ld de,10 << 8 | AddPitch.note
+	ld hl,13 << 8 | 0  ; SCCVoice.note
+	ld de,10 << 8 | 0  ; AddPitch.note
 	call Patch_AddLink
-	ld hl,13 << 8 | SCCVoice.detune
-	ld de,10 << 8 | AddPitch.detune
+	ld hl,13 << 8 | 1  ; SCCVoice.detune
+	ld de,10 << 8 | 1  ; AddPitch.detune
 	call Patch_AddLink
 	; Pulse width modulation
-	ld hl,12 << 8 | AttenuateAdd.multiplicand
-	ld de,11 << 8 | LFOTriangle.value
+	ld hl,12 << 8 | 0  ; AttenuateAdd.multiplicand
+	ld de,11 << 8 | 0  ; LFOTriangle.value
 	call Patch_AddLink
-	ld hl,12 << 8 | AttenuateAdd.multiplier
-	ld de,0 << 8 | 50
+	ld hl,12 << 8 | 1   ; AttenuateAdd.multiplier
+	ld de,0  << 8 | 50  ; Value 50
 	call Patch_AddLink
-	ld hl,12 << 8 | AttenuateAdd.addend
-	ld de,0 << 8 | 64
+	ld hl,12 << 8 | 2   ; AttenuateAdd.addend
+	ld de,0  << 8 | 64  ; Value 64
 	call Patch_AddLink
-	ld hl,13 << 8 | SCCVoice.wave
-	ld de,12 << 8 | AttenuateAdd.value
+	ld hl,13 << 8 | 3  ; SCCVoice.wave
+	ld de,12 << 8 | 0  ; AttenuateAdd.value
 	call Patch_AddLink
 	; Pulse width control
-;	ld hl,13 << 8 | SCCVoice.wave
-;	ld de,2 << 8 | 7
+;	ld hl,13 << 8 | 3  ; SCCVoice.wave
+;	ld de,2  << 8 | 7  ; Controller 7
 ;	call Patch_AddLink
 	ret
 	ENDP
@@ -202,6 +202,38 @@ Patch_GetModuleList:
 	ld b,(ix + Patch.moduleLists + 1)
 	ld ixl,c
 	ld ixh,b
+	ret
+
+; ix = this
+; bc <- module count
+Patch_GetModuleCount:
+	ld e,(ix + Patch.modules)
+	ld d,(ix + Patch.modules + 1)
+	ld ixl,e
+	ld ixh,d
+	call ArrayList_GetSize
+	ret
+
+; a = note index
+; bc = module index
+; ix = this
+; de <- module
+; ix <- module type
+; Modifies: af, bc, de, ix
+Patch_GetModule:
+	push ix
+	ld e,(ix + Patch.modules)
+	ld d,(ix + Patch.modules + 1)
+	ld ixl,e
+	ld ixh,d
+	call ArrayList_Get
+	pop ix
+	push de
+	push bc
+	call Patch_GetModuleList
+	pop bc
+	call ArrayList_Get
+	pop ix
 	ret
 
 ; ix = this
@@ -240,8 +272,8 @@ Loop:
 	ENDP
 
 ; ix = this
-; hl = link source (h: module, l: offset)
-; de = link destination (d: module, e: offset)
+; hl = link source (h: module, l: input port)
+; de = link destination (d: module, e: output port)
 Patch_AddLink: PROC
 	ld a,0
 Loop:
@@ -251,11 +283,27 @@ Loop:
 	push de
 	push hl
 	push ix
-	call Patch_GetModuleList
-	ex de,hl
-	call Patch_ModuleList_GetModuleJack
-	ex de,hl
-	call Patch_ModuleList_GetModuleJack
+	push hl
+	push ix
+	push af
+	push de
+	ld b,0
+	ld c,d
+	call Patch_GetModule
+	pop hl
+	ld a,l
+	call ModuleType_GetOutput
+	pop af
+	pop ix
+	ex (sp),hl
+	push hl
+	ld b,0
+	ld c,h
+	call Patch_GetModule
+	pop hl
+	ld a,l
+	call ModuleType_GetInput
+	pop de
 	ld (hl),e
 	inc hl
 	ld (hl),d
@@ -266,23 +314,6 @@ Loop:
 	inc a
 	jp Loop
 	ENDP
-
-; ix = module list
-; h = module index
-; l = module offset
-; hl <- module jack point
-; Modifies: f, bc, hl
-Patch_ModuleList_GetModuleJack:
-	push de
-	push hl
-	ld c,h
-	ld b,0
-	call ArrayList_Get
-	pop hl
-	ld h,0
-	add hl,de
-	pop de
-	ret
 
 ; hl <- controller
 Patch_GetController:

@@ -9,11 +9,11 @@ ModuleType: MACRO ?core, ?acquirer
 	outputs:
 		db ?core.outputs
 	outputCount:
-		db ?core.outputsEnd - ?core.outputs
+		dw ?core.outputsEnd - ?core.outputs
 	inputs:
 		db ?core.inputs
 	inputCount:
-		db (?core.inputsEnd - ?core.inputs) >> 1
+		dw (?core.inputsEnd - ?core.inputs) >> 1
 	_size:
 	ENDM
 
@@ -32,6 +32,50 @@ ModuleType_Acquire_HL:
 	ld l,(ix + ModuleType.acquirer)
 	ld h,(ix + ModuleType.acquirer + 1)
 	jp hl
+
+; a = port number
+; de = module core
+; ix = this
+; hl <- module output address
+; Modifies: af
+ModuleType_GetOutput: PROC
+	cp (ix + ModuleType.outputCount)
+	call nc,Check100H
+	add a,(ix + ModuleType.outputs)
+	ld l,a
+	ld h,0
+	rl h
+	add hl,de
+	ret
+Check100H:
+	bit 0,(ix + ModuleType.outputCount + 1)
+	ret nz
+	call System_ThrowException
+	ENDP
+
+; a = port number
+; de = module core
+; ix = this
+; hl <- module input address
+; Modifies: af
+ModuleType_GetInput: PROC
+	cp (ix + ModuleType.inputCount)
+	call nc,Check100H
+	add a,a
+	ld h,0
+	rl h
+	add a,(ix + ModuleType.inputs)
+	ld l,a
+	ld a,h
+	adc a,0
+	ld h,a
+	add hl,de
+	ret
+Check100H:
+	bit 0,(ix + ModuleType.inputCount + 1)
+	ret nz
+	call System_ThrowException
+	ENDP
 
 ;
 ; ModuleType definitions
