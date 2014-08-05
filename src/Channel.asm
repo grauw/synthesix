@@ -16,9 +16,9 @@ Channel: MACRO
 		Value 0
 	channelPressure:
 		Value 0
-	pitchBendFine:
-		Value 0
 	pitchBendCoarse:
+		Value 0
+	pitchBendFine:
 		Value 0
 	outputsEnd:
 	inputs:
