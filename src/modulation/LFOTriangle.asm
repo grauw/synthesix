@@ -6,9 +6,9 @@ LFOTriangle: MACRO
 	value:
 		Value 0
 	outputsEnd:
-	speed:
-		db 2
 	inputs:
+	speed:
+		dw Constants_instance + 2
 	trigger:
 		dw Constants_instance + 0
 	inputsEnd:
@@ -50,8 +50,10 @@ LFOTriangle_Update: PROC
 	ld h,(ix + LFOTriangle.trigger + 1)
 	bit 6,(hl)
 	call nz,LFOTriangle_Reset
+	ld l,(ix + LFOTriangle.speed)
+	ld h,(ix + LFOTriangle.speed + 1)
 	ld a,(ix + LFOTriangle.counter)
-	add a,(ix + LFOTriangle.speed)
+	add a,(hl)
 	ld (ix + LFOTriangle.counter),a
 	jp p,Positive
 	cpl

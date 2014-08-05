@@ -6,9 +6,9 @@ LFOTriangleSigned: MACRO
 	value:
 		Value 0
 	outputsEnd:
-	speed:
-		db 48
 	inputs:
+	speed:
+		dw Constants_instance + 48
 	trigger:
 		dw Constants_instance + 0
 	inputsEnd:
@@ -53,8 +53,10 @@ LFOTriangleSigned_Update: PROC
 	ld h,(ix + LFOTriangleSigned.trigger + 1)
 	bit 6,(hl)
 	call nz,LFOTriangleSigned_Reset
+	ld l,(ix + LFOTriangleSigned.speed)
+	ld h,(ix + LFOTriangleSigned.speed + 1)
 	ld a,(ix + LFOTriangleSigned.counter)
-	add a,(ix + LFOTriangleSigned.speed)
+	add a,(hl)
 	ld (ix + LFOTriangleSigned.counter),a
 	jp nc,NoSignChange
 	rrc (ix + LFOTriangleSigned.sign)  ; flip sign
