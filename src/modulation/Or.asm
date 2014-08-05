@@ -10,9 +10,9 @@ Or: MACRO
 	outputsEnd:
 	inputs:
 	term1:
-		dw Value_values.0
+		dw Constants_instance + 0
 	term2:
-		dw Value_values.0
+		dw Constants_instance + 0
 	inputsEnd:
 	_size:
 	ENDM

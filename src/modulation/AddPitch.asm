@@ -10,13 +10,13 @@ AddPitch: MACRO
 	outputsEnd:
 	inputs:
 	augendNote:
-		dw Value_values.0
+		dw Constants_instance + 0
 	augendDetune:
-		dw Value_values.0
+		dw Constants_instance + 0
 	addendNote:
-		dw Value_values.0
+		dw Constants_instance + 0
 	addendDetune:
-		dw Value_values.0
+		dw Constants_instance + 0
 	inputsEnd:
 	_size:
 	ENDM

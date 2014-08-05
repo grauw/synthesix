@@ -8,11 +8,11 @@ AttenuateAdd: MACRO
 	outputsEnd:
 	inputs:
 	multiplicand:
-		dw Value_values.127
+		dw Constants_instance + 127
 	multiplier:
-		dw Value_values.127
+		dw Constants_instance + 127
 	addend:
-		dw Value_values.0
+		dw Constants_instance + 0
 	inputsEnd:
 	_size:
 	ENDM

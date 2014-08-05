@@ -10,9 +10,9 @@ PitchBend: MACRO
 	outputsEnd:
 	inputs:
 	pitchCoarse:
-		dw Value_values.0
+		dw Constants_instance + 0
 	pitchFine:
-		dw Value_values.0
+		dw Constants_instance + 0
 	inputsEnd:
 	upRange:    ;max range is 31 notes
 		db 2

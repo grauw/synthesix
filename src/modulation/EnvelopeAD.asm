@@ -8,11 +8,11 @@ EnvelopeAD: MACRO
 	outputsEnd:
 	inputs:
 	attack:
-		dw Value_values.127
+		dw Constants_instance + 127
 	decay:
-		dw Value_values.4
+		dw Constants_instance + 4
 	trigger:
-		dw Value_values.0
+		dw Constants_instance + 0
 	inputsEnd:
 	sign:
 		db 0

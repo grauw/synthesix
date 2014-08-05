@@ -36,10 +36,10 @@ ModuleType_Acquire_HL:
 ;
 ; ModuleType definitions
 ;
-ModuleType_values: ModuleType Value, ModuleType_ValuesFactory
+ModuleType_constants: ModuleType Constants, ModuleType_ConstantsFactory
 
-ModuleType_ValuesFactory:
-	ld ix,Value_values
+ModuleType_ConstantsFactory:
+	ld ix,Constants_instance
 	ret
 
 ModuleType_channel: ModuleType Channel, ModuleType_ChannelFactory

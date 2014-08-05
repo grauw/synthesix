@@ -11,9 +11,9 @@ Sustain: MACRO
 	outputsEnd:
 	inputs:
 	gate:
-		dw Value_values.0
+		dw Constants_instance + 0
 	hold:
-		dw Value_values.0
+		dw Constants_instance + 0
 	inputsEnd:
 	_size:
 	ENDM

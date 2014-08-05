@@ -61,7 +61,7 @@ Patch_Load: PROC
 	pop ix
 	ld (ix + Patch.notePool),e
 	ld (ix + Patch.notePool + 1),d
-	ld hl,ModuleType_values
+	ld hl,ModuleType_constants
 	call Patch_AddModule                ; module 0
 	ld hl,ModuleType_channel
 	call Patch_AddModule                ; module 1

@@ -8,13 +8,13 @@ EnvelopeAR: MACRO
 	outputsEnd:
 	inputs:
 	attack:
-		dw Value_values.32
+		dw Constants_instance + 32
 	release:
-		dw Value_values.8
+		dw Constants_instance + 8
 	gate:
-		dw Value_values.0
+		dw Constants_instance + 0
 	trigger:
-		dw Value_values.0
+		dw Constants_instance + 0
 	inputsEnd:
 	sign:
 		db 0

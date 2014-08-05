@@ -1,5 +1,5 @@
 ;
-; A fixed value
+; A value
 ;
 Value: MACRO ?value
 	outputs:
@@ -19,8 +19,3 @@ Value_New:
 	ld iy,Value_class
 	call Class_New
 	ret
-
-;
-Value_values: REPT 256, ?value
-	Value ?value
-	ENDM

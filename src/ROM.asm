@@ -77,6 +77,7 @@ ROM_BANK_A000_CHANGE: equ 0B000H
 	INCLUDE "Listeners.asm"
 	INCLUDE "Clock.asm"
 	INCLUDE "modulation/Value.asm"
+	INCLUDE "modulation/Constants.asm"
 	INCLUDE "modulation/Attenuate.asm"
 	INCLUDE "modulation/AttenuateAdd.asm"
 	INCLUDE "modulation/AddPitch.asm"

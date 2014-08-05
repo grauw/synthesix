@@ -10,7 +10,7 @@ LFOTriangle: MACRO
 		db 2
 	inputs:
 	trigger:
-		dw Value_values.0
+		dw Constants_instance + 0
 	inputsEnd:
 	counter:
 		db 0
