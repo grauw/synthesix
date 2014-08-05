@@ -7,13 +7,13 @@ AddPitch: MACRO
 	detune:
 		Value 0
 	augendNote:
-		dw 0
+		dw Value_values.0
 	augendDetune:
-		dw 0
+		dw Value_values.0
 	addendNote:
-		dw 0
+		dw Value_values.0
 	addendDetune:
-		dw 0
+		dw Value_values.0
 	_size:
 	ENDM
 
