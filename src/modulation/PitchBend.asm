@@ -13,11 +13,11 @@ PitchBend: MACRO
 		dw Constants_instance + 0
 	pitchFine:
 		dw Constants_instance + 0
-	inputsEnd:
 	upRange:    ;max range is 31 notes
-		db 2
+		dw Constants_instance + 2
 	downRange:  ;max range is 31 notes
-		db 2
+		dw Constants_instance + 2
+	inputsEnd:
 	_size:
 	ENDM
 
@@ -58,7 +58,9 @@ Negative:
 	and a
 	sbc hl,de
 	add hl,hl
-	ld a,(ix + PitchBend.downRange)
+	ld e,(ix + PitchBend.downRange)
+	ld d,(ix + PitchBend.downRange + 1)
+	ld a,(de)
 	call PitchBend_MultiplyRange
 	cpl
 	ld (ix + PitchBend.note),a
@@ -72,7 +74,9 @@ Positive:
 	res 7,d
 	ex de,hl
 	add hl,hl
-	ld a,(ix + PitchBend.upRange)
+	ld e,(ix + PitchBend.upRange)
+	ld d,(ix + PitchBend.upRange + 1)
+	ld a,(de)
 	call PitchBend_MultiplyRange
 	ld (ix + PitchBend.note),a
 	ld (ix + PitchBend.detune),h
