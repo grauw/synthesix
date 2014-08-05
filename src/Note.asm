@@ -7,11 +7,11 @@ Note: MACRO
 		Value 0
 	velocity:
 		Value 0
-	offVelocity:
+	gate:
 		Value 0
 	trigger:
 		Value 0
-	gate:
+	offVelocity:
 		Value 0
 	outputsEnd:
 	inputs:
