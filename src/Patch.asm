@@ -243,6 +243,8 @@ Loop:
 Patch_AddLink: PROC
 	ld a,0
 Loop:
+	cp (ix + Patch.polyphony)
+	ret z
 	push af
 	push de
 	push hl
@@ -260,9 +262,7 @@ Loop:
 	pop de
 	pop af
 	inc a
-	cp (ix + Patch.polyphony)
-	jp nz,Loop
-	ret
+	jp Loop
 	ENDP
 
 ; ix = module list
