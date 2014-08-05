@@ -9,7 +9,7 @@ LFOTriangle: MACRO
 	inputs:
 	speed:
 		dw Constants_instance + 2
-	trigger:
+	reset:
 		dw Constants_instance + 0
 	inputsEnd:
 	counter:
@@ -46,8 +46,8 @@ LFOTriangle_Reset:
 
 ; ix = this
 LFOTriangle_Update: PROC
-	ld l,(ix + LFOTriangle.trigger)
-	ld h,(ix + LFOTriangle.trigger + 1)
+	ld l,(ix + LFOTriangle.reset)
+	ld h,(ix + LFOTriangle.reset + 1)
 	bit 6,(hl)
 	call nz,LFOTriangle_Reset
 	ld l,(ix + LFOTriangle.speed)

@@ -9,7 +9,7 @@ LFOTriangleSigned: MACRO
 	inputs:
 	speed:
 		dw Constants_instance + 48
-	trigger:
+	reset:
 		dw Constants_instance + 0
 	inputsEnd:
 	counter:
@@ -49,8 +49,8 @@ LFOTriangleSigned_Reset:
 
 ; ix = this
 LFOTriangleSigned_Update: PROC
-	ld l,(ix + LFOTriangleSigned.trigger)
-	ld h,(ix + LFOTriangleSigned.trigger + 1)
+	ld l,(ix + LFOTriangleSigned.reset)
+	ld h,(ix + LFOTriangleSigned.reset + 1)
 	bit 6,(hl)
 	call nz,LFOTriangleSigned_Reset
 	ld l,(ix + LFOTriangleSigned.speed)
