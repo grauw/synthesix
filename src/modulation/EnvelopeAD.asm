@@ -16,10 +16,10 @@ EnvelopeAD: MACRO
 		db -1
 	counter:
 		db 0
-	size:
+	_size:
 	ENDM
 
-	dw EnvelopeAD.size
+	dw EnvelopeAD._size
 EnvelopeAD_class: EnvelopeAD
 
 ; ix, de <- new object

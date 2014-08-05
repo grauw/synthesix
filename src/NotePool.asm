@@ -26,7 +26,7 @@ NotePool: MACRO
 		REPT MAX_QUEUEDNOTES
 		QueuedNote
 		ENDM
-	size:
+	_size:
 	ENDM
 
 KeyNotePair: MACRO
@@ -34,7 +34,7 @@ KeyNotePair: MACRO
 		db -1
 	note:
 		dw 0
-	size:
+	_size:
 	ENDM
 
 QueuedNote: MACRO
@@ -42,10 +42,10 @@ QueuedNote: MACRO
 		db -1
 	velocity:
 		db 0
-	size:
+	_size:
 	ENDM
 
-	dw NotePool.size
+	dw NotePool._size
 NotePool_class: NotePool
 
 ; ix, de <- new object
@@ -70,7 +70,7 @@ NotePool_NoteOn: PROC
 	jp z,NotePool_QueueNote
 	push ix
 	pop iy
-	ld de,KeyNotePair.size
+	ld de,KeyNotePair._size
 Loop:
 	cp (iy + NotePool.notes + KeyNotePair.key)
 	jr z,Found
@@ -99,7 +99,7 @@ NotePool_NoteOff: PROC
 	pop iy
 	ld l,a
 	ld a,b
-	ld de,KeyNotePair.size
+	ld de,KeyNotePair._size
 Loop:
 	cp (iy + NotePool.notes + KeyNotePair.key)
 	jr z,Found
@@ -136,7 +136,7 @@ NotePool_AddNote:
 	cp NotePool.MAX_NOTES
 	call nc,System_ThrowException
 	ld c,a
-	add a,c  ; * KeyNotePair.size
+	add a,c  ; * KeyNotePair._size
 	add a,c
 	ld c,a
 	ld b,0
@@ -190,9 +190,9 @@ Loop:
 Found:
 	dec e
 	ret z
-	ld a,(ix + NotePool.queuedNotes + QueuedNote.key + QueuedNote.size)
+	ld a,(ix + NotePool.queuedNotes + QueuedNote.key + QueuedNote._size)
 	ld (ix + NotePool.queuedNotes + QueuedNote.key),a
-	ld a,(ix + NotePool.queuedNotes + QueuedNote.velocity + QueuedNote.size)
+	ld a,(ix + NotePool.queuedNotes + QueuedNote.velocity + QueuedNote._size)
 	ld (ix + NotePool.queuedNotes + QueuedNote.velocity),a
 	inc ix
 	inc ix

@@ -11,10 +11,10 @@ Sustain: MACRO
 		dw Value_values.0
 	hold:
 		dw Value_values.0
-	size:
+	_size:
 	ENDM
 
-	dw Sustain.size
+	dw Sustain._size
 Sustain_class: Sustain
 
 ; ix, de <- new object

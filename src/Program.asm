@@ -6,10 +6,10 @@ Program: MACRO
 		dw 0
 	patch:
 		dw 0
-	size:
+	_size:
 	ENDM
 
-	dw Program.size
+	dw Program._size
 Program_class: Program
 
 ; hl = channel

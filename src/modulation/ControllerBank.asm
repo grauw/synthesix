@@ -2,10 +2,10 @@ ControllerBank: MACRO
 	controllers: REPT 128
 		Value 0
 		ENDM
-	size:
+	_size:
 	ENDM
 
-	dw ControllerBank.size
+	dw ControllerBank._size
 ControllerBank_class: ControllerBank
 
 ; ix, de <- new object

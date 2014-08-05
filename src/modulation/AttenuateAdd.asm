@@ -10,10 +10,10 @@ AttenuateAdd: MACRO
 		dw Value_values.127
 	addend:
 		dw Value_values.0
-	size:
+	_size:
 	ENDM
 
-	dw AttenuateAdd.size
+	dw AttenuateAdd._size
 AttenuateAdd_class: AttenuateAdd
 
 ; ix, de <- new object

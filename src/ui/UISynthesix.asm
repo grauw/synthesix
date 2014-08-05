@@ -4,10 +4,10 @@
 UISynthesix: MACRO
 	buffer:
 		dw 0
-	size:
+	_size:
 	ENDM
 
-	dw UISynthesix.size
+	dw UISynthesix._size
 UISynthesix_class: UISynthesix
 
 ; ix, de <- new object

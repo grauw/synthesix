@@ -8,10 +8,10 @@ Attenuate: MACRO
 		dw Value_values.127
 	multiplier:
 		dw Value_values.127
-	size:
+	_size:
 	ENDM
 
-	dw Attenuate.size
+	dw Attenuate._size
 Attenuate_class: Attenuate
 
 ; ix, de <- new object

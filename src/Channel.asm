@@ -23,10 +23,10 @@ Channel: MACRO
 		REPT MAX_NOTE_POOLS
 		dw 0
 		ENDM
-	size:
+	_size:
 	ENDM
 
-	dw Channel.size
+	dw Channel._size
 Channel_class: Channel
 
 ; ix <- new object
@@ -194,7 +194,7 @@ Next:
 ;
 Channels_Init:
 	REPT 16, ?channel
-	ld ix,Channel_channels + ?channel * Channel.size
+	ld ix,Channel_channels + ?channel * Channel._size
 	call Channel_Constructor
 	ENDM
 	ret

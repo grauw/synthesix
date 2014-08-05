@@ -12,10 +12,10 @@ LFOTriangleSigned: MACRO
 		db 0
 	sign:
 		db 10101010B
-	size:
+	_size:
 	ENDM
 
-	dw LFOTriangleSigned.size
+	dw LFOTriangleSigned._size
 LFOTriangleSigned_class: LFOTriangleSigned
 
 ; ix, de <- new object

@@ -4,10 +4,10 @@
 Value: MACRO ?value
 	value:
 		db ?value
-	size:
+	_size:
 	ENDM
 
-	dw Value.size
+	dw Value._size
 Value_class: Value 0
 
 ; ix <- new object

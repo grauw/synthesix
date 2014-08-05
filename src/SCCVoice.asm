@@ -28,10 +28,10 @@ SCCVoice: MACRO
 		db -1
 	free:
 		db 0
-	size:
+	_size:
 	ENDM
 
-	dw SCCVoice.size
+	dw SCCVoice._size
 SCCVoice_class: SCCVoice
 
 ; ix, de <- new object

@@ -4,7 +4,7 @@
 UIFocus: MACRO
 	target:
 		dw Channel_channels.0 + Channel.program
-	size:
+	_size:
 	ENDM
 
 ; ix = this

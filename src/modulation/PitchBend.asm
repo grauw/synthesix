@@ -14,10 +14,10 @@ PitchBend: MACRO
 		db 2
 	downRange:  ;max range is 31 notes
 		db 2
-	size:
+	_size:
 	ENDM
 
-	dw PitchBend.size
+	dw PitchBend._size
 PitchBend_class: PitchBend
 
 ; ix, de <- new object

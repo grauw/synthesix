@@ -13,10 +13,10 @@ Patch: MACRO
 		ENDM
 	modules:
 		dw 0
-	size:
+	_size:
 	ENDM
 
-	dw Patch.size
+	dw Patch._size
 Patch_class: Patch
 
 ; ix <- new object

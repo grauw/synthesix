@@ -7,6 +7,7 @@ Listeners: MACRO ?maxSize
 		REPT ?maxSize
 		Listener
 		ENDM
+	_size:
 	ENDM
 
 Listener: MACRO
@@ -16,7 +17,7 @@ Listener: MACRO
 	jump:
 		jp Listeners_DefaultListener
 	method: equ $ - 2
-	size:
+	_size:
 	ENDM
 
 ; ix = this
@@ -32,7 +33,7 @@ Listeners_AddListener: PROC
 	and a
 	di
 	jp z,First
-	ld (ix + Listener.jump - Listener.size),0CDH  ; change previous jp to call
+	ld (ix + Listener.jump - Listener._size),0CDH  ; change previous jp to call
 First:
 	ld (ix + Listener.object),e
 	ld (ix + Listener.object + 1),d
@@ -51,7 +52,7 @@ Listeners_GetListener:
 	add ix,bc
 	ld c,a
 	ld b,0
-	REPT 7  ; ix += bc * Listener.size
+	REPT 7  ; ix += bc * Listener._size
 	add ix,bc
 	ENDM
 	ret

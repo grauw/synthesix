@@ -18,10 +18,10 @@ SCC: MACRO
 		db 0
 	voices:
 		ds SCC_MAX_VOICES * 2
-	size:
+	_size:
 	ENDM
 
-	dw SCC.size
+	dw SCC._size
 SCC_class: SCC
 
 ; ix <- new object

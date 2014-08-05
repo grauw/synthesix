@@ -18,7 +18,7 @@ Heap: MACRO ?start, ?size
 	end:
 		dw ?start + ?size
 	rootBlock: HeapBlock
-	size:
+	_size:
 	ENDM
 
 HeapBlock: MACRO

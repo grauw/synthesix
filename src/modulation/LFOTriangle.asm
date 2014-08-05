@@ -10,10 +10,10 @@ LFOTriangle: MACRO
 		dw Value_values.0
 	counter:
 		db 0
-	size:
+	_size:
 	ENDM
 
-	dw LFOTriangle.size
+	dw LFOTriangle._size
 LFOTriangle_class: LFOTriangle
 
 ; ix, de <- new object

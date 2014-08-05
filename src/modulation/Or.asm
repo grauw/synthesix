@@ -10,10 +10,10 @@ Or: MACRO
 		dw Value_values.0
 	term2:
 		dw Value_values.0
-	size:
+	_size:
 	ENDM
 
-	dw Or.size
+	dw Or._size
 Or_class: Or
 
 ; ix, de <- new object

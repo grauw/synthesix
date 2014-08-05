@@ -14,10 +14,10 @@ AddPitch: MACRO
 		dw 0
 	addendDetune:
 		dw 0
-	size:
+	_size:
 	ENDM
 
-	dw AddPitch.size
+	dw AddPitch._size
 AddPitch_class: Value 0
 
 ; ix, de <- new object

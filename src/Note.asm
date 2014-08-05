@@ -12,10 +12,10 @@ Note: MACRO
 		Value 0
 	gate:
 		Value 0
-	size:
+	_size:
 	ENDM
 
-	dw Note.size
+	dw Note._size
 Note_class: Note
 
 ; ix, de <- new object

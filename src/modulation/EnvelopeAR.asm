@@ -16,10 +16,10 @@ EnvelopeAR: MACRO
 		db 0
 	counter:
 		db 0
-	size:
+	_size:
 	ENDM
 
-	dw EnvelopeAR.size
+	dw EnvelopeAR._size
 EnvelopeAR_class: EnvelopeAR
 
 ; ix, de <- new object

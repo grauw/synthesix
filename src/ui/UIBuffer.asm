@@ -8,10 +8,10 @@ UIBuffer: MACRO
 		dw 0
 	blinkBuffer:
 		dw 0
-	size:
+	_size:
 	ENDM
 
-	dw UIBuffer.size
+	dw UIBuffer._size
 UIBuffer_class: UIBuffer
 
 ; ix, de <- this

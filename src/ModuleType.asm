@@ -4,7 +4,7 @@
 ModuleType: MACRO ?acquirer
 	acquirer:
 		dw ?acquirer
-	size:
+	_size:
 	ENDM
 
 ; ix = this
