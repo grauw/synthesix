@@ -5,21 +5,21 @@ SCCVoice: MACRO
 	outputs:
 	outputsEnd:
 	inputs:
-	amplitude:
-		dw Constants_instance + 0
 	note:
 		dw Constants_instance + 0
 	detune:
+		dw Constants_instance + 0
+	amplitude:
 		dw Constants_instance + 0
 	wave:
 		dw Constants_instance + 0
 	phaseReset:
 		dw Constants_instance + 0
 	inputsEnd:
-	sccAmplitude:
-		db 0
 	sccFrequency:
 		dw 0
+	sccAmplitude:
+		db 0
 	sccDeformation:
 		db 0
 	sccWave:
