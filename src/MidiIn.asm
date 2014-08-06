@@ -273,9 +273,7 @@ RunningStatus:
 	and a
 	jp p,RunningStatus
 NoMoreData:
-	push hl
 	call ?method
-	pop hl
 NotADataByte:
 	pop ix
 	ld (ix + MidiIn.bufferTail),l
