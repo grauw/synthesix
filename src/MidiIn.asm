@@ -43,6 +43,8 @@ MidiIn_HasMessage:
 ; f <- z: buffer full
 ; Modifies: af, hl
 MidiIn_WriteByte:
+	cp 0F8H
+	call nc,System_ThrowException
 	ld l,(ix + MidiIn.bufferHead)
 	ld h,(ix + MidiIn.bufferHead + 1)
 	ld (hl),a
