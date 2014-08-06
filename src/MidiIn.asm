@@ -149,6 +149,8 @@ MidiIn_PitchBend:
 	call MidiIn_WriteByte
 	ld a,b
 	call MidiIn_WriteByte
+	ld a,c
+	call MidiIn_WriteByte
 	ret
 
 ; ix = this
