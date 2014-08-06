@@ -240,6 +240,10 @@ call_channel_3: MACRO ?method
 	ex af,af'
 	sub 3
 	ret c  ; message incomplete
+	ex af,af'
+	push ix
+	ld ixl,a
+	ld ixh,Channel_channels >> 8
 	ld b,(hl)
 	inc l
 	ld c,(hl)
@@ -247,15 +251,11 @@ call_channel_3: MACRO ?method
 	ld a,b
 	or c
 	jp m,NotADataByte3
-	ex af,af'
-	push ix
-	ld (ix + MidiIn.bufferTail),l
-	ld ixl,a
-	ld ixh,Channel_channels >> 8
 	push hl
 	call ?method
 	pop hl
 	pop ix
+	ld (ix + MidiIn.bufferTail),l
 	jp NextMessage
 	ENDM
 
@@ -263,30 +263,36 @@ call_channel_2: MACRO ?method
 	ex af,af'
 	sub 2
 	ret c  ; message incomplete
+	ex af,af'
+	push ix
+	ld ixl,a
+	ld ixh,Channel_channels >> 8
 	ld b,(hl)
 	inc l
 	ld a,b
 	and a
 	jp m,NotADataByte2
-	ex af,af'
-	push ix
-	ld (ix + MidiIn.bufferTail),l
-	ld ixl,a
-	ld ixh,Channel_channels >> 8
 	push hl
 	call ?method
 	pop hl
 	pop ix
+	ld (ix + MidiIn.bufferTail),l
 	jp NextMessage
 	ENDM
 
 ; if a status byte is read where a data byte is expected, skip prev. message
 NotADataByte3:
+	pop ix
 	dec l
 	ld (ix + MidiIn.bufferTail),l
 	bit 7,b
 	jp z,NextMessage
+	dec l
+	ld (ix + MidiIn.bufferTail),l
+	jp NextMessage
+
 NotADataByte2:
+	pop ix
 	dec l
 	ld (ix + MidiIn.bufferTail),l
 	jp NextMessage
