@@ -246,13 +246,14 @@ call_channel: MACRO ?length, ?method
 	ld c,(hl)
 	inc l
 	ENDIF
-	IF ?length = 2
 	ld a,b
+	IF ?length = 2
+	and a
+	jp m,NotADataByte2
 	ELSE
-	ld a,c
+	or c
+	jp m,NotADataByte3
 	ENDIF
-	or b
-	jp m,NotADataByte
 	ex af,af'
 	push ix
 	ld (ix + MidiIn.bufferTail),l
@@ -265,12 +266,13 @@ call_channel: MACRO ?length, ?method
 	jp NextMessage
 	ENDM
 
-; if value is out of bounds, skip it
-NotADataByte:
+; if a status byte is read where a data byte is expected, skip prev. message
+NotADataByte3:
 	dec l
 	ld (ix + MidiIn.bufferTail),l
 	bit 7,b
 	jp z,NextMessage
+NotADataByte2:
 	dec l
 	ld (ix + MidiIn.bufferTail),l
 	jp NextMessage
