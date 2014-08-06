@@ -74,13 +74,11 @@ Channel_NoteOn: PROC
 	dec d
 	ret z
 	push ix
-	push af
 	push bc
 	ld ixl,e
 	ld ixh,d
 	call NotePool_NoteOn
 	pop bc
-	pop af
 	pop ix
 	ENDM
 	ret
@@ -104,13 +102,11 @@ Channel_NoteOff:
 	dec d
 	ret z
 	push ix
-	push af
 	push bc
 	ld ixl,e
 	ld ixh,d
 	call NotePool_NoteOff
 	pop bc
-	pop af
 	pop ix
 	ENDM
 	ret
