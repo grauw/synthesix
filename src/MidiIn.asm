@@ -219,8 +219,8 @@ ProcessStatus_111:
 ProcessStatus_1110:
 	call_channel_3 Channel_PitchBend
 ProcessStatus_1111:
-	cp 0F4H << 4
-	jr nc,ProcessStatus_111100
+;	cp 0F4H << 4
+;	jr nc,ProcessStatus_111100
 	dec e
 	ret z  ; message incomplete
 	ld a,(hl)
