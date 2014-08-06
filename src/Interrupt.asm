@@ -5,6 +5,9 @@ Interrupt_Init:
 	ld hl,Interrupt_KEYIHandler.Hook
 	ld de,Interrupt_KEYIHandler.OldHook
 	call Interrupt_Hook
+	ld hl,Interrupt_VDPHRHandler.Hook
+	ld de,Interrupt_VDPHRHandler.OldHook
+	call Interrupt_Hook
 	ld hl,Interrupt_VDPHandler.Hook
 	ld de,Interrupt_VDPHandler.OldHook
 	call Interrupt_Hook
@@ -38,9 +41,11 @@ Interrupt_EnableInterruptHandler:
 	ld a,Interrupt_im2Table >> 8
 	ld i,a
 	im 2
+	call VDP_EnableLineInt
 	ret
 
 Interrupt_DisableInterruptHandler:
+	call VDP_DisableLineInt
 	im 1
 	ret
 
@@ -73,6 +78,7 @@ Interrupt_VDPHandler: PROC
 	in a,(99H)
 	and a
 	jp p,NotFromVDP
+Handle:
 	ld (STATFL),a
 	push hl
 	ld hl,(JIFFY)
@@ -109,6 +115,27 @@ OldHook:
 	ds 5
 Hook:
 	jp Interrupt_VDPHandler
+	ENDP
+
+Interrupt_VDPHRHandler: PROC
+	push af
+	ld a,1
+	out (99H),a
+	ld a,15 + 128
+	out (99H),a
+	in a,(99H)
+	rrca
+	ld a,0
+	out (99H),a
+	ld a,15 + 128
+	out (99H),a
+	jp c,Interrupt_VDPHandler.Handle
+NotFromVDPHR:
+	pop af
+OldHook:
+	ds 5
+Hook:
+	jp Interrupt_VDPHRHandler
 	ENDP
 
 ;

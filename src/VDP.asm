@@ -57,6 +57,35 @@ VDP_Enable60Hz:
 	call VDP_SetRegister
 	ret
 
+VDP_EnableLineInt:
+	ld a,0  ; set HR line 0
+	ld b,19
+	call VDP_SetRegister
+	ld a,(VDP_MIRROR_0 + 1)  ; disable IE0
+	and 11011111B
+	ld (VDP_MIRROR_0 + 1),a
+	ld b,1
+	call VDP_SetRegister
+	ld a,(VDP_MIRROR_0 + 0)  ; enable IE1
+	or 00010000B
+	ld (VDP_MIRROR_0 + 0),a
+	ld b,0
+	call VDP_SetRegister
+	ret
+
+VDP_DisableLineInt:
+	ld a,(VDP_MIRROR_0 + 0)  ; disable IE1
+	and 11101111B
+	ld (VDP_MIRROR_0 + 0),a
+	ld b,0
+	call VDP_SetRegister
+	ld a,(VDP_MIRROR_0 + 1)  ; enable IE0
+	or 00100000B
+	ld (VDP_MIRROR_0 + 1),a
+	ld b,1
+	call VDP_SetRegister
+	ret
+
 VDP_SetColor:
 	di
 	out (VDP_PORT_1),a
@@ -64,7 +93,6 @@ VDP_SetColor:
 	ei
 	out (VDP_PORT_1),a
 	ret
-
 
 VDP_EnableBlink: PROC
 	xor a
