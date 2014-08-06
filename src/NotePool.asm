@@ -64,6 +64,7 @@ NotePool_Constructor:
 ; ix = this
 ; b = note number (0-127)
 ; c = velocity (0-127)
+; Modifies: af, de, hl, iy
 NotePool_NoteOn: PROC
 	ld a,(ix + NotePool.nextNote)
 	cp (ix + NotePool.lastNote)
@@ -91,6 +92,7 @@ Found:
 ; ix = this
 ; b = note number (0-127)
 ; c = velocity (0-127)
+; Modifies: af, bc, de, hl, iy
 NotePool_NoteOff: PROC
 	ld a,(ix + NotePool.polyphony)
 	and a
@@ -131,6 +133,7 @@ Replace:
 
 ; ix = this
 ; hl = note
+; Modifies: af, bc
 NotePool_AddNote:
 	ld a,(ix + NotePool.polyphony)
 	cp NotePool.MAX_NOTES
@@ -156,6 +159,7 @@ NotePool_AddNote:
 ; ix = this
 ; b = note number (0-127)
 ; c = velocity (0-127)
+; Modifies: af, de, ix
 NotePool_QueueNote:
 	ld a,(ix + NotePool.queuedNoteCount)
 	cp NotePool.MAX_QUEUEDNOTES
@@ -172,6 +176,7 @@ NotePool_QueueNote:
 ; ix = this
 ; b = note number (0-127)
 ; c = velocity (0-127)
+; Modifies: af, de, ix
 NotePool_UnqueueNote: PROC
 	ld a,(ix + NotePool.queuedNoteCount)
 	and a
@@ -203,6 +208,7 @@ Found:
 ; b <- note number (0-127)
 ; c <- velocity (0-127)
 ; f <- c: queue empty (bc not modified)
+; Modifies: af, bc, de, ix
 NotePool_PopQueuedNote:
 	ld a,(ix + NotePool.queuedNoteCount)
 	sub 1
