@@ -195,16 +195,16 @@ ProcessStatus_100:
 	add a,a
 	jp c,ProcessStatus_1001
 ProcessStatus_1000:
-	call_channel 3, Channel_NoteOff
+	call_channel_3 Channel_NoteOff
 ProcessStatus_1001:
-	call_channel 3, Channel_NoteOn
+	call_channel_3 Channel_NoteOn
 ProcessStatus_101:
 	add a,a
 	jp c,ProcessStatus_1011
 ProcessStatus_1010:
-	call_channel 3, Channel_PolyPressure
+	call_channel_3 Channel_PolyPressure
 ProcessStatus_1011:
-	call_channel 3, Channel_ControlChange
+	call_channel_3 Channel_ControlChange
 ProcessStatus_11:
 	add a,a
 	jp c,ProcessStatus_111
@@ -212,14 +212,14 @@ ProcessStatus_110:
 	add a,a
 	jp c,ProcessStatus_1101
 ProcessStatus_1100:
-	call_channel 2, Channel_ProgramChange
+	call_channel_2 Channel_ProgramChange
 ProcessStatus_1101:
-	call_channel 2, Channel_ChannelPressure
+	call_channel_2 Channel_ChannelPressure
 ProcessStatus_111:
 	add a,a
 	jp c,ProcessStatus_1111
 ProcessStatus_1110:
-	call_channel 3, Channel_PitchBend
+	call_channel_3 Channel_PitchBend
 ProcessStatus_1111:
 	cp 0F4H << 4
 	jr nc,ProcessStatus_111100
@@ -236,24 +236,38 @@ ProcessStatus_Skip:
 	ld (ix + MidiIn.bufferTail),l
 	jp NextMessage
 
-call_channel: MACRO ?length, ?method
+call_channel_3: MACRO ?method
 	ex af,af'
-	sub ?length
+	sub 3
 	ret c  ; message incomplete
 	ld b,(hl)
 	inc l
-	IF ?length = 3
 	ld c,(hl)
 	inc l
-	ENDIF
 	ld a,b
-	IF ?length = 2
-	and a
-	jp m,NotADataByte2
-	ELSE
 	or c
 	jp m,NotADataByte3
-	ENDIF
+	ex af,af'
+	push ix
+	ld (ix + MidiIn.bufferTail),l
+	ld ixl,a
+	ld ixh,Channel_channels >> 8
+	push hl
+	call ?method
+	pop hl
+	pop ix
+	jp NextMessage
+	ENDM
+
+call_channel_2: MACRO ?method
+	ex af,af'
+	sub 2
+	ret c  ; message incomplete
+	ld b,(hl)
+	inc l
+	ld a,b
+	and a
+	jp m,NotADataByte2
 	ex af,af'
 	push ix
 	ld (ix + MidiIn.bufferTail),l
