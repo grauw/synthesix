@@ -261,14 +261,22 @@ call_channel_2: MACRO ?method
 	push ix
 	ld ixl,a
 	ld ixh,Channel_channels >> 8
-	ld b,(hl)
-	inc l
-	ld a,b
+	ld a,(hl)
 	and a
-	jp m,NotADataByte2
+	jp m,NotADataByte
+RunningStatus:
+	inc l
+	ld b,a
+	dec e
+	jr z,NoMoreData
+	ld a,(hl)
+	and a
+	jp p,RunningStatus
+NoMoreData:
 	push hl
 	call ?method
 	pop hl
+NotADataByte:
 	pop ix
 	ld (ix + MidiIn.bufferTail),l
 	jp NextMessage
@@ -281,12 +289,6 @@ NotADataByte3:
 	ld (ix + MidiIn.bufferTail),l
 	bit 7,b
 	jp z,NextMessage
-	dec l
-	ld (ix + MidiIn.bufferTail),l
-	jp NextMessage
-
-NotADataByte2:
-	pop ix
 	dec l
 	ld (ix + MidiIn.bufferTail),l
 	jp NextMessage
