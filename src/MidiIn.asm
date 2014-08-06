@@ -236,7 +236,7 @@ ProcessStatus_Skip:
 
 call_channel: MACRO ?length, ?method
 	ex af,af'
-	cp ?length
+	sub ?length
 	ret c  ; message incomplete
 	ld b,(hl)
 	inc l
