@@ -162,7 +162,7 @@ NextMessage:
 	ld a,(ix + MidiIn.bufferHead)
 	sub l
 	ret z  ; no messages
-	ex af,af'
+	ld e,a
 	ld a,(hl)
 	inc l
 	add a,a
@@ -172,9 +172,7 @@ ProcessStatus_0:
 	cp -1
 	jp z,ProcessStatus_Skip
 	dec l
-	ex af,af'
-	inc a
-	ex af,af'
+	inc e
 	jp ProcessStatus_1_Running
 ProcessStatus_1:
 	cp 0F0H << 1
@@ -223,10 +221,8 @@ ProcessStatus_1110:
 ProcessStatus_1111:
 	cp 0F4H << 4
 	jr nc,ProcessStatus_111100
-	ex af,af'
-	cp 2
-	ret c
-	ex af,af'
+	dec e
+	ret z  ; message incomplete
 	ld a,(hl)
 	and a
 	jp m,ProcessStatus_Skip
@@ -237,10 +233,10 @@ ProcessStatus_Skip:
 	jp NextMessage
 
 call_channel_3: MACRO ?method
-	ex af,af'
-	sub 3
-	ret c  ; message incomplete
-	ex af,af'
+	dec e
+	ret z  ; message incomplete
+	dec e
+	ret z  ; message incomplete
 	push ix
 	ld ixl,a
 	ld ixh,Channel_channels >> 8
@@ -260,10 +256,8 @@ call_channel_3: MACRO ?method
 	ENDM
 
 call_channel_2: MACRO ?method
-	ex af,af'
-	sub 2
-	ret c  ; message incomplete
-	ex af,af'
+	dec e
+	ret z  ; message incomplete
 	push ix
 	ld ixl,a
 	ld ixh,Channel_channels >> 8
