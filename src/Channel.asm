@@ -59,6 +59,7 @@ Channel_Constructor: PROC
 ; ix = this
 ; b = note number (0-127)
 ; c = velocity (0-127)
+; Modifies: af, de, hl, iy
 Channel_NoteOn: PROC
 	inc c
 	dec c
@@ -91,6 +92,7 @@ NoteOff:
 ; ix = this
 ; b = note number (0-127)
 ; c = velocity (0-127)
+; Modifies: af, de, hl, iy
 Channel_NoteOff:
 	ld a,b
 	call Channel_GetKey
@@ -116,6 +118,7 @@ Channel_NoteOff:
 ; ix = this
 ; b = controller
 ; c = value
+; Modifies: af, de, hl
 Channel_ControlChange:
 	ld a,b
 	cp 121
@@ -127,17 +130,21 @@ Channel_ControlChange:
 Channel_ChannelMode:
 	ret
 
+; Modifies: none
 Channel_PolyPressure:
 	ret
 
+; Modifies: none
 Channel_ProgramChange:
 	ld (ix + Channel.program),b
 	ret
 
+; Modifies: none
 Channel_ChannelPressure:
 	ld (ix + Channel.channelPressure),b
 	ret
 
+; Modifies: af, bc
 Channel_PitchBend:
 	ld a,c
 	xor 40H
