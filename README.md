@@ -1,5 +1,5 @@
-Synthesix - MIDI synthesizer for MSX
-====================================
+Synthesix - Modular MIDI synthesizer for MSX
+============================================
 
 Copyright 2013 Laurens Holst
 
@@ -12,20 +12,13 @@ Issues: <https://bitbucket.org/grauw/synthesix/issues>
 Support: <http://www.msx.org/forum/msx-talk/software/synthesix>
 License: Simplified BSD License
 
-PSG, Multi-SCC(+), MSX-MUSIC, MSX-AUDIO, OPL4 patch editor with MIDI control.
+Synthesix is synthesizer for MSX sound chips. It lets you play and tweak your
+MSX sound chips in real-time, using external MIDI controllers and DAW software.
 
-Open source & with sequencer API so someone can create a tracker for it.
-
-Hires timer using line interrupts for high-quality effects with high update
-frequency (limitable to once/frame to make it suitable for bgm).
-
-Lfo, wave morphing, pwm, etc. Hardware (when available) and software ASDR.
-
-MIDI controller assign to each parameter and effect, through common mapping.
-
-Synthesix can be loaded on an MSX using a Konami Snatcher SCC+ cartridge,
-or compatible devices such as the MegaFlashROM SCC+ or the ESE Mega-SCC+
-(built into One Chip MSX).
+Patches are edited in a modular sound design paradigm. This architecture lets
+you insert modules which perform various functions into the control chain
+between your MIDI keyboard and the sound chip. This gives you great and flexible
+control over the sound that is played.
 
 
 System Requirements
@@ -60,8 +53,24 @@ Synthesix currently supports the following input devices:
 If you have another input device which you’d like to be supported, let me know
 or file a ticket for it in the issue tracker.
 
+
+Usage instructions
+------------------
+
+Synthesix can be loaded on an MSX using a Konami Snatcher SCC+ cartridge,
+or compatible devices such as the MegaFlashROM SCC+ or the ESE Mega-SCC+
+(built into One Chip MSX).
+
+
 Development information
 -----------------------
+
+Synthesix is free and open source software. If you want to contribute to the
+project you are very welcome to. Please contact me at any one of the places
+mentioned in the project information section.
+
+You are also free to re-use code such as the MIDI support routines for your own
+projects, provided you abide by the license terms.
 
 Label naming convention:
 
