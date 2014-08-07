@@ -5,15 +5,15 @@
 	INCLUDE "Font.asm"
 	INCLUDE "UIBuffer.asm"
 	INCLUDE "UIFocus.asm"
+	INCLUDE "UISynthesix.asm"
+	INCLUDE "UIKeyboard.asm"
 	INCLUDE "ValueView.asm"
 	INCLUDE "InputView.asm"
 	INCLUDE "OutputView.asm"
-	INCLUDE "UISynthesix.asm"
 	INCLUDE "ProgramView.asm"
 	INCLUDE "ChannelView.asm"
 	INCLUDE "ControllerBankView.asm"
 	INCLUDE "NoteView.asm"
-	INCLUDE "UIKeyboard.asm"
 	INCLUDE "SCCVoiceView.asm"
 
 UI_Init:
