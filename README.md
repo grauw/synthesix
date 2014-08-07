@@ -10,6 +10,7 @@ Author: Laurens Holst <laurens.nospam@grauw.nl>
 Site: <https://bitbucket.org/grauw/synthesix>  
 Issues: <https://bitbucket.org/grauw/synthesix/issues>
 Support: <http://www.msx.org/forum/msx-talk/software/synthesix>
+License: Simplified BSD License
 
 PSG, Multi-SCC(+), MSX-MUSIC, MSX-AUDIO, OPL4 patch editor with MIDI control.
 
