@@ -56,6 +56,8 @@ Synthesix currently supports the following input devices:
   * Yamaha YK-01/10/20 Music Keyboard, connected to HX-MU900 or FS-CA1
   * Computer alphanumeric keys
 
+If you have another input device which you’d like to be supported, let me know
+or file a ticket for it in the issue tracker.
 
 Development information
 -----------------------
