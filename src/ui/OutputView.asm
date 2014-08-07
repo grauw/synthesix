@@ -5,7 +5,7 @@
 ; iy = module
 ; hl = string buffer (4 characters)
 ; Modifies: af, bc
-UIOutput_Paint:
+OutputView_Paint:
 	add a,iyl
 	ld c,a
 	ld a,0
@@ -13,5 +13,5 @@ UIOutput_Paint:
 	ld b,a
 	call UIFocus_Paint
 	ld a,(bc)
-	call UIValue_Paint
+	call ValueView_Paint
 	ret

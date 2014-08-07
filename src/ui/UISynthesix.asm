@@ -59,7 +59,7 @@ UISynthesix_Paint:
 	ld iy,(Synthesix_program)
 	ld de,0100H
 	call UIBuffer_GetRelativePosition
-	call UIProgram_Paint
+	call ProgramView_Paint
 	pop hl
 
 	push hl
@@ -75,7 +75,7 @@ UISynthesix_Paint:
 	call SCC_GetVoice_IY
 	ld de,1300H
 	call UIBuffer_GetRelativePosition
-	call UISCCVoice_Paint
+	call SCCVoiceView_Paint
 	pop hl
 
 	push hl
@@ -84,7 +84,7 @@ UISynthesix_Paint:
 	call SCC_GetVoice_IY
 	ld de,1310H
 	call UIBuffer_GetRelativePosition
-	call UISCCVoice_Paint
+	call SCCVoiceView_Paint
 	pop hl
 
 	push hl
@@ -93,7 +93,7 @@ UISynthesix_Paint:
 	call SCC_GetVoice_IY
 	ld de,1320H
 	call UIBuffer_GetRelativePosition
-	call UISCCVoice_Paint
+	call SCCVoiceView_Paint
 	pop hl
 
 	push hl
@@ -102,7 +102,7 @@ UISynthesix_Paint:
 	call SCC_GetVoice_IY
 	ld de,1330H
 	call UIBuffer_GetRelativePosition
-	call UISCCVoice_Paint
+	call SCCVoiceView_Paint
 	pop hl
 	ret
 

@@ -15,7 +15,7 @@ UIKeyboard_Paint:
 	ld de,0100H
 	call UIBuffer_GetRelativePosition
 	ld a,Channel.pitchBendCoarse
-	call UIOutput_Paint
+	call OutputView_Paint
 	pop hl
 
 	push hl

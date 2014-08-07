@@ -5,7 +5,7 @@
 ; iy = module
 ; hl = string buffer (4 characters)
 ; Modifies: af, bc, de
-UIInput_Paint:
+InputView_Paint:
 	ex de,hl
 	add a,iyl
 	ld l,a
@@ -18,5 +18,5 @@ UIInput_Paint:
 	ex de,hl
 	call UIFocus_Paint
 	ld a,(bc)
-	call UIValue_Paint
+	call ValueView_Paint
 	ret

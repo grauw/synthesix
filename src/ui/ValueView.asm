@@ -3,17 +3,17 @@
 ;
 ; a = value
 ; hl = string buffer (4 characters)
-UIValue_Paint:
+ValueView_Paint:
 	push hl
 	ld hl,KeyMidi_instance.shift
 	bit 0,(hl)
 	pop hl
-	jp nz,UIValue_FormatNumber
-	jp UIValue_FormatBar
+	jp nz,ValueView_FormatNumber
+	jp ValueView_FormatBar
 
 ; a = number
 ; hl = string buffer (4 characters)
-UIValue_FormatNumber: PROC
+ValueView_FormatNumber: PROC
 	bit 7,a
 	jr nz,NegativeSign
 	ld (hl)," "
@@ -57,7 +57,7 @@ Continue10:
 
 ; a = number
 ; hl = string buffer (4 characters)
-UIValue_FormatBar: PROC
+ValueView_FormatBar: PROC
 	add a,128
 	srl a  ; covert 0-255 to 0-23
 	ld b,a

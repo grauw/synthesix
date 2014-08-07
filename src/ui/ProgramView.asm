@@ -3,7 +3,7 @@
 ;
 ; iy = program
 ; hl = buffer
-UIProgram_Paint:
+ProgramView_Paint:
 	push hl
 	push iy
 	ld e,(iy + Program.channel)
@@ -12,7 +12,7 @@ UIProgram_Paint:
 	ld iyh,d
 	ld de,0000H
 	call UIBuffer_GetRelativePosition
-	call UIChannel_Paint
+	call ChannelView_Paint
 	pop iy
 	pop hl
 
@@ -28,7 +28,7 @@ UIProgram_Paint:
 	ld iyh,d
 	ld de,0010H
 	call UIBuffer_GetRelativePosition
-	call UIControllerBank_Paint
+	call ControllerBankView_Paint
 	pop iy
 	pop hl
 
@@ -48,7 +48,7 @@ UIProgram_Paint:
 	ld iyh,d
 	ld de,0020H
 	call UIBuffer_GetRelativePosition
-	call UINote_Paint
+	call NoteView_Paint
 	pop iy
 	pop hl
 	ret
