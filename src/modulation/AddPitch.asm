@@ -22,7 +22,7 @@ AddPitch: MACRO
 	ENDM
 
 	dw AddPitch._size
-AddPitch_class: Value 0
+AddPitch_class: AddPitch
 
 ; ix, de <- new object
 AddPitch_New:
