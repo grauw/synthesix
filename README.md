@@ -35,6 +35,8 @@ Supported output devices
 
   * Konami SCC
 
+Support for more sound chips will be added in the future.
+
 
 Supported input devices
 -----------------------
