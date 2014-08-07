@@ -236,6 +236,20 @@ Patch_GetModule:
 	pop ix
 	ret
 
+; bc = module index
+; ix = this
+; ix <- module type
+; Modifies: f, de, hl
+Patch_GetModuleType:
+	ld e,(ix + Patch.modules)
+	ld d,(ix + Patch.modules + 1)
+	ld ixl,e
+	ld ixh,d
+	call ArrayList_Get
+	ld ixl,e
+	ld ixh,d
+	ret
+
 ; ix = this
 ; hl = module type
 Patch_AddModule: PROC

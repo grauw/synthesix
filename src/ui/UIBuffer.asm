@@ -162,6 +162,18 @@ UIBuffer_ResetBlinkBit:
 	ret
 
 ; ix = this
+UIBuffer_ClearBlinkBuffer:
+	ld l,(ix + UIBuffer.blinkBuffer)
+	ld h,(ix + UIBuffer.blinkBuffer + 1)
+	ld e,l
+	ld d,h
+	ld (hl),0
+	inc de
+	ld bc,(UIBuffer.WIDTH * UIBuffer.HEIGHT) / 8 - 1
+	ldir
+	ret
+
+; ix = this
 UIBuffer_Draw:
 	ld a,0
 	ld hl,0

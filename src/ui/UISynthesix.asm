@@ -4,6 +4,8 @@
 UISynthesix: MACRO
 	buffer:
 		dw 0
+	patchEditor:
+		dw 0
 	_size:
 	ENDM
 
@@ -24,16 +26,35 @@ UISynthesix_Constructor:
 	pop ix
 	ld (ix + UISynthesix.buffer),e
 	ld (ix + UISynthesix.buffer + 1),d
+	push ix
+	call PatchEditor_New
+	pop ix
+	ld (ix + UISynthesix.patchEditor),e
+	ld (ix + UISynthesix.patchEditor + 1),d
 	ld e,ixl
 	ld d,ixh
 	ret
 
 UISynthesix_Update:
 	push ix
+	ld e,(ix + UISynthesix.patchEditor)
+	ld d,(ix + UISynthesix.patchEditor + 1)
+	ld ixl,e
+	ld ixh,d
+	ld iy,(Synthesix_program)
+	ld e,(iy + Program.patch)
+	ld d,(iy + Program.patch + 1)
+	ld iyl,e
+	ld iyh,d
+	call PatchEditor_Update
+	pop ix
+
+	push ix
 	ld e,(ix + UISynthesix.buffer)
 	ld d,(ix + UISynthesix.buffer + 1)
 	ld ixl,e
 	ld ixh,d
+	call UIBuffer_ClearBlinkBuffer
 	call UIBuffer_GetBuffer
 	call UISynthesix_Paint
 	call UIBuffer_Draw

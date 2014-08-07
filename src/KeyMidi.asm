@@ -13,6 +13,14 @@ KeyMidi: MACRO
 		db 0
 	shift:
 		db 0
+	up:
+		db 0
+	down:
+		db 0
+	left:
+		db 0
+	right:
+		db 0
 	ENDM
 
 ; ix = this
@@ -98,13 +106,13 @@ KeyMidi_ProcessKeyPress:
 	and a
 	jp p,KeyMidi_PressNote
 	cp -2
-	jp z,KeyMidi_PressIncreaseVelocity
+	jp z,KeyMidi_PressUp
 	cp -3
-	jp z,KeyMidi_PressDecreaseVelocity
+	jp z,KeyMidi_PressDown
 	cp -4
-	jp z,KeyMidi_PressIncreaseVolume
+	jp z,KeyMidi_PressLeft
 	cp -5
-	jp z,KeyMidi_PressDecreaseVolume
+	jp z,KeyMidi_PressRight
 	cp -6
 	jp z,KeyMidi_PressSpace
 	cp -99
@@ -142,51 +150,23 @@ KeyMidi_ReleaseNote:
 	ret
 
 ; ix = this
-KeyMidi_PressIncreaseVelocity:
-	ld a,(ix + KeyMidi.velocity)
-	add a,8
-	and 7FH
-	ld (ix + KeyMidi.velocity),a
+KeyMidi_PressUp:
+	inc (ix + KeyMidi.up)
 	ret
 
 ; ix = this
-KeyMidi_PressDecreaseVelocity:
-	ld a,(ix + KeyMidi.velocity)
-	sub 8
-	and 7FH
-	ld (ix + KeyMidi.velocity),a
+KeyMidi_PressDown:
+	inc (ix + KeyMidi.down)
 	ret
 
 ; ix = this
-KeyMidi_PressIncreaseVolume:
-	ld a,7
-	push ix
-	ld ix,Channel_channels.0
-	call Channel_GetController
-	pop ix
-	ld a,(hl)
-	inc a
-	and 7FH
-	ld b,7
-	ld c,a
-	ld a,0
-	call MidiIn_ControlChange
+KeyMidi_PressLeft:
+	inc (ix + KeyMidi.left)
 	ret
 
 ; ix = this
-KeyMidi_PressDecreaseVolume:
-	ld a,7
-	push ix
-	ld ix,Channel_channels.0
-	call Channel_GetController
-	pop ix
-	ld a,(hl)
-	dec a
-	and 7FH
-	ld b,7
-	ld c,a
-	ld a,0
-	call MidiIn_ControlChange
+KeyMidi_PressRight:
+	inc (ix + KeyMidi.right)
 	ret
 
 ; ix = this
@@ -232,7 +212,7 @@ KeyMidi_noteMapping:
 	db 49, 67, 71, 53, 62, 50, 69, 48  ; row 5: S T U V W X Y Z
 	db -98,-1, -1, -1, -1, -1, -1, -1  ; row 6: SHIFT CTRL GRAPH CAPS CODE F1 F2 F3
 	db -1, -1,-99, -1, -1, -1, -1, -1  ; row 7: F4 F5 ESC TAB STOP BS SELECT RET
-	db -6, -1, -1, -1, -5, -2, -3, -4  ; row 8: SPACE HOME INS DEL ← ↑ ↓ →
+	db -6, -1, -1, -1, -4, -2, -3, -5  ; row 8: SPACE HOME INS DEL ← ↑ ↓ →
 	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 9: NUM* NUM+ NUM/ NUM0 NUM1 NUM2 NUM3 NUM4
 	db -1, -1, -1, -1, -1, -1, -1, -1  ; row A: NUM5 NUM6 NUM7 NUM8 NUM9 NUM- NUM, NUM.
 

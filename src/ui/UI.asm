@@ -7,6 +7,7 @@
 	INCLUDE "UIFocus.asm"
 	INCLUDE "UISynthesix.asm"
 	INCLUDE "UIKeyboard.asm"
+	INCLUDE "PatchEditor.asm"
 	INCLUDE "ValueView.asm"
 	INCLUDE "InputView.asm"
 	INCLUDE "OutputView.asm"

@@ -3,7 +3,7 @@
 ;
 UIFocus: MACRO
 	target:
-		dw Channel_channels.0 + Channel.program
+		dw 0
 	_size:
 	ENDM
 
@@ -37,4 +37,8 @@ Loop:
 	ENDP
 
 ;
+	SECTION RAM
+
 UIFocus_instance: UIFocus
+
+	ENDS
