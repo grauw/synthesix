@@ -53,12 +53,16 @@ PatchEditor_UpdateSelection: PROC
 	push iy
 	ld iy,KeyMidi_instance
 	ld a,(ix + PatchEditor.module)
+	di
 	sub (iy + KeyMidi.left)
+	ei
 	ld (iy + KeyMidi.left),0
 	jr nc,NoWrapLeft
 	sub b
 NoWrapLeft:
+	di
 	add a,(iy + KeyMidi.right)
+	ei
 	ld (iy + KeyMidi.right),0
 	add a,b
 	jr c,WrapRight
@@ -91,12 +95,16 @@ ClampBottom:
 	ld a,c
 	dec a
 NoClampBottom:
+	di
 	sub (iy + KeyMidi.up)
+	ei
 	ld (iy + KeyMidi.up),0
 	jr nc,NoWrapTop
 	sub b
 NoWrapTop:
+	di
 	add a,(iy + KeyMidi.down)
+	ei
 	ld (iy + KeyMidi.down),0
 	add a,b
 	jr c,WrapBottom
