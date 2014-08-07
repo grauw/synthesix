@@ -6,6 +6,11 @@ Copyright 2013 Laurens Holst
 Project information
 -------------------
 
+Author: Laurens Holst <laurens.nospam@grauw.nl>  
+Site: <https://bitbucket.org/grauw/synthesix>  
+Issues: <https://bitbucket.org/grauw/synthesix/issues>
+Support: <http://www.msx.org/forum/msx-talk/software/synthesix>
+
 PSG, Multi-SCC(+), MSX-MUSIC, MSX-AUDIO, OPL4 patch editor with MIDI control.
 
 Open source & with sequencer API so someone can create a tracker for it.
