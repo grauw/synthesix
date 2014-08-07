@@ -1,0 +1,77 @@
+SFG-05 BIOS ROM disassembly notes
+=================================
+
+Notes from investigation on how the SFG-05 BIOS accessed the MIDI interface.
+
+See: http://map.grauw.nl/resources/midi/ym2148.php
+
+BIOS ROM MIDI I/O access at
+---------------------------
+
+select sfg-05 rom in basic:
+  poke &hffff,163
+  out &ha8,255
+
+3FF3: 30D5*
+3FF4: 30DA*
+3FF5: 2CE7* 2D99* 2DF0* 2DF7* 2ED3*
+3FF6: 2CBE 2CDA 2CEF* 2D84* 2DAF* 2DE4* 2DE9* 2DFB* 2E6A* 2E90* 2ECF* 2EE0* 3096* 30CC* 30D0*
+
+IM0 int handler:            2CFC
+IM2 MIDI interrupt handler: 2D7A
+IM2 ext interrupt handler:  2EE3
+
+R-call:      2B19    R-20 send midi msg (30F6), R-21 send midi rt msg (2DBB)
+S-call:      2BA3    S-05 define FIFO (306F), S-0C init midi (30B8)
+F-call:      2BDC    F-02 reset err flag (311E), F-03 send midi rt msg (2DBB)
+M-call:      2E93    receive a byte of midi (framing error, overrun error, RxRDY)
+
+F979: A reference to the MIDB map
+      +30h int start alt handler
+      +36h recv byte alt handler (ret c to bypass buffer)
+      +38h non-timer int handler
+
+F99C: Rx buffer pointer
+F99E: Rx buffer read position
+F99F: Rx buffer write position
+
+F9A0: Tx buffer pointer
+F9A2: Tx buffer read position
+F9A3: Tx buffer write position
+
+F9A4: Error flags (bit 1 = Rx overflow)
+
+F999: bit 0: mode 2.0
+
+F9A5h command register mirror
+
+
+S-0C init midi (30B8)
+---------------------
+
+3FF6 = 80h
+3FF6 = 6Dh, or 65h if there is no read buffer
+3FF3 = 75h
+3FF4 = 77h
+I = F9
+F975 = 2D7A :: IM2 MIDI interrupt handler
+F977 = 2EE3 :: IM2 ext (YM2151 timer) interrupt handler
+F9A2 = F9A3 = F99E = F99F = 0
+F9A4 &= CEh
+
+
+IM2 MIDI int handler (2D7A)
+---------------------------
+
+if CMD bit 3 = 0, skip read byte check
+-> cmd bit 3 disables Rx ints?
+
+if STAT bit 1 = 1, read byte
+- read 3FF5
+- if STAT bits 4 or 5 are set (err?), set CMD bit 4 (clear err?) and abort int
+- check if the F979 jump table has a 36h entry, if so call it
+  - if it returns c, byte is not stored in Rx buffer
+
+otherwise, send byte
+- write 3FF5
+- if Tx buffer is empty, clear CMD bit 1
