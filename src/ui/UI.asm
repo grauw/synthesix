@@ -12,6 +12,7 @@
 	INCLUDE "InputView.asm"
 	INCLUDE "OutputView.asm"
 	INCLUDE "ProgramView.asm"
+	INCLUDE "PatchView.asm"
 	INCLUDE "ChannelView.asm"
 	INCLUDE "ControllerBankView.asm"
 	INCLUDE "NoteView.asm"
