@@ -2,15 +2,16 @@
 ; Display an input value
 ;
 ; a = value offset
-; iy = module
-; hl = string buffer (4 characters)
+; ix = module
+; iy = buffer
+; hl = buffer address
 ; Modifies: af, bc, de
 InputView_Paint:
 	ex de,hl
-	add a,iyl
+	add a,ixl
 	ld l,a
 	ld a,0
-	adc a,iyh
+	adc a,ixh
 	ld h,a
 	ld c,(hl)
 	inc hl

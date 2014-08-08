@@ -1,8 +1,9 @@
 ;
 ; Display a virtual keyboard
 ;
-; iy = note
-; hl = buffer
+; ix = note
+; iy = buffer
+; hl = buffer address
 NoteView_Paint:
 	push hl
 	ex de,hl

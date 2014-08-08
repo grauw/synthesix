@@ -11,8 +11,8 @@ UIFocus: MACRO
 UIFocus_Constructor:
 	ret
 
-; ix = buffer
 ; bc = value reference
+; iy = buffer
 ; hl = buffer address
 ; Modifies: af, de
 UIFocus_Paint: PROC
@@ -22,6 +22,8 @@ UIFocus_Paint: PROC
 	ld a,(UIFocus_instance.target + 1)
 	cp b
 	ret nz
+	push iy
+	ex (sp),ix
 	push bc
 	push hl
 	ld b,4
@@ -33,6 +35,7 @@ Loop:
 	djnz Loop
 	pop hl
 	pop bc
+	pop ix
 	ret
 	ENDP
 

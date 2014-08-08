@@ -1,8 +1,9 @@
 ;
 ; Display an SCC voice
 ;
-; iy = voice
-; hl = buffer
+; ix = voice
+; iy = buffer
+; hl = buffer address
 SCCVoiceView_Paint:
 	push hl
 	ex de,hl

@@ -1,8 +1,9 @@
 ;
 ; Display a virtual keyboard
 ;
-; iy = channel
-; hl = buffer
+; ix = channel
+; iy = buffer
+; hl = buffer address
 UIKeyboard_Paint:
 	push hl
 	ex de,hl
@@ -23,11 +24,12 @@ UIKeyboard_Paint:
 	pop hl
 	ret
 
-; iy = channel
-; hl = buffer
+; ix = channel
+; iy = buffer
+; hl = buffer address
 UIKeyboard_UpdateKeys: PROC
-	ld c,(iy + Channel.keys)
-	ld b,(iy + Channel.keys + 1)
+	ld c,(ix + Channel.keys)
+	ld b,(ix + Channel.keys + 1)
 	ld de,5
 	add hl,de
 	ex de,hl

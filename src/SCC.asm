@@ -110,8 +110,9 @@ SCC_UpdateLate:
 
 ; ix = this
 ; a = voice number
-; hl <- voice
-; Modifies: bc, ix
+; de <- voice
+; ix <- voice
+; Modifies: bc, hl, ix
 SCC_GetVoice:
 	cp SCC_MAX_VOICES
 	call nc,System_ThrowException
@@ -119,25 +120,10 @@ SCC_GetVoice:
 	ld c,a
 	ld b,0
 	add ix,bc
-	ld l,(ix + SCC.voices)
-	ld h,(ix + SCC.voices + 1)
-	ret
-
-; iy = this
-; a = voice number
-; iy <- voice
-; Modifies: bc, ix
-SCC_GetVoice_IY:
-	cp SCC_MAX_VOICES
-	call nc,System_ThrowException
-	add a,a
-	ld c,a
-	ld b,0
-	add iy,bc
-	ld c,(iy + SCC.voices)
-	ld b,(iy + SCC.voices + 1)
-	ld iyl,c
-	ld iyh,b
+	ld e,(ix + SCC.voices)
+	ld d,(ix + SCC.voices + 1)
+	ld ixl,e
+	ld ixh,d
 	ret
 
 ; ix = this

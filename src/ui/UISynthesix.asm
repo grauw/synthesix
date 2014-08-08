@@ -56,12 +56,17 @@ UISynthesix_Update:
 	ld ixh,d
 	call UIBuffer_ClearBlinkBuffer
 	call UIBuffer_GetBuffer
+	push ix
+	push ix
+	pop iy
 	call UISynthesix_Paint
+	pop ix
 	call UIBuffer_Draw
 	pop ix
 	ret
 
-; hl = buffer
+; iy = buffer
+; hl = buffer address
 UISynthesix_Paint:
 	push hl
 	ex de,hl
@@ -77,14 +82,14 @@ UISynthesix_Paint:
 	pop hl
 
 	push hl
-	ld iy,(Synthesix_program)
+	ld ix,(Synthesix_program)
 	ld de,0100H
 	call UIBuffer_GetRelativePosition
 	call ProgramView_Paint
 	pop hl
 
 	push hl
-	ld iy,Channel_channels.0
+	ld ix,Channel_channels.0
 	ld de,1900H
 	call UIBuffer_GetRelativePosition
 	call UIKeyboard_Paint
@@ -92,8 +97,8 @@ UISynthesix_Paint:
 
 	push hl
 	ld a,0
-	ld iy,(Synthesix_scc)
-	call SCC_GetVoice_IY
+	ld ix,(Synthesix_scc)
+	call SCC_GetVoice
 	ld de,1300H
 	call UIBuffer_GetRelativePosition
 	call SCCVoiceView_Paint
@@ -101,8 +106,8 @@ UISynthesix_Paint:
 
 	push hl
 	ld a,1
-	ld iy,(Synthesix_scc)
-	call SCC_GetVoice_IY
+	ld ix,(Synthesix_scc)
+	call SCC_GetVoice
 	ld de,1310H
 	call UIBuffer_GetRelativePosition
 	call SCCVoiceView_Paint
@@ -110,8 +115,8 @@ UISynthesix_Paint:
 
 	push hl
 	ld a,2
-	ld iy,(Synthesix_scc)
-	call SCC_GetVoice_IY
+	ld ix,(Synthesix_scc)
+	call SCC_GetVoice
 	ld de,1320H
 	call UIBuffer_GetRelativePosition
 	call SCCVoiceView_Paint
@@ -119,8 +124,8 @@ UISynthesix_Paint:
 
 	push hl
 	ld a,3
-	ld iy,(Synthesix_scc)
-	call SCC_GetVoice_IY
+	ld ix,(Synthesix_scc)
+	call SCC_GetVoice
 	ld de,1330H
 	call UIBuffer_GetRelativePosition
 	call SCCVoiceView_Paint

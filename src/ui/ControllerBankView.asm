@@ -1,8 +1,9 @@
 ;
 ; Display a virtual keyboard
 ;
-; iy = controller bank
-; hl = buffer
+; ix = controller bank
+; iy = buffer
+; hl = buffer address
 ControllerBankView_Paint:
 	push hl
 	ex de,hl

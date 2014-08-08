@@ -1,15 +1,16 @@
 ;
 ; Display an output value
 ;
-; c = value offset
-; iy = module
-; hl = string buffer (4 characters)
+; a = value offset
+; ix = module
+; iy = buffer
+; hl = buffer address
 ; Modifies: af, bc
 OutputView_Paint:
-	add a,iyl
+	add a,ixl
 	ld c,a
 	ld a,0
-	adc a,iyh
+	adc a,ixh
 	ld b,a
 	call UIFocus_Paint
 	ld a,(bc)

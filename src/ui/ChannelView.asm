@@ -1,8 +1,9 @@
 ;
 ; Display a virtual keyboard
 ;
-; iy = channel
-; hl = buffer
+; ix = channel
+; iy = buffer
+; hl = buffer address
 ChannelView_Paint:
 	push hl
 	ex de,hl
