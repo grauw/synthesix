@@ -206,6 +206,7 @@ Patch_GetModuleList:
 
 ; ix = this
 ; bc <- module count
+; Modifies: bc, de, ix
 Patch_GetModuleCount:
 	ld e,(ix + Patch.modules)
 	ld d,(ix + Patch.modules + 1)
@@ -219,7 +220,7 @@ Patch_GetModuleCount:
 ; ix = this
 ; de <- module
 ; ix <- module type
-; Modifies: af, bc, de, ix
+; Modifies: af, bc, de, hl, ix
 Patch_GetModule:
 	push ix
 	ld e,(ix + Patch.modules)
