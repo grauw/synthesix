@@ -1,5 +1,5 @@
 ;
-; Display a virtual keyboard
+; Display a controller bank
 ;
 ; ix = controller bank
 ; iy = buffer
