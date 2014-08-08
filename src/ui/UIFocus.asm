@@ -11,20 +11,20 @@ UIFocus: MACRO
 UIFocus_Constructor:
 	ret
 
-; bc = value reference
+; de = value reference
 ; iy = buffer
 ; hl = buffer address
-; Modifies: af, de
+; Modifies: af, bc, de
 UIFocus_Paint: PROC
 	ld a,(UIFocus_instance.target)
-	cp c
+	cp e
 	ret nz
 	ld a,(UIFocus_instance.target + 1)
-	cp b
+	cp d
 	ret nz
 	push iy
 	ex (sp),ix
-	push bc
+	push de
 	push hl
 	ld b,4
 Loop:
@@ -34,7 +34,7 @@ Loop:
 	inc hl
 	djnz Loop
 	pop hl
-	pop bc
+	pop de
 	pop ix
 	ret
 	ENDP

@@ -5,14 +5,14 @@
 ; ix = module
 ; iy = buffer
 ; hl = buffer address
-; Modifies: af, bc
+; Modifies: af, bc, de, hl
 OutputView_Paint:
 	add a,ixl
-	ld c,a
+	ld e,a
 	ld a,0
 	adc a,ixh
-	ld b,a
+	ld d,a
 	call UIFocus_Paint
-	ld a,(bc)
+	ld a,(de)
 	call ValueView_Paint
 	ret

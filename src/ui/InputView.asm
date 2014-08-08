@@ -5,19 +5,19 @@
 ; ix = module
 ; iy = buffer
 ; hl = buffer address
-; Modifies: af, bc, de
+; Modifies: af, bc, de, hl
 InputView_Paint:
-	ex de,hl
 	add a,ixl
-	ld l,a
+	ld e,a
 	ld a,0
 	adc a,ixh
-	ld h,a
+	ld d,a
+	call UIFocus_Paint
+	ex de,hl
 	ld c,(hl)
 	inc hl
 	ld b,(hl)
 	ex de,hl
-	call UIFocus_Paint
 	ld a,(bc)
 	call ValueView_Paint
 	ret
