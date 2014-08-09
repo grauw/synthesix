@@ -41,18 +41,21 @@ UIBuffer_Constructor:
 	ld d,iyh
 	ret
 
+; iy = this
 ; hl <- buffer
 UIBuffer_GetBuffer:
 	ld l,(iy + UIBuffer.buffer)
 	ld h,(iy + UIBuffer.buffer + 1)
 	ret
 
+; iy = this
 ; hl <- blink buffer
 UIBuffer_GetBlinkBuffer:
 	ld l,(iy + UIBuffer.blinkBuffer)
 	ld h,(iy + UIBuffer.blinkBuffer + 1)
 	ret
 
+; iy = this
 ; hl = buffer address
 ; hl <- blink buffer address
 ; a <- blink position
@@ -134,6 +137,7 @@ NoAdd:
 	ret
 	ENDP
 
+; iy = this
 ; hl = buffer address
 ; Modifies: af, de, hl
 UIBuffer_SetBlinkBit:
@@ -146,6 +150,7 @@ UIBuffer_SetBlinkBit:
 	ld (hl),a
 	ret
 
+; iy = this
 ; hl = buffer address
 ; Modifies: af, de, hl
 UIBuffer_ResetBlinkBit:
