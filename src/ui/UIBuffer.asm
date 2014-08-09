@@ -14,45 +14,43 @@ UIBuffer: MACRO
 	dw UIBuffer._size
 UIBuffer_class: UIBuffer
 
-; ix, de <- this
+; iy, de <- this
 UIBuffer_New:
 	ld iy,UIBuffer_class
 	call Class_New
+	push ix
+	pop iy
 	jp UIBuffer_Constructor
 
-; ix = this
-; ix, de <- this
+; iy = this
+; iy, de <- this
 UIBuffer_Constructor:
-	push ix
 	ld a," "
 	ld bc,UIBuffer.HEIGHT * UIBuffer.WIDTH
 	ld ix,Heap_heap
 	call Heap_AllocateClear
-	pop ix
-	ld (ix + UIBuffer.buffer),e
-	ld (ix + UIBuffer.buffer + 1),d
-	push ix
+	ld (iy + UIBuffer.buffer),e
+	ld (iy + UIBuffer.buffer + 1),d
 	ld a,0
 	ld bc,UIBuffer.HEIGHT * UIBuffer.WIDTH / 8
 	ld ix,Heap_heap
 	call Heap_AllocateClear
-	pop ix
-	ld (ix + UIBuffer.blinkBuffer),e
-	ld (ix + UIBuffer.blinkBuffer + 1),d
-	ld e,ixl
-	ld d,ixh
+	ld (iy + UIBuffer.blinkBuffer),e
+	ld (iy + UIBuffer.blinkBuffer + 1),d
+	ld e,iyl
+	ld d,iyh
 	ret
 
 ; hl <- buffer
 UIBuffer_GetBuffer:
-	ld l,(ix + UIBuffer.buffer)
-	ld h,(ix + UIBuffer.buffer + 1)
+	ld l,(iy + UIBuffer.buffer)
+	ld h,(iy + UIBuffer.buffer + 1)
 	ret
 
 ; hl <- blink buffer
 UIBuffer_GetBlinkBuffer:
-	ld l,(ix + UIBuffer.blinkBuffer)
-	ld h,(ix + UIBuffer.blinkBuffer + 1)
+	ld l,(iy + UIBuffer.blinkBuffer)
+	ld h,(iy + UIBuffer.blinkBuffer + 1)
 	ret
 
 ; hl = buffer address
@@ -60,8 +58,8 @@ UIBuffer_GetBlinkBuffer:
 ; a <- blink position
 ; Modifies: af, de, hl
 UIBuffer_GetBlinkByBuffer:
-	ld e,(ix + UIBuffer.buffer)
-	ld d,(ix + UIBuffer.buffer + 1)
+	ld e,(iy + UIBuffer.buffer)
+	ld d,(iy + UIBuffer.buffer + 1)
 	xor a
 	sbc hl,de
 	rr h
@@ -76,18 +74,18 @@ UIBuffer_GetBlinkByBuffer:
 	rlca
 	rlca
 	rlca
-	ld e,(ix + UIBuffer.blinkBuffer)
-	ld d,(ix + UIBuffer.blinkBuffer + 1)
+	ld e,(iy + UIBuffer.blinkBuffer)
+	ld d,(iy + UIBuffer.blinkBuffer + 1)
 	add hl,de
 	ret
 
-; ix = this
+; iy = this
 ; de = y / x coordinate
 ; hl <- buffer
 ; Modifies: af, bc, de
 UIBuffer_GetPosition:
-	ld l,(ix + UIBuffer.buffer)
-	ld h,(ix + UIBuffer.buffer + 1)
+	ld l,(iy + UIBuffer.buffer)
+	ld h,(iy + UIBuffer.buffer + 1)
 	call UIBuffer_GetRelativePosition
 	ret
 
@@ -161,10 +159,10 @@ UIBuffer_ResetBlinkBit:
 	ld (hl),a
 	ret
 
-; ix = this
+; iy = this
 UIBuffer_ClearBlinkBuffer:
-	ld l,(ix + UIBuffer.blinkBuffer)
-	ld h,(ix + UIBuffer.blinkBuffer + 1)
+	ld l,(iy + UIBuffer.blinkBuffer)
+	ld h,(iy + UIBuffer.blinkBuffer + 1)
 	ld e,l
 	ld d,h
 	ld (hl),0
@@ -173,20 +171,20 @@ UIBuffer_ClearBlinkBuffer:
 	ldir
 	ret
 
-; ix = this
+; iy = this
 UIBuffer_Draw:
 	ld a,0
 	ld hl,0
 	call VDP_SetWriteAddress
-	ld l,(ix + UIBuffer.buffer)
-	ld h,(ix + UIBuffer.buffer + 1)
+	ld l,(iy + UIBuffer.buffer)
+	ld h,(iy + UIBuffer.buffer + 1)
 	ld bc,UIBuffer.HEIGHT * UIBuffer.WIDTH
 	call VDP_Write
 	ld a,0
 	ld hl,(TXTCOL)
 	call VDP_SetWriteAddress
-	ld l,(ix + UIBuffer.blinkBuffer)
-	ld h,(ix + UIBuffer.blinkBuffer + 1)
+	ld l,(iy + UIBuffer.blinkBuffer)
+	ld h,(iy + UIBuffer.blinkBuffer + 1)
 	ld bc,UIBuffer.HEIGHT * UIBuffer.WIDTH / 8
 	call VDP_Write
 	ret

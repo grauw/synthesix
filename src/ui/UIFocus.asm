@@ -22,8 +22,6 @@ UIFocus_Paint: PROC
 	ld a,(UIFocus_instance.target + 1)
 	cp d
 	ret nz
-	push iy
-	ex (sp),ix
 	push de
 	push hl
 	ld b,4
@@ -35,7 +33,6 @@ Loop:
 	djnz Loop
 	pop hl
 	pop de
-	pop ix
 	ret
 	ENDP
 

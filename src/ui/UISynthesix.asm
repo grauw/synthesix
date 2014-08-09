@@ -52,15 +52,13 @@ UISynthesix_Update:
 	push ix
 	ld e,(ix + UISynthesix.buffer)
 	ld d,(ix + UISynthesix.buffer + 1)
-	ld ixl,e
-	ld ixh,d
+	ld iyl,e
+	ld iyh,d
 	call UIBuffer_ClearBlinkBuffer
 	call UIBuffer_GetBuffer
-	push ix
-	push ix
-	pop iy
+	push iy
 	call UISynthesix_Paint
-	pop ix
+	pop iy
 	call UIBuffer_Draw
 	pop ix
 	ret
