@@ -8,7 +8,7 @@ NoteView_Paint:
 	push hl
 	ex de,hl
 	ld hl,NoteView_background
-	ld bc,0610H
+	ld bc,0710H
 	call UIBuffer_CopyToBuffer
 	pop hl
 
@@ -39,6 +39,13 @@ NoteView_Paint:
 	ld a,Note.trigger
 	call OutputView_Paint
 	pop hl
+
+	push hl
+	ld de,050AH
+	call UIBuffer_GetRelativePosition
+	ld a,Note.offVelocity
+	call OutputView_Paint
+	pop hl
 	ret
 
 ;
@@ -48,4 +55,5 @@ NoteView_background:
 	db 22," Velocit 0000 ",28
 	db 22," Gate    0000 ",28
 	db 22," Trigger 0000 ",28
+	db 22," Off vel 0000 ",28
 	db 26,23,23,23,23,23,23,23,23,23,23,23,30,31,31,27
