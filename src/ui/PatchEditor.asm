@@ -2,6 +2,8 @@
 ; Patch editor
 ;
 PatchEditor: MACRO
+	patch:
+		dw 0
 	module:
 		db 0
 	port:
@@ -12,22 +14,36 @@ PatchEditor: MACRO
 	dw PatchEditor._size
 PatchEditor_class: PatchEditor
 
+; de = patch
 ; ix, de <- new object
 PatchEditor_New:
+	push de
 	ld iy,PatchEditor_class
 	call Class_New
+	pop de
 	call PatchEditor_Constructor
 	ret
 
+; de = patch
 ; ix = this
 ; ix, de <- this
 PatchEditor_Constructor:
+	ld (ix + PatchEditor.patch),e
+	ld (ix + PatchEditor.patch + 1),d
 	ld e,ixl
 	ld d,ixh
 	ret
 
 ; ix = this
-; iy = patch
+; ix <- patch
+PatchEditor_GetPatch:
+	ld e,(ix + PatchEditor.patch)
+	ld d,(ix + PatchEditor.patch + 1)
+	ld ixl,e
+	ld ixh,d
+	ret
+
+; ix = this
 PatchEditor_Update: PROC
 	call PatchEditor_UpdateSelection
 	ld c,(ix + PatchEditor.module)
@@ -42,15 +58,13 @@ PatchEditor_Update: PROC
 ; ix = this
 PatchEditor_UpdateSelection: PROC
 	push ix
-	push iy
-	pop ix
+	call PatchEditor_GetPatch
 	call Patch_GetModuleCount
 	pop ix
 	ld a,c
 	neg
 	ld b,a
 
-	push iy
 	ld iy,KeyMidi_instance
 	ld a,(ix + PatchEditor.module)
 	di
@@ -69,13 +83,11 @@ NoWrapLeft:
 	sub b
 WrapRight:
 	ld (ix + PatchEditor.module),a
-	pop iy
 
 	ld c,a
 	ld b,0
 	push ix
-	push iy
-	pop ix
+	call PatchEditor_GetPatch
 	call Patch_GetModuleType
 	ld a,(ix + ModuleType.outputCount)
 	add a,(ix + ModuleType.inputCount)
@@ -84,7 +96,6 @@ WrapRight:
 	neg
 	ld b,a
 
-	push iy
 	ld iy,KeyMidi_instance
 	ld a,(ix + PatchEditor.port)
 	add a,b
@@ -111,18 +122,16 @@ NoWrapTop:
 	sub b
 WrapBottom:
 	ld (ix + PatchEditor.port),a
-	pop iy
 	ret
 	ENDP
 
 ; a = port
 ; c = module
-; iy = patch
+; ix = this
 ; hl <- module port address
 ; Modifies: af, bc, de, hl, ix
 PatchEditor_GetPort: PROC
-	push iy
-	pop ix
+	call PatchEditor_GetPatch
 	push af
 	ld a,0
 	ld b,0

@@ -27,6 +27,9 @@ UISynthesix_Constructor:
 	ld (ix + UISynthesix.buffer),e
 	ld (ix + UISynthesix.buffer + 1),d
 	push ix
+	ld ix,(Synthesix_program)
+	ld e,(ix + Program.patch)
+	ld d,(ix + Program.patch + 1)
 	call PatchEditor_New
 	pop ix
 	ld (ix + UISynthesix.patchEditor),e
@@ -41,11 +44,6 @@ UISynthesix_Update:
 	ld d,(ix + UISynthesix.patchEditor + 1)
 	ld ixl,e
 	ld ixh,d
-	ld iy,(Synthesix_program)
-	ld e,(iy + Program.patch)
-	ld d,(iy + Program.patch + 1)
-	ld iyl,e
-	ld iyh,d
 	call PatchEditor_Update
 	pop ix
 
