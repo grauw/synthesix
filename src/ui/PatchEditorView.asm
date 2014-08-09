@@ -1,10 +1,21 @@
 ;
-; Display a patch
+; Display a patch editor
 ;
+; ix = patch editor
+; iy = buffer
+; hl = buffer address
+PatchEditorView_Paint:
+	ld e,(ix + PatchEditor.patch)
+	ld d,(ix + PatchEditor.patch + 1)
+	ld ixl,e
+	ld ixh,d
+	call PatchEditorView_PaintPatch
+	ret
+
 ; ix = patch
 ; iy = buffer
 ; hl = buffer address
-PatchView_Paint: PROC
+PatchEditorView_PaintPatch: PROC
 	push ix
 	call Patch_GetModuleCount
 	pop ix
@@ -25,7 +36,7 @@ Loop:
 	xor a
 	call Patch_GetModule
 	pop hl
-	call PatchView_PaintModule
+	call PatchEditorView_PaintModule
 	pop ix
 	pop hl
 	ld bc,16
@@ -44,25 +55,25 @@ Loop:
 ; ix = module type
 ; iy = buffer
 ; hl = buffer address
-PatchView_PaintModule:
+PatchEditorView_PaintModule:
 	push de
 	ex (sp),ix
 	pop de
 
 	ld bc,ModuleType_constants
-	call PatchView_CheckType
+	call PatchEditorView_CheckType
 	jp z,ConstantsView_Paint
 
 	ld bc,ModuleType_channel
-	call PatchView_CheckType
+	call PatchEditorView_CheckType
 	jp z,ChannelView_Paint
 
 	ld bc,ModuleType_controllerBank
-	call PatchView_CheckType
+	call PatchEditorView_CheckType
 	jp z,ControllerBankView_Paint
 
 	ld bc,ModuleType_note
-	call PatchView_CheckType
+	call PatchEditorView_CheckType
 	jp z,NoteView_Paint
 	ret
 
@@ -70,7 +81,7 @@ PatchView_PaintModule:
 ; de = module type
 ; f <- z: match
 ; Modifies: af
-PatchView_CheckType:
+PatchEditorView_CheckType:
 	ld a,e
 	cp c
 	ret nz

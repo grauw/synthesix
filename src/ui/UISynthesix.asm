@@ -61,6 +61,7 @@ UISynthesix_Update:
 	pop ix
 	ret
 
+; ix = this
 ; iy = buffer
 ; hl = buffer address
 UISynthesix_Paint:
@@ -78,10 +79,13 @@ UISynthesix_Paint:
 	pop hl
 
 	push hl
-	ld ix,(Synthesix_program)
+	ld e,(ix + UISynthesix.patchEditor)
+	ld d,(ix + UISynthesix.patchEditor + 1)
+	ld ixl,e
+	ld ixh,d
 	ld de,0100H
 	call UIBuffer_GetRelativePosition
-	call ProgramView_Paint
+	call PatchEditorView_Paint
 	pop hl
 
 	push hl
