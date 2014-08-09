@@ -37,7 +37,7 @@ ModuleType_Acquire_HL:
 ; de = module core
 ; ix = this
 ; hl <- module output address
-; Modifies: af
+; Modifies: af, hl
 ModuleType_GetOutput: PROC
 	cp (ix + ModuleType.outputCount)
 	call nc,Check100H
@@ -57,7 +57,7 @@ Check100H:
 ; de = module core
 ; ix = this
 ; hl <- module input address
-; Modifies: af
+; Modifies: af, hl
 ModuleType_GetInput: PROC
 	cp (ix + ModuleType.inputCount)
 	call nc,Check100H
@@ -75,6 +75,33 @@ Check100H:
 	bit 0,(ix + ModuleType.inputCount + 1)
 	ret nz
 	call System_ThrowException
+	ENDP
+
+;
+; Link an input port of this module to another module’s output port.
+;
+; ix = this
+; iy = other module
+; b = this module’s input port number
+; c = other module’s output port number
+; de = this module’s core
+; hl = other module’s core
+ModuleType_Link: PROC
+	push hl
+	ld a,b
+	call ModuleType_GetInput
+	pop de
+	push hl
+	push iy
+	pop ix
+	ld a,c
+	call ModuleType_GetOutput
+	pop de
+	ex de,hl
+	ld (hl),e
+	inc hl
+	ld (hl),d
+	ret
 	ENDP
 
 ;

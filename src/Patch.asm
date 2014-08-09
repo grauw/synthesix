@@ -298,30 +298,26 @@ Loop:
 	push de
 	push hl
 	push ix
-	push hl
+	ld c,e
+	ld b,l
+	push bc
 	push ix
-	push af
-	push de
+	push hl
 	ld b,0
 	ld c,d
+	push af
 	call Patch_GetModule
-	pop hl
-	ld a,l
-	call ModuleType_GetOutput
 	pop af
-	pop ix
-	ex (sp),hl
-	push hl
+	pop hl
+	ex (sp),ix
+	push de
 	ld b,0
 	ld c,h
 	call Patch_GetModule
 	pop hl
-	ld a,l
-	call ModuleType_GetInput
-	pop de
-	ld (hl),e
-	inc hl
-	ld (hl),d
+	pop iy
+	pop bc
+	call ModuleType_Link
 	pop ix
 	pop hl
 	pop de
