@@ -49,6 +49,10 @@ PatchView_PaintModule:
 	ex (sp),ix
 	pop de
 
+	ld bc,ModuleType_constants
+	call PatchView_CheckType
+	jp z,ConstantsView_Paint
+
 	ld bc,ModuleType_channel
 	call PatchView_CheckType
 	jp z,ChannelView_Paint
