@@ -144,7 +144,7 @@ ModuleType_NoteFactory:
 ModuleType_sccVoice: ModuleType SCCVoice, ModuleType_SCCVoiceFactory
 
 ModuleType_SCCVoiceFactory:
-	ld ix,(Synthesix_scc)
+	ld ix,(Synthesix_instance.scc)
 	call SCC_GetFreeVoice
 	ret
 

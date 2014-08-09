@@ -27,7 +27,7 @@ UISynthesix_Constructor:
 	ld (ix + UISynthesix.buffer),e
 	ld (ix + UISynthesix.buffer + 1),d
 	push ix
-	ld ix,(Synthesix_program)
+	ld ix,(Synthesix_instance.program)
 	ld e,(ix + Program.patch)
 	ld d,(ix + Program.patch + 1)
 	call PatchEditor_New
@@ -97,7 +97,7 @@ UISynthesix_Paint:
 
 	push hl
 	ld a,0
-	ld ix,(Synthesix_scc)
+	ld ix,(Synthesix_instance.scc)
 	call SCC_GetVoice
 	ld de,1300H
 	call UIBuffer_GetRelativePosition
@@ -106,7 +106,7 @@ UISynthesix_Paint:
 
 	push hl
 	ld a,1
-	ld ix,(Synthesix_scc)
+	ld ix,(Synthesix_instance.scc)
 	call SCC_GetVoice
 	ld de,1310H
 	call UIBuffer_GetRelativePosition
@@ -115,7 +115,7 @@ UISynthesix_Paint:
 
 	push hl
 	ld a,2
-	ld ix,(Synthesix_scc)
+	ld ix,(Synthesix_instance.scc)
 	call SCC_GetVoice
 	ld de,1320H
 	call UIBuffer_GetRelativePosition
@@ -124,7 +124,7 @@ UISynthesix_Paint:
 
 	push hl
 	ld a,3
-	ld ix,(Synthesix_scc)
+	ld ix,(Synthesix_instance.scc)
 	call SCC_GetVoice
 	ld de,1330H
 	call UIBuffer_GetRelativePosition

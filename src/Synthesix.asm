@@ -1,3 +1,18 @@
+;
+; Top-level Synthesix program class
+;
+; Contains references to top-level objects, the main loop and the core ISR.
+;
+Synthesix: MACRO
+	scc:
+		dw 0
+	program:
+		dw 0
+	ENDM
+
+;
+; Program entry point
+;
 Synthesix_Main:
 	call VDP_GetVersion
 	cp 1
@@ -20,19 +35,35 @@ Synthesix_Main:
 	call Math_UnitTest
 	call ArrayList_UnitTest
 
+	ld ix,Synthesix_instance
+	call Synthesix_Constructor
+	call Synthesix_EnterMainLoop
+
+	call KILBUF
+	ret
+
+; ix = this
+; ix <- this
+Synthesix_Constructor:
+	push ix
 	ld ix,KeyMidi_instance
 	call KeyMidi_Constructor
 	call Channels_Init
 	call PSG_Init
 	call SCC_New
-	ld (Synthesix_scc),ix
+	ld (Synthesix_instance.scc),ix
 	ld hl,Channel_channels.0
 	call Program_New
-	ld (Synthesix_program),ix
+	ld (Synthesix_instance.program),ix
 
 	call UI_Init
 
 	call Interrupt_Init
+	pop ix
+	ret
+
+; ix = this
+Synthesix_EnterMainLoop:
 	call Interrupt_EnableInterruptHandler
 	ld ix,PhilipsMidi_instance
 	call PhilipsMidi_Install
@@ -53,7 +84,6 @@ Synthesix_Main:
 	call PhilipsMidi_Uninstall
 	call Interrupt_RestoreTIMIHook
 	call Interrupt_DisableInterruptHandler
-	call KILBUF
 	ret
 
 Synthesix_MainLoop:
@@ -95,10 +125,6 @@ Synthesix_Interrupt:
 ;
 	SECTION RAM
 
-Synthesix_scc:
-	dw 0
-
-Synthesix_program:
-	dw 0
+Synthesix_instance: Synthesix
 
 	ENDS
