@@ -6,6 +6,9 @@
 ; hl = buffer address
 PatchEditorView_Paint:
 	call PatchEditorView_SetFocusColor
+	ld b,5
+	call PatchEditor_GetScrollPosition
+	call c,PatchEditorView_ClearBackground
 	ld e,(ix + PatchEditor.patch)
 	ld d,(ix + PatchEditor.patch + 1)
 	ld ixl,e
@@ -13,6 +16,8 @@ PatchEditorView_Paint:
 	call PatchEditorView_PaintPatch
 	ret
 
+; ix = this
+; iy = buffer
 PatchEditorView_SetFocusColor:
 	ld a,(ix + PatchEditor.assign)
 	and a
@@ -21,10 +26,25 @@ PatchEditorView_SetFocusColor:
 	ld (iy + UIBuffer.blinkColor),UIFocus.ASSIGNCOLOR
 	ret
 
+; hl = buffer position
+PatchEditorView_ClearBackground:
+	push bc
+	push hl
+	ld e,l
+	ld d,h
+	inc de
+	ld (hl)," "
+	ld bc,UIBuffer.WIDTH * 16 - 1
+	ldir
+	pop hl
+	pop bc
+	ret
+
 ; ix = patch
 ; iy = buffer
 ; hl = buffer address
 PatchEditorView_PaintPatch: PROC
+	push bc
 	push ix
 	call Patch_GetModuleCount
 	pop ix
@@ -35,7 +55,7 @@ PatchEditorView_PaintPatch: PROC
 NoMax:
 	ld e,a
 	ld d,0
-	ld bc,0
+	pop bc
 Loop:
 	push bc
 	push de
