@@ -73,7 +73,7 @@ UISynthesix_Paint:
 	pop hl
 
 	push hl
-	ld de,002FH
+	ld de,0030H
 	call UIBuffer_GetRelativePosition
 	call UISynthesix_PaintLiveIndicator
 	pop hl
@@ -142,6 +142,6 @@ UISynthesix_PaintLiveIndicator:
 
 ;
 UISynthesix_template:
-	ds 30,23
+	ds 31,23
 	db " S y n t h e s i x "
-	ds 29,23
+	ds 30,23
