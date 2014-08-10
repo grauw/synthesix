@@ -84,6 +84,10 @@ PatchEditorView_PaintModule:
 	ld bc,ModuleType_note
 	call PatchEditorView_CheckType
 	jp z,NoteView_Paint
+
+	ld bc,ModuleType_sccVoice
+	call PatchEditorView_CheckType
+	jp z,SCCVoiceView_Paint
 	ret
 
 ; bc = module type to compare with
