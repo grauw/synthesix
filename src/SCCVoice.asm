@@ -88,14 +88,18 @@ SCCVoice_PrepareFrequency: PROC
 	ld e,(hl)
 	inc l
 	ld d,(hl)
-	bit 7,b
-	jr nz,Negative
+	ld a,b
+	and a
+	jp m,Negative
+	jr z,NoDetune
 	inc l     ; get 100 cent upwards
 	ld a,e
 	sub (hl)
 	inc a     ; round up division that follows
 	jp Continue
 Negative:
+	inc a
+	jr z,NoDetune
 	dec l     ; get 100 cent downwards
 	dec l
 	dec l
@@ -107,6 +111,7 @@ Continue:
 	call Math_Multiply127x127Signed
 	cpl
 	call Math_AddSigned
+NoDetune:
 	ld (ix + SCCVoice.sccFrequency),e
 	ld (ix + SCCVoice.sccFrequency + 1),d
 	ret
