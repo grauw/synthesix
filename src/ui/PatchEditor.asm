@@ -63,6 +63,9 @@ Loop:
 	call KeyMidi_ReadKeyCode
 	pop ix
 	ret z
+	call ProcessKey
+	jp Loop
+ProcessKey:
 	cp 29
 	jp z,KeyLeft
 	cp 28
@@ -71,42 +74,42 @@ Loop:
 	jp z,KeyUp
 	cp 31
 	jp z,KeyDown
-	jp Loop
+	ret
 KeyLeft:
 	ld a,(ix + PatchEditor.module)
 	and a
 	call z,PatchEditor_GetModuleCount
 	dec a
 	ld (ix + PatchEditor.module),a
-	jp ClampAndLoop
+	jp Clamp
 KeyRight:
 	call PatchEditor_GetModuleCount
 	inc (ix + PatchEditor.module)
 	cp (ix + PatchEditor.module)
-	jp nz,ClampAndLoop
+	jp nz,Clamp
 	ld (ix + PatchEditor.module),0
-	jp ClampAndLoop
+	jp Clamp
 KeyUp:
 	ld a,(ix + PatchEditor.port)
 	and a
 	call z,PatchEditor_GetPortCount
 	dec a
 	ld (ix + PatchEditor.port),a
-	jp Loop
+	ret
 KeyDown:
 	call PatchEditor_GetPortCount
 	inc (ix + PatchEditor.port)
 	cp (ix + PatchEditor.port)
-	jp nz,Loop
+	ret nz
 	ld (ix + PatchEditor.port),0
-	jp Loop
-ClampAndLoop:
+	ret
+Clamp:
 	call PatchEditor_GetPortCount
 	dec a
 	cp (ix + PatchEditor.port)
-	jp nc,Loop
+	ret nc
 	ld (ix + PatchEditor.port),a
-	jp Loop
+	ret
 	ENDP
 
 ; ix = this
