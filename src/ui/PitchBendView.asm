@@ -47,14 +47,14 @@ Update:
 	push hl
 	ld de,050AH
 	call UIBuffer_GetRelativePosition
-	ld a,PitchBend.upRange
+	ld a,PitchBend.rangeUp
 	call InputView_Paint
 	pop hl
 
 	push hl
 	ld de,060AH
 	call UIBuffer_GetRelativePosition
-	ld a,PitchBend.downRange
+	ld a,PitchBend.rangeDown
 	call InputView_Paint
 	pop hl
 	ret
