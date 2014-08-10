@@ -4,7 +4,10 @@
 ; ix = constants
 ; iy = buffer
 ; hl = buffer address
-ConstantsView_Paint:
+ConstantsView_Paint: PROC
+	bit 0,(iy + UIBuffer.repaint)
+	jp z,Update
+
 	push hl
 	ex de,hl
 	ld hl,ConstantsView_background
@@ -12,6 +15,7 @@ ConstantsView_Paint:
 	call UIBuffer_CopyToBuffer
 	pop hl
 
+Update:
 	push hl
 	ld de,010AH
 	call UIBuffer_GetRelativePosition
@@ -110,6 +114,7 @@ ConstantsView_Paint:
 	call OutputView_Paint
 	pop hl
 	ret
+	ENDP
 
 ;
 ConstantsView_background:

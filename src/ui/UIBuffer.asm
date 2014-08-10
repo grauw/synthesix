@@ -10,6 +10,8 @@ UIBuffer: MACRO
 		dw 0
 	blinkColor:
 		db 0
+	repaint:
+		db -1
 	_size:
 	ENDM
 
@@ -198,6 +200,7 @@ UIBuffer_Draw:
 	ld (VDP_MIRROR_8 + 12),a
 	ld b,12
 	call VDP_SetRegister
+	ld (iy + UIBuffer.repaint),0
 	ret
 
 	ALIGN 8

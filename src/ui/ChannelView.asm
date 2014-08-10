@@ -4,7 +4,10 @@
 ; ix = channel
 ; iy = buffer
 ; hl = buffer address
-ChannelView_Paint:
+ChannelView_Paint: PROC
+	bit 0,(iy + UIBuffer.repaint)
+	jp z,Update
+
 	push hl
 	ex de,hl
 	ld hl,ChannelView_background
@@ -12,6 +15,7 @@ ChannelView_Paint:
 	call UIBuffer_CopyToBuffer
 	pop hl
 
+Update:
 	push hl
 	ld de,010AH
 	call UIBuffer_GetRelativePosition
@@ -40,6 +44,7 @@ ChannelView_Paint:
 	call OutputView_Paint
 	pop hl
 	ret
+	ENDP
 
 ;
 ChannelView_background:

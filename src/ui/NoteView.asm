@@ -4,7 +4,10 @@
 ; ix = note
 ; iy = buffer
 ; hl = buffer address
-NoteView_Paint:
+NoteView_Paint: PROC
+	bit 0,(iy + UIBuffer.repaint)
+	jp z,Update
+
 	push hl
 	ex de,hl
 	ld hl,NoteView_background
@@ -12,6 +15,7 @@ NoteView_Paint:
 	call UIBuffer_CopyToBuffer
 	pop hl
 
+Update:
 	push hl
 	ld de,010AH
 	call UIBuffer_GetRelativePosition
@@ -47,6 +51,7 @@ NoteView_Paint:
 	call OutputView_Paint
 	pop hl
 	ret
+	ENDP
 
 ;
 NoteView_background:

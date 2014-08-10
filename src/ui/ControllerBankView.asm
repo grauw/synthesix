@@ -4,7 +4,10 @@
 ; ix = controller bank
 ; iy = buffer
 ; hl = buffer address
-ControllerBankView_Paint:
+ControllerBankView_Paint: PROC
+	bit 0,(iy + UIBuffer.repaint)
+	jp z,Update
+
 	push hl
 	ex de,hl
 	ld hl,ControllerBankView_background
@@ -12,6 +15,7 @@ ControllerBankView_Paint:
 	call UIBuffer_CopyToBuffer
 	pop hl
 
+Update:
 	push hl
 	ld de,010AH
 	call UIBuffer_GetRelativePosition
@@ -110,6 +114,7 @@ ControllerBankView_Paint:
 	call OutputView_Paint
 	pop hl
 	ret
+	ENDP
 
 ;
 ControllerBankView_background:

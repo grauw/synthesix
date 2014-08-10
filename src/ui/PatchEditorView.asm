@@ -5,6 +5,8 @@
 ; iy = buffer
 ; hl = buffer address
 PatchEditorView_Paint:
+	ld a,(iy + UIBuffer.repaint)
+	push af
 	call PatchEditorView_SetFocusColor
 	ld b,5
 	call PatchEditor_GetScrollPosition
@@ -14,6 +16,8 @@ PatchEditorView_Paint:
 	ld ixl,e
 	ld ixh,d
 	call PatchEditorView_PaintPatch
+	pop af
+	ld (iy + UIBuffer.repaint),a
 	ret
 
 ; ix = this
@@ -28,6 +32,7 @@ PatchEditorView_SetFocusColor:
 
 ; hl = buffer position
 PatchEditorView_ClearBackground:
+	ld (iy + UIBuffer.repaint),-1
 	push bc
 	push hl
 	ld e,l

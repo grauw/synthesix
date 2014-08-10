@@ -4,7 +4,10 @@
 ; ix = voice
 ; iy = buffer
 ; hl = buffer address
-SCCVoiceView_Paint:
+SCCVoiceView_Paint: PROC
+	bit 0,(iy + UIBuffer.repaint)
+	jp z,Update
+
 	push hl
 	ex de,hl
 	ld hl,SCCVoiceView_background
@@ -12,6 +15,7 @@ SCCVoiceView_Paint:
 	call UIBuffer_CopyToBuffer
 	pop hl
 
+Update:
 	push hl
 	ld de,010AH
 	call UIBuffer_GetRelativePosition
@@ -40,6 +44,7 @@ SCCVoiceView_Paint:
 	call InputView_Paint
 	pop hl
 	ret
+	ENDP
 
 ;
 SCCVoiceView_background:

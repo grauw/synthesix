@@ -4,7 +4,10 @@
 ; ix = channel
 ; iy = buffer
 ; hl = buffer address
-UIKeyboard_Paint:
+UIKeyboard_Paint: PROC
+	bit 0,(iy + UIBuffer.repaint)
+	jp z,Update
+
 	push hl
 	ex de,hl
 	ld hl,UIKeyboard_background
@@ -12,6 +15,7 @@ UIKeyboard_Paint:
 	call UIBuffer_CopyToBuffer
 	pop hl
 
+Update:
 	push hl
 	ld de,0100H
 	call UIBuffer_GetRelativePosition
@@ -23,6 +27,7 @@ UIKeyboard_Paint:
 	call UIKeyboard_UpdateKeys
 	pop hl
 	ret
+	ENDP
 
 ; ix = channel
 ; iy = buffer
