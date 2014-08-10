@@ -19,7 +19,7 @@ EnvelopeAD: MACRO
 	phase:
 		db -1
 	counter:
-		db 0
+		db 255
 	_size:
 	ENDM
 
