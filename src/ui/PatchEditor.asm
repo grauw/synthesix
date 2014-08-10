@@ -57,34 +57,72 @@ PatchEditor_Update: PROC
 
 ; ix = this
 PatchEditor_UpdateSelection: PROC
+Loop:
+	push ix
+	ld ix,KeyMidi_instance
+	call KeyMidi_ReadKeyCode
+	pop ix
+	ret z
+	cp 29
+	jp z,KeyLeft
+	cp 28
+	jp z,KeyRight
+	cp 30
+	jp z,KeyUp
+	cp 31
+	jp z,KeyDown
+	jp Loop
+KeyLeft:
+	ld a,(ix + PatchEditor.module)
+	and a
+	call z,PatchEditor_GetModuleCount
+	dec a
+	ld (ix + PatchEditor.module),a
+	jp ClampAndLoop
+KeyRight:
+	call PatchEditor_GetModuleCount
+	inc (ix + PatchEditor.module)
+	cp (ix + PatchEditor.module)
+	jp nz,ClampAndLoop
+	ld (ix + PatchEditor.module),0
+	jp ClampAndLoop
+KeyUp:
+	ld a,(ix + PatchEditor.port)
+	and a
+	call z,PatchEditor_GetPortCount
+	dec a
+	ld (ix + PatchEditor.port),a
+	jp Loop
+KeyDown:
+	call PatchEditor_GetPortCount
+	inc (ix + PatchEditor.port)
+	cp (ix + PatchEditor.port)
+	jp nz,Loop
+	ld (ix + PatchEditor.port),0
+	jp Loop
+ClampAndLoop:
+	call PatchEditor_GetPortCount
+	dec a
+	cp (ix + PatchEditor.port)
+	jp nc,Loop
+	ld (ix + PatchEditor.port),a
+	jp Loop
+	ENDP
+
+; ix = this
+; a <- module count
+PatchEditor_GetModuleCount:
 	push ix
 	call PatchEditor_GetPatch
 	call Patch_GetModuleCount
 	pop ix
 	ld a,c
-	neg
-	ld b,a
+	ret
 
-	ld iy,KeyMidi_instance
-	ld a,(ix + PatchEditor.module)
-	di
-	sub (iy + KeyMidi.left)
-	ei
-	ld (iy + KeyMidi.left),0
-	jr nc,NoWrapLeft
-	sub b
-NoWrapLeft:
-	di
-	add a,(iy + KeyMidi.right)
-	ei
-	ld (iy + KeyMidi.right),0
-	add a,b
-	jr c,WrapRight
-	sub b
-WrapRight:
-	ld (ix + PatchEditor.module),a
-
-	ld c,a
+; ix = this
+; a <- port count
+PatchEditor_GetPortCount:
+	ld c,(ix + PatchEditor.module)
 	ld b,0
 	push ix
 	call PatchEditor_GetPatch
@@ -92,38 +130,7 @@ WrapRight:
 	ld a,(ix + ModuleType.outputCount)
 	add a,(ix + ModuleType.inputCount)
 	pop ix
-	ld c,a
-	neg
-	ld b,a
-
-	ld iy,KeyMidi_instance
-	ld a,(ix + PatchEditor.port)
-	add a,b
-	jp c,ClampBottom
-	sub b
-	jp NoClampBottom
-ClampBottom:
-	ld a,c
-	dec a
-NoClampBottom:
-	di
-	sub (iy + KeyMidi.up)
-	ei
-	ld (iy + KeyMidi.up),0
-	jr nc,NoWrapTop
-	sub b
-NoWrapTop:
-	di
-	add a,(iy + KeyMidi.down)
-	ei
-	ld (iy + KeyMidi.down),0
-	add a,b
-	jr c,WrapBottom
-	sub b
-WrapBottom:
-	ld (ix + PatchEditor.port),a
 	ret
-	ENDP
 
 ; a = port
 ; c = module

@@ -9,17 +9,13 @@ KeyMidi: MACRO
 		ds 11,0
 	velocity:
 		db 7FH
+	keyBufferHead:
+		dw KeyMidi_keyBuffer
+	keyBufferTail:
+		dw KeyMidi_keyBuffer
 	escape:
 		db 0
 	shift:
-		db 0
-	up:
-		db 0
-	down:
-		db 0
-	left:
-		db 0
-	right:
 		db 0
 	ENDM
 
@@ -35,6 +31,37 @@ KeyMidi_Constructor:
 	ld hl,NEWKEY
 	ld bc,11
 	ldir
+	ret
+
+; ix = this
+; a = byte
+; f <- z: buffer full
+; Modifies: af, hl
+KeyMidi_WriteKeyCode:
+	ld l,(ix + KeyMidi.keyBufferHead)
+	ld h,(ix + KeyMidi.keyBufferHead + 1)
+	ld (hl),a
+	inc l
+	ld (ix + KeyMidi.keyBufferHead),l
+	ld a,(ix + KeyMidi.keyBufferTail)
+	cp l
+	ret nz
+	call System_ThrowException
+	ret
+
+; ix = this
+; a <- byte
+; f <- z: buffer empty
+; Modifies: af, hl
+KeyMidi_ReadKeyCode:
+	ld l,(ix + KeyMidi.keyBufferTail)
+	ld h,(ix + KeyMidi.keyBufferTail + 1)
+	ld a,(ix + KeyMidi.keyBufferHead)
+	cp l
+	ret z
+	ld a,(hl)
+	inc l
+	ld (ix + KeyMidi.keyBufferTail),l
 	ret
 
 ; ix = this
@@ -105,20 +132,16 @@ KeyMidi_ProcessKeyChange:
 KeyMidi_ProcessKeyPress:
 	and a
 	jp p,KeyMidi_PressNote
-	cp -2
-	jp z,KeyMidi_PressUp
-	cp -3
-	jp z,KeyMidi_PressDown
-	cp -4
-	jp z,KeyMidi_PressLeft
-	cp -5
-	jp z,KeyMidi_PressRight
 	cp -6
 	jp z,KeyMidi_PressSpace
 	cp -99
 	jp z,KeyMidi_PressEscape
 	cp -98
 	jp z,KeyMidi_PressShift
+	cp -1
+	ret z
+	neg
+	jp KeyMidi_WriteKeyCode
 	ret
 
 ; ix = this
@@ -147,26 +170,6 @@ KeyMidi_ReleaseNote:
 	ld c,40H
 	ld a,0
 	call MidiIn_NoteOff
-	ret
-
-; ix = this
-KeyMidi_PressUp:
-	inc (ix + KeyMidi.up)
-	ret
-
-; ix = this
-KeyMidi_PressDown:
-	inc (ix + KeyMidi.down)
-	ret
-
-; ix = this
-KeyMidi_PressLeft:
-	inc (ix + KeyMidi.left)
-	ret
-
-; ix = this
-KeyMidi_PressRight:
-	inc (ix + KeyMidi.right)
 	ret
 
 ; ix = this
@@ -204,17 +207,17 @@ KeyMidi_ReleaseSpace:
 	ret
 
 KeyMidi_noteMapping:
-	db 75, -1, 61, 63, -1, 66, 68, 70  ; row 0: 0 1 2 3 4 5 6 7
-	db -1, 73, -1, 78, 56, 77, 79, 63  ; row 1: 8 9 - = \ [ ] ;
-	db -1, -1, 60, 62, 64, -1, -1, 55  ; row 2: ' ` , . / DEAD A B
-	db 52, 51, 64, -1, 54, 56, 72, 58  ; row 3: C D E F G H I J
-	db -1, 61, 59, 57, 74, 76, 60, 65  ; row 4: K L M N O P Q R
-	db 49, 67, 71, 53, 62, 50, 69, 48  ; row 5: S T U V W X Y Z
-	db -98,-1, -1, -1, -1, -1, -1, -1  ; row 6: SHIFT CTRL GRAPH CAPS CODE F1 F2 F3
-	db -1, -1,-99, -1, -1, -1, -1, -1  ; row 7: F4 F5 ESC TAB STOP BS SELECT RET
-	db -6, -1, -1, -1, -4, -2, -3, -5  ; row 8: SPACE HOME INS DEL ← ↑ ↓ →
-	db -1, -1, -1, -1, -1, -1, -1, -1  ; row 9: NUM* NUM+ NUM/ NUM0 NUM1 NUM2 NUM3 NUM4
-	db -1, -1, -1, -1, -1, -1, -1, -1  ; row A: NUM5 NUM6 NUM7 NUM8 NUM9 NUM- NUM, NUM.
+	db   75,  -1,  61,  63,  -1,  66,  68,  70  ; row 0: 0 1 2 3 4 5 6 7
+	db   -1,  73,  -1,  78,  56,  77,  79,  63  ; row 1: 8 9 - = \ [ ] ;
+	db   -1,  -1,  60,  62,  64,  -1,  -1,  55  ; row 2: ' ` , . / DEAD A B
+	db   52,  51,  64,  -1,  54,  56,  72,  58  ; row 3: C D E F G H I J
+	db   -1,  61,  59,  57,  74,  76,  60,  65  ; row 4: K L M N O P Q R
+	db   49,  67,  71,  53,  62,  50,  69,  48  ; row 5: S T U V W X Y Z
+	db  -98,  -1,  -1,  -1,  -1,  -1,  -1,  -1  ; row 6: SHIFT CTRL GRAPH CAPS CODE F1 F2 F3
+	db   -1,  -1, -99,  -1,  -1,  -8,  -1, -13  ; row 7: F4 F5 ESC TAB STOP BS SELECT RET
+	db   -6,  -1,  -1,  -1, -29, -30, -31, -28  ; row 8: SPACE HOME INS DEL ← ↑ ↓ →
+	db   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1  ; row 9: NUM* NUM+ NUM/ NUM0 NUM1 NUM2 NUM3 NUM4
+	db   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1  ; row A: NUM5 NUM6 NUM7 NUM8 NUM9 NUM- NUM, NUM.
 
 ;
 ; Variables in RAM
@@ -222,5 +225,9 @@ KeyMidi_noteMapping:
 	SECTION RAM
 
 KeyMidi_instance: KeyMidi
+
+	ALIGN 100H
+KeyMidi_keyBuffer:
+	ds 256
 
 	ENDS
