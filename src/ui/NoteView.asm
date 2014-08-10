@@ -1,5 +1,5 @@
 ;
-; Display a virtual keyboard
+; Displays a note
 ;
 ; ix = note
 ; iy = buffer

@@ -1,5 +1,5 @@
 ;
-; Display a virtual keyboard
+; Displays a channel
 ;
 ; ix = channel
 ; iy = buffer
