@@ -18,6 +18,7 @@
 	INCLUDE "NoteView.asm"
 	INCLUDE "EnvelopeADView.asm"
 	INCLUDE "EnvelopeARView.asm"
+	INCLUDE "PitchBendView.asm"
 	INCLUDE "SCCVoiceView.asm"
 
 UI_Init:

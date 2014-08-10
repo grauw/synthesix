@@ -118,6 +118,10 @@ PatchEditorView_PaintModule:
 	call PatchEditorView_CheckType
 	jp z,EnvelopeARView_Paint
 
+	ld bc,ModuleType_pitchBend
+	call PatchEditorView_CheckType
+	jp z,PitchBendView_Paint
+
 	ld bc,ModuleType_sccVoice
 	call PatchEditorView_CheckType
 	jp z,SCCVoiceView_Paint
