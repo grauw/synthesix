@@ -110,6 +110,14 @@ PatchEditorView_PaintModule:
 	call PatchEditorView_CheckType
 	jp z,NoteView_Paint
 
+	ld bc,ModuleType_envelopeAD
+	call PatchEditorView_CheckType
+	jp z,EnvelopeADView_Paint
+
+	ld bc,ModuleType_envelopeAR
+	call PatchEditorView_CheckType
+	jp z,EnvelopeARView_Paint
+
 	ld bc,ModuleType_sccVoice
 	call PatchEditorView_CheckType
 	jp z,SCCVoiceView_Paint

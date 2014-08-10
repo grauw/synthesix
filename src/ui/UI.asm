@@ -16,6 +16,8 @@
 	INCLUDE "ChannelView.asm"
 	INCLUDE "ControllerBankView.asm"
 	INCLUDE "NoteView.asm"
+	INCLUDE "EnvelopeADView.asm"
+	INCLUDE "EnvelopeARView.asm"
 	INCLUDE "SCCVoiceView.asm"
 
 UI_Init:
