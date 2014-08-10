@@ -8,6 +8,12 @@ PatchEditor: MACRO
 		db 0
 	port:
 		db 0
+	assign:
+		db 0
+	assignModule:
+		db 0
+	assignPort:
+		db 0
 	_size:
 	ENDM
 
@@ -74,6 +80,35 @@ ProcessKey:
 	jp z,KeyUp
 	cp 31
 	jp z,KeyDown
+	cp 13
+	jp z,Select
+	cp 27
+	jp z,Cancel
+	ret
+Select:
+	bit 0,(ix + PatchEditor.assign)
+	jp nz,Assign
+	ld b,(ix + PatchEditor.module)
+	ld c,(ix + PatchEditor.port)
+	ld (ix + PatchEditor.assignModule),b
+	ld (ix + PatchEditor.assignPort),c
+	ld (ix + PatchEditor.assign),-1
+	ret
+Assign:
+	ld b,(ix + PatchEditor.assignModule)
+	ld c,(ix + PatchEditor.assignPort)
+	ld (ix + PatchEditor.module),b
+	ld (ix + PatchEditor.port),c
+	ld (ix + PatchEditor.assign),0
+	ret
+Cancel:
+	bit 0,(ix + PatchEditor.assign)
+	ret z
+	ld b,(ix + PatchEditor.assignModule)
+	ld c,(ix + PatchEditor.assignPort)
+	ld (ix + PatchEditor.module),b
+	ld (ix + PatchEditor.port),c
+	ld (ix + PatchEditor.assign),0
 	ret
 KeyLeft:
 	ld a,(ix + PatchEditor.module)

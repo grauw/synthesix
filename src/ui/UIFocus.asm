@@ -2,6 +2,8 @@
 ; Show focus highlight on the current focused element
 ;
 UIFocus: MACRO
+	SELECTCOLOR: equ 0F8H
+	ASSIGNCOLOR: equ 0F2H
 	target:
 		dw 0
 	_size:

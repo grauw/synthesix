@@ -5,11 +5,20 @@
 ; iy = buffer
 ; hl = buffer address
 PatchEditorView_Paint:
+	call PatchEditorView_SetFocusColor
 	ld e,(ix + PatchEditor.patch)
 	ld d,(ix + PatchEditor.patch + 1)
 	ld ixl,e
 	ld ixh,d
 	call PatchEditorView_PaintPatch
+	ret
+
+PatchEditorView_SetFocusColor:
+	ld a,(ix + PatchEditor.assign)
+	and a
+	ld (iy + UIBuffer.blinkColor),UIFocus.SELECTCOLOR
+	ret z
+	ld (iy + UIBuffer.blinkColor),UIFocus.ASSIGNCOLOR
 	ret
 
 ; ix = patch

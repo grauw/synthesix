@@ -214,7 +214,7 @@ KeyMidi_noteMapping:
 	db   -1,  61,  59,  57,  74,  76,  60,  65  ; row 4: K L M N O P Q R
 	db   49,  67,  71,  53,  62,  50,  69,  48  ; row 5: S T U V W X Y Z
 	db  -98,  -1,  -1,  -1,  -1,  -1,  -1,  -1  ; row 6: SHIFT CTRL GRAPH CAPS CODE F1 F2 F3
-	db   -1,  -1, -99,  -1,  -1,  -8,  -1, -13  ; row 7: F4 F5 ESC TAB STOP BS SELECT RET
+	db   -1, -99, -27,  -1,  -1,  -8,  -1, -13  ; row 7: F4 F5 ESC TAB STOP BS SELECT RET
 	db   -6,  -1,  -1,  -1, -29, -30, -31, -28  ; row 8: SPACE HOME INS DEL ← ↑ ↓ →
 	db   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1  ; row 9: NUM* NUM+ NUM/ NUM0 NUM1 NUM2 NUM3 NUM4
 	db   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1  ; row A: NUM5 NUM6 NUM7 NUM8 NUM9 NUM- NUM, NUM.

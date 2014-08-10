@@ -8,6 +8,8 @@ UIBuffer: MACRO
 		dw 0
 	blinkBuffer:
 		dw 0
+	blinkColor:
+		db 0
 	_size:
 	ENDM
 
@@ -192,6 +194,10 @@ UIBuffer_Draw:
 	ld h,(iy + UIBuffer.blinkBuffer + 1)
 	ld bc,UIBuffer.HEIGHT * UIBuffer.WIDTH / 8
 	call VDP_Write
+	ld a,(iy + UIBuffer.blinkColor)
+	ld (VDP_MIRROR_8 + 12),a
+	ld b,12
+	call VDP_SetRegister
 	ret
 
 	ALIGN 8
