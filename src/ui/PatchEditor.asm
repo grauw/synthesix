@@ -7,7 +7,7 @@ PatchEditor: MACRO
 	module:
 		db 0
 	port:
-		dw 0
+		db 0
 	_size:
 	ENDM
 
