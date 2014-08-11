@@ -177,7 +177,7 @@ UIBuffer_ClearBlinkBuffer:
 	ld (hl),0
 	inc de
 	ld bc,(UIBuffer.WIDTH * UIBuffer.HEIGHT) / 8 - 1
-	ldir
+	call System_LDIR
 	ret
 
 ; iy = this

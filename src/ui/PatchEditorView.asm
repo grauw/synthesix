@@ -40,7 +40,7 @@ PatchEditorView_ClearBackground:
 	inc de
 	ld (hl)," "
 	ld bc,UIBuffer.WIDTH * 16 - 1
-	ldir
+	call System_LDIR
 	pop hl
 	pop bc
 	ret

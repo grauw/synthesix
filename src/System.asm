@@ -72,6 +72,31 @@ System_PrintHex_Done:
 	pop af
 	ret
 
+	SECTION RAM
+
+; About 21% faster alternative for large LDIRs (break-even at 18 loops)
+; Note: not thread-safe
+; hl = source
+; de = destination
+; bc = byte count
+System_LDIR: PROC
+	xor a
+	sub c
+	and 16-1
+	add a,a
+	ld (jumpOffset),a
+	jr nz,$
+jumpOffset: equ $ - 1
+Loop:
+	REPT 16
+	ldi
+	ENDM
+	jp pe,Loop
+	ret
+	ENDP
+
+	ENDS
+
 System_EnableTurbo:
 	ld a,(IDBYT2)
 	cp 3
