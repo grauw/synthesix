@@ -112,14 +112,14 @@ SCC_UpdateLate:
 ; a = voice number
 ; de <- voice
 ; ix <- voice
-; Modifies: bc, hl, ix
+; Modifies: af, de, ix
 SCC_GetVoice:
 	cp SCC_MAX_VOICES
 	call nc,System_ThrowException
 	add a,a
-	ld c,a
-	ld b,0
-	add ix,bc
+	ld e,a
+	ld d,0
+	add ix,de
 	ld e,(ix + SCC.voices)
 	ld d,(ix + SCC.voices + 1)
 	ld ixl,e
