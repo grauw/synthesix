@@ -13,7 +13,6 @@
 	INCLUDE "OutputView.asm"
 	INCLUDE "PatchEditorView.asm"
 	INCLUDE "ModuleView.asm"
-	INCLUDE "SCCVoiceView.asm"
 
 UI_Init:
 	call VDP_InitScreen0

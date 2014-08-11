@@ -96,39 +96,43 @@ UISynthesix_Paint:
 	pop hl
 
 	push hl
+	ld de,1200H
+	call UIBuffer_GetRelativePosition
 	ld a,0
 	ld ix,(Synthesix_instance.scc)
 	call SCC_GetVoice
-	ld de,1300H
-	call UIBuffer_GetRelativePosition
-	call SCCVoiceView_Paint
+	ld ix,ModuleType_sccVoice
+	call ModuleView_Paint
 	pop hl
 
 	push hl
+	ld de,1210H
+	call UIBuffer_GetRelativePosition
 	ld a,1
 	ld ix,(Synthesix_instance.scc)
 	call SCC_GetVoice
-	ld de,1310H
-	call UIBuffer_GetRelativePosition
-	call SCCVoiceView_Paint
+	ld ix,ModuleType_sccVoice
+	call ModuleView_Paint
 	pop hl
 
 	push hl
+	ld de,1220H
+	call UIBuffer_GetRelativePosition
 	ld a,2
 	ld ix,(Synthesix_instance.scc)
 	call SCC_GetVoice
-	ld de,1320H
-	call UIBuffer_GetRelativePosition
-	call SCCVoiceView_Paint
+	ld ix,ModuleType_sccVoice
+	call ModuleView_Paint
 	pop hl
 
 	push hl
+	ld de,1230H
+	call UIBuffer_GetRelativePosition
 	ld a,3
 	ld ix,(Synthesix_instance.scc)
 	call SCC_GetVoice
-	ld de,1330H
-	call UIBuffer_GetRelativePosition
-	call SCCVoiceView_Paint
+	ld ix,ModuleType_sccVoice
+	call ModuleView_Paint
 	pop hl
 	ret
 
