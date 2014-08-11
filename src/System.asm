@@ -74,8 +74,7 @@ System_PrintHex_Done:
 
 	SECTION RAM
 
-; About 21% faster alternative for large LDIRs (break-even at 18 loops)
-; Note: not thread-safe
+; About 21% faster alternative for large LDIRs (break-even at 20 loops)
 ; hl = source
 ; de = destination
 ; bc = byte count
@@ -84,7 +83,9 @@ System_LDIR: PROC
 	sub c
 	and 16-1
 	add a,a
+	di
 	ld (jumpOffset),a
+	ei
 	jr nz,$
 jumpOffset: equ $ - 1
 Loop:
