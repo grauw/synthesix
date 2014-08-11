@@ -13,6 +13,7 @@ ROM_CodeBank2: equ 1
 ROM_MultiplyTableBank1: equ 2
 ROM_MultiplyTableBank2: equ 3
 ROM_RAMInitBank: equ 4
+ROM_FontBank: equ 4
 ROM_WaveTableBank: equ 5
 ROM_SCCBank: equ 3FH
 
@@ -28,7 +29,8 @@ RAM_sourceAddress:
 RAM_startAddress:
 RAM: ds 1800H
 RAM_endAddress:
-	ds 800H
+	org 7800H
+ROM_FONT: ds 800H
 	org 06000H
 ROM_WAVETABLES: ds 2000H
 

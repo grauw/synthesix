@@ -1,14 +1,30 @@
 ;
 ; Custom font
 ;
+	SECTION ROM_BANK0
+
 Font_Install:
+	ld hl,(ROM_bank6000)
+	push hl
+	ld l,ROM_FontBank
+	ld (ROM_bank6000),hl
+	ld (hl),l
+
 	xor a
 	ld hl,1000H  ; pattern generator table address
 	call VDP_SetWriteAddress
 	ld hl,Font_font
 	ld bc,256 * 8
 	call VDP_Write
+
+	pop hl
+	ld (ROM_bank6000),hl
+	ld (hl),l
 	ret
+
+	ENDS
+
+	SECTION ROM_FONT
 
 Font_font:
 	db 00000000B  ; 0
@@ -2314,3 +2330,5 @@ Font_font:
 	db 00000000B
 	db 00000000B
 	db 00000000B
+
+	ENDS
