@@ -18,6 +18,7 @@ PitchBend: MACRO
 	rangeDown:  ;max range is 31 notes
 		dw Constants_instance + 2
 	inputsEnd:
+	labels: equ PitchBend_labels
 	_size:
 	ENDM
 
@@ -125,3 +126,13 @@ Continue4:
 	adc a,0
 	ret
 	ENDP
+
+;
+PitchBend_labels:
+	db "Pitch bend",0
+	db "Note",0
+	db "Detune",0
+	db "Bend C",0
+	db "Bend F",0
+	db "Range U",0
+	db "Range D",0

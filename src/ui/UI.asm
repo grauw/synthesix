@@ -12,13 +12,7 @@
 	INCLUDE "InputView.asm"
 	INCLUDE "OutputView.asm"
 	INCLUDE "PatchEditorView.asm"
-	INCLUDE "ConstantsView.asm"
-	INCLUDE "ChannelView.asm"
-	INCLUDE "ControllerBankView.asm"
-	INCLUDE "NoteView.asm"
-	INCLUDE "EnvelopeADView.asm"
-	INCLUDE "EnvelopeARView.asm"
-	INCLUDE "PitchBendView.asm"
+	INCLUDE "ModuleView.asm"
 	INCLUDE "SCCVoiceView.asm"
 
 UI_Init:

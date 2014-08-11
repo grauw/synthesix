@@ -16,6 +16,7 @@ LFOTriangleSigned: MACRO
 		db 0
 	sign:
 		db 10101010B
+	labels: equ LFOTriangleSigned_labels
 	_size:
 	ENDM
 
@@ -77,3 +78,10 @@ Negative:
 	ld (ix + LFOTriangleSigned.value),a
 	ret
 	ENDP
+
+;
+LFOTriangleSigned_labels:
+	db "Triangle LFO signed",0
+	db "Value",0
+	db "Speed",0
+	db "Reset",0

@@ -70,7 +70,7 @@ Loop:
 	xor a
 	call Patch_GetModule
 	pop hl
-	call PatchEditorView_PaintModule
+	call ModuleView_Paint
 	pop ix
 	pop hl
 	ld bc,16
@@ -84,48 +84,6 @@ Loop:
 	jp nz,Loop
 	ret
 	ENDP
-
-; de = module
-; ix = module type
-; iy = buffer
-; hl = buffer address
-PatchEditorView_PaintModule:
-	push de
-	ex (sp),ix
-	pop de
-
-	ld bc,ModuleType_constants
-	call PatchEditorView_CheckType
-	jp z,ConstantsView_Paint
-
-	ld bc,ModuleType_channel
-	call PatchEditorView_CheckType
-	jp z,ChannelView_Paint
-
-	ld bc,ModuleType_controllerBank
-	call PatchEditorView_CheckType
-	jp z,ControllerBankView_Paint
-
-	ld bc,ModuleType_note
-	call PatchEditorView_CheckType
-	jp z,NoteView_Paint
-
-	ld bc,ModuleType_envelopeAD
-	call PatchEditorView_CheckType
-	jp z,EnvelopeADView_Paint
-
-	ld bc,ModuleType_envelopeAR
-	call PatchEditorView_CheckType
-	jp z,EnvelopeARView_Paint
-
-	ld bc,ModuleType_pitchBend
-	call PatchEditorView_CheckType
-	jp z,PitchBendView_Paint
-
-	ld bc,ModuleType_sccVoice
-	call PatchEditorView_CheckType
-	jp z,SCCVoiceView_Paint
-	ret
 
 ; bc = module type to compare with
 ; de = module type

@@ -18,6 +18,7 @@ AddPitch: MACRO
 	addendDetune:
 		dw Constants_instance + 0
 	inputsEnd:
+	labels: equ AddPitch_labels
 	_size:
 	ENDM
 
@@ -78,3 +79,13 @@ SubtractDetune:
 	dec (ix + AddPitch.detune)
 	ret
 	ENDP
+
+;
+AddPitch_labels:
+	db "Add pitch",0
+	db "Note",0
+	db "Detune",0
+	db "Note A",0
+	db "DetuneA",0
+	db "Note B",0
+	db "DetuneB",0

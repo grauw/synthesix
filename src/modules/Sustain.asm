@@ -15,6 +15,7 @@ Sustain: MACRO
 	hold:
 		dw Constants_instance + 0
 	inputsEnd:
+	labels: equ Sustain_labels
 	_size:
 	ENDM
 
@@ -58,3 +59,10 @@ Set:
 	ld (ix + Sustain.value),a
 	ret
 	ENDP
+
+;
+Sustain_labels:
+	db "Sustain",0
+	db "Value",0
+	db "Gate",0
+	db "Hold",0

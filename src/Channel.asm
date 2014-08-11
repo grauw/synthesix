@@ -27,6 +27,7 @@ Channel: MACRO
 		REPT MAX_NOTE_POOLS
 		dw 0
 		ENDM
+	labels: equ Channel_labels
 	_size:
 	ENDM
 
@@ -218,3 +219,11 @@ Channel_channels: REPT 16, ?channel
 	ENDM
 
 	ENDS
+
+;
+Channel_labels:
+	db "Channel",0
+	db "Program",0
+	db "C.Press",0
+	db "Bend C",0
+	db "Bend F",0

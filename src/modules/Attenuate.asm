@@ -12,6 +12,7 @@ Attenuate: MACRO
 	multiplier:
 		dw Constants_instance + 127
 	inputsEnd:
+	labels: equ Attenuate_labels
 	_size:
 	ENDM
 
@@ -49,3 +50,10 @@ Attenuate_Update: PROC
 	ld (ix + Attenuate.value),a
 	ret
 	ENDP
+
+;
+Attenuate_labels:
+	db "Attenuate",0
+	db "Value",0
+	db "Multiplicand",0
+	db "Multiplier",0

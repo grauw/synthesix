@@ -16,6 +16,7 @@ Note: MACRO
 	outputsEnd:
 	inputs:
 	inputsEnd:
+	labels: equ Note_labels
 	_size:
 	ENDM
 
@@ -65,3 +66,12 @@ Note_NoteOff:
 Note_UpdateLate:
 	ld (ix + Note.trigger),0
 	ret
+
+;
+Note_labels:
+	db "Note",0
+	db "Key",0
+	db "Velocity",0
+	db "Gate",0
+	db "Trigger",0
+	db "Off velocity",0

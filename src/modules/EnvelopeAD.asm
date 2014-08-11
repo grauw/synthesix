@@ -20,6 +20,7 @@ EnvelopeAD: MACRO
 		db -1
 	counter:
 		db 255
+	labels: equ EnvelopeAD_labels
 	_size:
 	ENDM
 
@@ -106,3 +107,11 @@ Complete:
 	ld (ix + EnvelopeAD.value),~0
 	ret
 	ENDP
+
+;
+EnvelopeAD_labels:
+	db "AD envelope",0
+	db "Value",0
+	db "Attack",0
+	db "Decay",0
+	db "Trigger",0

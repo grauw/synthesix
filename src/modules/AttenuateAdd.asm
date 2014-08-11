@@ -14,6 +14,7 @@ AttenuateAdd: MACRO
 	addend:
 		dw Constants_instance + 0
 	inputsEnd:
+	labels: equ AttenuateAdd_labels
 	_size:
 	ENDM
 
@@ -59,3 +60,11 @@ AttenuateAdd_Update: PROC
 	ld (ix + AttenuateAdd.value),128
 	ret
 	ENDP
+
+;
+AttenuateAdd_labels:
+	db "Attenuate-add",0
+	db "Value",0
+	db "Multiplicand",0
+	db "Multiplier",0
+	db "Addend",0

@@ -14,6 +14,8 @@ ModuleType: MACRO ?core, ?acquirer
 		db ?core.inputs
 	inputCount:
 		dw (?core.inputsEnd - ?core.inputs) >> 1
+	labels:
+		dw ?core.labels
 	_size:
 	ENDM
 

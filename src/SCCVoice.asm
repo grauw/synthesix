@@ -32,6 +32,7 @@ SCCVoice: MACRO
 		db -1
 	free:
 		db 0
+	labels: equ SCCVoice_labels
 	_size:
 	ENDM
 
@@ -233,3 +234,11 @@ SCCVoice_Release:
 	res 7,(ix + SCCVoice.free)
 	ret
 
+;
+SCCVoice_labels:
+	db "SCC voice",0
+	db "Note",0
+	db "Detune",0
+	db "Amplitude",0
+	db "Wave",0
+	db "Phase reset",0

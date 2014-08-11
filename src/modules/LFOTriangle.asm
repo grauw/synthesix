@@ -14,6 +14,7 @@ LFOTriangle: MACRO
 	inputsEnd:
 	counter:
 		db 0
+	labels: equ LFOTriangle_labels
 	_size:
 	ENDM
 
@@ -61,3 +62,10 @@ Positive:
 	ld (ix + LFOTriangle.value),a
 	ret
 	ENDP
+
+;
+LFOTriangle_labels:
+	db "Triangle LFO",0
+	db "Value",0
+	db "Speed",0
+	db "Reset",0

@@ -6,6 +6,7 @@ ControllerBank: MACRO
 	outputsEnd:
 	inputs:
 	inputsEnd:
+	labels: equ ControllerBank_labels
 	_size:
 	ENDM
 
@@ -32,3 +33,21 @@ ControllerBank_GetController:
 	ld d,0
 	add hl,de
 	ret
+
+;
+ControllerBank_labels:
+	db "Controllers",0
+	db "Bank C",0
+	db "Mod",0
+	db "Breath",0
+	db "Undefined",0
+	db "Foot",0
+	db "P.Time",0
+	db "Data C",0
+	db "Volume",0
+	db "Balance",0
+	db "Undefined",0
+	db "Pan",0
+	db "Expression",0
+	db "Fx 1",0
+	db "Fx 2",0

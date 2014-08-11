@@ -20,6 +20,7 @@ EnvelopeAR: MACRO
 		db 0
 	counter:
 		db 0
+	labels: equ EnvelopeAR_labels
 	_size:
 	ENDM
 
@@ -109,3 +110,12 @@ Complete:
 	ld (ix + EnvelopeAR.value),~0
 	ret
 	ENDP
+
+;
+EnvelopeAR_labels:
+	db "AR envelope",0
+	db "Value",0
+	db "Attack",0
+	db "Release",0
+	db "Gate",0
+	db "Trigger",0

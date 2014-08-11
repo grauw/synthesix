@@ -14,6 +14,7 @@ Or: MACRO
 	term2:
 		dw Constants_instance + 0
 	inputsEnd:
+	labels: equ Or_labels
 	_size:
 	ENDM
 
@@ -53,3 +54,10 @@ Set:
 	ld (ix + Or.value),a
 	ret
 	ENDP
+
+;
+Or_labels:
+	db "Or",0
+	db "Value",0
+	db "Term 1",0
+	db "Term 2",0
