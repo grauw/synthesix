@@ -81,7 +81,7 @@ Negative:
 
 ;
 LFOTriangleBipolar_labels:
-	db "Tri LFO bipolar",0
+	db 246,247," LFO",0
 	db "Value",0
 	db "Speed",0
 	db "Reset",0

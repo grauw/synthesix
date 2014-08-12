@@ -65,7 +65,7 @@ Positive:
 
 ;
 LFOTriangle_labels:
-	db "Tri LFO",0
+	db 254,255," LFO",0
 	db "Value",0
 	db "Speed",0
 	db "Reset",0
