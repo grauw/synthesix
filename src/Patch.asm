@@ -96,17 +96,11 @@ Patch_Load: PROC
 	ld de,3  << 8 | 2  ; Note.gate
 	call Patch_AddLink
 	; AR envelope
-	ld a,93
-	call Patch_GetController
-	ld (hl),32
-	ld a,94
-	call Patch_GetController
-	ld (hl),8
 	ld hl,5 << 8 | 0   ; EnvelopeAR.attack
-	ld de,2 << 8 | 93  ; Controller 93
+	ld de,0 << 8 | 32  ; Value 32
 	call Patch_AddLink
 	ld hl,5 << 8 | 1   ; EnvelopeAR.release
-	ld de,2 << 8 | 94  ; Controller 94
+	ld de,0 << 8 | 8   ; Value 8
 	call Patch_AddLink
 	ld hl,5 << 8 | 3  ; EnvelopeAR.trigger
 	ld de,3 << 8 | 3  ; Note.trigger
@@ -325,11 +319,3 @@ Loop:
 	inc a
 	jp Loop
 	ENDP
-
-; hl <- controller
-Patch_GetController:
-	push ix
-	ld ix,Channel_channels.0
-	call Channel_GetController
-	pop ix
-	ret
