@@ -184,7 +184,81 @@ Found:
 	ENDP
 
 ;
+; Finds the nearest entry which is lower or equal to the given value.
+;
+; de = value to find
+; ix = this
+; bc <- index
+; de <- actual address
+; hl <- index
+; Modifies: all but ix
+ArrayList_FindNearestBelow: PROC
+	ld c,(ix + ArrayList.buffer)
+	ld b,(ix + ArrayList.buffer + 1)
+	ld iyl,c
+	ld iyh,b
+	ld bc,0                         ; bc = best match (0 - distance)
+	exx
+	ld c,(ix + ArrayList.size)      ; bc' = array index
+	ld de,0                         ; de' = match
+	ld hl,-1                        ; hl' = best match index
+	ld b,(ix + ArrayList.size + 1)
+	add iy,bc                       ; iy = current position (counts backwards)
+	add iy,bc
+	exx
+Loop:
+	exx
+Loop2:
+	ld a,b
+	or c
+	jr z,Done
+	dec bc
+	exx
+	dec iy
+	dec iy
+	ld l,(iy + 0)  ; hl = entry
+	ld h,(iy + 1)  ; de = search value
+	sbc hl,de
+	jr z,Found
+	jr nc,Loop
+	and a
+	sbc hl,bc
+	jr c,Loop
+	add hl,bc
+	ld c,l  ; bc = new best match distance
+	ld b,h
+	exx
+	ld l,c  ; hl' = new best match index
+	ld h,b
+	jp Loop2
+Found:
+	push de
+	exx
+	pop de
+	ld l,c
+	ld h,b
+	ret
+Done:
+	bit 7,h
+	call nz,System_ThrowException
+	exx
+	ex de,hl
+	add hl,bc
+	push hl
+	exx
+	pop de
+	ld c,l
+	ld b,h
+	ret
+	ENDP
+
+;
 ArrayList_UnitTest:
+	call ArrayList_TestAddRemoveGet
+	call ArrayList_TestFindNearestBelow
+	ret
+
+ArrayList_TestAddRemoveGet:
 	ld bc,4
 	call ArrayList_New
 
@@ -267,6 +341,70 @@ ArrayList_UnitTest:
 	call ArrayList_Get
 	and a
 	ld hl,1234H
+	sbc hl,de
+	call nz,System_ThrowException
+
+	call ArrayList_Destroy
+	ret
+
+ArrayList_TestFindNearestBelow:
+	ld bc,4
+	call ArrayList_New
+
+	ld de,1000H
+	call ArrayList_Add
+	ld de,1007H
+	call ArrayList_Add
+	ld de,1005H
+	call ArrayList_Add
+	ld de,1009H
+	call ArrayList_Add
+
+	ld de,1004H
+	call ArrayList_FindNearestBelow
+	and a
+	sbc hl,bc
+	call nz,System_ThrowException
+	ld hl,0
+	sbc hl,bc
+	call nz,System_ThrowException
+	ld hl,1000H
+	sbc hl,de
+	call nz,System_ThrowException
+
+	ld de,1005H
+	call ArrayList_FindNearestBelow
+	and a
+	sbc hl,bc
+	call nz,System_ThrowException
+	ld hl,2
+	sbc hl,bc
+	call nz,System_ThrowException
+	ld hl,1005H
+	sbc hl,de
+	call nz,System_ThrowException
+
+	ld de,1006H
+	call ArrayList_FindNearestBelow
+	and a
+	sbc hl,bc
+	call nz,System_ThrowException
+	ld hl,2
+	sbc hl,bc
+	call nz,System_ThrowException
+	ld hl,1005H
+	sbc hl,de
+	call nz,System_ThrowException
+
+	ld de,1008H
+	call ArrayList_FindNearestBelow
+	and a
+	sbc hl,bc
+	call nz,System_ThrowException
+	ld hl,1
+	sbc hl,bc
+	call nz,System_ThrowException
+	ld hl,1007H
 	sbc hl,de
 	call nz,System_ThrowException
 
