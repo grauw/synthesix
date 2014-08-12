@@ -97,40 +97,6 @@ ArrayList_GetElement:
 	add hl,bc
 	ret
 
-; de = value to find
-; ix = this
-; bc <- index
-; hl <- index
-; Modifies: af, bc, hl
-ArrayList_Find: PROC
-	ld c,(ix + ArrayList.size)
-	ld b,(ix + ArrayList.size + 1)
-	push bc
-	ld l,(ix + ArrayList.buffer)
-	ld h,(ix + ArrayList.buffer + 1)
-Loop:
-	ld a,b
-	or c
-	call z,System_ThrowException
-	ld a,(hl)
-	inc hl
-	cp e
-	jp nz,Next
-	ld a,(hl)
-	cp d
-	jp z,Found
-Next:
-	inc hl
-	dec bc
-	jp Loop
-Found:
-	pop hl
-	sbc hl,bc
-	ld c,l
-	ld b,h
-	ret
-	ENDP
-
 ; de = value to add
 ; ix = this
 ; bc <- index of added element
@@ -182,6 +148,40 @@ ArrayList_Remove:
 	pop bc
 	ldir
 	ret
+
+; de = value to find
+; ix = this
+; bc <- index
+; hl <- index
+; Modifies: af, bc, hl
+ArrayList_Find: PROC
+	ld c,(ix + ArrayList.size)
+	ld b,(ix + ArrayList.size + 1)
+	push bc
+	ld l,(ix + ArrayList.buffer)
+	ld h,(ix + ArrayList.buffer + 1)
+Loop:
+	ld a,b
+	or c
+	call z,System_ThrowException
+	ld a,(hl)
+	inc hl
+	cp e
+	jp nz,Next
+	ld a,(hl)
+	cp d
+	jp z,Found
+Next:
+	inc hl
+	dec bc
+	jp Loop
+Found:
+	pop hl
+	sbc hl,bc
+	ld c,l
+	ld b,h
+	ret
+	ENDP
 
 ;
 ArrayList_UnitTest:
