@@ -156,7 +156,7 @@ ModuleType_envelopeAR: ModuleType EnvelopeAR, EnvelopeAR_New
 
 ModuleType_lfoTriangle: ModuleType LFOTriangle, LFOTriangle_New
 
-ModuleType_lfoTriangleSigned: ModuleType LFOTriangleSigned, LFOTriangleSigned_New
+ModuleType_lfoTriangleBipolar: ModuleType LFOTriangleBipolar, LFOTriangleBipolar_New
 
 ModuleType_attenuate: ModuleType Attenuate, Attenuate_New
 

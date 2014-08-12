@@ -75,7 +75,7 @@ Patch_Load: PROC
 	call Patch_AddModule                ; module 5
 	ld hl,ModuleType_sustain
 	call Patch_AddModule                ; module 6
-	ld hl,ModuleType_lfoTriangleSigned
+	ld hl,ModuleType_lfoTriangleBipolar
 	call Patch_AddModule                ; module 7
 	ld hl,ModuleType_attenuate
 	call Patch_AddModule                ; module 8
@@ -125,7 +125,7 @@ Patch_Load: PROC
 	call Patch_AddLink
 	; After touch vibrato
 	ld hl,8 << 8 | 0  ; Attenuate.multiplicand
-	ld de,7 << 8 | 0  ; LFOTriangleSigned.value
+	ld de,7 << 8 | 0  ; LFOTriangleBipolar.value
 	call Patch_AddLink
 	ld hl,8 << 8 | 1  ; Attenuate.multiplier
 	ld de,2 << 8 | 1  ; Controller 1
