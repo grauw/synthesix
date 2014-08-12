@@ -117,11 +117,16 @@ ProcessKey:
 Select:
 	bit 0,(ix + PatchEditor.assign)
 	jp nz,Assign
-	ld b,(ix + PatchEditor.module)
-	ld c,(ix + PatchEditor.port)
-	ld (ix + PatchEditor.assignModule),b
-	ld (ix + PatchEditor.assignPort),c
+	ld e,(ix + PatchEditor.module)
+	ld d,(ix + PatchEditor.port)
+	ld (ix + PatchEditor.assignModule),e
+	ld (ix + PatchEditor.assignPort),d
 	ld (ix + PatchEditor.assign),-1
+	call PatchEditor_IsOutputSelected
+	ret c
+	call PatchEditor_GetInputTarget
+	ld (ix + PatchEditor.module),c
+	ld (ix + PatchEditor.port),a
 	ret
 Assign:
 	ld b,(ix + PatchEditor.assignModule)
@@ -219,3 +224,45 @@ PatchEditor_GetPort: PROC
 	add a,c
 	jp ModuleType_GetOutput
 	ENDP
+
+; ix = this
+; f <- c: selected port is output
+PatchEditor_IsOutputSelected: PROC
+	push ix
+	ld c,(ix + PatchEditor.module)
+	ld b,0
+	call PatchEditor_GetPatch
+	call Patch_GetModuleType
+	bit 0,(ix + ModuleType.outputCount + 1)
+	jp nz,Output
+	ld b,(ix + ModuleType.outputCount)
+	pop ix
+	ld a,(ix + PatchEditor.port)
+	cp b
+	ret
+Output:
+	pop ix
+	scf
+	ret
+	ENDP
+
+;
+; Return the output port the selected input port points to.
+;
+; ix = this
+; bc <- module
+; a <- port
+PatchEditor_GetInputTarget:
+	push ix
+	ld c,(ix + PatchEditor.module)
+	ld a,(ix + PatchEditor.port)
+	call PatchEditor_GetPort
+	pop ix
+	push ix
+	call PatchEditor_GetPatch
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	call Patch_FindModuleOutputPort
+	pop ix
+	ret

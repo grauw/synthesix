@@ -319,3 +319,47 @@ Loop:
 	inc a
 	jp Loop
 	ENDP
+
+; a = note index
+; de = address somewhere inside the module
+; ix = this
+; bc <- module index
+; de <- module core
+; ix <- module type
+; Modifies: all
+Patch_FindModule:
+	push ix
+	call Patch_GetModuleList
+	call ArrayList_FindNearestBelow
+	pop ix
+	push bc
+	push de
+	call Patch_GetModuleType
+	pop de
+	pop bc
+	ret
+
+; a = note index
+; de = address somewhere inside the module
+; ix = this
+; a <- output port index
+; bc <- module index
+; ix <- module type
+; Modifies: all
+Patch_FindModuleOutputPort:
+	push de
+	call Patch_FindModule
+	pop hl
+	and a
+	sbc hl,de
+	ld e,(ix + ModuleType.outputs)
+	ld d,0
+	and a
+	sbc hl,de
+	call c,System_ThrowException  ; de is not an output
+	ld a,l
+	bit 0,(ix + ModuleType.outputCount + 1)
+	ret nz
+	cp (ix + ModuleType.outputCount)
+	call nc,System_ThrowException  ; de is not an output
+	ret
