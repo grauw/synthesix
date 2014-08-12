@@ -63,7 +63,7 @@ AttenuateAdd_Update: PROC
 
 ;
 AttenuateAdd_labels:
-	db "Attenuate-add",0
+	db "Attenu-add",0
 	db "Value",0
 	db "Multiplicand",0
 	db "Multiplier",0

@@ -81,7 +81,7 @@ Negative:
 
 ;
 LFOTriangleSigned_labels:
-	db "Triangle LFO signed",0
+	db "Tri LFO bipolar",0
 	db "Value",0
 	db "Speed",0
 	db "Reset",0
