@@ -40,7 +40,7 @@ OutputsLoop:
 	pop bc
 	pop af
 	dec c
-	ret z
+	jp z,Exit
 	inc a
 	djnz OutputsLoop
 	pop ix
@@ -67,10 +67,11 @@ InputsLoop:
 	pop bc
 	pop af
 	dec c
-	ret z
+	jp z,Exit
 	inc a
 	inc a
 	djnz InputsLoop
+Exit:
 	pop ix
 	pop de
 NoInputs:
