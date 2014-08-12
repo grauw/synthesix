@@ -27,8 +27,8 @@ Update:
 	ld b,(ix + ModuleType.outputCount)
 	push de
 	push ix
-	push de
-	pop ix
+	ld ixl,e
+	ld ixh,d
 OutputsLoop:
 	push af
 	push bc
@@ -54,8 +54,8 @@ NoOutputs:
 	ld b,(ix + ModuleType.inputCount)
 	push de
 	push ix
-	push de
-	pop ix
+	ld ixl,e
+	ld ixh,d
 InputsLoop:
 	push af
 	push bc
