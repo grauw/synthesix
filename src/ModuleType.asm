@@ -193,3 +193,5 @@ ModuleType_addPitch: ModuleType AddPitch, AddPitch_New
 ModuleType_sustain: ModuleType Sustain, Sustain_New
 
 ModuleType_select8: ModuleType Select8, Select8_New
+
+ModuleType_sequence8: ModuleType Sequence8, Sequence8_New

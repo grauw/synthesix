@@ -105,6 +105,7 @@ ROM_BANK_A000_CHANGE: equ 0B000H
 	INCLUDE "modules/WaveTriangleBipolar.asm"
 	INCLUDE "modules/PitchBend.asm"
 	INCLUDE "modules/Select8.asm"
+	INCLUDE "modules/Sequence8.asm"
 	INCLUDE "ui/UI.asm"
 
 	ENDS
