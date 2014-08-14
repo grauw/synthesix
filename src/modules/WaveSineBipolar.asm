@@ -48,6 +48,8 @@ WaveSineBipolar_Update: PROC
 	ENDP
 
 ;
+	SECTION ROM_TABLES
+
 	ALIGN 100H
 WaveSineBipolar_table:
 	db 0, 3, 6, 9, 12, 16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 46
@@ -66,6 +68,8 @@ WaveSineBipolar_table:
 	db -118, -117, -116, -114, -113, -112, -110, -108, -107, -105, -103, -101, -99, -97, -95, -93
 	db -91, -89, -86, -84, -82, -79, -77, -74, -72, -69, -66, -64, -61, -58, -55, -52
 	db -50, -47, -44, -41, -38, -35, -32, -29, -26, -23, -20, -17, -13, -10, -7, -4
+
+	ENDS
 
 ;
 WaveSineBipolar_labels:

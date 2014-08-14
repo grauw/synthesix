@@ -102,6 +102,8 @@ PSG_initValues:
 	db 0BH, 00H          ; envelope frequency
 	db 0B8H              ; envelope shape
 
+	SECTION ROM_TABLES
+
 	ALIGN 100H
 PSG_frequencyTable:
 	INCLUDE "psgftable.asm"
@@ -116,3 +118,5 @@ PSG_volumeTable:
 	db 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14
 	db 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 15, 15, 15
 	db 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15
+
+	ENDS
