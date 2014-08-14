@@ -93,6 +93,8 @@ Patch_Load: PROC
 	call Patch_AddModule                ; module 14
 	ld hl,ModuleType_sccVoice
 	call Patch_AddModule                ; module 15
+	ld hl,ModuleType_select8
+	call Patch_AddModule                ; module 16
 	ld hl,15 << 8 | 0  ; SCCVoice.note
 	ld de,3  << 8 | 0  ; Note.key
 	call Patch_AddLink
@@ -184,6 +186,37 @@ Patch_Load: PROC
 	; Pulse width control
 ;	ld hl,15 << 8 | 3  ; SCCVoice.wave
 ;	ld de,2  << 8 | 7  ; Controller 7
+;	call Patch_AddLink
+	; 8-step sequence
+	ld hl,16 << 8 | 0  ; Select8.position
+	ld de,7  << 8 | 1  ; Counter.tally
+	call Patch_AddLink
+	ld hl,16 << 8 | 1   ; Select8.steps 0
+	ld de,0  << 8 | 10  ; Value
+	call Patch_AddLink
+	ld hl,16 << 8 | 2   ; Select8.steps 1
+	ld de,0  << 8 | 14  ; Value
+	call Patch_AddLink
+	ld hl,16 << 8 | 3   ; Select8.steps 2
+	ld de,0  << 8 | 18  ; Value
+	call Patch_AddLink
+	ld hl,16 << 8 | 4   ; Select8.steps 3
+	ld de,0  << 8 | 22  ; Value
+	call Patch_AddLink
+	ld hl,16 << 8 | 5   ; Select8.steps 4
+	ld de,0  << 8 | 26  ; Value
+	call Patch_AddLink
+	ld hl,16 << 8 | 6   ; Select8.steps 5
+	ld de,0  << 8 | 30  ; Value
+	call Patch_AddLink
+	ld hl,16 << 8 | 7   ; Select8.steps 6
+	ld de,0  << 8 | 34  ; Value
+	call Patch_AddLink
+	ld hl,16 << 8 | 8   ; Select8.steps 7
+	ld de,0  << 8 | 38  ; Value
+	call Patch_AddLink
+;	ld hl,15 << 8 | 3  ; SCCVoice.wave
+;	ld de,16 << 8 | 0  ; Select8.value
 ;	call Patch_AddLink
 	ret
 	ENDP

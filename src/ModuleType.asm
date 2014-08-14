@@ -191,3 +191,5 @@ ModuleType_pitchBend: ModuleType PitchBend, PitchBend_New
 ModuleType_addPitch: ModuleType AddPitch, AddPitch_New
 
 ModuleType_sustain: ModuleType Sustain, Sustain_New
+
+ModuleType_select8: ModuleType Select8, Select8_New
