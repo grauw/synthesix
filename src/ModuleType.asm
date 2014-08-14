@@ -152,6 +152,8 @@ ModuleType_SCCVoiceFactory:
 
 ModuleType_multCounter: ModuleType MultCounter, MultCounter_New
 
+ModuleType_divCounter: ModuleType DivCounter, DivCounter_New
+
 ModuleType_envelopeAD: ModuleType EnvelopeAD, EnvelopeAD_New
 
 ModuleType_envelopeAR: ModuleType EnvelopeAR, EnvelopeAR_New

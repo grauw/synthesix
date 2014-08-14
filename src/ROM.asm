@@ -87,6 +87,7 @@ ROM_BANK_A000_CHANGE: equ 0B000H
 	INCLUDE "modules/Sustain.asm"
 	INCLUDE "modules/ControllerBank.asm"
 	INCLUDE "modules/MultCounter.asm"
+	INCLUDE "modules/DivCounter.asm"
 	INCLUDE "modules/EnvelopeAD.asm"
 	INCLUDE "modules/EnvelopeAR.asm"
 	INCLUDE "modules/LFOTriangle.asm"
