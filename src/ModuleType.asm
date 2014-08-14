@@ -150,7 +150,7 @@ ModuleType_SCCVoiceFactory:
 	call SCC_GetFreeVoice
 	ret
 
-ModuleType_counter: ModuleType Counter, Counter_New
+ModuleType_multCounter: ModuleType MultCounter, MultCounter_New
 
 ModuleType_envelopeAD: ModuleType EnvelopeAD, EnvelopeAD_New
 
