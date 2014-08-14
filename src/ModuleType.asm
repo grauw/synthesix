@@ -160,6 +160,10 @@ ModuleType_lfoTriangle: ModuleType LFOTriangle, LFOTriangle_New
 
 ModuleType_lfoTriangleBipolar: ModuleType LFOTriangleBipolar, LFOTriangleBipolar_New
 
+ModuleType_waveTriangle: ModuleType WaveTriangle, WaveTriangle_New
+
+ModuleType_waveTriangleBipolar: ModuleType WaveTriangleBipolar, WaveTriangleBipolar_New
+
 ModuleType_attenuate: ModuleType Attenuate, Attenuate_New
 
 ModuleType_attenuateAdd: ModuleType AttenuateAdd, AttenuateAdd_New

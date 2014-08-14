@@ -91,6 +91,8 @@ ROM_BANK_A000_CHANGE: equ 0B000H
 	INCLUDE "modules/EnvelopeAR.asm"
 	INCLUDE "modules/LFOTriangle.asm"
 	INCLUDE "modules/LFOTriangleBipolar.asm"
+	INCLUDE "modules/WaveTriangle.asm"
+	INCLUDE "modules/WaveTriangleBipolar.asm"
 	INCLUDE "modules/PitchBend.asm"
 	INCLUDE "ui/UI.asm"
 
