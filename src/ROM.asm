@@ -94,6 +94,8 @@ ROM_BANK_A000_CHANGE: equ 0B000H
 	INCLUDE "modules/LFOTriangleBipolar.asm"
 	INCLUDE "modules/WaveSquare.asm"
 	INCLUDE "modules/WaveSquareBipolar.asm"
+	INCLUDE "modules/WaveSaw.asm"
+	INCLUDE "modules/WaveSawBipolar.asm"
 	INCLUDE "modules/WaveTriangle.asm"
 	INCLUDE "modules/WaveTriangleBipolar.asm"
 	INCLUDE "modules/PitchBend.asm"
