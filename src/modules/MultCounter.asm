@@ -15,6 +15,8 @@ MultCounter: MACRO
 		dw Constants_instance + 127
 	increment:
 		dw Constants_instance + 0
+	reset:
+		dw Constants_instance + 0
 	inputsEnd:
 	labels: equ MultCounter_labels
 	_size:
@@ -44,6 +46,10 @@ MultCounter_Constructor:
 
 ; ix = this
 MultCounter_Update: PROC
+	ld l,(ix + MultCounter.reset)
+	ld h,(ix + MultCounter.reset + 1)
+	bit 6,(hl)
+	call nz,Reset
 	ld l,(ix + MultCounter.trigger)
 	ld h,(ix + MultCounter.trigger + 1)
 	bit 6,(hl)
@@ -61,6 +67,10 @@ Overflow:
 	inc (ix + MultCounter.tally)
 	ld (ix + MultCounter.overflow),127
 	ret
+Reset:
+	ld (ix + MultCounter.counter),0
+	ld (ix + MultCounter.tally),0
+	ret
 	ENDP
 
 ;
@@ -71,3 +81,4 @@ MultCounter_labels:
 	db "Overflow",0
 	db "Trigger",0
 	db "Increment",0
+	db "Reset",0
