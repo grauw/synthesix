@@ -162,6 +162,10 @@ ModuleType_lfoTriangle: ModuleType LFOTriangle, LFOTriangle_New
 
 ModuleType_lfoTriangleBipolar: ModuleType LFOTriangleBipolar, LFOTriangleBipolar_New
 
+ModuleType_waveSine: ModuleType WaveSine, WaveSine_New
+
+ModuleType_waveSineBipolar: ModuleType WaveSineBipolar, WaveSineBipolar_New
+
 ModuleType_waveSquare: ModuleType WaveSquare, WaveSquare_New
 
 ModuleType_waveSquareBipolar: ModuleType WaveSquareBipolar, WaveSquareBipolar_New
