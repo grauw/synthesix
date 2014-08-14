@@ -255,8 +255,10 @@ VDP_SetWriteAddress14Bit:
 ; bc = byte count
 ; Modifies: af
 VDP_Read:
+	dec bc
 	ld a,b
 	inc a
+	inc c
 	ld b,c
 	ld c,VDP_PORT_0
 VDP_Read_Loop:
@@ -269,8 +271,10 @@ VDP_Read_Loop:
 ; bc = byte count
 ; Modifies: af
 VDP_Write:
+	dec bc
 	ld a,b
 	inc a
+	inc c
 	ld b,c
 	ld c,VDP_PORT_0
 VDP_Write_Loop:
