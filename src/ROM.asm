@@ -96,6 +96,8 @@ ROM_BANK_A000_CHANGE: equ 0B000H
 	INCLUDE "modules/WaveSineBipolar.asm"
 	INCLUDE "modules/WaveSquare.asm"
 	INCLUDE "modules/WaveSquareBipolar.asm"
+	INCLUDE "modules/WavePulse.asm"
+	INCLUDE "modules/WavePulseBipolar.asm"
 	INCLUDE "modules/WaveSaw.asm"
 	INCLUDE "modules/WaveSawBipolar.asm"
 	INCLUDE "modules/WaveTriangle.asm"

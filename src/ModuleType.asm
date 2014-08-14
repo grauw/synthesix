@@ -170,6 +170,10 @@ ModuleType_waveSquare: ModuleType WaveSquare, WaveSquare_New
 
 ModuleType_waveSquareBipolar: ModuleType WaveSquareBipolar, WaveSquareBipolar_New
 
+ModuleType_wavePulse: ModuleType WavePulse, WavePulse_New
+
+ModuleType_wavePulseBipolar: ModuleType WavePulseBipolar, WavePulseBipolar_New
+
 ModuleType_waveSaw: ModuleType WaveSaw, WaveSaw_New
 
 ModuleType_waveSawBipolar: ModuleType WaveSawBipolar, WaveSawBipolar_New
