@@ -58,14 +58,13 @@ MultCounter_Update: PROC
 	ld l,(ix + MultCounter.increment)
 	ld h,(ix + MultCounter.increment + 1)
 	add a,(hl)
-	jp c,Overflow
 	ld (ix + MultCounter.counter),a
-	ld (ix + MultCounter.overflow),0
-	ret
-Overflow:
-	ld (ix + MultCounter.counter),a
-	inc (ix + MultCounter.tally)
+	jr nc,NoOverflow
 	ld (ix + MultCounter.overflow),127
+	inc (ix + MultCounter.tally)
+	ret
+NoOverflow:
+	ld (ix + MultCounter.overflow),0
 	ret
 Reset:
 	ld (ix + MultCounter.counter),0
