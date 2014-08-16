@@ -12,7 +12,6 @@ OutputView_Paint:
 	ld a,0
 	adc a,ixh
 	ld d,a
-	call UIFocus_Paint
 	ld a,(de)
 	call ValueView_Paint
 	ret

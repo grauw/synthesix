@@ -81,12 +81,6 @@ MoveLeft:
 ; ix = this
 PatchEditor_Update: PROC
 	call PatchEditor_UpdateSelection
-	ld c,(ix + PatchEditor.module)
-	ld a,(ix + PatchEditor.port)
-	push ix
-	call PatchEditor_GetPort
-	pop ix
-	ld (UIFocus_instance.target),hl
 	ret
 	ENDP
 

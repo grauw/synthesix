@@ -4,7 +4,6 @@
 
 	INCLUDE "Font.asm"
 	INCLUDE "UIBuffer.asm"
-	INCLUDE "UIFocus.asm"
 	INCLUDE "UISynthesix.asm"
 	INCLUDE "UIKeyboard.asm"
 	INCLUDE "PatchEditor.asm"

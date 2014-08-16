@@ -12,7 +12,6 @@ InputView_Paint:
 	ld a,0
 	adc a,ixh
 	ld d,a
-	call UIFocus_Paint
 	ex de,hl
 	ld c,(hl)
 	inc hl
