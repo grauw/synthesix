@@ -45,7 +45,10 @@ Channel_New:
 ; ix <- this
 Channel_Constructor: PROC
 	push ix
-	call ControllerBank_New
+	xor a
+	ld bc,128
+	ld ix,Heap_heap
+	call Heap_AllocateClear
 	pop ix
 	ld (ix + Channel.keys),e
 	ld (ix + Channel.keys + 1),d
@@ -164,7 +167,10 @@ Channel_PitchBend:
 Channel_GetKey:
 	ld l,(ix + Channel.keys)
 	ld h,(ix + Channel.keys + 1)
-	jp ControllerBank_GetController
+	ld e,a
+	ld d,0
+	add hl,de
+	ret
 
 ; ix = this
 ; a = controller number
