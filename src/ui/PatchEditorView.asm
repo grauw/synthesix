@@ -48,7 +48,7 @@ PatchEditorView_PaintFocus:
 	ld (hl),11111110B
 	pop hl
 	pop bc
-	ld a,(ix + PatchEditor.assign)
+	ld a,(ix + PatchEditor.mode)
 	and a
 	ld (iy + UIBuffer.blinkColor),PatchEditorView_SELECTCOLOR
 	ret z

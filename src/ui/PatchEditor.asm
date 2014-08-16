@@ -4,11 +4,11 @@
 PatchEditor: MACRO
 	patch:
 		dw 0
+	mode:
+		db 0  ; 0 = select, 1 = assign
 	module:
 		db 0
 	port:
-		db 0
-	assign:
 		db 0
 	assignModule:
 		db 0
@@ -109,13 +109,13 @@ ProcessKey:
 	jp z,Cancel
 	ret
 Select:
-	bit 0,(ix + PatchEditor.assign)
+	bit 0,(ix + PatchEditor.mode)
 	jp nz,Assign
 	ld e,(ix + PatchEditor.module)
 	ld d,(ix + PatchEditor.port)
 	ld (ix + PatchEditor.assignModule),e
 	ld (ix + PatchEditor.assignPort),d
-	ld (ix + PatchEditor.assign),-1
+	ld (ix + PatchEditor.mode),1
 	call PatchEditor_IsOutputSelected
 	ret c
 	call PatchEditor_GetInputTarget
@@ -127,16 +127,16 @@ Assign:
 	ld c,(ix + PatchEditor.assignPort)
 	ld (ix + PatchEditor.module),b
 	ld (ix + PatchEditor.port),c
-	ld (ix + PatchEditor.assign),0
+	ld (ix + PatchEditor.mode),0
 	ret
 Cancel:
-	bit 0,(ix + PatchEditor.assign)
+	bit 0,(ix + PatchEditor.mode)
 	ret z
 	ld b,(ix + PatchEditor.assignModule)
 	ld c,(ix + PatchEditor.assignPort)
 	ld (ix + PatchEditor.module),b
 	ld (ix + PatchEditor.port),c
-	ld (ix + PatchEditor.assign),0
+	ld (ix + PatchEditor.mode),0
 	ret
 KeyLeft:
 	ld a,(ix + PatchEditor.module)
