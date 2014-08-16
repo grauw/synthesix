@@ -10,13 +10,16 @@ ControllerBank: MACRO
 	_size:
 	ENDM
 
-	dw ControllerBank._size
-ControllerBank_class: ControllerBank
-
 ; ix, de <- new object
 ControllerBank_New:
-	ld iy,ControllerBank_class
-	call Class_New
+	push ix
+	xor a
+	ld bc,128
+	ld ix,Heap_heap
+	call Heap_AllocateClear
+	pop ix
+	ld ixl,e
+	ld ixh,d
 	jp ControllerBank_Constructor
 
 ; ix = this
