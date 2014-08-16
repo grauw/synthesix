@@ -118,7 +118,7 @@ Channel_NoteOff:
 ; Modifies: af, de, hl
 Channel_ControlChange:
 	ld a,b
-	cp 121
+	cp 120
 	jr nc,Channel_ChannelMode
 	call Channel_GetController
 	ld (hl),c
