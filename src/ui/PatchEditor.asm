@@ -129,6 +129,7 @@ SelectInput:
 Assign:
 	call PatchEditor_IsValidSelection
 	ret c
+	call PatchEditor_Link
 	ld b,(ix + PatchEditor.assignModule)
 	ld c,(ix + PatchEditor.assignPort)
 	ld (ix + PatchEditor.module),b
@@ -279,3 +280,33 @@ PatchEditor_GetInputTarget:
 	call Patch_FindModuleOutputPort
 	pop ix
 	ret
+
+; ix = this
+PatchEditor_Link: PROC
+	ld h,(ix + PatchEditor.assignModule)
+	ld l,(ix + PatchEditor.assignPort)
+	ld d,(ix + PatchEditor.module)
+	ld e,(ix + PatchEditor.port)
+	bit 1,(ix + PatchEditor.mode)
+	jr z,LinkToInput
+	ex de,hl
+LinkToInput:
+	push ix
+	push de
+	push hl
+	call PatchEditor_GetPatch
+	push ix
+	ld c,h
+	ld b,0
+	call Patch_GetModuleType
+	ld c,(ix + ModuleType.outputCount)
+	pop ix
+	pop hl
+	pop de
+	ld a,l
+	sub c
+	ld l,a
+	call Patch_AddLink
+	pop ix
+	ret
+	ENDP
