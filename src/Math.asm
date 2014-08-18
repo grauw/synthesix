@@ -167,8 +167,9 @@ Math_Multiply8x16:
 	REPT 7
 	add hl,hl
 	add a,a
-	jr nc,$ + 3
+	jr nc,NoAdd
 	add hl,bc
+NoAdd:
 	ENDM
 	add hl,hl
 	add a,a
