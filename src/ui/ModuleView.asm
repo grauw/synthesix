@@ -5,17 +5,29 @@
 ; ix = module type
 ; iy = buffer
 ; hl = buffer address
-ModuleView_Paint: PROC
+ModuleView_Paint:
 	bit 0,(iy + UIBuffer.repaint)
-	jp z,Update
+	call nz,ModuleView_PaintBackground
+	call ModuleView_PaintUpdate
+	ret
 
+; de = module
+; ix = module type
+; iy = buffer
+; hl = buffer address
+ModuleView_PaintBackground:
 	push de
 	push hl
 	call ModuleView_PaintModuleType
 	pop hl
 	pop de
+	ret
 
-Update:
+; de = module
+; ix = module type
+; iy = buffer
+; hl = buffer address
+ModuleView_PaintUpdate: PROC
 	ld bc,UIBuffer.WIDTH * 1 + 10
 	add hl,bc
 

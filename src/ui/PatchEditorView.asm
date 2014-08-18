@@ -13,15 +13,33 @@ PatchEditorView_Paint:
 	push af
 	ld b,5
 	call PatchEditor_GetScrollPosition
-	call c,PatchEditorView_ClearBackground
+	push bc
+	call c,PatchEditorView_PaintBackground
+	pop bc
+	call PatchEditorView_PaintUpdate
+	pop af
+	ld (iy + UIBuffer.repaint),a
+	ret
+
+; ix = patch editor
+; iy = buffer
+; hl = buffer address
+PatchEditorView_PaintBackground:
+	ld (iy + UIBuffer.repaint),-1
+	call PatchEditorView_ClearBackground
+	ret
+
+; c = position
+; ix = patch editor
+; iy = buffer
+; hl = buffer address
+PatchEditorView_PaintUpdate:
 	call PatchEditorView_PaintFocus
 	ld e,(ix + PatchEditor.patch)
 	ld d,(ix + PatchEditor.patch + 1)
 	ld ixl,e
 	ld ixh,d
 	call PatchEditorView_PaintPatch
-	pop af
-	ld (iy + UIBuffer.repaint),a
 	ret
 
 ; c = scroll position
@@ -68,7 +86,6 @@ Invalid:
 
 ; hl = buffer position
 PatchEditorView_ClearBackground:
-	ld (iy + UIBuffer.repaint),-1
 	push bc
 	push hl
 	ld e,l
