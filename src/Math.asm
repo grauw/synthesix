@@ -177,6 +177,46 @@ NoAdd:
 	add hl,bc
 	ret
 
+; Divide 16-bit values, with 16-bit result
+; bc = dividend
+; de = divisor
+; bc <- result
+; hl <- rest
+Math_Divide16: PROC
+	ld hl,0
+	ld a,b
+	ld b,8
+Loop1:
+	rla
+	adc hl,hl
+	sbc hl,de
+	jr nc,NoAdd1
+	add hl,de
+NoAdd1:
+	djnz Loop1
+	ld b,a
+	ld a,c
+	ld c,b
+	ld b,8
+Loop2:
+	rla
+	adc hl,hl
+	sbc hl,de
+	jr nc,NoAdd2
+	add hl,de
+NoAdd2:
+	djnz Loop2
+	rla
+	cpl
+	ld b,a
+	ld a,c
+	ld c,b
+	rla
+	cpl
+	ld b,a
+	ret
+	ENDP
+
 ;
 ; Unit tests
 ;
