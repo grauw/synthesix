@@ -154,6 +154,7 @@ KeyMidi_ProcessKeyRelease:
 	ret
 
 ; ix = this
+; a = note number (negated)
 KeyMidi_PressNote:
 	neg
 	ld b,a
@@ -164,6 +165,7 @@ KeyMidi_PressNote:
 	ret
 
 ; ix = this
+; a = note number (negated)
 KeyMidi_ReleaseNote:
 	neg
 	ld b,a
@@ -173,7 +175,7 @@ KeyMidi_ReleaseNote:
 	ret
 
 ; ix = this
-; a = key identifier
+; a = key code
 KeyMidi_KeyCodePress:
 	jp KeyMidi_WriteKeyCode
 
