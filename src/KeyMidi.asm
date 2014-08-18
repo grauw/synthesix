@@ -13,7 +13,7 @@ KeyMidi: MACRO
 		dw KeyMidi_keyBuffer
 	keyBufferTail:
 		dw KeyMidi_keyBuffer
-	escape:
+	quit:
 		db 0
 	shift:
 		db 0
@@ -135,7 +135,7 @@ KeyMidi_ProcessKeyPress:
 	cp 1
 	jp z,KeyMidi_PressSpace
 	cp 2
-	jp z,KeyMidi_PressEscape
+	jp z,KeyMidi_PressQuit
 	cp 3
 	jp z,KeyMidi_PressShift
 	cp 0
@@ -178,9 +178,9 @@ KeyMidi_KeyCodePress:
 	jp KeyMidi_WriteKeyCode
 
 ; ix = this
-KeyMidi_PressEscape:
+KeyMidi_PressQuit:
 	ld a,-1
-	ld (ix + KeyMidi.escape),a
+	ld (ix + KeyMidi.quit),a
 	ret
 
 ; ix = this

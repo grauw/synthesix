@@ -89,7 +89,7 @@ Synthesix_EnterMainLoop:
 Synthesix_MainLoop:
 	call UI_Update
 	ld ix,KeyMidi_instance
-	bit 0,(ix + KeyMidi.escape)
+	bit 0,(ix + KeyMidi.quit)
 	jp z,Synthesix_MainLoop
 	ret
 
