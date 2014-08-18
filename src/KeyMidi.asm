@@ -7,12 +7,12 @@ KeyMidi: MACRO
 	super: MidiIn MidiIn_buffer1
 	lastScan:
 		ds 11,0
-	velocity:
-		db 7FH
 	keyBufferHead:
 		dw KeyMidi_keyBuffer
 	keyBufferTail:
 		dw KeyMidi_keyBuffer
+	velocity:
+		db 7FH
 	quit:
 		db 0
 	shift:
