@@ -329,6 +329,9 @@ Loop:
 	ret
 	ENDP
 
+;
+; Link an input port of the source module to an output port of the destination
+;
 ; ix = this
 ; hl = link source (h: module, l: input port)
 ; de = link destination (d: module, e: output port)
