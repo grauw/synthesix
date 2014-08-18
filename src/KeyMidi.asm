@@ -78,7 +78,7 @@ KeyMidi_Scan:
 	ret
 
 ; ix = this
-KeyMidi_ProcessRow:
+KeyMidi_ProcessRow: PROC
 	di
 	in a,(PPI_PORT_C)
 	and 11110000B
@@ -90,12 +90,12 @@ KeyMidi_ProcessRow:
 	ld (hl),a
 	inc hl
 	xor c
-	jr z,KeyMidi_ProcessRow_NoChange
+	jr z,NoChange
 	ld b,8
-KeyMidi_ProcessRow_Loop:
+Loop:
 	rrc c
 	rrca       ; preserves sign flag
-	jp nc,KeyMidi_ProcessRow_Next
+	jp nc,Next
 	push af
 	push bc
 	push de
@@ -108,17 +108,18 @@ KeyMidi_ProcessRow_Loop:
 	pop de
 	pop bc
 	pop af
-KeyMidi_ProcessRow_Next:
+Next:
 	inc de
-	djnz KeyMidi_ProcessRow_Loop
+	djnz Loop
 	ret
-KeyMidi_ProcessRow_NoChange:
+NoChange:
 	ld a,e
 	add a,8
 	ld e,a
 	ret nc
 	inc d
 	ret
+	ENDP
 
 ; ix = this
 ; a = key / note identifier
