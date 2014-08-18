@@ -3,6 +3,7 @@
 ;
 PatchEditorView_SELECTCOLOR: equ 0F8H
 PatchEditorView_ASSIGNCOLOR: equ 0F2H
+PatchEditorView_INVALIDCOLOR: equ 0FEH
 
 ; ix = patch editor
 ; iy = buffer
@@ -26,7 +27,7 @@ PatchEditorView_Paint:
 ; c = scroll position
 ; ix = this
 ; iy = buffer
-PatchEditorView_PaintFocus:
+PatchEditorView_PaintFocus: PROC
 	ld a,(ix + PatchEditor.module)
 	sub c
 	add a,a
@@ -52,8 +53,18 @@ PatchEditorView_PaintFocus:
 	and a
 	ld (iy + UIBuffer.blinkColor),PatchEditorView_SELECTCOLOR
 	ret z
+	push bc
+	push hl
+	call PatchEditor_IsValidSelection
+	pop hl
+	pop bc
+	jr c,Invalid
 	ld (iy + UIBuffer.blinkColor),PatchEditorView_ASSIGNCOLOR
 	ret
+Invalid:
+	ld (iy + UIBuffer.blinkColor),PatchEditorView_INVALIDCOLOR
+	ret
+	ENDP
 
 ; hl = buffer position
 PatchEditorView_ClearBackground:

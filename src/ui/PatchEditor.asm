@@ -115,19 +115,25 @@ Select:
 	ld d,(ix + PatchEditor.port)
 	ld (ix + PatchEditor.assignModule),e
 	ld (ix + PatchEditor.assignPort),d
-	ld (ix + PatchEditor.mode),1
 	call PatchEditor_IsOutputSelected
-	ret c
+	jp c,SelectInput
+SelectOutput:
+	ld (ix + PatchEditor.mode),01B
 	call PatchEditor_GetInputTarget
 	ld (ix + PatchEditor.module),c
 	ld (ix + PatchEditor.port),a
 	ret
+SelectInput:
+	ld (ix + PatchEditor.mode),11B
+	ret
 Assign:
+	call PatchEditor_IsValidSelection
+	ret c
 	ld b,(ix + PatchEditor.assignModule)
 	ld c,(ix + PatchEditor.assignPort)
 	ld (ix + PatchEditor.module),b
 	ld (ix + PatchEditor.port),c
-	ld (ix + PatchEditor.mode),0
+	ld (ix + PatchEditor.mode),00B
 	ret
 Cancel:
 	bit 0,(ix + PatchEditor.mode)
@@ -136,7 +142,7 @@ Cancel:
 	ld c,(ix + PatchEditor.assignPort)
 	ld (ix + PatchEditor.module),b
 	ld (ix + PatchEditor.port),c
-	ld (ix + PatchEditor.mode),0
+	ld (ix + PatchEditor.mode),00B
 	ret
 KeyLeft:
 	ld a,(ix + PatchEditor.module)
@@ -237,6 +243,19 @@ PatchEditor_IsOutputSelected: PROC
 Output:
 	pop ix
 	scf
+	ret
+	ENDP
+
+; ix = this
+; c = selection is invalid
+PatchEditor_IsValidSelection: PROC
+	and a
+	bit 0,(ix + PatchEditor.mode)
+	ret z
+	bit 1,(ix + PatchEditor.mode)
+	jr nz,PatchEditor_IsOutputSelected
+	call PatchEditor_IsOutputSelected
+	ccf
 	ret
 	ENDP
 
