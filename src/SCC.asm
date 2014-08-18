@@ -80,9 +80,9 @@ SCC_Constructor:
 	push ix
 	ld e,ixl
 	ld d,ixh
-	ld ix,Clock_60HzLate
+	ld ix,Updater_60HzLate
 	ld hl,SCC_UpdateLate
-	call Clock_AddListener
+	call Updater_AddListener
 	pop ix
 	ret
 

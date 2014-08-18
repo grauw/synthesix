@@ -113,10 +113,10 @@ Synthesix_Interrupt:
 	call MidiIn_ProcessMessages
 	ld ix,SFGMidi_instance
 	call MidiIn_ProcessMessages
-	ld ix,Clock_60Hz
-	call Clock_Update
-	ld ix,Clock_60HzLate
-	call Clock_Update
+	ld ix,Updater_60Hz
+	call Updater_Update
+	ld ix,Updater_60HzLate
+	call Updater_Update
 
 	ld a,0F4H
 	call VDP_SetColor

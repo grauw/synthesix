@@ -40,9 +40,9 @@ Sequence8_Constructor:
 	push ix
 	ld e,ixl
 	ld d,ixh
-	ld ix,Clock_60Hz
+	ld ix,Updater_60Hz
 	ld hl,Sequence8_Update
-	call Clock_AddListener
+	call Updater_AddListener
 	pop ix
 	ret
 

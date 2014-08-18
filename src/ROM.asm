@@ -78,7 +78,7 @@ ROM_BANK_A000_CHANGE: equ 0B000H
 	INCLUDE "Patch.asm"
 	INCLUDE "ModuleType.asm"
 	INCLUDE "Listeners.asm"
-	INCLUDE "Clock.asm"
+	INCLUDE "Updater.asm"
 	INCLUDE "modules/Value.asm"
 	INCLUDE "modules/Constants.asm"
 	INCLUDE "modules/Attenuate.asm"
