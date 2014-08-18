@@ -8,24 +8,28 @@ PatchEditorView_INVALIDCOLOR: equ 0FEH
 ; ix = patch editor
 ; iy = buffer
 ; hl = buffer address
-PatchEditorView_Paint:
+PatchEditorView_Paint: PROC
 	ld a,(iy + UIBuffer.repaint)
 	push af
 	ld b,5
 	call PatchEditor_GetScrollPosition
+	jp nc,NoRepaint
+	ld (iy + UIBuffer.repaint),-1
+NoRepaint:
+	bit 0,(iy + UIBuffer.repaint)
 	push bc
-	call c,PatchEditorView_PaintBackground
+	call nz,PatchEditorView_PaintBackground
 	pop bc
 	call PatchEditorView_PaintUpdate
 	pop af
 	ld (iy + UIBuffer.repaint),a
 	ret
+	ENDP
 
 ; ix = patch editor
 ; iy = buffer
 ; hl = buffer address
 PatchEditorView_PaintBackground:
-	ld (iy + UIBuffer.repaint),-1
 	push hl
 	call PatchEditorView_ClearBackground
 	pop hl
