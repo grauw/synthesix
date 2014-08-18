@@ -26,12 +26,66 @@ NoRepaint:
 	ret
 	ENDP
 
+; bc = position
 ; ix = patch editor
 ; iy = buffer
 ; hl = buffer address
 PatchEditorView_PaintBackground:
 	push hl
+	call PatchEditorView_PaintProgressBar
+	pop hl
+	push hl
 	call PatchEditorView_ClearBackground
+	pop hl
+	ret
+
+; bc = position
+; ix = patch editor
+; iy = buffer
+; hl = buffer address
+PatchEditorView_PaintProgressBar:
+	push bc
+	push hl
+	ld bc,16 * UIBuffer.WIDTH
+	add hl,bc
+	ld (hl),140
+	ld e,l
+	ld d,h
+	inc de
+	ld bc,UIBuffer.WIDTH - 1
+	call System_LDIR
+	pop hl
+	pop bc
+
+	push hl
+	ld a,79
+	call Math_Multiply8x16
+	push hl
+	push ix
+	call PatchEditor_GetPatch
+	call Patch_GetModuleCount
+	ld e,c
+	ld d,b
+	pop ix
+	pop bc
+	ld hl,-5
+	add hl,de
+	ex de,hl
+	pop hl
+	ret nc
+	ld a,d
+	or e
+	ret z
+
+	push hl
+	call Math_Divide16
+	pop hl
+
+	push hl
+	add hl,bc
+	ld bc,16 * UIBuffer.WIDTH
+	add hl,bc
+	ld (hl),141
 	pop hl
 	ret
 
