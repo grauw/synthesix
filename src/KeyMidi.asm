@@ -11,6 +11,8 @@ KeyMidi: MACRO
 		dw KeyMidi_keyBuffer
 	keyBufferTail:
 		dw KeyMidi_keyBuffer
+	repeat:
+		db 0
 	velocity:
 		db 7FH
 	quit:
@@ -75,8 +77,22 @@ KeyMidi_Scan:
 	ld b,?row
 	call KeyMidi_ProcessRow
 	ENDM
+	ld a,(ix + KeyMidi.repeat)
+	and a
+	ret z
+	dec (ix + KeyMidi.repeat)
+	ret nz
+	ld bc,11
+	sbc hl,bc
+	ld de,KeyMidi_noteMapping
+	REPT 11, ?row
+	call KeyMidi_ProcessRowRepeat
+	ENDM
 	ret
 
+; b = row number
+; hl = last scan buffer (indexed)
+; de = note mapping table (indexed)
 ; ix = this
 KeyMidi_ProcessRow: PROC
 	di
@@ -121,6 +137,44 @@ NoChange:
 	ret
 	ENDP
 
+; hl = last scan buffer (indexed)
+; de = note mapping table (indexed)
+; ix = this
+KeyMidi_ProcessRowRepeat: PROC
+	ld a,(hl)
+	inc hl
+	inc a
+	jr z,NothingPressed
+	dec a
+	ld b,8
+Loop:
+	rrca       ; preserves sign flag
+	jp c,Next
+	push af
+	push bc
+	push de
+	push hl
+	push ix
+	ld a,(de)
+	call KeyMidi_ProcessKeyRepeat
+	pop ix
+	pop hl
+	pop de
+	pop bc
+	pop af
+Next:
+	inc de
+	djnz Loop
+	ret
+NothingPressed:
+	ld a,e
+	add a,8
+	ld e,a
+	ret nc
+	inc d
+	ret
+	ENDP
+
 ; ix = this
 ; a = key / note identifier
 ; f = negative sign: press, positive sign: release
@@ -155,6 +209,15 @@ KeyMidi_ProcessKeyRelease:
 	ret
 
 ; ix = this
+; a = key / note identifier
+KeyMidi_ProcessKeyRepeat:
+	and a
+	ret m
+	cp 8
+	jp nc,KeyMidi_KeyCodeRepeat
+	ret
+
+; ix = this
 ; a = note number (negated)
 KeyMidi_PressNote:
 	neg
@@ -178,7 +241,16 @@ KeyMidi_ReleaseNote:
 ; ix = this
 ; a = key code
 KeyMidi_KeyCodePress:
-	jp KeyMidi_WriteKeyCode
+	call KeyMidi_WriteKeyCode
+	ld (ix + KeyMidi.repeat),30 + 1
+	ret
+
+; ix = this
+; a = key code
+KeyMidi_KeyCodeRepeat:
+	call KeyMidi_WriteKeyCode
+	ld (ix + KeyMidi.repeat),3 + 1
+	ret
 
 ; ix = this
 KeyMidi_PressQuit:
