@@ -131,14 +131,14 @@ KeyMidi_ProcessKeyChange:
 ; a = key / note identifier
 KeyMidi_ProcessKeyPress:
 	and a
-	jp p,KeyMidi_PressNote
-	cp -6
+	jp m,KeyMidi_PressNote
+	cp 6
 	jp z,KeyMidi_PressSpace
-	cp -99
+	cp 99
 	jp z,KeyMidi_PressEscape
-	cp -98
+	cp 98
 	jp z,KeyMidi_PressShift
-	cp -1
+	cp 0
 	jp nz,KeyMidi_KeyCodePress
 	ret
 
@@ -146,15 +146,16 @@ KeyMidi_ProcessKeyPress:
 ; a = key / note identifier
 KeyMidi_ProcessKeyRelease:
 	and a
-	jp p,KeyMidi_ReleaseNote
-	cp -6
+	jp m,KeyMidi_ReleaseNote
+	cp 6
 	jp z,KeyMidi_ReleaseSpace
-	cp -98
+	cp 98
 	jp z,KeyMidi_ReleaseShift
 	ret
 
 ; ix = this
 KeyMidi_PressNote:
+	neg
 	ld b,a
 	ld a,(ix + KeyMidi.velocity)
 	ld c,a
@@ -164,6 +165,7 @@ KeyMidi_PressNote:
 
 ; ix = this
 KeyMidi_ReleaseNote:
+	neg
 	ld b,a
 	ld c,40H
 	ld a,0
@@ -173,7 +175,6 @@ KeyMidi_ReleaseNote:
 ; ix = this
 ; a = key identifier
 KeyMidi_KeyCodePress:
-	neg
 	jp KeyMidi_WriteKeyCode
 
 ; ix = this
@@ -211,17 +212,17 @@ KeyMidi_ReleaseSpace:
 	ret
 
 KeyMidi_noteMapping:
-	db   75,  -1,  61,  63,  -1,  66,  68,  70  ; row 0: 0 1 2 3 4 5 6 7
-	db   -1,  73,  -1,  78,  56,  77,  79,  63  ; row 1: 8 9 - = \ [ ] ;
-	db   -1,  -1,  60,  62,  64,  -1,  -1,  55  ; row 2: ' ` , . / DEAD A B
-	db   52,  51,  64,  -1,  54,  56,  72,  58  ; row 3: C D E F G H I J
-	db   -1,  61,  59,  57,  74,  76,  60,  65  ; row 4: K L M N O P Q R
-	db   49,  67,  71,  53,  62,  50,  69,  48  ; row 5: S T U V W X Y Z
-	db  -98,  -1,  -1,  -1,  -1,  -1,  -1,  -1  ; row 6: SHIFT CTRL GRAPH CAPS CODE F1 F2 F3
-	db   -1, -99, -27,  -9,  -1,  -8, -24, -13  ; row 7: F4 F5 ESC TAB STOP BS SELECT RET
-	db   -6, -11, -18,-127, -29, -30, -31, -28  ; row 8: SPACE HOME INS DEL ← ↑ ↓ →
-	db   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1  ; row 9: NUM* NUM+ NUM/ NUM0 NUM1 NUM2 NUM3 NUM4
-	db   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1  ; row A: NUM5 NUM6 NUM7 NUM8 NUM9 NUM- NUM, NUM.
+	db  -75,   0, -61, -63,   0, -66, -68, -70  ; row 0: 0 1 2 3 4 5 6 7
+	db    0, -73,   0, -78, -56, -77, -79, -63  ; row 1: 8 9 - = \ [ ] ;
+	db    0,   0,  60, -62, -64,   0,   0, -55  ; row 2: ' ` , . / DEAD A B
+	db  -52, -51, -64,   0, -54, -56, -72, -58  ; row 3: C D E F G H I J
+	db    0, -61, -59, -57, -74, -76, -60, -65  ; row 4: K L M N O P Q R
+	db  -49, -67, -71, -53, -62, -50, -69, -48  ; row 5: S T U V W X Y Z
+	db   98,   0,   0,   0,   0,   0,   0,   0  ; row 6: SHIFT CTRL GRAPH CAPS CODE F1 F2 F3
+	db    0,  99,  27,   9,   0,   8,  24,  13  ; row 7: F4 F5 ESC TAB STOP BS SELECT RET
+	db    6,  11,  18, 127,  29,  30,  31,  28  ; row 8: SPACE HOME INS DEL ← ↑ ↓ →
+	db    0,   0,   0,   0,   0,   0,   0,   0  ; row 9: NUM* NUM+ NUM/ NUM0 NUM1 NUM2 NUM3 NUM4
+	db    0,   0,   0,   0,   0,   0,   0,   0  ; row A: NUM5 NUM6 NUM7 NUM8 NUM9 NUM- NUM, NUM.
 
 ;
 ; Variables in RAM
