@@ -161,13 +161,10 @@ Math_Multiply8x8:
 ; bc = factor 2
 ; hl <- product
 ; Modifies: af, hl
-; Clock ticks: 235 - 301
+; Clock ticks: 247 - 313
 Math_Multiply8x16:
 	ld l,0
-	add a,a
-	jr nc,$ + 3
-	add hl,bc
-	REPT 6
+	REPT 7
 	add hl,hl
 	add a,a
 	jr nc,$ + 3
