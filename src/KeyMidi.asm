@@ -139,9 +139,7 @@ KeyMidi_ProcessKeyPress:
 	cp -98
 	jp z,KeyMidi_PressShift
 	cp -1
-	ret z
-	neg
-	jp KeyMidi_WriteKeyCode
+	jp nz,KeyMidi_KeyCodePress
 	ret
 
 ; ix = this
@@ -171,6 +169,12 @@ KeyMidi_ReleaseNote:
 	ld a,0
 	call MidiIn_NoteOff
 	ret
+
+; ix = this
+; a = key identifier
+KeyMidi_KeyCodePress:
+	neg
+	jp KeyMidi_WriteKeyCode
 
 ; ix = this
 KeyMidi_PressEscape:
