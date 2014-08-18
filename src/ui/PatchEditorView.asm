@@ -26,7 +26,9 @@ PatchEditorView_Paint:
 ; hl = buffer address
 PatchEditorView_PaintBackground:
 	ld (iy + UIBuffer.repaint),-1
+	push hl
 	call PatchEditorView_ClearBackground
+	pop hl
 	ret
 
 ; c = position
@@ -86,16 +88,12 @@ Invalid:
 
 ; hl = buffer position
 PatchEditorView_ClearBackground:
-	push bc
-	push hl
 	ld e,l
 	ld d,h
 	inc de
 	ld (hl)," "
 	ld bc,UIBuffer.WIDTH * 16 - 1
 	call System_LDIR
-	pop hl
-	pop bc
 	ret
 
 ; c = scroll position
