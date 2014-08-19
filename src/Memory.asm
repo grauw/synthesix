@@ -1,11 +1,6 @@
 ;
 ; Memory and slot-related routines
 ;
-Memory_EnableROMInPage2:
-	call Memory_GetSlotPage1
-	call Memory_SetSlotPage2
-	ret
-
 Memory_EnableRAMInPage2:
 	call Memory_GetSlotPage3
 	call Memory_SetSlotPage2

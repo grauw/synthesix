@@ -117,10 +117,6 @@ ROM_Init:
 	ld (ROM_BANK_4000_CHANGE),a
 	ld a,ROM_CodeBank2
 	ld (ROM_BANK_6000_CHANGE),a
-	ld a,ROM_MultiplyTableBank1
-	ld (ROM_BANK_8000_CHANGE),a
-	ld a,ROM_MultiplyTableBank2
-	ld (ROM_BANK_A000_CHANGE),a
 	ret
 
 ;

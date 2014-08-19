@@ -20,7 +20,6 @@ Synthesix_Main:
 
 ;	call System_EnableTurbo
 
-	call Memory_EnableROMInPage2
 	call ROM_Init
 	call Memory_EnableRAMInPage2
 	call RAM_Init
