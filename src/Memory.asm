@@ -172,13 +172,11 @@ Memory_SetSlotPage2:
 ;
 ; Prepares a slot selection in page 0.
 ;
-; Note, when applying, primary slots will be set to their state when prepared.
-; So when invoked, slot selection of pages 1, 2 and 3 should be the same.
-;
 ; a = slot ID formatted FxxxSSPP
-; bc <- prepared slot id (1)
-; de <- prepared slot id (2)
-; Modifies: af, bc, de
+; bc <- prepared slot id (1) (b: primary value, c: SLTTBL LSB)
+; de <- prepared slot id (2) (d: secondary’s primary value, e: secondary value)
+; hl <- SLTTBL entry
+; Modifies: af, bc, de, hl
 ;
 Memory_PrepareSlotPage0:
 	ld c,a
@@ -216,13 +214,11 @@ Memory_PrepareSlotPage0:
 ;
 ; Prepares a slot selection in page 2.
 ;
-; Note, when applying, primary slots will be set to their state when prepared.
-; So when invoked, slot selection of pages 0, 1 and 3 should be the same.
-;
 ; a = slot ID formatted FxxxSSPP
-; bc <- prepared slot id (1)
-; de <- prepared slot id (2)
-; Modifies: af, bc, de
+; bc <- prepared slot id (1) (b: primary value, c: SLTTBL LSB)
+; de <- prepared slot id (2) (d: secondary’s primary value, e: secondary value)
+; hl <- SLTTBL entry
+; Modifies: af, bc, de, hl
 ;
 Memory_PrepareSlotPage2:
 	ld c,a
