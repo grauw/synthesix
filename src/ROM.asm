@@ -22,7 +22,7 @@ ROM_HEADER: ds 10H
 ROM_BANK0: ds 1F0H
 ROM: ds 3B00H
 ROM_TABLES: ds 300H
-	org 06000H
+	org 6000H
 ROM_MULTIPLYTABLE: ds 4000H
 	org 6000H
 RAM_sourceAddress:
@@ -32,7 +32,7 @@ RAM: ds 1800H
 RAM_endAddress:
 	org 7800H
 ROM_FONT: ds 800H
-	org 06000H
+	org 6000H
 ROM_WAVETABLES: ds 2000H
 
 Heap_size: equ 1000H
