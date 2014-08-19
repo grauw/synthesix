@@ -124,50 +124,8 @@ Memory_GetSlotPage3:
 ; Modifies: af, bc, de, hl
 ;
 Memory_SetSlotPage2:
-	ld c,a
-	and 00001100B
-	rlca
-	rlca
-	ld e,a
-	ld a,c
-	and 00000011B
-	ld c,a
-	rlca
-	rlca
-	rlca
-	rlca
-	ld b,a
-	rlca
-	rlca
-	ld d,a
-	ld h,SLTTBL >> 8
-	ld a,SLTTBL & 0FFH
-	add a,c
-	ld l,a
-	in a,(0A8H)
-	ld c,a
-	and 00111111B
-	or d
-	ld d,a
-	ld a,c
-	and 11001111B
-	or b
-	ld b,a
-	ld a,(hl)
-	and 11001111B
-	or e
-	ld e,a
-	ld (hl),a
-	ld c,0A8H
-	ld hl,0FFFFH
-	ld a,r
-	di
-	out (c),d
-	ld (hl),e
-	out (c),b
-	ret po
-	ei
-	ret
+	call Memory_PrepareSlotPage2
+	jp Memory_SetPreparedSlotPage2
 
 ;
 ; Prepares a slot selection in page 0.
