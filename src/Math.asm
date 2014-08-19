@@ -161,10 +161,15 @@ Math_Multiply8x8:
 ; bc = factor 2
 ; hl <- product
 ; Modifies: af, hl
-; Clock ticks: 247 - 313
-Math_Multiply8x16:
-	ld l,0
-	REPT 7
+; Clock ticks: 236 - 302
+Math_Multiply8x16: PROC
+	ld hl,0
+	add a,a
+	jr nc,NoAdd
+	ld l,c
+	ld h,b
+NoAdd:
+	REPT 6
 	add hl,hl
 	add a,a
 	jr nc,NoAdd
@@ -176,6 +181,7 @@ NoAdd:
 	ret nc
 	add hl,bc
 	ret
+	ENDP
 
 ; Divide 16-bit values, with 16-bit result
 ; bc = dividend
