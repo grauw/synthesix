@@ -212,6 +212,51 @@ Memory_PrepareSlotPage0:
 	ret
 
 ;
+; Prepares a slot selection in page 1.
+;
+; a = slot ID formatted FxxxSSPP
+; bc <- prepared slot id (1) (b: primary value, c: SLTTBL LSB)
+; de <- prepared slot id (2) (d: secondary’s primary value, e: secondary value)
+; hl <- SLTTBL entry
+; Modifies: af, bc, de, hl
+;
+Memory_PrepareSlotPage1:
+	ld c,a
+	and 00001100B
+	ld e,a
+	ld a,c
+	and 00000011B
+	ld c,a
+	rlca
+	rlca
+	ld b,a
+	rlca
+	rlca
+	rlca
+	rlca
+	or b
+	ld d,a
+	ld h,SLTTBL >> 8
+	ld a,SLTTBL & 0FFH
+	add a,c
+	ld l,a
+	in a,(0A8H)
+	ld c,a
+	and 00110011B
+	or d
+	ld d,a
+	ld a,c
+	and 11110011B
+	or b
+	ld b,a
+	ld a,(hl)
+	and 11110011B
+	or e
+	ld e,a
+	ld c,l
+	ret
+
+;
 ; Prepares a slot selection in page 2.
 ;
 ; a = slot ID formatted FxxxSSPP
