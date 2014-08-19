@@ -39,7 +39,9 @@ Synthesix_Main:
 	call Synthesix_Constructor
 	call Synthesix_EnterMainLoop
 
-	call KILBUF
+	ld iy,(EXPTBL-1)
+	ld ix,KILBUF
+	call CALSLT
 	ret
 
 ; ix = this

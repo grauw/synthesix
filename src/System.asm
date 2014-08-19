@@ -4,7 +4,31 @@
 
 ; a = character
 ; Modifies: none
-System_PrintChar: equ CHPUT
+System_PrintChar:
+	exx
+	ex af,af'
+	push af
+	push bc
+	push de
+	push hl
+	ex af,af'
+	exx
+	push ix
+	push iy
+	ld iy,(EXPTBL-1)
+	ld ix,CHPUT
+	call CALSLT
+	pop iy
+	pop ix
+	exx
+	ex af,af'
+	pop hl
+	pop de
+	pop bc
+	pop af
+	ex af,af'
+	exx
+	ret
 
 ; hl = string (0-terminated)
 ; Modifies: none
@@ -99,11 +123,16 @@ Loop:
 	ENDS
 
 System_EnableTurbo:
-	ld a,(IDBYT2)
+	ld a,(EXPTBL)
+	ld hl,IDBYT2
+	call RDSLT
+	ei
 	cp 3
 	ret c
 	ld a,10000001B
-	call CHGCPU
+	ld iy,(EXPTBL-1)
+	ld ix,CHGCPU
+	call CALSLT
 	ret
 
 System_Stop:

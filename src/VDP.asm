@@ -14,15 +14,22 @@ VDP_MIRROR_25: equ 0FFFAH - 25
 VDP_InitScreen0: PROC
 	ld a,80
 	ld (LINL40),a
-	ld a,(IDBYT2)
+	ld a,(EXPTBL)
+	ld hl,IDBYT2
+	call RDSLT
+	ei
 	and a
 	jr z,MSX1
-	call INITXT
+	ld iy,(EXPTBL-1)
+	ld ix,INITXT
+	call CALSLT
 	ret
 MSX1: ; complicated dance to enable TEXT 2 mode on MSX1 computers with v9938
 	ld hl,1000H              ; increase pattern generator table address
 	ld (TXTCGP),hl           ; so that it isn’t overwritten in 80x26.5 mode
-	call INITXT
+	ld iy,(EXPTBL-1)
+	ld ix,INITXT
+	call CALSLT
 	ld a,(VDP_MIRROR_0)      ; change TEXT1 to TEXT2 mode
 	or 4
 	ld (VDP_MIRROR_0),a
@@ -33,7 +40,10 @@ MSX1: ; complicated dance to enable TEXT 2 mode on MSX1 computers with v9938
 	ld (VDP_MIRROR_0 + 2),a
 	ld b,2
 	call VDP_SetRegister
-	ld a,(IDBYT0)
+	ld a,(EXPTBL)
+	ld hl,IDBYT0
+	call RDSLT
+	ei
 	and 10000000B
 	rlca
 	rlca
