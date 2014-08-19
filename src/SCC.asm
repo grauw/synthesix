@@ -6,6 +6,8 @@ SCC_FREQUENCY: equ 9880H
 SCC_AMPLITUDE: equ 988AH
 SCC_MIXER: equ 988FH
 SCC_DEFORMATION: equ 98E0H
+SCC_BANK_8000_CHANGE: equ 9000H
+SCC_BANK_A000_CHANGE: equ 0B000H
 
 SCC_MAX_VOICES: equ 4
 
@@ -53,8 +55,7 @@ SCC_Constructor:
 	call Memory_SetSlotPage2
 
 	ld a,ROM_SCCBank
-	ld (ROM_bank8000),a
-	ld (ROM_BANK_8000_CHANGE),a
+	ld (SCC_BANK_8000_CHANGE),a
 
 	ld a,0
 	ld (SCC_AMPLITUDE + 0),a
