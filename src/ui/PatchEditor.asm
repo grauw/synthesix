@@ -14,7 +14,7 @@ PatchEditor: MACRO
 		db 0
 	assignPort:
 		db 0
-	scrollPosition:
+	moduleScrollPosition:
 		db 0
 	_size:
 	ENDM
@@ -55,8 +55,8 @@ PatchEditor_GetPatch:
 ; b = width
 ; bc <- position
 ; f <- c: position moved
-PatchEditor_GetScrollPosition: PROC
-	ld c,(ix + PatchEditor.scrollPosition)
+PatchEditor_GetModuleScrollPosition: PROC
+	ld c,(ix + PatchEditor.moduleScrollPosition)
 	ld a,(ix + PatchEditor.module)
 	cp c
 	jr c,MoveLeft
@@ -71,7 +71,7 @@ NoChange:
 MoveRight:
 	inc a
 MoveLeft:
-	ld (ix + PatchEditor.scrollPosition),a
+	ld (ix + PatchEditor.moduleScrollPosition),a
 	ld c,a
 	ld b,0
 	scf

@@ -12,7 +12,7 @@ PatchEditorView_Paint: PROC
 	ld a,(iy + UIBuffer.repaint)
 	push af
 	ld b,5
-	call PatchEditor_GetScrollPosition
+	call PatchEditor_GetModuleScrollPosition
 	jp nc,NoRepaint
 	ld (iy + UIBuffer.repaint),-1
 NoRepaint:
