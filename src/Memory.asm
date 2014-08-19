@@ -22,7 +22,7 @@ Memory_GetSlot:
 	jp Memory_GetSlotPage3
 
 Memory_GetSlotPage0:
-	call RSLREG
+	in a,(0A8H)
 	and 00000011B
 	ld c,a
 	ld b,0
@@ -45,7 +45,7 @@ Memory_GetSlotPage0:
 	ret
 
 Memory_GetSlotPage1:
-	call RSLREG
+	in a,(0A8H)
 	and 00001100B
 	rrca
 	rrca
@@ -68,7 +68,7 @@ Memory_GetSlotPage1:
 	ret
 
 Memory_GetSlotPage2:
-	call RSLREG
+	in a,(0A8H)
 	and 00110000B
 	rrca
 	rrca
@@ -95,7 +95,7 @@ Memory_GetSlotPage2:
 	ret
 
 Memory_GetSlotPage3:
-	call RSLREG
+	in a,(0A8H)
 	and 11000000B
 	rlca
 	rlca
