@@ -117,17 +117,6 @@ Memory_GetSlotPage3:
 	ret
 
 ;
-; Sets a slot in page 2.
-; The current interrupt enabled state is preserved.
-;
-; a = slot ID formatted FxxxSSPP
-; Modifies: af, bc, de, hl
-;
-Memory_SetSlotPage2:
-	call Memory_PrepareSlotPage2
-	jp Memory_SetPreparedSlotPage2
-
-;
 ; Prepares a slot selection in page 0.
 ;
 ; a = slot ID formatted FxxxSSPP
@@ -260,6 +249,17 @@ Memory_PrepareSlotPage2:
 	ld e,a
 	ld c,l
 	ret
+
+;
+; Sets a slot in page 2.
+; The current interrupt enabled state is preserved.
+;
+; a = slot ID formatted FxxxSSPP
+; Modifies: af, bc, de, hl
+;
+Memory_SetSlotPage2:
+	call Memory_PrepareSlotPage2
+	jp Memory_SetPreparedSlotPage2
 
 ;
 ; Sets a prepared slot selection in page 2.
