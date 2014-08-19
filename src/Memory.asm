@@ -257,6 +257,25 @@ Memory_PrepareSlotPage2:
 ; a = slot ID formatted FxxxSSPP
 ; Modifies: af, bc, de, hl
 ;
+Memory_SetSlot: PROC
+	bit 7,h
+	jr nz,Page23
+	bit 6,h
+	call z,System_ThrowException
+	call System_ThrowException
+Page23:
+	bit 6,h
+	jp z,Memory_SetSlotPage2
+	call System_ThrowException
+	ENDP
+
+;
+; Sets a slot in page 2.
+; The current interrupt enabled state is preserved.
+;
+; a = slot ID formatted FxxxSSPP
+; Modifies: af, bc, de, hl
+;
 Memory_SetSlotPage2:
 	call Memory_PrepareSlotPage2
 	jp Memory_SetPreparedSlotPage2
@@ -295,6 +314,28 @@ Memory_SetPreparedSlotPage2:
 	ret po
 	ei
 	ret
+
+;
+; Reads a byte from a slot in the page indicated by hl
+; The current interrupt enabled state is preserved.
+;
+; a = slot ID
+; hl = address
+; a <- value
+; Modifies: af, af', bc, de, hl
+;
+Memory_ReadSlot: PROC
+	bit 7,h
+	jr nz,Page23
+	bit 6,h
+	jp z,Memory_ReadSlotPage0
+	call System_ThrowException
+Page23:
+	bit 6,h
+	call z,System_ThrowException
+	call System_ThrowException
+	ret
+	ENDP
 
 ;
 ; Reads a byte from a slot in page 0
@@ -339,6 +380,28 @@ Memory_ReadPreparedSlotPage0:
 	ret po
 	ei
 	ret
+
+;
+; Writes a byte to a slot in the page indicated by hl
+; The current interrupt enabled state is preserved.
+;
+; a = slot ID
+; c = value
+; hl = address
+; Modifies: af, af', bc, de, hl
+;
+Memory_WriteSlot: PROC
+	bit 7,h
+	jr nz,Page23
+	bit 6,h
+	jp z,Memory_WriteSlotPage0
+	call System_ThrowException
+Page23:
+	bit 6,h
+	call z,System_ThrowException
+	call System_ThrowException
+	ret
+	ENDP
 
 ;
 ; Writes a byte to a slot in page 0
