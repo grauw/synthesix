@@ -17,7 +17,7 @@ NotePool: MACRO
 	lastNote:
 		db -1
 	notes:
-		REPT MAX_NOTES, ?note
+		REPT MAX_NOTES
 		KeyNotePair
 		ENDM
 	queuedNoteCount:
