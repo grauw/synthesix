@@ -166,22 +166,42 @@ Channel_LocalControl:
 
 ; ix = this
 Channel_AllNotesOff:
+	REPT Channel.MAX_NOTE_POOLS, ?pool
+	ld e,(ix + Channel.notePools + ?pool * 2)
+	ld d,(ix + Channel.notePools + ?pool * 2 + 1)
+	inc d
+	dec d
+	ret z
+	push ix
+	ld ixl,e
+	ld ixh,d
+	call NotePool_AllNotesOff
+	pop ix
+	ENDM
 	ret
 
 ; ix = this
 Channel_OmniModeOff:
+	call Channel_AllNotesOff
+	; not implemented
 	ret
 
 ; ix = this
 Channel_OmniModeOn:
+	call Channel_AllNotesOff
+	; not implemented
 	ret
 
 ; ix = this
 Channel_MonoModeOn:
+	call Channel_AllNotesOff
+	; not implemented
 	ret
 
 ; ix = this
 Channel_PolyModeOn:
+	call Channel_AllNotesOff
+	; not implemented
 	ret
 
 ; Modifies: none

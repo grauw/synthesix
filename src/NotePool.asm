@@ -221,3 +221,29 @@ NotePool_PopQueuedNote:
 	ld b,(ix + NotePool.queuedNotes + QueuedNote.key)
 	ld c,(ix + NotePool.queuedNotes + QueuedNote.velocity)
 	ret
+
+; ix = this
+NotePool_AllNotesOff: PROC
+	ld (ix + NotePool.queuedNoteCount),0
+	push ix
+	pop iy
+	ld b,(ix + NotePool.polyphony)
+Loop:
+	ld a,(iy + NotePool.notes + KeyNotePair.key)
+	and a
+	jp m,Next
+	push bc
+	push ix
+	push iy
+	ld b,a
+	ld c,64
+	call NotePool_NoteOff
+	pop iy
+	pop ix
+	pop bc
+Next:
+	ld de,KeyNotePair._size
+	add iy,de
+	djnz Loop
+	ret
+	ENDP
