@@ -193,6 +193,10 @@ KeyMidi_ProcessKeyPress:
 	jp z,KeyMidi_PressQuit
 	cp 3
 	jp z,KeyMidi_PressShift
+	cp 4
+	jp z,KeyMidi_PressF4
+	cp 5
+	jp z,KeyMidi_PressF5
 	cp 0
 	jp nz,KeyMidi_KeyCodePress
 	ret
@@ -286,6 +290,22 @@ KeyMidi_ReleaseSpace:
 	call MidiIn_ControlChange
 	ret
 
+; ix = this
+KeyMidi_PressF4:
+	ld b,121  ; all controllers off
+	ld c,0
+	ld a,0
+	call MidiIn_ControlChange
+	ret
+
+; ix = this
+KeyMidi_PressF5:
+	ld b,123  ; all notes off
+	ld c,0
+	ld a,0
+	call MidiIn_ControlChange
+	ret
+
 KeyMidi_noteMapping:
 	db  -75,   0, -61, -63,   0, -66, -68, -70  ; row 0: 0 1 2 3 4 5 6 7
 	db    0, -73,   0, -78, -56, -77, -79, -63  ; row 1: 8 9 - = \ [ ] ;
@@ -294,7 +314,7 @@ KeyMidi_noteMapping:
 	db    0, -61, -59, -57, -74, -76, -60, -65  ; row 4: K L M N O P Q R
 	db  -49, -67, -71, -53, -62, -50, -69, -48  ; row 5: S T U V W X Y Z
 	db    3,   0,   0,   0,   0,   0,   0,   0  ; row 6: SHIFT CTRL GRAPH CAPS CODE F1 F2 F3
-	db    0,   0,  27,   9,   2,   8,  24,  13  ; row 7: F4 F5 ESC TAB STOP BS SELECT RET
+	db    4,   5,  27,   9,   2,   8,  24,  13  ; row 7: F4 F5 ESC TAB STOP BS SELECT RET
 	db    1,  11,  18, 127,  29,  30,  31,  28  ; row 8: SPACE HOME INS DEL ← ↑ ↓ →
 	db    0,   0,   0,   0,   0,   0,   0,   0  ; row 9: NUM* NUM+ NUM/ NUM0 NUM1 NUM2 NUM3 NUM4
 	db    0,   0,   0,   0,   0,   0,   0,   0  ; row A: NUM5 NUM6 NUM7 NUM8 NUM9 NUM- NUM, NUM.
