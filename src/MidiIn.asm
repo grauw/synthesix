@@ -179,8 +179,8 @@ ProcessStatus_0:
 ProcessStatus_1:
 	cp 0F0H << 1
 	jr c,ProcessStatus_1_SetRunning
-	cp 0F8H << 1
-	jr nc,ProcessStatus_1_Running
+;	cp 0F8H << 1  ; commented out: realtime messages never enter the buffer
+;	jr nc,ProcessStatus_1_Running
 	ld (ix + MidiIn.runningStatus),-1
 	jp ProcessStatus_1_Running
 ProcessStatus_1_SetRunning:
@@ -221,7 +221,7 @@ ProcessStatus_111:
 ProcessStatus_1110:
 	call_channel_3 Channel_PitchBend
 ProcessStatus_1111:
-;	cp 0F4H << 4
+;	cp 0F4H << 4  ; commented out: realtime messages never enter the buffer
 ;	jr nc,ProcessStatus_111100
 	dec e
 	ret z  ; message incomplete
