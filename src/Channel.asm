@@ -183,6 +183,7 @@ Channel_GetController:
 
 ; ix = this
 ; ix <- controller bank
+; de <- controller bank
 Channel_GetControllerBank:
 	ld e,(ix + Channel.controllers)
 	ld d,(ix + Channel.controllers + 1)

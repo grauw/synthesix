@@ -152,6 +152,13 @@ ControllerBank_GetController:
 	add hl,de
 	ret
 
+; de = this
+ControllerBank_Reset:
+	ld hl,ControllerBank_class
+	ld bc,ControllerBank._size
+	ldir
+	ret
+
 ;
 ControllerBank_labels:
 	db "Controllers",0
