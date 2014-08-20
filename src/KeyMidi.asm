@@ -292,6 +292,8 @@ KeyMidi_ReleaseSpace:
 
 ; ix = this
 KeyMidi_PressF4:
+	bit 7,(ix + KeyMidi.shift)
+	ret z
 	ld b,121  ; all controllers off
 	ld c,0
 	ld a,0
@@ -300,6 +302,8 @@ KeyMidi_PressF4:
 
 ; ix = this
 KeyMidi_PressF5:
+	bit 7,(ix + KeyMidi.shift)
+	ret z
 	ld b,123  ; all notes off
 	ld c,0
 	ld a,0
