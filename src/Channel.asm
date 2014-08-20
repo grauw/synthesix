@@ -177,8 +177,8 @@ Channel_GetKey:
 ; hl <- controller
 ; Modifies: de, hl
 Channel_GetController:
-	ld l,(ix + Channel.controllers)
-	ld h,(ix + Channel.controllers + 1)
+	ld e,(ix + Channel.controllers)
+	ld d,(ix + Channel.controllers + 1)
 	jp ControllerBank_GetController
 
 ; ix = this

@@ -144,11 +144,11 @@ ControllerBank_Constructor:
 	ld d,ixh
 	ret
 
-; hl = this
+; de = this
 ; hl <- controller value address
 ControllerBank_GetController:
-	ld e,a
-	ld d,0
+	ld l,a
+	ld h,0
 	add hl,de
 	ret
 
