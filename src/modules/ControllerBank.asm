@@ -1,8 +1,126 @@
 ControllerBank: MACRO
 	outputs:
-	controllers: REPT 120
+	controllers:
+		Value 0  ; 0
 		Value 0
-		ENDM
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 100
+		Value 0  ; 8
+		Value 0
+		Value 64
+		Value 127
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0  ; 16
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0  ; 24
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0  ; 32
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0  ; 40
+		Value 0
+		Value 0
+		Value 127
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0  ; 48
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0  ; 56
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0  ; 64
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0  ; 72
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0  ; 80
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0  ; 88
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0  ; 96
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0  ; 104
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0  ; 112
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
+		Value 0
 	outputsEnd:
 	inputs:
 	inputsEnd:
