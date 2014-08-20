@@ -127,7 +127,61 @@ Channel_ControlChange:
 	ld (hl),c
 	ret
 
+; ix = this
+; a = controller
+; c = value
 Channel_ChannelMode:
+	cp 121
+	jp c,Channel_AllSoundOff
+	jp z,Channel_ResetAllControllers
+	cp 123
+	jp c,Channel_LocalControl
+	jp z,Channel_AllNotesOff
+	cp 125
+	jp c,Channel_OmniModeOff
+	jp z,Channel_OmniModeOn
+	cp 127
+	jp c,Channel_MonoModeOn
+	jp z,Channel_PolyModeOn
+	call System_ThrowException
+
+; ix = this
+Channel_AllSoundOff:
+	ret
+
+; ix = this
+Channel_ResetAllControllers:
+	ld e,(ix + Channel.controllers)
+	ld d,(ix + Channel.controllers + 1)
+	call ControllerBank_Reset
+	ld (ix + Channel.channelPressure),0
+	ld (ix + Channel.pitchBendCoarse),0
+	ld (ix + Channel.pitchBendFine),0
+	; also reset all poly pressure
+	ret
+
+; ix = this
+Channel_LocalControl:
+	ret
+
+; ix = this
+Channel_AllNotesOff:
+	ret
+
+; ix = this
+Channel_OmniModeOff:
+	ret
+
+; ix = this
+Channel_OmniModeOn:
+	ret
+
+; ix = this
+Channel_MonoModeOn:
+	ret
+
+; ix = this
+Channel_PolyModeOn:
 	ret
 
 ; Modifies: none
