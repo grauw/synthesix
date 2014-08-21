@@ -112,6 +112,28 @@ Memory_GetSlotPage3:
 	ret
 
 ;
+; Prepares a slot selection.
+;
+; a = slot ID formatted FxxxSSPP
+; h = memory page
+; bc <- prepared slot id (1) (b: primary value, c: SLTTBL LSB)
+; de <- prepared slot id (2) (d: secondary’s primary value, e: secondary value)
+; hl <- SLTTBL entry
+; Modifies: af, bc, de, hl
+;
+Memory_PrepareSlot: PROC
+	bit 7,h
+	jr nz,Page23
+	bit 6,h
+	jp z,Memory_PrepareSlotPage0
+	jp Memory_PrepareSlotPage1
+Page23:
+	bit 6,h
+	jp z,Memory_PrepareSlotPage2
+	call System_ThrowException
+	ENDP
+
+;
 ; Prepares a slot selection in page 0.
 ;
 ; a = slot ID formatted FxxxSSPP
@@ -253,27 +275,10 @@ Memory_PrepareSlotPage2:
 ; h = memory page
 ; Modifies: af, bc, de, hl
 ;
-Memory_SetSlot: PROC
-	bit 7,h
-	jr nz,Page23
+Memory_SetSlot:
 	bit 6,h
-	call z,System_ThrowException
-	call System_ThrowException
-Page23:
-	bit 6,h
-	jp z,Memory_SetSlotPage2
-	call System_ThrowException
-	ENDP
-
-;
-; Sets a slot in page 2.
-; The current interrupt enabled state is preserved.
-;
-; a = slot ID formatted FxxxSSPP
-; Modifies: af, bc, de, hl
-;
-Memory_SetSlotPage2:
-	call Memory_PrepareSlotPage2
+	call nz,System_ThrowException  ; setting page 1 not supported yet
+	call Memory_PrepareSlot
 	jp Memory_SetPreparedSlot
 
 ;
@@ -318,31 +323,11 @@ Memory_SetPreparedSlot:
 ; a <- value
 ; Modifies: af, af', bc, de, hl
 ;
-Memory_ReadSlot: PROC
-	bit 7,h
-	jr nz,Page23
+Memory_ReadSlot:
 	bit 6,h
-	jp z,Memory_ReadSlotPage0
-	call System_ThrowException
-Page23:
-	bit 6,h
-	call z,System_ThrowException
-	call System_ThrowException
-	ret
-	ENDP
-
-;
-; Reads a byte from a slot in page 0
-; The current interrupt enabled state is preserved.
-;
-; a = slot ID
-; hl = address
-; a <- value
-; Modifies: af, af', bc, de, hl
-;
-Memory_ReadSlotPage0:
+	call nz,System_ThrowException  ; setting page 1 not supported yet
 	push hl
-	call Memory_PrepareSlotPage0
+	call Memory_PrepareSlot
 	pop hl
 	jp Memory_ReadPreparedSlot
 
@@ -384,32 +369,12 @@ Memory_ReadPreparedSlot:
 ; hl = address
 ; Modifies: af, af', bc, de, hl
 ;
-Memory_WriteSlot: PROC
-	bit 7,h
-	jr nz,Page23
+Memory_WriteSlot:
 	bit 6,h
-	jp z,Memory_WriteSlotPage0
-	call System_ThrowException
-Page23:
-	bit 6,h
-	call z,System_ThrowException
-	call System_ThrowException
-	ret
-	ENDP
-
-;
-; Writes a byte to a slot in page 0
-; The current interrupt enabled state is preserved.
-;
-; a = slot ID
-; c = value
-; hl = address
-; Modifies: af, af', bc, de, hl
-;
-Memory_WriteSlotPage0:
+	call nz,System_ThrowException  ; setting page 1 not supported yet
 	push bc
 	push hl
-	call Memory_PrepareSlotPage0
+	call Memory_PrepareSlot
 	pop hl
 	pop bc
 	jp Memory_WritePreparedSlot

@@ -113,11 +113,11 @@ ROM_BANK_6000_CHANGE: equ 7000H
 ;
 ROM_Main:
 	ei
-
 	call ROM_Init
 
 	call Memory_GetSlotPage3
-	call Memory_SetSlotPage2
+	ld h,80H
+	call Memory_SetSlot
 	call ROM_InitRAM
 
 	call Synthesix_Main

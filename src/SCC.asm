@@ -52,7 +52,8 @@ SCC_Constructor:
 	call Memory_GetSlotPage2
 	push af
 	ld a,(ix + SCC.slot)
-	call Memory_SetSlotPage2
+	ld h,80H
+	call Memory_SetSlot
 
 	ld a,ROM_SCCBank
 	ld (SCC_BANK_8000_CHANGE),a
@@ -68,7 +69,8 @@ SCC_Constructor:
 	ld (ix + SCC.mixerCopy),a
 
 	pop af
-	call Memory_SetSlotPage2
+	ld h,80H
+	call Memory_SetSlot
 
 	REPT SCC_MAX_VOICES, ?voice
 	push ix
@@ -167,7 +169,8 @@ SCC_MatchSlot: PROC
 	call Memory_GetSlotPage2
 	push af
 	ex af,af'
-	call Memory_SetSlotPage2
+	ld h,80H
+	call Memory_SetSlot
 
 	ld a,(9000H)
 	ld d,a
@@ -195,12 +198,14 @@ NoSCC:
 	ld a,d
 	ld (9000H),a
 	pop af
-	call Memory_SetSlotPage2
+	ld h,80H
+	call Memory_SetSlot
 	and a
 	ret
 Found:
 	pop af
-	call Memory_SetSlotPage2
+	ld h,80H
+	call Memory_SetSlot
 	scf
 	ret
 	ENDP
