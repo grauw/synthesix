@@ -116,11 +116,12 @@ ROM_Main:
 
 	call Memory_GetSlotPage3
 	call Memory_SetSlotPage2
-	call RAM_Init
+	call ROM_InitRAM
 
 	call Synthesix_Main
 	ret
 
+;
 ROM_Init:
 	ld a,ROM_CodeBank1
 	ld (ROM_BANK_4000_CHANGE),a
@@ -132,7 +133,7 @@ ROM_Init:
 ; Copy RAM initialisation data from ROM to RAM.
 ; These values are defined in the RAM section and copied on boot.
 ;
-RAM_Init:
+ROM_InitRAM:
 	and a
 	ld hl,(HIMEM)
 	ld bc,RAM_endAddress
