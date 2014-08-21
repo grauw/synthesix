@@ -41,7 +41,7 @@ ROM_BANK_6000_CHANGE: equ 7000H
 	SECTION ROM_HEADER
 
 	db "AB"
-	dw Synthesix_Main
+	dw ROM_Main
 	dw 0, 0, 0, 0, 0, 0
 
 	ENDS
@@ -107,6 +107,19 @@ ROM_BANK_6000_CHANGE: equ 7000H
 	ENDS
 
 	SECTION ROM_BANK0
+
+;
+; Program entry point
+;
+ROM_Main:
+	call ROM_Init
+
+	call Memory_GetSlotPage3
+	call Memory_SetSlotPage2
+	call RAM_Init
+
+	call Synthesix_Main
+	ret
 
 ROM_Init:
 	ld a,ROM_CodeBank1

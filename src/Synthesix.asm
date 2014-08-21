@@ -11,18 +11,12 @@ Synthesix: MACRO
 	ENDM
 
 ;
-; Program entry point
-;
 Synthesix_Main:
 	call VDP_GetVersion
 	cp 1
 	ret c
 
 ;	call System_EnableTurbo
-
-	call ROM_Init
-	call Memory_EnableRAMInPage2
-	call RAM_Init
 
 	ld ix,Heap_heap
 	call Heap_Constructor

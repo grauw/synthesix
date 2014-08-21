@@ -1,11 +1,6 @@
 ;
 ; Memory and slot-related routines
 ;
-Memory_EnableRAMInPage2:
-	call Memory_GetSlotPage3
-	call Memory_SetSlotPage2
-	ret
-
 Memory_GetSlot:
 	ld a,h
 	sub 64
