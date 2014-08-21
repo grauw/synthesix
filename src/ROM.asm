@@ -86,6 +86,11 @@ ROM_BANK_6000_CHANGE: equ 7000H
 	INCLUDE "ModuleType.asm"
 	INCLUDE "Listeners.asm"
 	INCLUDE "Updater.asm"
+
+	ENDS
+
+	SECTION TPA
+
 	INCLUDE "modules/Modules.asm"
 	INCLUDE "ui/UI.asm"
 
