@@ -87,7 +87,7 @@ SFGMidi_Configure:
 	ld e,(ix + SFGMidi.preparedSlot)
 	ld d,(ix + SFGMidi.preparedSlot + 1)
 	ld hl,SFGMidi_COMMAND
-	call Memory_WritePreparedSlotPage0
+	call Memory_WritePreparedSlot
 
 	; YM2148 UART: set command
 	ld c,00001101B  ; enable rx interrupt
@@ -95,13 +95,13 @@ SFGMidi_Configure:
 	ld e,(ix + SFGMidi.preparedSlot)
 	ld d,(ix + SFGMidi.preparedSlot + 1)
 	ld hl,SFGMidi_COMMAND
-	call Memory_WritePreparedSlotPage0
+	call Memory_WritePreparedSlot
 
 	; YM2148 UART: reset interrupt flag
 	ld e,(ix + SFGMidi.preparedSlot)
 	ld d,(ix + SFGMidi.preparedSlot + 1)
 	ld hl,SFGMidi_DATA
-	call Memory_ReadPreparedSlotPage0
+	call Memory_ReadPreparedSlot
 	ret
 
 ;
@@ -114,7 +114,7 @@ SFGMidi_Reset:
 	ld e,(ix + SFGMidi.preparedSlot)
 	ld d,(ix + SFGMidi.preparedSlot + 1)
 	ld hl,SFGMidi_COMMAND
-	call Memory_WritePreparedSlotPage0
+	call Memory_WritePreparedSlot
 	ret
 
 ;
@@ -129,7 +129,7 @@ SFGMidi_CheckOverrun: PROC
 	ld e,(ix + SFGMidi.preparedSlot)
 	ld d,(ix + SFGMidi.preparedSlot + 1)
 	ld hl,SFGMidi_STATUS
-	call Memory_ReadPreparedSlotPage0
+	call Memory_ReadPreparedSlot
 	ei
 	and 00110000B
 	ret z
@@ -140,7 +140,7 @@ SFGMidi_CheckOverrun: PROC
 	ld e,(ix + SFGMidi.preparedSlot)
 	ld d,(ix + SFGMidi.preparedSlot + 1)
 	ld hl,SFGMidi_COMMAND
-	call Memory_WritePreparedSlotPage0
+	call Memory_WritePreparedSlot
 	ei
 	pop af
 	and 00010000B

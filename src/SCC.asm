@@ -92,7 +92,7 @@ SCC_UpdateLate:
 	ld c,(ix + SCC.preparedSlot + 1)
 	ld d,(ix + SCC.preparedSlot + 2)
 	ld e,(ix + SCC.preparedSlot + 3)
-	call Memory_SetPreparedSlotPage2
+	call Memory_SetPreparedSlot
 	exx
 
 	REPT SCC_MAX_VOICES, ?voice
@@ -106,7 +106,7 @@ SCC_UpdateLate:
 	ENDM
 
 	exx
-	call Memory_SetPreparedSlotPage2
+	call Memory_SetPreparedSlot
 	ret
 
 ; ix = this

@@ -273,15 +273,13 @@ Page23:
 ;
 Memory_SetSlotPage2:
 	call Memory_PrepareSlotPage2
-	jp Memory_SetPreparedSlotPage2
+	jp Memory_SetPreparedSlot
 
 ;
-; Sets a prepared slot selection in page 2.
+; Sets a prepared slot selection.
 ; The current interrupt enabled state is preserved.
 ; The original slot layout can be restored by invoking this method again.
-;
-; Note, when applying, primary slots will be set to their state when prepared.
-; So when invoked, slot selection of pages 0, 1 and 3 should be the same.
+; Note, primary slots will be set to the state they were in when prepared.
 ;
 ; bc = Prepared slot id (1)
 ; de = Prepared slot id (2)
@@ -289,7 +287,7 @@ Memory_SetSlotPage2:
 ; de <- Prepared slot id (2) to restore
 ; Modifies: af, bc, de, hl
 ;
-Memory_SetPreparedSlotPage2:
+Memory_SetPreparedSlot:
 	push bc
 	ld hl,0FFFFH
 	ld c,0A8H
@@ -345,10 +343,10 @@ Memory_ReadSlotPage0:
 	push hl
 	call Memory_PrepareSlotPage0
 	pop hl
-	jp Memory_ReadPreparedSlotPage0
+	jp Memory_ReadPreparedSlot
 
 ;
-; Reads a byte from a prepared slot in page 0
+; Reads a byte from a prepared slot
 ; The current interrupt enabled state is preserved.
 ;
 ; de = prepared slot id (2)
@@ -356,7 +354,7 @@ Memory_ReadSlotPage0:
 ; a <- value
 ; Modifies: af, af', bc, de, hl
 ;
-Memory_ReadPreparedSlotPage0:
+Memory_ReadPreparedSlot:
 	ld c,0A8H
 	ld a,r
 	ex af,af'
@@ -413,10 +411,10 @@ Memory_WriteSlotPage0:
 	call Memory_PrepareSlotPage0
 	pop hl
 	pop bc
-	jp Memory_WritePreparedSlotPage0
+	jp Memory_WritePreparedSlot
 
 ;
-; Writes a byte to a prepared slot in page 0
+; Writes a byte to a prepared slot
 ; The current interrupt enabled state is preserved.
 ;
 ; c = value
@@ -424,7 +422,7 @@ Memory_WriteSlotPage0:
 ; hl = address
 ; Modifies: af, af', bc, de, hl
 ;
-Memory_WritePreparedSlotPage0:
+Memory_WritePreparedSlot:
 	ld a,r
 	ld a,c
 	ld c,0A8H
