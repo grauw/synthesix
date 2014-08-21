@@ -177,7 +177,7 @@ Loop:
 	push hl
 	push ix
 	push hl
-	xor a
+	ld a,0
 	call Patch_GetModule
 	pop hl
 	call ModuleView_Paint
