@@ -501,6 +501,8 @@ Memory_WritePreparedSlotPage1:
 
 	ENDS
 
+	SECTION RAM
+
 ;
 ; Executes an inter-slot call.
 ; The current interrupt enabled state is preserved.
@@ -515,8 +517,6 @@ Memory_CallSlot: PROC
 	ld a,ixh
 	ld h,a
 	ld a,iyh
-	bit 6,h
-	call nz,System_ThrowException  ; calling into page 1 not supported yet
 	call Memory_PrepareSlot
 	call Memory_SetPreparedSlot
 	push bc
@@ -535,6 +535,8 @@ Memory_CallSlot: PROC
 CallIX:
 	jp ix
 	ENDP
+
+	ENDS
 
 ;
 ; Search all slots and subslots for a match.
