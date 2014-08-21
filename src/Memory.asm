@@ -276,9 +276,11 @@ Memory_PrepareSlotPage2:
 ; Modifies: af, bc, de, hl
 ;
 Memory_SetSlot:
-	bit 6,h
-	call nz,System_ThrowException  ; setting page 1 not supported yet
+	push hl
 	call Memory_PrepareSlot
+	pop hl
+	bit 6,h
+	jp nz,Memory_SetPreparedSlotPage1
 	jp Memory_SetPreparedSlot
 
 ;
@@ -314,6 +316,35 @@ Memory_SetPreparedSlot:
 	ei
 	ret
 
+	SECTION TPA
+
+;
+; Sets a prepared slot selection in page 1.
+; See SetPreparedSlot.
+;
+Memory_SetPreparedSlotPage1:
+	push bc
+	ld hl,0FFFFH
+	ld c,0A8H
+	ld a,r
+	di
+	in a,(0A8H)  ; be careful not to modify p/v flag
+	out (c),d
+	ld (hl),e
+	out (c),b
+	pop bc
+	ld h,SLTTBL >> 8
+	ld l,c
+	ld b,a
+	ld a,(hl)
+	ld (hl),e
+	ld e,a
+	ret po
+	ei
+	ret
+
+	ENDS
+
 ;
 ; Reads a byte from a slot.
 ; The current interrupt enabled state is preserved.
@@ -324,11 +355,11 @@ Memory_SetPreparedSlot:
 ; Modifies: af, af', bc, de, hl
 ;
 Memory_ReadSlot:
-	bit 6,h
-	call nz,System_ThrowException  ; setting page 1 not supported yet
 	push hl
 	call Memory_PrepareSlot
 	pop hl
+	bit 6,h
+	jp nz,Memory_ReadPreparedSlotPage1
 	jp Memory_ReadPreparedSlot
 
 ;
@@ -361,6 +392,35 @@ Memory_ReadPreparedSlot:
 	ei
 	ret
 
+	SECTION TPA
+
+;
+; Reads a byte from a prepared slot in page 1.
+; See ReadPreparedSlot.
+;
+Memory_ReadPreparedSlotPage1:
+	ld c,0A8H
+	ld a,r
+	ex af,af'
+	di
+	in b,(c)
+	out (c),d
+	ld a,(0FFFFH)
+	cpl
+	ex af,af'
+	ld a,e
+	ld (0FFFFH),a
+	ld a,(hl)
+	ex af,af'
+	ld (0FFFFH),a
+	out (c),b
+	ex af,af'
+	ret po
+	ei
+	ret
+
+	ENDS
+
 ;
 ; Writes a byte to a slot.
 ; The current interrupt enabled state is preserved.
@@ -371,13 +431,13 @@ Memory_ReadPreparedSlot:
 ; Modifies: af, af', bc, de, hl
 ;
 Memory_WriteSlot:
-	bit 6,h
-	call nz,System_ThrowException  ; setting page 1 not supported yet
 	push bc
 	push hl
 	call Memory_PrepareSlot
 	pop hl
 	pop bc
+	bit 6,h
+	jp nz,Memory_WritePreparedSlotPage1
 	jp Memory_WritePreparedSlot
 
 ;
@@ -410,6 +470,36 @@ Memory_WritePreparedSlot:
 	ret po
 	ei
 	ret
+
+	SECTION TPA
+
+;
+; Writes a byte to a prepared slot in page 1.
+; See WritePreparedSlot.
+;
+Memory_WritePreparedSlotPage1:
+	ld a,r
+	ld a,c
+	ld c,0A8H
+	ex af,af'
+	di
+	in b,(c)
+	out (c),d
+	ld a,(0FFFFH)
+	cpl
+	ld d,a
+	ld a,e
+	ld (0FFFFH),a
+	ex af,af'
+	ld (hl),a
+	ld a,d
+	ld (0FFFFH),a
+	out (c),b
+	ret po
+	ei
+	ret
+
+	ENDS
 
 ;
 ; Executes an inter-slot call.
