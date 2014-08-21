@@ -412,6 +412,41 @@ Memory_WritePreparedSlot:
 	ret
 
 ;
+; Executes an inter-slot call.
+; The current interrupt enabled state is preserved.
+;
+; iyh = slot ID
+; ix = address
+; Modifies: af', bc', de', hl'
+;
+Memory_CallSlot: PROC
+	ex af,af'
+	exx
+	ld a,ixh
+	ld h,a
+	ld a,iyh
+	bit 6,h
+	call nz,System_ThrowException  ; calling into page 1 not supported yet
+	call Memory_PrepareSlot
+	call Memory_SetPreparedSlot
+	push bc
+	push de
+	exx
+	ex af,af'
+	call CallIX
+	ex af,af'
+	exx
+	pop de
+	pop bc
+	call Memory_SetPreparedSlot
+	exx
+	ex af,af'
+	ret
+CallIX:
+	jp ix
+	ENDP
+
+;
 ; Search all slots and subslots for a match.
 ; Invoke Continue to continue searching where a previous search left off.
 ;
