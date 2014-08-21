@@ -112,6 +112,8 @@ ROM_BANK_6000_CHANGE: equ 7000H
 ; Program entry point
 ;
 ROM_Main:
+	ei
+
 	call ROM_Init
 
 	call Memory_GetSlotPage3
