@@ -185,10 +185,12 @@ VDP_GetVersion:
 ; f <- z: TMS9918A, nz: V99X8
 ;
 VDP_IsTMS9918A: PROC
+	in a,(VDP_PORT_1)    ; read s#0, make sure interrupt flag is reset
 	di
+Wait:
 	in a,(VDP_PORT_1)    ; read s#0
 	and a
-	jp p,VDP_IsTMS9918A  ; wait until interrupt flag is set
+	jp p,Wait            ; wait until interrupt flag is set
 	ld a,2               ; select s#2 on V9938
 	out (VDP_PORT_1),a
 	ld a,15 + 128
