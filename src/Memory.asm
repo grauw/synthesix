@@ -246,10 +246,11 @@ Memory_PrepareSlotPage2:
 	ret
 
 ;
-; Sets a slot in page 2.
+; Sets a slot in the page specified by h.
 ; The current interrupt enabled state is preserved.
 ;
 ; a = slot ID formatted FxxxSSPP
+; h = memory page
 ; Modifies: af, bc, de, hl
 ;
 Memory_SetSlot: PROC
@@ -309,7 +310,7 @@ Memory_SetPreparedSlot:
 	ret
 
 ;
-; Reads a byte from a slot in the page indicated by hl
+; Reads a byte from a slot.
 ; The current interrupt enabled state is preserved.
 ;
 ; a = slot ID
@@ -346,7 +347,7 @@ Memory_ReadSlotPage0:
 	jp Memory_ReadPreparedSlot
 
 ;
-; Reads a byte from a prepared slot
+; Reads a byte from a prepared slot.
 ; The current interrupt enabled state is preserved.
 ;
 ; de = prepared slot id (2)
@@ -375,7 +376,7 @@ Memory_ReadPreparedSlot:
 	ret
 
 ;
-; Writes a byte to a slot in the page indicated by hl
+; Writes a byte to a slot.
 ; The current interrupt enabled state is preserved.
 ;
 ; a = slot ID
@@ -414,7 +415,7 @@ Memory_WriteSlotPage0:
 	jp Memory_WritePreparedSlot
 
 ;
-; Writes a byte to a prepared slot
+; Writes a byte to a prepared slot.
 ; The current interrupt enabled state is preserved.
 ;
 ; c = value
