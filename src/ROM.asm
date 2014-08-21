@@ -137,8 +137,9 @@ ROM_Init:
 ;
 ROM_InitRAM:
 	and a
-	ld hl,(HIMEM)
-	ld bc,RAM_endAddress
+	ld hl,0
+	add hl,sp
+	ld bc,RAM_endAddress + 100H
 	sbc hl,bc
 	ld hl,RAM_insufficientTPA
 	call c,System_ThrowExceptionWithMessage
