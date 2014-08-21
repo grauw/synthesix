@@ -176,10 +176,10 @@ ControllerBank_labels:
 	db "Expression",0
 	db "Fx 1",0
 	db "Fx 2",0
-	db "CC# 14",0
-	db "CC# 15",0
-	db "CC# 16",0
-	db "CC# 17",0
+	db "Gen.P 1",0
+	db "Gen.P 2",0
+	db "Gen.P 3",0
+	db "Gen.P 4",0
 	db "CC# 18",0
 	db "CC# 19",0
 	db "CC# 20",0
@@ -194,26 +194,26 @@ ControllerBank_labels:
 	db "CC# 29",0
 	db "CC# 30",0
 	db "CC# 31",0
-	db "CC# 32",0
-	db "CC# 33",0
-	db "CC# 34",0
+	db "Bank F",0
+	db "Mod F",0
+	db "Breat F",0
 	db "CC# 35",0
-	db "CC# 36",0
-	db "CC# 37",0
-	db "CC# 38",0
-	db "CC# 39",0
-	db "CC# 40",0
+	db "Foot F",0
+	db "P.Tim F",0
+	db "Data F",0
+	db "Volum F",0
+	db "Balan F",0
 	db "CC# 41",0
-	db "CC# 42",0
-	db "CC# 43",0
-	db "CC# 44",0
-	db "CC# 45",0
+	db "Pan F",0
+	db "Expre F",0
+	db "Fx 1 F",0
+	db "Fx 2 F",0
 	db "CC# 46",0
 	db "CC# 47",0
-	db "CC# 48",0
-	db "CC# 49",0
-	db "CC# 50",0
-	db "CC# 51",0
+	db "GP 1 F",0
+	db "GP 2 F",0
+	db "GP 3 F",0
+	db "GP 4 F",0
 	db "CC# 52",0
 	db "CC# 53",0
 	db "CC# 54",0
@@ -227,43 +227,43 @@ ControllerBank_labels:
 	db "CC# 62",0
 	db "CC# 63",0
 	db "Sustain",0
-	db "CC# 65",0
-	db "CC# 66",0
-	db "CC# 67",0
-	db "CC# 68",0
-	db "CC# 69",0
-	db "CC# 70",0
-	db "CC# 71",0
-	db "CC# 72",0
-	db "CC# 73",0
-	db "CC# 74",0
-	db "CC# 75",0
-	db "CC# 76",0
-	db "CC# 77",0
-	db "CC# 78",0
-	db "CC# 79",0
-	db "CC# 80",0
-	db "CC# 81",0
-	db "CC# 82",0
-	db "CC# 83",0
-	db "CC# 84",0
+	db "Portamento",0
+	db "Sostenuto",0
+	db "Soft",0
+	db "Legato",0
+	db "Hold 2",0
+	db "Sound Variation",0
+	db "Timbre",0
+	db "Release",0
+	db "Attack",0
+	db "Brightness",0
+	db "Decay",0
+	db "Vib.Rate",0
+	db "Vib.Depth",0
+	db "Vib.Delay",0
+	db "Sound10",0
+	db "Gen.P 5",0
+	db "Gen.P 6",0
+	db "Gen.P 7",0
+	db "Gen.P 8",0
+	db "P.Control",0
 	db "CC# 85",0
 	db "CC# 86",0
 	db "CC# 87",0
-	db "CC# 88",0
+	db "Vel Prefix",0
 	db "CC# 89",0
 	db "CC# 90",0
-	db "CC# 91",0
-	db "CC# 92",0
-	db "CC# 93",0
-	db "CC# 94",0
-	db "CC# 95",0
-	db "CC# 96",0
-	db "CC# 97",0
-	db "CC# 98",0
-	db "CC# 99",0
-	db "CC# 100",0
-	db "CC# 101",0
+	db "Reverb",0
+	db "Tremolo",0
+	db "Chorus",0
+	db "Celeste",0
+	db "Phaser",0
+	db "Data Increment",0
+	db "Data Decrement",0
+	db "NRPN F",0
+	db "NRPN C",0
+	db "RPN F",0
+	db "RPN C",0
 	db "CC# 102",0
 	db "CC# 103",0
 	db "CC# 104",0
