@@ -99,10 +99,10 @@ ControllerBank: MACRO
 		Value 0
 		Value 0  ; 96
 		Value 0
-		Value 0
-		Value 0
-		Value 0
-		Value 0
+		Value 127
+		Value 127
+		Value 127
+		Value 127
 		Value 0
 		Value 0
 		Value 0  ; 104
