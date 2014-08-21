@@ -164,11 +164,10 @@ PatchEditorView_PaintPatch: PROC
 	call Patch_GetModuleCount
 	pop ix
 	ld a,c
-	cp 5
-	jp c,NoMax
-	ld a,5
-NoMax:
 	pop bc
+	cp 5
+	jr c,Loop
+	ld a,5
 Loop:
 	push af
 	push bc
