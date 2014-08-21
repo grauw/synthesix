@@ -348,6 +348,7 @@ Memory_ReadPreparedSlot:
 	in b,(c)
 	out (c),d
 	ld a,(0FFFFH)
+	cpl
 	ex af,af'
 	ld a,e
 	ld (0FFFFH),a
@@ -397,6 +398,7 @@ Memory_WritePreparedSlot:
 	in b,(c)
 	out (c),d
 	ld a,(0FFFFH)
+	cpl
 	ld d,a
 	ld a,e
 	ld (0FFFFH),a
