@@ -168,10 +168,9 @@ PatchEditorView_PaintPatch: PROC
 	jp c,NoMax
 	ld a,5
 NoMax:
-	ld e,a
-	ld d,0
 	pop bc
 Loop:
+	push af
 	push bc
 	push de
 	push hl
@@ -187,10 +186,9 @@ Loop:
 	add hl,bc
 	pop de
 	pop bc
+	pop af
 	inc bc
-	dec de
-	ld a,d
-	or e
+	dec a
 	jp nz,Loop
 	ret
 	ENDP
