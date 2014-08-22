@@ -13,7 +13,7 @@
 ; mode. These are the last two keys, B6 and C6.
 ;
 AudioMidi: MACRO
-	super: MidiIn MidiIn_buffer1
+	super: MidiIn MidiIn_buffer5
 	found:
 		db 0
 	toshiba:
