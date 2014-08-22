@@ -1,6 +1,7 @@
 ;
 ; Display a patch editor
 ;
+PatchEditorView_MODULES: equ 5
 PatchEditorView_SELECTCOLOR: equ 0F8H
 PatchEditorView_ASSIGNCOLOR: equ 0F2H
 PatchEditorView_INVALIDCOLOR: equ 0FEH
@@ -11,7 +12,7 @@ PatchEditorView_INVALIDCOLOR: equ 0FEH
 PatchEditorView_Paint: PROC
 	ld a,(iy + UIBuffer.repaint)
 	push af
-	ld b,5
+	ld b,PatchEditorView_MODULES
 	call PatchEditor_GetModuleScrollPosition
 	jp nc,NoRepaint
 	ld (iy + UIBuffer.repaint),-1
@@ -68,7 +69,7 @@ PatchEditorView_PaintProgressBar:
 	ld d,b
 	pop ix
 	pop bc
-	ld hl,-5
+	ld hl,-PatchEditorView_MODULES
 	add hl,de
 	ex de,hl
 	pop hl
@@ -114,7 +115,7 @@ PatchEditorView_PaintFocus: PROC
 	add a,a
 	ld e,a
 	ld a,(ix + PatchEditor.port)
-	cp 14
+	cp ModuleView_PORTS
 	ret nc
 	inc a
 	ld d,a
@@ -165,9 +166,9 @@ PatchEditorView_PaintPatch: PROC
 	pop ix
 	ld a,c
 	pop bc
-	cp 5
+	cp PatchEditorView_MODULES
 	jr c,Loop
-	ld a,5
+	ld a,PatchEditorView_MODULES
 Loop:
 	push af
 	push bc
