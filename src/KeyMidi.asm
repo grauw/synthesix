@@ -68,6 +68,8 @@ KeyMidi_ReadKeyCode:
 
 ; ix = this
 KeyMidi_Scan:
+	ld a,(JIFFY)
+	ld (ix + MidiIn.clock),a
 	ld e,ixl
 	ld d,ixh
 	ld hl,KeyMidi.lastScan
