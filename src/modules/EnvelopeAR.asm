@@ -13,7 +13,7 @@ EnvelopeAR: MACRO
 		dw Constants_instance + 8
 	gate:
 		dw Constants_instance + 0
-	trigger:
+	reset:
 		dw Constants_instance + 0
 	inputsEnd:
 	sign:
@@ -53,8 +53,8 @@ EnvelopeAR_Reset:
 
 ; ix = this
 EnvelopeAR_Update:
-	ld l,(ix + EnvelopeAR.trigger)
-	ld h,(ix + EnvelopeAR.trigger + 1)
+	ld l,(ix + EnvelopeAR.reset)
+	ld h,(ix + EnvelopeAR.reset + 1)
 	bit 6,(hl)
 	call nz,EnvelopeAR_Reset
 	ld l,(ix + EnvelopeAR.gate)
@@ -118,4 +118,4 @@ EnvelopeAR_labels:
 	db "Attack",0
 	db "Release",0
 	db "Gate",0
-	db "Trigger",0
+	db "Reset",0
