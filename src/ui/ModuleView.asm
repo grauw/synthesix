@@ -3,39 +3,53 @@
 ;
 ModuleView_PORTS: equ 14
 
+; a = first port
 ; de = module
 ; ix = module type
 ; iy = buffer
 ; hl = buffer address
 ModuleView_Paint:
+	ld c,a
+	ld a,(ix + ModuleType.outputCount)
+	add a,(ix + ModuleType.inputCount)
+	dec a
+	cp c
+	call c,System_ThrowException  ; scroll position exceeds port count
+	ld a,c
 	bit 0,(iy + UIBuffer.repaint)
 	call nz,ModuleView_PaintBackground
 	call ModuleView_PaintUpdate
 	ret
 
+; a = first port
 ; de = module
 ; ix = module type
 ; iy = buffer
 ; hl = buffer address
 ModuleView_PaintBackground:
+	push af
 	push de
 	push hl
+	ld a,c
 	call ModuleView_PaintModuleType
 	pop hl
 	pop de
+	pop af
 	ret
 
+; a = first port
 ; de = module
 ; ix = module type
 ; iy = buffer
 ; hl = buffer address
 ModuleView_PaintUpdate: PROC
+	push af
 	ld bc,UIBuffer.WIDTH * 1 + 10
 	add hl,bc
 	ld a,(ix + ModuleType.outputCount)
 	add a,(ix + ModuleType.inputCount)
 	ld c,a
-	ld a,0
+	pop af
 	ld b,ModuleView_PORTS
 Loop:
 	push af
@@ -94,13 +108,16 @@ Input:
 	jp ValueView_Paint
 	ENDP
 
+; a = first port
 ; ix = module type
 ; iy = buffer
 ; hl = buffer address
 ModuleView_PaintModuleType:
+	push af
 	ld e,(ix + ModuleType.labels)
 	ld d,(ix + ModuleType.labels + 1)
 	call ModuleView_PaintTop
+	pop af
 	call ModuleView_PaintPorts
 	call ModuleView_PaintBottom
 	ret
@@ -160,15 +177,18 @@ ModuleView_PaintBottom:
 	pop de
 	ret
 
+; a = first port
 ; de = labels
 ; ix = module type
 ; iy = buffer
 ; hl = buffer address
 ModuleView_PaintPorts: PROC
+	push af
+	call ModuleView_GetPortLabel
 	ld a,(ix + ModuleType.outputCount)
 	add a,(ix + ModuleType.inputCount)
 	ld c,a
-	ld a,0
+	pop af
 	ld b,ModuleView_PORTS
 Loop:
 	push af
@@ -231,6 +251,25 @@ ModuleView_GetPortBackground:
 	ret c
 	ld hl,ModuleView_input
 	ret
+
+; a = port
+; de = labels
+; de <- port label
+; Modifies: af, bc, de
+ModuleView_GetPortLabel: PROC
+	and a
+	ret z
+	ex de,hl
+	ld b,a
+	xor a
+Loop:
+	ld c,0FFH
+	cpir
+	call po,System_ThrowException
+	djnz Loop
+	ex de,hl
+	ret
+	ENDP
 
 ; de = ASCIIZ string
 ; a <- length, excluding the terminator

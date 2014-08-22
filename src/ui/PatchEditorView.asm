@@ -179,6 +179,7 @@ Loop:
 	ld a,0
 	call Patch_GetModule
 	pop hl
+	ld a,0
 	call ModuleView_Paint
 	pop ix
 	pop hl
