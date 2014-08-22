@@ -110,7 +110,7 @@ Patch_Load: PROC
 	ld hl,5 << 8 | 1   ; EnvelopeAR.release
 	ld de,0 << 8 | 8   ; Value 8
 	call Patch_AddLink
-	ld hl,5 << 8 | 3  ; EnvelopeAR.trigger
+	ld hl,5 << 8 | 3  ; EnvelopeAR.reset
 	ld de,3 << 8 | 3  ; Note.trigger
 	call Patch_AddLink
 	ld hl,6 << 8 | 0  ; Sustain.gate
