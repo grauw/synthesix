@@ -18,6 +18,12 @@ PatchEditor: MACRO
 		db 0
 	portScrollPosition:
 		db 0
+	moduleScrollPositionMoved:
+		db 0
+	portScrollPositionMoved:
+		db 0
+	moduleLastScrollPositionUpdate:
+		db 0
 	_size:
 	ENDM
 
@@ -52,6 +58,32 @@ PatchEditor_GetPatch:
 	ld ixl,e
 	ld ixh,d
 	ret
+
+; ix = this
+; b = nr of modules shown
+; c = nr of ports shown
+; Modifies: af, bc
+PatchEditor_UpdateScrollPosition: PROC
+	ld a,(ix + PatchEditor.module)
+	cp (ix + PatchEditor.moduleLastScrollPositionUpdate)
+	jr z,NoPortPositionReset
+	ld (ix + PatchEditor.portScrollPosition),0
+	ld (ix + PatchEditor.moduleLastScrollPositionUpdate),a
+	call NoPortPositionReset
+	ld (ix + PatchEditor.portScrollPositionMoved),-1
+	ret
+NoPortPositionReset:
+	push bc
+	call PatchEditor_GetModuleScrollPosition
+	sbc a,a
+	ld (ix + PatchEditor.moduleScrollPositionMoved),a
+	pop bc
+	ld b,c
+	call PatchEditor_GetPortScrollPosition
+	sbc a,a
+	ld (ix + PatchEditor.portScrollPositionMoved),a
+	ret
+	ENDP
 
 ; ix = this
 ; b = width

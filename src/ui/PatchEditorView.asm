@@ -12,9 +12,13 @@ PatchEditorView_INVALIDCOLOR: equ 0FEH
 PatchEditorView_Paint: PROC
 	ld a,(iy + UIBuffer.repaint)
 	push af
-	ld b,PatchEditorView_MODULES
-	call PatchEditor_GetModuleScrollPosition
-	jp nc,NoRepaint
+	ld bc,PatchEditorView_MODULES << 8 | ModuleView_PORTS
+	call PatchEditor_UpdateScrollPosition
+	ld c,(ix + PatchEditor.moduleScrollPosition)
+	ld b,0
+	ld a,(ix + PatchEditor.moduleScrollPositionMoved)
+	or (ix + PatchEditor.portScrollPositionMoved)
+	jp z,NoRepaint
 	ld (iy + UIBuffer.repaint),-1
 NoRepaint:
 	bit 0,(iy + UIBuffer.repaint)
@@ -111,8 +115,10 @@ PatchEditorView_PaintFocus: PROC
 	add a,a
 	ld e,a
 	ld a,(ix + PatchEditor.port)
+	sub (ix + PatchEditor.portScrollPosition)
+	call c,System_ThrowException  ; port should be within scroll position bounds
 	cp ModuleView_PORTS
-	ret nc
+	call nc,System_ThrowException
 	inc a
 	ld d,a
 	push bc
@@ -172,12 +178,21 @@ Loop:
 	push de
 	push hl
 	push ix
+	push bc
 	push hl
 	ld a,0
 	call PatchEditor_GetPatch
 	call Patch_GetModule
 	pop hl
+	pop bc
+	ex (sp),ix
+	ld a,(ix + PatchEditor.module)
+	cp c
 	ld a,0
+	jr nz,NotThisModule
+	ld a,(ix + PatchEditor.portScrollPosition)
+NotThisModule:
+	ex (sp),ix
 	call ModuleView_Paint
 	pop ix
 	pop hl
