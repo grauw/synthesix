@@ -99,8 +99,7 @@ ModuleView_PaintModuleType:
 	ld e,(ix + ModuleType.labels)
 	ld d,(ix + ModuleType.labels + 1)
 	call ModuleView_PaintTop
-	call ModuleView_PaintOutputs
-	call ModuleView_PaintInputs
+	call ModuleView_PaintPorts
 	call ModuleView_PaintBottom
 	ret
 
@@ -163,119 +162,73 @@ ModuleView_PaintBottom:
 ; ix = module type
 ; iy = buffer
 ; hl = buffer address
-ModuleView_PaintOutputs: PROC
-	bit 0,(ix + ModuleType.outputCount + 1)
-	jr nz,Limit
+ModuleView_PaintPorts: PROC
 	ld a,(ix + ModuleType.outputCount)
-	cp ModuleView_PORTS
-	jr c,Loop
-Limit:
-	ld a,ModuleView_PORTS
+	add a,(ix + ModuleType.inputCount)
+	ld c,a
+	ld a,0
+	ld b,ModuleView_PORTS
 Loop:
-	and a
-	ret z
 	push af
-	call ModuleView_PaintOutput
-	pop af
+	push bc
+	push hl
+	call ModuleView_PaintPort
+	pop hl
 	ld bc,UIBuffer.WIDTH
 	add hl,bc
-	dec a
-	jp Loop
+	pop bc
+	pop af
+	inc a
+	cp c
+	ret z
+	djnz Loop
+	ret
 	ENDP
 
+; a = port
 ; de = labels
 ; ix = module type
 ; iy = buffer
 ; hl = buffer address
-ModuleView_PaintOutput: PROC
+ModuleView_PaintPort: PROC
 	push de
 	push hl
 	ex de,hl
+	call ModuleView_GetPortBackground
+	call UIBuffer_CopyToBuffer
+	pop hl
+	pop de
+	inc hl
+	inc hl
+	ld b,7
+Loop:
+	ld a,(de)
+	inc de
+	and a
+	ret z
+	ld (hl),a
+	inc hl
+	djnz Loop
+Loop2:
+	ld a,(de)
+	inc de
+	and a
+	jp nz,Loop2
+	ret
+	ENDP
+
+; a = port
+; bc <- port background size
+; hl <- port background
+ModuleView_GetPortBackground:
+	ld bc,0110H
 	ld hl,ModuleView_output
-	ld bc,0110H
-	call UIBuffer_CopyToBuffer
-	pop hl
-	pop de
-	push hl
-	inc hl
-	inc hl
-	ld b,7
-Loop:
-	ld a,(de)
-	inc de
-	and a
-	jp z,Done
-	ld (hl),a
-	inc hl
-	djnz Loop
-Loop2:
-	ld a,(de)
-	inc de
-	and a
-	jp nz,Loop2
-Done:
-	pop hl
-	ret
-	ENDP
-
-; de = labels
-; ix = module type
-; iy = buffer
-; hl = buffer address
-ModuleView_PaintInputs: PROC
-	bit 0,(ix + ModuleType.inputCount + 1)
-	jr nz,Limit
-	ld a,(ix + ModuleType.inputCount)
-	cp ModuleView_PORTS
-	jr c,Loop
-Limit:
-	ld a,ModuleView_PORTS
-Loop:
-	and a
-	ret z
-	push af
-	call ModuleView_PaintInput
-	pop af
-	ld bc,UIBuffer.WIDTH
-	add hl,bc
-	dec a
-	jp Loop
-	ENDP
-
-; de = labels
-; ix = module type
-; iy = buffer
-; hl = buffer address
-ModuleView_PaintInput: PROC
-	push de
-	push hl
-	ex de,hl
+	bit 0,(ix + ModuleType.outputCount + 1)
+	ret nz
+	cp (ix + ModuleType.outputCount)
+	ret c
 	ld hl,ModuleView_input
-	ld bc,0110H
-	call UIBuffer_CopyToBuffer
-	pop hl
-	pop de
-	push hl
-	inc hl
-	inc hl
-	ld b,7
-Loop:
-	ld a,(de)
-	inc de
-	and a
-	jp z,Done
-	ld (hl),a
-	inc hl
-	djnz Loop
-Loop2:
-	ld a,(de)
-	inc de
-	and a
-	jp nz,Loop2
-Done:
-	pop hl
 	ret
-	ENDP
 
 ; de = ASCIIZ string
 ; a <- length, excluding the terminator
