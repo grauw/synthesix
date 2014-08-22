@@ -103,6 +103,19 @@ Patch_Load: PROC
 	ld hl,15 << 8 | 2  ; SCCVoice.amplitude
 	ld de,3  << 8 | 2  ; Note.gate
 	call Patch_AddLink
+	; AD envelope
+	ld hl,4 << 8 | 0   ; EnvelopeAD.attack
+	ld de,0 << 8 | 127 ; Value 127
+	call Patch_AddLink
+	ld hl,4 << 8 | 1   ; EnvelopeAD.decay
+	ld de,0 << 8 | 2   ; Value 2
+	call Patch_AddLink
+	ld hl,4 << 8 | 2  ; EnvelopeAD.trigger
+	ld de,3 << 8 | 3  ; Note.trigger
+	call Patch_AddLink
+	ld hl,4 << 8 | 3  ; EnvelopeAD.reset
+	ld de,3 << 8 | 3  ; Note.trigger
+	call Patch_AddLink
 	; AR envelope
 	ld hl,5 << 8 | 0   ; EnvelopeAR.attack
 	ld de,0 << 8 | 32  ; Value 32
