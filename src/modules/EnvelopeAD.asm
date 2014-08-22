@@ -13,6 +13,8 @@ EnvelopeAD: MACRO
 		dw Constants_instance + 4
 	trigger:
 		dw Constants_instance + 0
+	reset:
+		dw Constants_instance + 0
 	inputsEnd:
 	sign:
 		db 0
@@ -47,17 +49,25 @@ EnvelopeAD_Constructor:
 	ret
 
 ; ix = this
-EnvelopeAD_Reset:
+EnvelopeAD_Trigger:
 	ld (ix + EnvelopeAD.phase),0
+	ret
+
+; ix = this
+EnvelopeAD_Reset:
 	ld (ix + EnvelopeAD.counter),0
 	ret
 
 ; ix = this
 EnvelopeAD_Update:
+	ld l,(ix + EnvelopeAD.reset)
+	ld h,(ix + EnvelopeAD.reset + 1)
+	bit 6,(hl)
+	call nz,EnvelopeAD_Reset
 	ld l,(ix + EnvelopeAD.trigger)
 	ld h,(ix + EnvelopeAD.trigger + 1)
 	bit 6,(hl)
-	call nz,EnvelopeAD_Reset
+	call nz,EnvelopeAD_Trigger
 	bit 7,(ix + EnvelopeAD.phase)  ; to test a third phase: rlc (ix) ; jp po
 	jr nz,EnvelopeAD_UpdateDecay
 	jp EnvelopeAD_UpdateAttack
@@ -116,3 +126,4 @@ EnvelopeAD_labels:
 	db "Attack",0
 	db "Decay",0
 	db "Trigger",0
+	db "Reset",0
