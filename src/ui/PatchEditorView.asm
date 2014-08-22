@@ -96,10 +96,6 @@ PatchEditorView_PaintProgressBar:
 ; hl = buffer address
 PatchEditorView_PaintUpdate:
 	call PatchEditorView_PaintFocus
-	ld e,(ix + PatchEditor.patch)
-	ld d,(ix + PatchEditor.patch + 1)
-	ld ixl,e
-	ld ixh,d
 	call PatchEditorView_PaintPatch
 	ret
 
@@ -162,6 +158,7 @@ PatchEditorView_ClearBackground:
 PatchEditorView_PaintPatch: PROC
 	push bc
 	push ix
+	call PatchEditor_GetPatch
 	call Patch_GetModuleCount
 	pop ix
 	ld a,c
@@ -177,6 +174,7 @@ Loop:
 	push ix
 	push hl
 	ld a,0
+	call PatchEditor_GetPatch
 	call Patch_GetModule
 	pop hl
 	ld a,0
