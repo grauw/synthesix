@@ -78,8 +78,8 @@ EnvelopeAD_UpdateAttack: PROC
 	ld l,(ix + EnvelopeAD.attack)
 	ld h,(ix + EnvelopeAD.attack + 1)
 	add a,(hl)
-	ld (ix + EnvelopeAD.counter),a
 	jr c,Complete
+	ld (ix + EnvelopeAD.counter),a
 	rra
 	ld (ix + EnvelopeAD.value),a
 	bit 0,(ix + EnvelopeAD.sign)
