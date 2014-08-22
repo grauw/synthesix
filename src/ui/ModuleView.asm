@@ -102,7 +102,10 @@ ModuleView_PaintModuleType:
 	call ModuleView_PaintBottom
 	ret
 
-;
+; de = labels
+; ix = module type
+; iy = buffer
+; hl = buffer address
 ModuleView_PaintTop: PROC
 	push de
 	push hl
@@ -139,6 +142,10 @@ NotTooLong:
 	ret
 	ENDP
 
+; de = labels
+; ix = module type
+; iy = buffer
+; hl = buffer address
 ModuleView_PaintBottom:
 	push de
 	push hl
@@ -150,6 +157,10 @@ ModuleView_PaintBottom:
 	pop de
 	ret
 
+; de = labels
+; ix = module type
+; iy = buffer
+; hl = buffer address
 ModuleView_PaintOutputs: PROC
 	bit 0,(ix + ModuleType.outputCount + 1)
 	jr nz,Limit
@@ -170,6 +181,10 @@ Loop:
 	jp Loop
 	ENDP
 
+; de = labels
+; ix = module type
+; iy = buffer
+; hl = buffer address
 ModuleView_PaintOutput: PROC
 	push de
 	push hl
@@ -201,6 +216,10 @@ Done:
 	ret
 	ENDP
 
+; de = labels
+; ix = module type
+; iy = buffer
+; hl = buffer address
 ModuleView_PaintInputs: PROC
 	bit 0,(ix + ModuleType.inputCount + 1)
 	jr nz,Limit
@@ -221,6 +240,10 @@ Loop:
 	jp Loop
 	ENDP
 
+; de = labels
+; ix = module type
+; iy = buffer
+; hl = buffer address
 ModuleView_PaintInput: PROC
 	push de
 	push hl
