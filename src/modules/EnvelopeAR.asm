@@ -16,8 +16,6 @@ EnvelopeAR: MACRO
 	reset:
 		dw Constants_instance + 0
 	inputsEnd:
-	sign:
-		db 0
 	counter:
 		db 0
 	labels: equ EnvelopeAR_labels
@@ -73,17 +71,10 @@ EnvelopeAR_UpdateAttack: PROC
 	ld (ix + EnvelopeAR.counter),a
 	rra
 	ld (ix + EnvelopeAR.value),a
-	bit 0,(ix + EnvelopeAR.sign)
-	ret z
-	cpl
-	ld (ix + EnvelopeAR.value),a
 	ret
 Complete:
 	ld (ix + EnvelopeAR.counter),255
 	ld (ix + EnvelopeAR.value),127
-	bit 0,(ix + EnvelopeAR.sign)
-	ret z
-	ld (ix + EnvelopeAR.value),~127
 	ret
 	ENDP
 
@@ -97,17 +88,10 @@ EnvelopeAR_UpdateRelease: PROC
 	ld (ix + EnvelopeAR.counter),a
 	rra
 	ld (ix + EnvelopeAR.value),a
-	bit 0,(ix + EnvelopeAR.sign)
-	ret z
-	cpl
-	ld (ix + EnvelopeAR.value),a
 	ret
 Complete:
 	ld (ix + EnvelopeAR.counter),0
 	ld (ix + EnvelopeAR.value),0
-	bit 0,(ix + EnvelopeAR.sign)
-	ret z
-	ld (ix + EnvelopeAR.value),~0
 	ret
 	ENDP
 

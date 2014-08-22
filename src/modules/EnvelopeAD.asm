@@ -16,8 +16,6 @@ EnvelopeAD: MACRO
 	reset:
 		dw Constants_instance + 0
 	inputsEnd:
-	sign:
-		db 0
 	phase:
 		db -1
 	counter:
@@ -82,10 +80,6 @@ EnvelopeAD_UpdateAttack: PROC
 	ld (ix + EnvelopeAD.counter),a
 	rra
 	ld (ix + EnvelopeAD.value),a
-	bit 0,(ix + EnvelopeAD.sign)
-	ret z
-	cpl
-	ld (ix + EnvelopeAD.value),a
 	ret
 Complete:
 	ld (ix + EnvelopeAD.phase),-1
@@ -105,17 +99,10 @@ ContinueFromAttack:
 	ld (ix + EnvelopeAD.counter),a
 	rra
 	ld (ix + EnvelopeAD.value),a
-	bit 0,(ix + EnvelopeAD.sign)
-	ret z
-	cpl
-	ld (ix + EnvelopeAD.value),a
 	ret
 Complete:
 	ld (ix + EnvelopeAD.counter),0
 	ld (ix + EnvelopeAD.value),0
-	bit 0,(ix + EnvelopeAD.sign)
-	ret z
-	ld (ix + EnvelopeAD.value),~0
 	ret
 	ENDP
 
