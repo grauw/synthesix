@@ -1,6 +1,8 @@
 ;
 ; Display a module
 ;
+ModuleView_PORTS: equ 14
+
 ; de = module
 ; ix = module type
 ; iy = buffer
@@ -31,7 +33,7 @@ ModuleView_PaintUpdate: PROC
 	ld bc,UIBuffer.WIDTH * 1 + 10
 	add hl,bc
 
-	ld c,14
+	ld c,ModuleView_PORTS
 	ld a,(ix + ModuleType.outputCount)
 	or (ix + ModuleType.outputCount + 1)
 	jr z,NoOutputs
@@ -165,10 +167,10 @@ ModuleView_PaintOutputs: PROC
 	bit 0,(ix + ModuleType.outputCount + 1)
 	jr nz,Limit
 	ld a,(ix + ModuleType.outputCount)
-	cp 14
+	cp ModuleView_PORTS
 	jr c,Loop
 Limit:
-	ld a,14
+	ld a,ModuleView_PORTS
 Loop:
 	and a
 	ret z
@@ -224,10 +226,10 @@ ModuleView_PaintInputs: PROC
 	bit 0,(ix + ModuleType.inputCount + 1)
 	jr nz,Limit
 	ld a,(ix + ModuleType.inputCount)
-	cp 14
+	cp ModuleView_PORTS
 	jr c,Loop
 Limit:
-	ld a,14
+	ld a,ModuleView_PORTS
 Loop:
 	and a
 	ret z
