@@ -57,6 +57,7 @@ PatchEditor_GetPatch:
 ; b = width
 ; bc <- position
 ; f <- c: position moved
+; Modifies: af, bc
 PatchEditor_GetModuleScrollPosition: PROC
 	ld c,(ix + PatchEditor.moduleScrollPosition)
 	ld a,(ix + PatchEditor.module)
@@ -84,6 +85,7 @@ MoveLeft:
 ; b = height
 ; bc <- position
 ; f <- c: position moved
+; Modifies: af, bc
 PatchEditor_GetPortScrollPosition: PROC
 	ld c,(ix + PatchEditor.portScrollPosition)
 	ld a,(ix + PatchEditor.port)
