@@ -79,6 +79,7 @@ EnvelopeAD_UpdateAttack: PROC
 	ret
 Complete:
 	ld (ix + EnvelopeAD.phase),-1
+	xor a
 	jp EnvelopeAD_UpdateDecay.ContinueFromAttack
 	ENDP
 
