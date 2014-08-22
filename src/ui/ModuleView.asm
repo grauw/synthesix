@@ -32,64 +32,66 @@ ModuleView_PaintBackground:
 ModuleView_PaintUpdate: PROC
 	ld bc,UIBuffer.WIDTH * 1 + 10
 	add hl,bc
-
-	ld c,ModuleView_PORTS
 	ld a,(ix + ModuleType.outputCount)
-	or (ix + ModuleType.outputCount + 1)
-	jr z,NoOutputs
-	ld a,(ix + ModuleType.outputs)
-	ld b,(ix + ModuleType.outputCount)
-	push de
-	push ix
-	ld ixl,e
-	ld ixh,d
-OutputsLoop:
+	add a,(ix + ModuleType.inputCount)
+	ld c,a
+	ld a,0
+	ld b,ModuleView_PORTS
+Loop:
 	push af
 	push bc
+	push de
 	push hl
-	call OutputView_Paint
+	call ModuleView_PaintUpdatePort
 	pop hl
+	pop de
 	ld bc,UIBuffer.WIDTH
 	add hl,bc
 	pop bc
 	pop af
-	dec c
-	jp z,Exit
 	inc a
-	djnz OutputsLoop
-	pop ix
-	pop de
-NoOutputs:
-
-	ld a,(ix + ModuleType.inputCount)
-	or (ix + ModuleType.inputCount + 1)
-	jr z,NoInputs
-	ld a,(ix + ModuleType.inputs)
-	ld b,(ix + ModuleType.inputCount)
-	push de
-	push ix
-	ld ixl,e
-	ld ixh,d
-InputsLoop:
-	push af
-	push bc
-	push hl
-	call InputView_Paint
-	pop hl
-	ld bc,UIBuffer.WIDTH
-	add hl,bc
-	pop bc
-	pop af
-	dec c
-	jp z,Exit
-	inc a
-	inc a
-	djnz InputsLoop
-Exit:
-	pop ix
-	pop de
-NoInputs:
+	cp c
+	ret z
+	djnz Loop
 	ret
+	ENDP
+
+; a = port
+; de = module
+; ix = module type
+; iy = buffer
+; hl = buffer address
+; Modifies: af, bc, de, hl
+ModuleView_PaintUpdatePort: PROC
+	bit 0,(ix + ModuleType.outputCount + 1)
+	jr nz,Output
+	ld b,(ix + ModuleType.outputCount)
+	sub b
+	jr nc,Input
+	add a,b
+Output:
+	add a,(ix + ModuleType.outputs)
+	push hl
+	ld l,a
+	ld h,0
+	add hl,de
+	ld a,(hl)
+	pop hl
+	jp ValueView_Paint
+Input:
+	add a,a
+	add a,(ix + ModuleType.inputs)
+	push hl
+	ld l,a
+	ld h,0
+	add hl,de
+	ld a,(hl)
+	inc hl
+	ld h,(hl)
+	ld l,a
+	ld a,(hl)
+	pop hl
+	jp ValueView_Paint
 	ENDP
 
 ; ix = module type
