@@ -19,7 +19,7 @@ EnvelopeAD: MACRO
 	phase:
 		db -1
 	counter:
-		db 255
+		db 0
 	labels: equ EnvelopeAD_labels
 	_size:
 	ENDM
@@ -79,7 +79,7 @@ EnvelopeAD_UpdateAttack: PROC
 	ret
 Complete:
 	ld (ix + EnvelopeAD.phase),-1
-	xor a
+	ld a,255
 	jp EnvelopeAD_UpdateDecay.ContinueFromAttack
 	ENDP
 
@@ -88,11 +88,10 @@ EnvelopeAD_UpdateDecay: PROC
 	ld a,(ix + EnvelopeAD.counter)
 	ld l,(ix + EnvelopeAD.decay)
 	ld h,(ix + EnvelopeAD.decay + 1)
-	add a,(hl)
+	sub (hl)
 	jr c,Complete
 ContinueFromAttack:
 	ld (ix + EnvelopeAD.counter),a
-	cpl
 	rra
 	ld (ix + EnvelopeAD.value),a
 	bit 0,(ix + EnvelopeAD.sign)
@@ -101,7 +100,7 @@ ContinueFromAttack:
 	ld (ix + EnvelopeAD.value),a
 	ret
 Complete:
-	ld (ix + EnvelopeAD.counter),255
+	ld (ix + EnvelopeAD.counter),0
 	ld (ix + EnvelopeAD.value),0
 	bit 0,(ix + EnvelopeAD.sign)
 	ret z
