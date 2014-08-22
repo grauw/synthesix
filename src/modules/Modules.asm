@@ -25,3 +25,4 @@
 	INCLUDE "PitchBend.asm"
 	INCLUDE "Select8.asm"
 	INCLUDE "Sequence8.asm"
+	INCLUDE "MidiClock.asm"
