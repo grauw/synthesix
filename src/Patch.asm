@@ -204,7 +204,7 @@ Patch_Load: PROC
 ;	call Patch_AddLink
 	; 8-step sequence
 	ld hl,17 << 8 | 0  ; Select8.position
-	ld de,7  << 8 | 1  ; Counter.tally
+	ld de,16 << 8 | 1  ; MidiClock.counter
 	call Patch_AddLink
 	ld hl,17 << 8 | 1   ; Select8.steps 0
 	ld de,0  << 8 | 10  ; Value
