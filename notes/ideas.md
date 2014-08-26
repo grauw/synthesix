@@ -130,8 +130,6 @@ Synthesis core
     is for educational or development use only, and should never appear in a
     commercial design.” <http://www.midi.org/techspecs/manid.php>
 
-* Change LFOs so that they use a single phase input.
-
 * Add poly pressure array to channel
   * Let notes pull from it
   * Should they take highest between channel and poly pressure?
@@ -310,13 +308,8 @@ User interface
   * Indicate poly connections by showing double or triple wires
 
 * Selecting a value and pressing ENTER enters link edit mode
-  * Cursor turns green and selects
-  * If input, selection moves to the current value target
-  * Move selection to another field to choose
   * Link updates immediately to audit (and notice lucky coincidences)
-  * Press ESC to cancel selection, press ENTER to commit
   * Hold SHIFT to enter MIDI learn mode (move controller to select)
-  * Press BACKSPACE to delete link and fix the value
   * Draw line between input and source (when pressing SHIFT?)
 
 * Selecting a module and pressing ENTER enters module edit mode
