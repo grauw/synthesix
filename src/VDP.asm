@@ -221,6 +221,19 @@ VDP_SetRegister:
 	out (VDP_PORT_1),a
 	ret
 
+; Set the palette referenced by hl.
+; Modifies: af, bc, hl
+VDP_SetPalette:
+	xor a
+	di
+	out (VDP_PORT_1),a
+	ld a,16 | VDP_REGISTER
+	ei
+	out (VDP_PORT_1),a
+	ld bc,32 << 8 | 9AH
+	otir
+	ret
+
 ; hl = address bits 0-15
 ; a = address bit 16
 VDP_SetReadAddress:

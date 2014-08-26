@@ -18,6 +18,8 @@ UI_Init:
 	call VDP_Enable212Lines
 	call VDP_Enable60Hz
 	call VDP_EnableBlink
+	ld hl,UI_palette
+	call VDP_SetPalette
 	call Font_Install
 	call UISynthesix_New
 	ld (UI_root),ix
@@ -30,6 +32,12 @@ UI_Update:
 	ret
 
 ;
+UI_palette:
+	dw 000H, 000H, 500H, 733H  ; format: GRB
+	dw 024H, 024H, 151H, 627H
+	dw 070H, 373H, 661H, 663H
+	dw 411H, 265H, 444H, 777H
+
 	SECTION RAM
 
 UI_root:
