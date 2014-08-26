@@ -265,7 +265,7 @@ VDP_SetWriteAddress14Bit:
 
 ; hl = source address
 ; bc = byte count
-; Modifies: af
+; Modifies: af, bc, hl
 VDP_Read: PROC
 	dec bc
 	inc b
@@ -282,7 +282,7 @@ Loop:
 
 ; hl = source address
 ; bc = byte count
-; Modifies: af
+; Modifies: af, bc, hl
 VDP_Write: PROC
 	dec bc
 	inc b
