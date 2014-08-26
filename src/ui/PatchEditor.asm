@@ -172,6 +172,10 @@ ProcessKey:
 	jp z,Cancel
 	cp 8
 	jp z,Backspace
+	cp 18
+	jp z,Insert
+	cp 127
+	jp z,Delete
 	ret
 Select:
 	bit 0,(ix + PatchEditor.mode)
@@ -216,6 +220,24 @@ Backspace:
 	call PatchEditor_IsOutputSelected
 	ret c
 	call PatchEditor_GetInputValue
+	call PatchEditor_SetInputValue
+	ret
+Insert:
+	bit 0,(ix + PatchEditor.mode)
+	ret nz
+	call PatchEditor_IsOutputSelected
+	ret c
+	call PatchEditor_GetInputValue
+	inc a
+	call PatchEditor_SetInputValue
+	ret
+Delete:
+	bit 0,(ix + PatchEditor.mode)
+	ret nz
+	call PatchEditor_IsOutputSelected
+	ret c
+	call PatchEditor_GetInputValue
+	dec a
 	call PatchEditor_SetInputValue
 	ret
 KeyLeft:
