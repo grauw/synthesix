@@ -205,6 +205,9 @@ Patch_Load: PROC
 ;	ld de,2  << 8 | 7  ; Controller 7
 ;	call Patch_AddLink
 	; 8-step sequence
+	ld hl,16 << 8 | 1   ; MidiClock.divider
+	ld de,0  << 8 | 12  ; Value
+	call Patch_AddLink
 	ld hl,17 << 8 | 0  ; Sequence8.trigger
 	ld de,16 << 8 | 0  ; MidiClock.trigger
 	call Patch_AddLink
