@@ -170,6 +170,8 @@ ProcessKey:
 	jp z,Select
 	cp 27
 	jp z,Cancel
+	cp 8
+	jp z,Backspace
 	ret
 Select:
 	bit 0,(ix + PatchEditor.mode)
@@ -207,6 +209,14 @@ Cancel:
 	ld (ix + PatchEditor.module),b
 	ld (ix + PatchEditor.port),c
 	ld (ix + PatchEditor.mode),00B
+	ret
+Backspace:
+	bit 0,(ix + PatchEditor.mode)
+	ret nz
+	call PatchEditor_IsOutputSelected
+	ret c
+	call PatchEditor_GetInputValue
+	call PatchEditor_SetInputValue
 	ret
 KeyLeft:
 	ld a,(ix + PatchEditor.module)
@@ -342,6 +352,50 @@ PatchEditor_GetInputTarget:
 	ld d,(hl)
 	call Patch_FindModuleOutputPort
 	pop ix
+	ret
+
+; Return the value of the selected input port.
+; ix = this
+; a <- value
+; de <- value address
+; hl <- input port address
+PatchEditor_GetInputValue:
+	push ix
+	call PatchEditor_IsOutputSelected
+	call c,System_ThrowException  ; only works on inputs
+	ld c,(ix + PatchEditor.module)
+	ld a,(ix + PatchEditor.port)
+	call PatchEditor_GetPort
+	pop ix
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	dec hl
+	ld a,(de)
+	ret
+
+; Sets the value of the selected input to a constant value.
+; ix = this
+; a = value
+; hl <- input port address
+PatchEditor_SetInputValue:
+	ld hl,Constants_instance
+	ld e,a
+	ld d,0
+	add hl,de
+	push hl
+	push ix
+	call PatchEditor_IsOutputSelected
+	call c,System_ThrowException  ; only works on inputs
+	ld c,(ix + PatchEditor.module)
+	ld a,(ix + PatchEditor.port)
+	call PatchEditor_GetPort
+	pop ix
+	pop de
+	ld (hl),e
+	inc hl
+	ld (hl),d
+	dec hl
 	ret
 
 ; ix = this
