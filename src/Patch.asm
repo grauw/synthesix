@@ -97,6 +97,8 @@ Patch_Load: PROC
 	call Patch_AddModule                ; module 16
 	ld hl,ModuleType_select8
 	call Patch_AddModule                ; module 17
+	ld hl,ModuleType_attenuateAdd
+	call Patch_AddModule                ; module 18
 	ld hl,15 << 8 | 0  ; SCCVoice.note
 	ld de,3  << 8 | 0  ; Note.key
 	call Patch_AddLink
@@ -230,8 +232,14 @@ Patch_Load: PROC
 	ld hl,17 << 8 | 8   ; Select8.steps 7
 	ld de,0  << 8 | 38  ; Value
 	call Patch_AddLink
+	ld hl,18 << 8 | 0  ; AttenuateAdd.multiplicand
+	ld de,17 << 8 | 0  ; Select8.value
+	call Patch_AddLink
+	ld hl,18 << 8 | 2  ; AttenuateAdd.addend
+	ld de,11 << 8 | 0  ; AddPitch.note
+	call Patch_AddLink
 ;	ld hl,15 << 8 | 3  ; SCCVoice.wave
-;	ld de,17 << 8 | 0  ; Select8.value
+;	ld de,18 << 8 | 0  ; AttenuateAdd.value
 ;	call Patch_AddLink
 	ret
 	ENDP
