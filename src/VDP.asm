@@ -12,6 +12,12 @@ VDP_MIRROR_8: equ 0FFE7H - 8
 VDP_MIRROR_25: equ 0FFFAH - 25
 
 VDP_InitScreen0: PROC
+	xor a
+	ld hl,0
+	call VDP_SetWriteAddress
+	xor a
+	ld bc,27 * 80
+	call VDP_Fill
 	ld a,80
 	ld (LINL40),a
 	ld a,(EXPTBL)
