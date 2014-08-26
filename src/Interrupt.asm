@@ -41,11 +41,11 @@ Interrupt_EnableInterruptHandler:
 	ld a,Interrupt_im2Table >> 8
 	ld i,a
 	im 2
-	call VDP_EnableLineInt
+;	call VDP_EnableLineInt
 	ret
 
 Interrupt_DisableInterruptHandler:
-	call VDP_DisableLineInt
+;	call VDP_DisableLineInt
 	im 1
 	ret
 
