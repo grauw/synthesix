@@ -91,18 +91,18 @@ Patch_Load: PROC
 	call Patch_AddModule                ; module 13
 	ld hl,ModuleType_attenuateAdd
 	call Patch_AddModule                ; module 14
-	ld hl,ModuleType_sccVoice
-	call Patch_AddModule                ; module 15
 	ld hl,ModuleType_midiClock
-	call Patch_AddModule                ; module 16
+	call Patch_AddModule                ; module 15
 	ld hl,ModuleType_sequence8
-	call Patch_AddModule                ; module 17
+	call Patch_AddModule                ; module 16
 	ld hl,ModuleType_attenuateAdd
+	call Patch_AddModule                ; module 17
+	ld hl,ModuleType_sccVoice
 	call Patch_AddModule                ; module 18
-	ld hl,15 << 8 | 0  ; SCCVoice.note
+	ld hl,18 << 8 | 0  ; SCCVoice.note
 	ld de,3  << 8 | 0  ; Note.key
 	call Patch_AddLink
-	ld hl,15 << 8 | 2  ; SCCVoice.amplitude
+	ld hl,18 << 8 | 2  ; SCCVoice.amplitude
 	ld de,3  << 8 | 2  ; Note.gate
 	call Patch_AddLink
 	; AD envelope
@@ -137,7 +137,7 @@ Patch_Load: PROC
 	ld hl,5 << 8 | 2  ; EnvelopeAR.gate
 	ld de,6 << 8 | 0  ; Sustain.value
 	call Patch_AddLink
-	ld hl,15 << 8 | 2  ; SCCVoice.amplitude
+	ld hl,18 << 8 | 2  ; SCCVoice.amplitude
 	ld de,5  << 8 | 0  ; EnvelopeAR.value
 	call Patch_AddLink
 	; After touch vibrato
@@ -153,7 +153,7 @@ Patch_Load: PROC
 	ld hl,9 << 8 | 1  ; Attenuate.multiplier
 	ld de,2 << 8 | 1  ; Controller 1
 	call Patch_AddLink
-	ld hl,15 << 8 | 1  ; SCCVoice.detune
+	ld hl,18 << 8 | 1  ; SCCVoice.detune
 	ld de,9  << 8 | 0  ; Attenuate.value
 	call Patch_AddLink
 	; Pitch bend
@@ -175,10 +175,10 @@ Patch_Load: PROC
 	ld hl,11 << 8 | 3  ; AddPitch.addendDetune
 	ld de,9  << 8 | 0  ; Attenuate.value
 	call Patch_AddLink
-	ld hl,15 << 8 | 0  ; SCCVoice.note
+	ld hl,18 << 8 | 0  ; SCCVoice.note
 	ld de,11 << 8 | 0  ; AddPitch.note
 	call Patch_AddLink
-	ld hl,15 << 8 | 1  ; SCCVoice.detune
+	ld hl,18 << 8 | 1  ; SCCVoice.detune
 	ld de,11 << 8 | 1  ; AddPitch.detune
 	call Patch_AddLink
 	; Pulse width modulation
@@ -197,52 +197,52 @@ Patch_Load: PROC
 	ld hl,14 << 8 | 2   ; AttenuateAdd.addend
 	ld de,0  << 8 | 64  ; Value 64
 	call Patch_AddLink
-	ld hl,15 << 8 | 3  ; SCCVoice.wave
+	ld hl,18 << 8 | 3  ; SCCVoice.wave
 	ld de,14 << 8 | 0  ; AttenuateAdd.value
 	call Patch_AddLink
 	; Pulse width control
-;	ld hl,15 << 8 | 3  ; SCCVoice.wave
+;	ld hl,18 << 8 | 3  ; SCCVoice.wave
 ;	ld de,2  << 8 | 7  ; Controller 7
 ;	call Patch_AddLink
 	; 8-step sequence
-	ld hl,16 << 8 | 1   ; MidiClock.divider
+	ld hl,15 << 8 | 1   ; MidiClock.divider
 	ld de,0  << 8 | 12  ; Value
 	call Patch_AddLink
-	ld hl,17 << 8 | 0  ; Sequence8.trigger
-	ld de,16 << 8 | 0  ; MidiClock.trigger
+	ld hl,16 << 8 | 0  ; Sequence8.trigger
+	ld de,15 << 8 | 0  ; MidiClock.trigger
 	call Patch_AddLink
-	ld hl,17 << 8 | 3   ; Sequence8.steps 0
+	ld hl,16 << 8 | 3   ; Sequence8.steps 0
 	ld de,0  << 8 | 10  ; Value
 	call Patch_AddLink
-	ld hl,17 << 8 | 4   ; Sequence8.steps 1
+	ld hl,16 << 8 | 4   ; Sequence8.steps 1
 	ld de,0  << 8 | 14  ; Value
 	call Patch_AddLink
-	ld hl,17 << 8 | 5   ; Sequence8.steps 2
+	ld hl,16 << 8 | 5   ; Sequence8.steps 2
 	ld de,0  << 8 | 18  ; Value
 	call Patch_AddLink
-	ld hl,17 << 8 | 6   ; Sequence8.steps 3
+	ld hl,16 << 8 | 6   ; Sequence8.steps 3
 	ld de,0  << 8 | 22  ; Value
 	call Patch_AddLink
-	ld hl,17 << 8 | 7   ; Sequence8.steps 4
+	ld hl,16 << 8 | 7   ; Sequence8.steps 4
 	ld de,0  << 8 | 26  ; Value
 	call Patch_AddLink
-	ld hl,17 << 8 | 8   ; Sequence8.steps 5
+	ld hl,16 << 8 | 8   ; Sequence8.steps 5
 	ld de,0  << 8 | 30  ; Value
 	call Patch_AddLink
-	ld hl,17 << 8 | 9   ; Sequence8.steps 6
+	ld hl,16 << 8 | 9   ; Sequence8.steps 6
 	ld de,0  << 8 | 34  ; Value
 	call Patch_AddLink
-	ld hl,17 << 8 | 10  ; Sequence8.steps 7
+	ld hl,16 << 8 | 10  ; Sequence8.steps 7
 	ld de,0  << 8 | 38  ; Value
 	call Patch_AddLink
-	ld hl,18 << 8 | 0  ; AttenuateAdd.multiplicand
-	ld de,17 << 8 | 0  ; Select8.value
+	ld hl,17 << 8 | 0  ; AttenuateAdd.multiplicand
+	ld de,16 << 8 | 0  ; Select8.value
 	call Patch_AddLink
-	ld hl,18 << 8 | 2  ; AttenuateAdd.addend
+	ld hl,17 << 8 | 2  ; AttenuateAdd.addend
 	ld de,11 << 8 | 0  ; AddPitch.note
 	call Patch_AddLink
-;	ld hl,15 << 8 | 3  ; SCCVoice.wave
-;	ld de,18 << 8 | 0  ; AttenuateAdd.value
+;	ld hl,18 << 8 | 3  ; SCCVoice.wave
+;	ld de,17 << 8 | 0  ; AttenuateAdd.value
 ;	call Patch_AddLink
 	ret
 	ENDP
