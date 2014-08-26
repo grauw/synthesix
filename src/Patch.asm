@@ -95,7 +95,7 @@ Patch_Load: PROC
 	call Patch_AddModule                ; module 15
 	ld hl,ModuleType_midiClock
 	call Patch_AddModule                ; module 16
-	ld hl,ModuleType_select8
+	ld hl,ModuleType_sequence8
 	call Patch_AddModule                ; module 17
 	ld hl,ModuleType_attenuateAdd
 	call Patch_AddModule                ; module 18
@@ -205,31 +205,31 @@ Patch_Load: PROC
 ;	ld de,2  << 8 | 7  ; Controller 7
 ;	call Patch_AddLink
 	; 8-step sequence
-	ld hl,17 << 8 | 0  ; Select8.position
-	ld de,16 << 8 | 1  ; MidiClock.counter
+	ld hl,17 << 8 | 0  ; Sequence8.trigger
+	ld de,16 << 8 | 0  ; MidiClock.trigger
 	call Patch_AddLink
-	ld hl,17 << 8 | 1   ; Select8.steps 0
+	ld hl,17 << 8 | 3   ; Sequence8.steps 0
 	ld de,0  << 8 | 10  ; Value
 	call Patch_AddLink
-	ld hl,17 << 8 | 2   ; Select8.steps 1
+	ld hl,17 << 8 | 4   ; Sequence8.steps 1
 	ld de,0  << 8 | 14  ; Value
 	call Patch_AddLink
-	ld hl,17 << 8 | 3   ; Select8.steps 2
+	ld hl,17 << 8 | 5   ; Sequence8.steps 2
 	ld de,0  << 8 | 18  ; Value
 	call Patch_AddLink
-	ld hl,17 << 8 | 4   ; Select8.steps 3
+	ld hl,17 << 8 | 6   ; Sequence8.steps 3
 	ld de,0  << 8 | 22  ; Value
 	call Patch_AddLink
-	ld hl,17 << 8 | 5   ; Select8.steps 4
+	ld hl,17 << 8 | 7   ; Sequence8.steps 4
 	ld de,0  << 8 | 26  ; Value
 	call Patch_AddLink
-	ld hl,17 << 8 | 6   ; Select8.steps 5
+	ld hl,17 << 8 | 8   ; Sequence8.steps 5
 	ld de,0  << 8 | 30  ; Value
 	call Patch_AddLink
-	ld hl,17 << 8 | 7   ; Select8.steps 6
+	ld hl,17 << 8 | 9   ; Sequence8.steps 6
 	ld de,0  << 8 | 34  ; Value
 	call Patch_AddLink
-	ld hl,17 << 8 | 8   ; Select8.steps 7
+	ld hl,17 << 8 | 10  ; Sequence8.steps 7
 	ld de,0  << 8 | 38  ; Value
 	call Patch_AddLink
 	ld hl,18 << 8 | 0  ; AttenuateAdd.multiplicand
