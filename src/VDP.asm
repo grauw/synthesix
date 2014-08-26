@@ -268,9 +268,9 @@ VDP_SetWriteAddress14Bit:
 ; Modifies: af
 VDP_Read: PROC
 	dec bc
-	ld a,b
-	inc a
+	inc b
 	inc c
+	ld a,b
 	ld b,c
 	ld c,VDP_PORT_0
 Loop:
@@ -285,9 +285,9 @@ Loop:
 ; Modifies: af
 VDP_Write: PROC
 	dec bc
-	ld a,b
-	inc a
+	inc b
 	inc c
+	ld a,b
 	ld b,c
 	ld c,VDP_PORT_0
 Loop:
