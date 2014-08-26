@@ -120,12 +120,8 @@ VDP_EnableBlink: PROC
 	ld hl,0C00H
 	call VDP_SetWriteAddress
 	xor a
-	ld bc,0E02H
-ClearLoop:
-	out (98H),a
-	djnz ClearLoop
-	dec c
-	jp nz,ClearLoop
+	ld bc,27 * 10
+	call VDP_Fill
 	ret
 	ENDP
 
@@ -293,6 +289,24 @@ VDP_Write: PROC
 Loop:
 	otir
 	dec a
+	jp nz,Loop
+	ret
+	ENDP
+
+; a = fill value
+; bc = byte count
+; Modifies: af, bc, l
+VDP_Fill: PROC
+	dec bc
+	inc b
+	inc c
+	ld l,b
+	ld b,c
+	ld c,l
+Loop:
+	out (VDP_PORT_0),a
+	djnz Loop
+	dec c
 	jp nz,Loop
 	ret
 	ENDP
