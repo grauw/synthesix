@@ -147,7 +147,6 @@ Constants_labels:
 	db "125",0
 	db "126",0
 	db "127",0
-	db "-128",0
 	db "-127",0
 	db "-126",0
 	db "-125",0
@@ -275,3 +274,4 @@ Constants_labels:
 	db "-3",0
 	db "-2",0
 	db "-1",0
+	db "-0",0
