@@ -5,7 +5,7 @@
 ; hl = string buffer (4 characters)
 ValueView_Paint:
 	push hl
-	ld hl,KeyMidi_instance.shift
+	ld hl,KeyMidi_instance.caps
 	bit 0,(hl)
 	pop hl
 	jp nz,ValueView_FormatNumber

@@ -19,6 +19,8 @@ KeyMidi: MACRO
 		db 0
 	shift:
 		db 0
+	caps:
+		db 0
 	ENDM
 
 ; ix = this
@@ -199,6 +201,8 @@ KeyMidi_ProcessKeyPress:
 	jp z,KeyMidi_PressF4
 	cp 5
 	jp z,KeyMidi_PressF5
+	cp 6
+	jp z,KeyMidi_PressCaps
 	cp 0
 	jp nz,KeyMidi_KeyCodePress
 	ret
@@ -312,6 +316,23 @@ KeyMidi_PressF5:
 	call MidiIn_ControlChange
 	ret
 
+; ix = this
+KeyMidi_PressCaps: PROC
+	ld a,(ix + KeyMidi.caps)
+	cpl
+	ld (ix + KeyMidi.caps),a
+	and a
+	in a,(PPI_PORT_C)
+	jp z,Off
+	and 10111111B
+	out (PPI_PORT_C),a
+	ret
+Off:
+	or 01000000B
+	out (PPI_PORT_C),a
+	ret
+	ENDP
+
 KeyMidi_noteMapping:
 	db  -75,   0, -61, -63,   0, -66, -68, -70  ; row 0: 0 1 2 3 4 5 6 7
 	db    0, -73,   0, -78, -56, -77, -79, -63  ; row 1: 8 9 - = \ [ ] ;
@@ -319,7 +340,7 @@ KeyMidi_noteMapping:
 	db  -52, -51, -64,   0, -54, -56, -72, -58  ; row 3: C D E F G H I J
 	db    0, -61, -59, -57, -74, -76, -60, -65  ; row 4: K L M N O P Q R
 	db  -49, -67, -71, -53, -62, -50, -69, -48  ; row 5: S T U V W X Y Z
-	db    3,   0,   0,   0,   0,   0,   0,   0  ; row 6: SHIFT CTRL GRAPH CAPS CODE F1 F2 F3
+	db    3,   0,   0,   6,   0,   0,   0,   0  ; row 6: SHIFT CTRL GRAPH CAPS CODE F1 F2 F3
 	db    4,   5,  27,   9,   2,   8,  24,  13  ; row 7: F4 F5 ESC TAB STOP BS SELECT RET
 	db    1,  11,  18, 127,  29,  30,  31,  28  ; row 8: SPACE HOME INS DEL ← ↑ ↓ →
 	db    0,   0,   0,   0,   0,   0,   0,   0  ; row 9: NUM* NUM+ NUM/ NUM0 NUM1 NUM2 NUM3 NUM4
