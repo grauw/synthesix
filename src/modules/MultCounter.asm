@@ -74,7 +74,7 @@ Reset:
 
 ;
 MultCounter_labels:
-	db "Mult Counter",0
+	db "Mult counter",0
 	db "Counter",0
 	db "Tally",0
 	db "Overflow",0

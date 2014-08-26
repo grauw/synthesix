@@ -95,7 +95,7 @@ MidiClock_GetPort:
 
 ;
 MidiClock_labels:
-	db "MIDI Clock",0
+	db "MIDI clock",0
 	db "Trigger",0
 	db "Counter",0
 	db "Fraction",0

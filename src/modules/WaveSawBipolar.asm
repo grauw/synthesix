@@ -47,6 +47,6 @@ WaveSawBipolar_Update: PROC
 
 ;
 WaveSawBipolar_labels:
-	db 244,245," Wave Bipolar",0
+	db 244,245," Wave bipolar",0
 	db "Value",0
 	db "Phase",0

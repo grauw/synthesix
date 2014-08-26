@@ -56,7 +56,7 @@ Low:
 
 ;
 WavePulseBipolar_labels:
-	db 240,243," Wave Bipolar",0
+	db 240,243," Wave bipolar",0
 	db "Value",0
 	db "Phase",0
 	db "Width",0

@@ -83,7 +83,7 @@ Reset:
 
 ;
 DivCounter_labels:
-	db "Div Counter",0
+	db "Div counter",0
 	db "Counter",0
 	db "Tally",0
 	db "Overflow",0

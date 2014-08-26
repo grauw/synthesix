@@ -64,7 +64,7 @@ NegativeUp:
 
 ;
 WaveTriangleBipolar_labels:
-	db 246,247," Wave Bipolar",0
+	db 246,247," Wave bipolar",0
 	db "Value",0
 	db "Phase",0
 	db "Phase Fine",0

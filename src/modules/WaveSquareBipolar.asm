@@ -52,6 +52,6 @@ Low:
 
 ;
 WaveSquareBipolar_labels:
-	db 242,243," Wave Bipolar",0
+	db 242,243," Wave bipolar",0
 	db "Value",0
 	db "Phase",0

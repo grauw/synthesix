@@ -73,6 +73,6 @@ WaveSineBipolar_table:
 
 ;
 WaveSineBipolar_labels:
-	db 248,249," Wave Bipolar",0
+	db 248,249," Wave bipolar",0
 	db "Value",0
 	db "Phase",0
