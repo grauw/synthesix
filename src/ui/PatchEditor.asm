@@ -159,60 +159,73 @@ Loop:
 	jp Loop
 ProcessKey:
 	cp 29
-	jp z,KeyLeft
+	jp z,PatchEditor_KeyLeft
 	cp 28
-	jp z,KeyRight
+	jp z,PatchEditor_KeyRight
 	cp 30
-	jp z,KeyUp
+	jp z,PatchEditor_KeyUp
 	cp 31
-	jp z,KeyDown
+	jp z,PatchEditor_KeyDown
 	cp 13
-	jp z,Select
+	jp z,PatchEditor_Select
 	cp 27
-	jp z,Cancel
+	jp z,PatchEditor_Cancel
 	cp 8
-	jp z,Backspace
+	jp z,PatchEditor_Backspace
 	cp 18
-	jp z,Insert
+	jp z,PatchEditor_Insert
 	cp 127
-	jp z,Delete
+	jp z,PatchEditor_Delete
 	ret
-KeyLeft:
+	ENDP
+
+; ix = this
+PatchEditor_KeyLeft:
 	ld a,(ix + PatchEditor.module)
 	and a
 	call z,PatchEditor_GetModuleCount
 	dec a
 	ld (ix + PatchEditor.module),a
-	jp Clamp
-KeyRight:
+	jp PatchEditor_Clamp
+
+; ix = this
+PatchEditor_KeyRight:
 	call PatchEditor_GetModuleCount
 	inc (ix + PatchEditor.module)
 	cp (ix + PatchEditor.module)
-	jp nz,Clamp
+	jp nz,PatchEditor_Clamp
 	ld (ix + PatchEditor.module),0
-	jp Clamp
-KeyUp:
+	jp PatchEditor_Clamp
+
+; ix = this
+PatchEditor_KeyUp:
 	ld a,(ix + PatchEditor.port)
 	and a
 	call z,PatchEditor_GetPortCount
 	dec a
 	ld (ix + PatchEditor.port),a
 	ret
-KeyDown:
+
+; ix = this
+PatchEditor_KeyDown:
 	call PatchEditor_GetPortCount
 	inc (ix + PatchEditor.port)
 	cp (ix + PatchEditor.port)
 	ret nz
 	ld (ix + PatchEditor.port),0
 	ret
-Clamp:
+
+; ix = this
+PatchEditor_Clamp:
 	call PatchEditor_GetPortCount
 	dec a
 	cp (ix + PatchEditor.port)
 	ret nc
 	ld (ix + PatchEditor.port),a
 	ret
-Select:
+
+; ix = this
+PatchEditor_Select: PROC
 	bit 0,(ix + PatchEditor.mode)
 	jp nz,Assign
 	ld e,(ix + PatchEditor.module)
@@ -240,7 +253,10 @@ Assign:
 	ld (ix + PatchEditor.port),c
 	ld (ix + PatchEditor.mode),00B
 	ret
-Cancel:
+	ENDP
+
+; ix = this
+PatchEditor_Cancel:
 	bit 0,(ix + PatchEditor.mode)
 	ret z
 	ld b,(ix + PatchEditor.assignModule)
@@ -249,7 +265,9 @@ Cancel:
 	ld (ix + PatchEditor.port),c
 	ld (ix + PatchEditor.mode),00B
 	ret
-Backspace:
+
+; ix = this
+PatchEditor_Backspace:
 	bit 0,(ix + PatchEditor.mode)
 	ret nz
 	call PatchEditor_IsOutputSelected
@@ -257,7 +275,9 @@ Backspace:
 	call PatchEditor_GetInputValue
 	call PatchEditor_SetInputValue
 	ret
-Insert:
+
+; ix = this
+PatchEditor_Insert:
 	bit 0,(ix + PatchEditor.mode)
 	ret nz
 	call PatchEditor_IsOutputSelected
@@ -266,7 +286,9 @@ Insert:
 	inc a
 	call PatchEditor_SetInputValue
 	ret
-Delete:
+
+; ix = this
+PatchEditor_Delete:
 	bit 0,(ix + PatchEditor.mode)
 	ret nz
 	call PatchEditor_IsOutputSelected
@@ -275,7 +297,6 @@ Delete:
 	dec a
 	call PatchEditor_SetInputValue
 	ret
-	ENDP
 
 ; ix = this
 ; a <- module count
