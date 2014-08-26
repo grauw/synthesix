@@ -177,6 +177,41 @@ ProcessKey:
 	cp 127
 	jp z,Delete
 	ret
+KeyLeft:
+	ld a,(ix + PatchEditor.module)
+	and a
+	call z,PatchEditor_GetModuleCount
+	dec a
+	ld (ix + PatchEditor.module),a
+	jp Clamp
+KeyRight:
+	call PatchEditor_GetModuleCount
+	inc (ix + PatchEditor.module)
+	cp (ix + PatchEditor.module)
+	jp nz,Clamp
+	ld (ix + PatchEditor.module),0
+	jp Clamp
+KeyUp:
+	ld a,(ix + PatchEditor.port)
+	and a
+	call z,PatchEditor_GetPortCount
+	dec a
+	ld (ix + PatchEditor.port),a
+	ret
+KeyDown:
+	call PatchEditor_GetPortCount
+	inc (ix + PatchEditor.port)
+	cp (ix + PatchEditor.port)
+	ret nz
+	ld (ix + PatchEditor.port),0
+	ret
+Clamp:
+	call PatchEditor_GetPortCount
+	dec a
+	cp (ix + PatchEditor.port)
+	ret nc
+	ld (ix + PatchEditor.port),a
+	ret
 Select:
 	bit 0,(ix + PatchEditor.mode)
 	jp nz,Assign
@@ -239,41 +274,6 @@ Delete:
 	call PatchEditor_GetInputValue
 	dec a
 	call PatchEditor_SetInputValue
-	ret
-KeyLeft:
-	ld a,(ix + PatchEditor.module)
-	and a
-	call z,PatchEditor_GetModuleCount
-	dec a
-	ld (ix + PatchEditor.module),a
-	jp Clamp
-KeyRight:
-	call PatchEditor_GetModuleCount
-	inc (ix + PatchEditor.module)
-	cp (ix + PatchEditor.module)
-	jp nz,Clamp
-	ld (ix + PatchEditor.module),0
-	jp Clamp
-KeyUp:
-	ld a,(ix + PatchEditor.port)
-	and a
-	call z,PatchEditor_GetPortCount
-	dec a
-	ld (ix + PatchEditor.port),a
-	ret
-KeyDown:
-	call PatchEditor_GetPortCount
-	inc (ix + PatchEditor.port)
-	cp (ix + PatchEditor.port)
-	ret nz
-	ld (ix + PatchEditor.port),0
-	ret
-Clamp:
-	call PatchEditor_GetPortCount
-	dec a
-	cp (ix + PatchEditor.port)
-	ret nc
-	ld (ix + PatchEditor.port),a
 	ret
 	ENDP
 
