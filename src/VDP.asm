@@ -266,31 +266,33 @@ VDP_SetWriteAddress14Bit:
 ; hl = source address
 ; bc = byte count
 ; Modifies: af
-VDP_Read:
+VDP_Read: PROC
 	dec bc
 	ld a,b
 	inc a
 	inc c
 	ld b,c
 	ld c,VDP_PORT_0
-VDP_Read_Loop:
+Loop:
 	inir
 	dec a
-	jp nz,VDP_Read_Loop
+	jp nz,Loop
 	ret
+	ENDP
 
 ; hl = source address
 ; bc = byte count
 ; Modifies: af
-VDP_Write:
+VDP_Write: PROC
 	dec bc
 	ld a,b
 	inc a
 	inc c
 	ld b,c
 	ld c,VDP_PORT_0
-VDP_Write_Loop:
+Loop:
 	otir
 	dec a
-	jp nz,VDP_Write_Loop
+	jp nz,Loop
 	ret
+	ENDP
