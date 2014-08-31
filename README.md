@@ -8,8 +8,8 @@ Project information
 
 Author: Laurens Holst <laurens.nospam@grauw.nl>  
 Site: <https://bitbucket.org/grauw/synthesix>  
-Issues: <https://bitbucket.org/grauw/synthesix/issues>
-Support: <http://www.msx.org/forum/msx-talk/software/synthesix>
+Issues: <https://bitbucket.org/grauw/synthesix/issues>  
+Support: <http://www.msx.org/forum/msx-talk/software/synthesix>  
 License: Simplified BSD License
 
 Synthesix is synthesizer for MSX sound chips. It lets you play and tweak your
