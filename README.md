@@ -24,7 +24,7 @@ control over the sound that is played.
 System Requirements
 -------------------
 
-  * MSX2, MSX2+, MSX turboR and MSX1 models with V9938 VDP
+  * MSX2, MSX2+, MSX turboR or MSX1 models with V9938 VDP
   * 16kB video RAM
   * 64kB main RAM
   * 64kB Konami 4/5 ROM
