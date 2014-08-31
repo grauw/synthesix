@@ -111,37 +111,37 @@ to the pre-defined set of modules for your sonic exploration.
 Module information
 ------------------
 
-*Constants* All 256 different unchanging output values.
+**Constants** All 256 different unchanging output values.
 
-*Channel* MIDI channel values. /Program/ provides the currently selected
+**Channel** MIDI channel values. /Program/ provides the currently selected
 program. /C.Press/ provides the channel pressure (aftertouch). Finally,
 /Bend Course/ and /Bend Fine/ provide the pitch bend amount.
 
-*Controllers* MIDI controller values.
+**Controllers** MIDI controller values.
 
-*Note* MIDI note information for each note pressed. /Key/ specifies the note
+**Note** MIDI note information for each note pressed. /Key/ specifies the note
 number, /Velocity/ the note’s velocity, /Gate/ indicates whether the key is
 currently being pressed, /Trigger/ provides an impulse when the note gets
 pressed, and /Off velocity/ provides the note-off velocity (a seldom-used MIDI
 feature).
 
-*AD envelope* A triggered attack-decay envelope function. /Attack/ specifies
+**AD envelope** A triggered attack-decay envelope function. /Attack/ specifies
 the speed at which the value increases, /Decay/ the speed at which the value
 decreases after the peak has been reached, /Trigger/ connects to an impulse
 which (re)starts the attack phase, and /Reset/ resets the value, used if you
 want retriggered in stead of legato envelopes.
 
-*AR envelope* A gated attack-release envelope function. /Attack/ specifies the
+**AR envelope** A gated attack-release envelope function. /Attack/ specifies the
 speed at which the value increases, /Release/ the speed at which the value
 decreases after the peak has been reached, /Gate/ connects to a gate which will
 keep the attack phase active until it goes low, and /Reset/ resets the value,
 used if you want retriggered in stead of legato envelopes.
 
-*Sustain* Latches high gate values while held. /Gate/ provides the gate value,
+**Sustain** Latches high gate values while held. /Gate/ provides the gate value,
 low (off) when below 40H, /Hold/ specifies when the gate value needs to be held.
 Typically connected to the sustain pedal (CC# 64).
 
-*Mult counter* Increases a counter by a value for each trigger. /Trigger/ makes
+**Mult counter** Increases a counter by a value for each trigger. /Trigger/ makes
 the counter increase, /Increment/ specifies by how much the counter is
 increased, /Reset/ resets the counter if it receives an impulse, /Counter/
 outputs the current counter value, /Tally/ maintains a count of how often the
@@ -149,48 +149,48 @@ counter overflows, and /Overflow/ generates an impulse every time the counter
 overflows. If the trigger is connected to constant 127, the counter will run at
 control rate (60 ticks per second).
 
-*Sine wave bipolar* Takes a signed /Phase/ input representing a -180 to 180
+**Sine wave bipolar** Takes a signed /Phase/ input representing a -180 to 180
 degrees phase, /Value/ outputs the corresponding signed sine wave. Typically
 phase is connected to a counter to generate a bipolar sine modulation.
 
-*Triangle wave* Takes a signed /Phase/ input representing a -180 to 180 degrees
+**Triangle wave** Takes a signed /Phase/ input representing a -180 to 180 degrees
 phase, /Value/ outputs the corresponding position of an unsigned triangle wave.
 Typically phase is connected to a counter to generate a triangle modulation.
 
-*Attenuate* Attenuates (weakens) a signal. The /Multiplicand/ specifies the
+**Attenuate** Attenuates (weakens) a signal. The /Multiplicand/ specifies the
 value to attenuate, and the /Multiplier/ the value to attenuate it with, /Value/
 is the output. For example, attenuating value 0, 64 and 127 by 80 results in 0,
 40 and 80 respectively.
 
-*Attenu-add* Attenuates a signal and then adds a value. /Addend/ specifies the
+**Attenu-add** Attenuates a signal and then adds a value. /Addend/ specifies the
 value to add after the attenuation, see attenuate for the description of the
 remaining values. Typically used to coax an input value into a certain range,
 e.g. n ⋅ 80 + 30 makes values 0-127 go between 30 and 110.
 
-*Pitch bend* Translates a pitch bend value to a note range. /Bend coarse/ and
+**Pitch bend** Translates a pitch bend value to a note range. /Bend coarse/ and
 /Bend fine/ specify the signed input bend value, /Range Up/ and /Range Down/
 specify the range of the bend in the up and down directions, and /Note/ and
 /Detune/ output the bended note and detune values. Typically connected to an
 add-pitch module.
 
-*Add pitch* Adds pairs of note and detune values. /Note A/ and /Note B/ specify
+**Add pitch** Adds pairs of note and detune values. /Note A/ and /Note B/ specify
 the notes to add, and /Detune A/ and /Detune B/ specify the detune values to
 add. The result of the addition is found in /Node/ and /Detune/. Typically
 connected to a voice.
 
-*MIDI clock* MIDI clock generator with divider functionality. /Port/ selects
+**MIDI clock** MIDI clock generator with divider functionality. /Port/ selects
 the source of the MIDI clock, 0 being the internal clock (fixed to 150 bpm).
 /Divider/ selects how many ticks it takes to trigger and increase the counter;
 there are 24 ticks in an 1/4 beat, 12 ticks in an 1/8th beath, etc. /Trigger/
 generates an impulse when the number of ticks were reached, /Counter/ counts how
 many impulses were generated and /Fraction/ is the divider’s remainder.
 
-*Sequence 8* Steps through a sequence of 8 /Steps/ on every /Trigger/ impulse.
+**Sequence 8** Steps through a sequence of 8 /Steps/ on every /Trigger/ impulse.
 /Length/ indicates how many steps to step through before wrapping. /Reset/
 restarts at step 0. /Value/ outputs the value of the current step, and
 /Position/ counts the number of triggers, selected step is position modulo 8.
 
-*SCC voice* Produces an SCC voice. /Note/ selects the note, /Detune/ specifies
+**SCC voice** Produces an SCC voice. /Note/ selects the note, /Detune/ specifies
 a signed detune in the range -50 .. +50 cents. /Amplitude/ specifies the
 amplitude of the sound. /Wave/ specifies which wave to choose from the
 pre-defined 128-entry wave table. /Phase reset/ restarts the wave’s phase.
