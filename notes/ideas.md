@@ -4,14 +4,16 @@ Ideas
 General
 -------
 
-* Terminology
+Terminology
+
   * Control signal flow / chain
   * Trigger impulse
   * Control sampling rate (60Hz)
   * Module cores
   * Part
 
-* Mode without UI updates to minimise latency
+Mode without UI updates to minimise latency
+
   * E.g. pressing STOP key; in stead, it will process MIDI messages
   * Window pops up informing the user while this mode is enabled
     * And telling him how to exit
@@ -19,33 +21,36 @@ General
     * Avoid using VDP int if alternative timer is available
   * Interrupt checks if buffer is empty, if not yields
 
-* Patch loading / saving
+Patch loading / saving
+
   * Save to spare cartridge FlashROM
   * Save to disk
   * Save to Sony HBI-55 / Yamaha UDC-01 Data Memory / PAC
   * Save to MIDI out (dump)
   * Save to cloud
 
-* Connect to the cloud through MIDI and a PC host application
+Connect to the cloud through MIDI and a PC host application
 
-* Put all core code in bank 1, all UI in bank 2, and shared stuff in bank 0
+Put all core code in bank 1, all UI in bank 2, and shared stuff in bank 0
+
   * Create core folder to group them
   * UI should have no need to access the core code
 
-* Organise code into “semantic” segments: SYSTEM CORE FONT UI
+Organise code into “semantic” segments: SYSTEM CORE FONT UI
 
-* Deallocate / reallocate all objects when heap is fragmented
+Deallocate / reallocate all objects when heap is fragmented
 
-* Add MIDI implementation chart
+Add MIDI implementation chart
 
-* Submit v1.0 to synthtopia, sonicstate, gearslutz, createdigitalmusic, etc...
-  soundonsound.com/forum, djtechtools.com
+Submit v1.0 to synthtopia, sonicstate, gearslutz, createdigitalmusic, etc...
+soundonsound.com/forum, djtechtools.com
 
 
 Synthesis core
 --------------
 
-* Simple module ideas
+Simple module ideas
+
   * Mix, does simple 50/50 mix (see wt interp)
   * Parametrix mix, mixes based on control (-127..127), also useful for panning
   * S&H / latch, samples a value at trigger (default 127) or gate (default 0)
@@ -109,18 +114,21 @@ Synthesis core
   * Delay, circular buffer with configurable size
   * Poly index, extracts the note index
 
-* Note per channel mode (poly pitchbend: QuNexus, Seaboard, Linnstrument, etc.)
+Note per channel mode (poly pitchbend: QuNexus, Seaboard, Linnstrument, etc.)
+
   * Simply instantiate multiple channels.
   * May not work for all patches who expect a single input from channel.
   * Maybe just a separate pitch bend input? (what about aftertouch?)
 
-* Typed links
+Typed links
+
   * Signed, unsigned, boolean, trigger, object
   * Poly, mono (rather a module property, isn’t it?)
   * Primitive type links are mostly useful for UI
   * Object type links have null object.
 
-* Poly to mono
+Poly to mono
+
   * Indicate polyness on modules with notches in bottom right line
   * Auto-limit poly based on available resources (at least 1 of each)
   * Merge modules, merge-or, merge-max, add, average, interval, count, select
@@ -130,11 +138,13 @@ Synthesis core
   * Polyphonic select + note number = arpeggiator
   * Essentially these are array inputs
 
-* Sound chip modules at the end of the chain! (poly to mono!)
+Sound chip modules at the end of the chain! (poly to mono!)
+
   * Requires object links
   * Do these cross patches? Check settings and require them to match...
 
-* NotePool
+NotePool
+
   * Rename to note allocator
   * Max polyphony, how many voices. Actual polyphony depends on resources.
   * Allocation, steal notes, priority, reuse, or round robin
@@ -148,54 +158,63 @@ Synthesis core
   * Interval links; if you play notes ABC, release AC, it will play BCD 
   * All of these parameters should ideally be linkable
 
-* How to implement channel reuse? Some thoughts:
+How to implement channel reuse? Some thoughts:
+
   * Triggers on voices
   * Voice priority values
   * Amplitude as gate, or as priority
   * Choke groups
   * Note allocation merge module
 
-* Rather than pushing Notes, store note array on Channel and pull?
+Rather than pushing Notes, store note array on Channel and pull?
 
-* Reset All Controllers should not actually reset all.
+Reset All Controllers should not actually reset all.
+
   * See http://midi.org/techspecs/rp15.php
 
-* Envelope segment curve selection; linear, log (attack), exp (decay)
+Envelope segment curve selection; linear, log (attack), exp (decay)
 
-* Numpad drumpad
+Numpad drumpad
 
-* Sysex dump of current patch configuration
+Sysex dump of current patch configuration
+
   * Including controller position
   * “A manufacturer must get a registered ID from the MMA if he wants to define
     his own SysEx messages, or use the following: Educational Use 0x7D. This ID
     is for educational or development use only, and should never appear in a
     commercial design.” <http://www.midi.org/techspecs/manid.php>
 
-* Add poly pressure array to channel
+Add poly pressure array to channel
+
   * Let notes pull from it
   * Should they take highest between channel and poly pressure?
     * Can also be done with a module...
     * Same goes for pitch bend
 
-* When linking module A to B, make sure B is updated before A
+When linking module A to B, make sure B is updated before A
+
   * Scan for module B, if A is found swap until B is reached
 
-* Update listeners improvements
+Update listeners improvements
+
   * Replace update listeners with linked list on module cores? (like hooks)
 
-* Rather than having channels, have parts which specify which port / channel /
-  keys they listen to. Basically they filter, allowing you to create splits etc.
-  The patch is contained inside the part.
+Rather than having channels, have parts which specify which port / channel /
+keys they listen to. Basically they filter, allowing you to create splits etc.
+The patch is contained inside the part.
+
   * Have note pool listeners register themselves on MIDI devices
   * Port number in addition to channel number
 
-* Extraction modules, connecting to MIDI stream?
+Extraction modules, connecting to MIDI stream?
+
   * MIDI aftertouch, CC, etc. Only listen to what you need.
   * May not perform well...
 
-* Don’t limit number of voice instances
+Don’t limit number of voice instances
 
-* Course wavetable interpolation
+Course wavetable interpolation
+
   * Slow, but maybe convenient
   
       ld a,(bc)
@@ -212,14 +231,16 @@ Synthesis core
       ld (de),a
       inc l, c, e
 
-* Add note number to Note
+Add note number to Note
 
-* (MIDI) Clock module
+(MIDI) Clock module
+
   * Provides 8-bit timer and trigger outputs
   * Separate clock divider module?
   * Or multiple clocks with integrated divider? Or both?
 
-* Packaging modules allows you to define new modules consisting of others
+Packaging modules allows you to define new modules consisting of others
+
   * Name: “Composite module”, “Macro module” (Reaktor), “Patcher module” (Max)
   * The built-in modules are called primitive modules
   * Cleans up nicely
@@ -228,48 +249,56 @@ Synthesis core
   * Extra annotation on the inputs specifying the default value
     * Which can also be a nonconstant...
 
-* Macro bank module
+Macro bank module
+
   * Combines 8 configurable controllers with attenuate-adds.
 
-* Key release trigger
+Key release trigger
 
-* Random generator source
+Random generator source
+
   * Random LFO
   * Analog drifting
   * Have ability to hold after note-on
 
-* CPU frequency adjust
+CPU frequency adjust
+
   * Frequency table offset (5.4MHz = -6, 7MHz = -12, 10Mhz = -18)
   * Enable globally or per-chip
   * With CPU frequency auto detection
   * Probably fastest to alter the table itself (in RAM, then)
 
-* Add number of notes pressed to Channel
+Add number of notes pressed to Channel
+
   * Wolf_: simple example: you know the drill with FM, drive the modulator level
            too high and you get nasty FM noise. So, how about: you play one
            note, the registers are 'nice', so you get a clean sound. Next you
            play two notes, now you drive the modulator level and you get a nasty
            FM noise.
 
-* Add scale detection to Channel
+Add scale detection to Channel
+
   * Distance between the root and the next note output
   * Wolf_: e.g. a minor chord could have different results compared to a major
            chord, and different compared to an octave.
   * Identifying the root
     * https://en.wikipedia.org/wiki/Root_%28chord%29#Identifying_a_chord.27s_root
 
-* Wavetable ideas
+Wavetable ideas
+
   * Saxophone; sample wave for each note (127 waves)
   * voice; vowels have periods too (a, e, i, u, o)
 
-* Wavetable editor
+Wavetable editor
+
   * Supports FFT-based wave interpolation & cutoff
   * Import samples from waves (e.g. Adventure Kid Waveforms)
     * Need non-power-of-2 downsampler
     * See openMSX code, set resampler {fast blip hq}
     * Also see libsamplerate (openmsx hq resampler is based on it)
 
-* Something about Sub 37 note allocation http://youtu.be/DYzsz2U7RM0?t=4m21s
+Something about Sub 37 note allocation http://youtu.be/DYzsz2U7RM0?t=4m21s
+
   * More Sub 37 stuff http://youtu.be/0N4xntZbdW0
     * Enveloped http://youtu.be/0N4xntZbdW0?t=6m44s
     * retrigger, multi-trigger, single-trigger, loop, delay, hold
@@ -278,12 +307,14 @@ Synthesis core
 Devices
 -------
 
-* FM architecture
+FM architecture
+
   * Operators, have multiplier, ADSR, level, etc.
   * 2-op / 4-op voices, have gate, frequency, modulator, carrier, algorithm...
   * FM chip, has 2-op and 4-op inputs, global panning, allocation strategy, etc.
 
-* PSG architecture
+PSG architecture
+
   * Tone voices, have frequency, volume, envelope enable, noise enable
   * Noise source, have frequency (on PSG module, or separate?)
   * Envelope, have frequency, type (on PSG module, or separate?)
@@ -291,32 +322,37 @@ Devices
     * Envelope/noise input can be null, then tone enables will be ignored
       * Can we enforce this efficiently?
 
-* PSG rate values are 1 higher than SCC
+PSG rate values are 1 higher than SCC
 
-* Introduce Device class which provides common calls for detection,
-  initialisation, hooking interrupts, providing timers, etc.
+Introduce Device class which provides common calls for detection,
+initialisation, hooking interrupts, providing timers, etc.
 
-* Sample ADC’s for modulation signal (Philips Music Module MIC: clap!)
+Sample ADC’s for modulation signal (Philips Music Module MIC: clap!)
+
   * Envelope follower
 
-* Add SCC+ detection
+Add SCC+ detection
 
-* Add PSG2 class to play the envelope  
-  Saw wave up to 6930Hz, triangle wave up to 3460Hz
+Add PSG2 class to play the envelope
 
-* MidiSaurus info
+  * Saw wave up to 6930Hz, triangle wave up to 3460Hz
+
+MidiSaurus info
+
   * http://www.mccm.hetlab.tk/millennium/milc/midi/topic_6.htm
   * http://www.mccm.hetlab.tk/millennium/milc/architec/topic_1.htm zegt:
   * http://www.msx.org/forum/msx-talk/hardware/programming-bit2-midi-saurus
   * http://www.msx.org/forum/msx-talk/hardware/midi-saurus-data-sheetprogramming-guide
   * http://www.msx.org/wiki/MIDI-Saurus
 
-* FAC MIDI interface
+FAC MIDI interface
+
   * Intel 8251
   * 10 OUT 3,0: OUT 3,0: OUT 3,0: OUT 3,64: OUT 3,78: OUT 3,21
   * 20 OUT 2,&H90: OUT 2,60: OUT 2,64
 
-* YIS503IIIR network module
+YIS503IIIR network module
+
   * The YM3802 UART has extensive MIDI support
   * Does it support the MIDI clock rate?
   * No opto-isolator though
@@ -325,7 +361,8 @@ Devices
 User interface
 --------------
 
-* Two-panel editor layout
+Two-panel editor layout
+
   * Left 80%: Patch modules overview (3x16 boxes w/name & 1 other thing)
   * Right 20%: Selected module details (like now)
   * Moving left / right selects module, up / down selects port
@@ -333,99 +370,114 @@ User interface
   * When selecting port, the connected module(s) is highlighted (bold outline?)
     * And the port is shown in the box
 
-* Have module categories (LFOs, Waves, etc.)
+Have module categories (LFOs, Waves, etc.)
+
   * Have space between module / category identifiers so I can easily insert more
 
-* Output build information along with exception
+Output build information along with exception
 
-* Boot-up effect (fade or w/e)
+Boot-up effect (fade or w/e)
 
-* Swap out compatible modules (e.g. saw wave / sine wave)
+Swap out compatible modules (e.g. saw wave / sine wave)
 
-* Show min/max cycles for each module
+Show min/max cycles for each module
+
   * So people can make informed performance decisions
   * E.g. Select8 is quite a bit faster than Sequence8
   * Also provide function to calculate total min/max load
 
-* Detect and indicate feedback loops
+Detect and indicate feedback loops
+
   * Feedback is OK, but it causes 1 sample delay so we should be clear about it
   * In Reaktor, an indicator Z appears on the output when there is feedback
 
-* Option to reorder modules to match dependencies
+Option to reorder modules to match dependencies
 
-* Make sure UI doesn’t get starved
+Make sure UI doesn’t get starved
+
   * If UI update is still not done after 1s, yield until it does
 
-* Detected devices screen
+Detected devices screen
+
   * Detect AY-3-8910 / YM2149 difference (masked course tuning bits return 0)
   * Allow chip mode selection, SCC/SCC+, OPL1/OPL3/OPL4, etc.
 
-* While editing an input, ability to immediately insert a module (smartly)
+While editing an input, ability to immediately insert a module (smartly)
 
-* Keyboard
+Keyboard
+
   * Switch layout depending on current mode
   * Store key presses into circular buffer (ignore when full, if debug: throw)
   * Use numpad to enter constant values quickly
 
-* Add module selection list shows name + first line of help text
+Add module selection list shows name + first line of help text
+
   * Or, help text in a panel to the right
 
-* Fill in dots in module UI to indicate connection?
+Fill in dots in module UI to indicate connection?
 
-* In help texts, speak of trigger impulse
+In help texts, speak of trigger impulse
 
-* For module help text, have general description, then enumerate parameters
+For module help text, have general description, then enumerate parameters
 
-* Oscilloscope view to show value changes over time
+Oscilloscope view to show value changes over time
 
-* Channel monitor like here: http://youtu.be/JBnk71WsKtc
+Channel monitor like here: http://youtu.be/JBnk71WsKtc
+
   * Keyboard monitor like this: http://youtu.be/2EdRRgxoP-g?t=16m12s
 
-* ADSR / wave viewer like this: http://youtu.be/ou5TMtUtUKI?t=2m55s
+ADSR / wave viewer like this: http://youtu.be/ou5TMtUtUKI?t=2m55s
 
-* F1-F5 accesses menus, use CTRL-* for shortcuts
+F1-F5 accesses menus, use CTRL-* for shortcuts
 
-* Indicate poly modules by giving them a double (or fatter) border
+Indicate poly modules by giving them a double (or fatter) border
+
   * Indicate poly connections by showing double or triple wires
 
-* Selecting a value and pressing ENTER enters link edit mode
+Selecting a value and pressing ENTER enters link edit mode
+
   * Link updates immediately to audit (and notice lucky coincidences)
   * Hold CTRL and move controller to change constant value
   * Hold SHIFT to enter MIDI learn mode (move controller to select)
     * Move selection to the controller if available, or constant otherwise
   * Draw line between input and source (when pressing SHIFT?)
 
-* Selecting a module and pressing ENTER enters module edit mode
+Selecting a module and pressing ENTER enters module edit mode
+
   * Pressing LEFT / RIGHT moves the module (w/ constraints?)
   * Pressing BACKSPACE removes it and fixes all links
 
-* Show help window while in edit mode
+Show help window while in edit mode
 
-* Include description with patch for description, tips, credits, etc.
+Include description with patch for description, tips, credits, etc.
 
-* Small popup at the bottom showing control changes for a second
+Small popup at the bottom showing control changes for a second
 
-* Show memory meter (heap status)
+Show memory meter (heap status)
 
-* Show CPU load meter.
+Show CPU load meter.
+
   * Employ timers with higher accuracy levels when available.
   * TurboR timer 0E6H-0E7H (16-bit LE) runs at 255682 Hz (14 Z80 cycles/tick)
 
-* Change BLINK colour depending on selection
+Change BLINK colour depending on selection
+
   * For module selection, use orange foreground colour to change outline
   * For input value selection, use dark blue background
   * For output value selection, use purple background
 
-* Do colour split at bottom to give a different colour
+Do colour split at bottom to give a different colour
 
-* Inspiration
+Inspiration
+
   * Arturia Origin https://www.youtube.com/watch?v=IVj0Kah7bas
 
 
 Performance
 -----------
 
-* MidiIn_ProcessMessages optimisations:
+MidiIn_ProcessMessages optimisations:
+
   * Running status optimisation
     * After a message has been processed, see if the next byte is no status byte
     * If so, loop immediately. Aftertouch, CC and bends will like this.
@@ -434,12 +486,14 @@ Performance
   * Bypass MidiIn for nonmidi devices (KeyMidi / AudioMidi)
     * However for now it’s kept to increase testing coverage
 
-* Embed small modules in the object
+Embed small modules in the object
+
   * e.g. Or, ld a,(nn), ld hl,nn, or (hl), ld (nn),a -> 10 bytes in stead of 5
   * Listeners needs to adapt to support variable length
   * Or better, embed the modules into one long stream of code
 
-* Copy code to RAM on turbo r
+Copy code to RAM on turbo r
 
-* Memory optimisation
+Memory optimisation
+
   * Put all cores in a dedicated mapper page
