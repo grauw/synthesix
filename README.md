@@ -107,6 +107,9 @@ one for each note / SCC voice. Essentially, there are 4 layers of modules.
 Also, it is currently not possible to add or remove modules, so you are limited
 to the pre-defined set of modules for your sonic exploration.
 
+If you experience stuck notes, you can send a MIDI All Notes Off message or
+press the `shift-F5` key combination.
+
 
 Module information
 ------------------
