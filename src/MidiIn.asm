@@ -7,7 +7,7 @@ MidiIn: MACRO ?buffer  ; buffer must be aligned to 100H
 	bufferTail:
 		dw ?buffer
 	runningStatus:
-		db 0
+		db -1
 	clock:
 		db 0
 
@@ -171,8 +171,8 @@ NextMessage:
 	jp c,ProcessStatus_1
 ProcessStatus_0:
 	ld a,(ix + MidiIn.runningStatus)
-	and a
-	jp p,ProcessStatus_Skip
+	cp -1
+	jp z,ProcessStatus_Skip
 	dec l
 	inc e
 	jp ProcessStatus_1_Running
@@ -181,7 +181,7 @@ ProcessStatus_1:
 	jr c,ProcessStatus_1_SetRunning
 ;	cp 0F8H << 1  ; commented out: realtime messages never enter the buffer
 ;	jr nc,ProcessStatus_1_Running
-	ld (ix + MidiIn.runningStatus),0
+	ld (ix + MidiIn.runningStatus),-1
 	jp ProcessStatus_1_Running
 ProcessStatus_1_SetRunning:
 	ld (ix + MidiIn.runningStatus),a
