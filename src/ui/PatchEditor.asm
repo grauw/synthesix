@@ -420,25 +420,21 @@ PatchEditor_GetInputValue:
 ; Sets the value of the selected input to a constant value.
 ; ix = this
 ; a = value
-; hl <- input port address
 PatchEditor_SetInputValue:
-	ld hl,Constants_instance
+	ld l,(ix + PatchEditor.port)
+	ld h,(ix + PatchEditor.module)
 	ld e,a
 	ld d,0
-	add hl,de
-	push hl
 	push ix
+	push de
+	push hl
 	call PatchEditor_IsOutputSelected
 	call c,System_ThrowException  ; only works on inputs
-	ld c,(ix + PatchEditor.module)
-	ld a,(ix + PatchEditor.port)
-	call PatchEditor_GetPort
-	pop ix
+	call PatchEditor_GetPatch
+	pop hl
 	pop de
-	ld (hl),e
-	inc hl
-	ld (hl),d
-	dec hl
+	call Patch_AddLink
+	pop ix
 	ret
 
 ; ix = this
