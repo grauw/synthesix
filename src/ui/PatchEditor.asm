@@ -432,7 +432,19 @@ PatchEditor_SetInputValue:
 	call c,System_ThrowException  ; only works on inputs
 	call PatchEditor_GetPatch
 	pop hl
+	push hl
+	push ix
+	ld a,0
+	ld b,0
+	ld c,h
+	call Patch_GetModuleType
+	ld a,(ix + ModuleType.outputCount)
+	pop ix
+	pop hl
 	pop de
+	neg
+	add a,l
+	ld l,a
 	call Patch_AddLink
 	pop ix
 	ret
