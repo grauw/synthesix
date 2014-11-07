@@ -16,3 +16,6 @@ run2: all
 
 run3: all
 	openmsx -cart bin/synthe6.rom -romtype KonamiSCC -machine Yamaha_CX5MII -ext mu-PACK -script openmsx.tcl
+
+run4: all
+	openmsx -cart bin/synthe6.rom -romtype KonamiSCC -machine Sony_HB-F500P -ext mu-PACK -script openmsx.tcl
