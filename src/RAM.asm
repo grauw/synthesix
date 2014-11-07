@@ -102,7 +102,7 @@ RAM_DetectPage2:
 ;
 ; a = slot ID
 ; f <- c: found
-; Modifies: af, bc, de, hl, iy
+; Modifies: af, bc, de, hl, iy, ix
 ;
 RAM_MatchPage0:
 	ld ixl,a
@@ -119,7 +119,7 @@ RAM_MatchPage0:
 ;
 ; a = slot ID
 ; f <- c: found
-; Modifies: af, bc, de, hl, iy
+; Modifies: af, bc, de, hl, iy, ix
 ;
 RAM_MatchPage2:
 	ld ixl,a
