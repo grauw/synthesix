@@ -85,14 +85,20 @@ System_PrintHexA:
 ; Modifies: none
 System_PrintHex:
 	push af
+	call System_NibbleToHexDigit
+	call System_PrintChar
+	pop af
+	ret
+
+; a = value (0 - 15)
+; a <- hexadecimal character
+; Modifies: a
+System_NibbleToHexDigit:
 	and 0FH
 	add a,"0"
 	cp ":"
-	jr c,System_PrintHex_Done
+	ret c
 	add a,"A" - ":"
-System_PrintHex_Done:
-	call System_PrintChar
-	pop af
 	ret
 
 	SECTION RAM
