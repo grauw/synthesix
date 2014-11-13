@@ -72,7 +72,6 @@ System_PrintHexHL:
 ; Modifies: none
 System_PrintHexA:
 	push af
-	and 0F0H
 	rrca
 	rrca
 	rrca
