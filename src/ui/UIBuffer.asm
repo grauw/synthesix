@@ -180,6 +180,57 @@ UIBuffer_ClearBlinkBuffer:
 	call System_LDIR
 	ret
 
+; de = value
+; hl = buffer
+; hl <- buffer position after printed number
+; Modifies: hl
+UIBuffer_PrintHexDE:
+	push af
+	ld a,d
+	call UIBuffer_PrintHexA
+	ld a,e
+	call UIBuffer_PrintHexA
+	pop af
+	ret
+
+; a = value
+; hl = buffer
+; hl <- buffer position after printed number
+; Modifies: hl
+UIBuffer_PrintHexA:
+	push af
+	rrca
+	rrca
+	rrca
+	rrca
+	call UIBuffer_PrintHex
+	pop af
+	call UIBuffer_PrintHex
+	ret
+
+; a = value (0 - 15)
+; hl = buffer
+; hl <- buffer position after printed digit
+; Modifies: hl
+UIBuffer_PrintHex:
+	push af
+	call UIBuffer_NibbleToHexNumber
+	ld (hl),a
+	inc hl
+	pop af
+	ret
+
+; a = value (0 - 15)
+; a <- hexadecimal character
+; Modifies: a
+UIBuffer_NibbleToHexNumber:
+	and 0FH
+	add a,"0"
+	cp ":"
+	ret c
+	add a,"A" - ":"
+	ret
+
 ; iy = this
 UIBuffer_Draw:
 	ld a,0

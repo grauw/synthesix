@@ -73,6 +73,13 @@ UISynthesix_Paint:
 	pop hl
 
 	push hl
+	ld de,004CH
+	add hl,de
+	ld de,(Synthesix_instance.lastSpeedMeasurement)
+	call UIBuffer_PrintHexDE
+	pop hl
+
+	push hl
 	ld de,0030H
 	call UIBuffer_GetRelativePosition
 	call UISynthesix_PaintLiveIndicator
@@ -152,4 +159,5 @@ UISynthesix_PaintLiveIndicator:
 UISynthesix_template:
 	ds 31,23
 	db " S y n t h e s i x "
-	ds 30,23
+	ds 25,23
+	db " ----"
