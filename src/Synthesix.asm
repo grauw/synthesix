@@ -89,8 +89,7 @@ Synthesix_MainLoop:
 	ret
 
 Synthesix_Interrupt:
-	ld a,0F5H
-	call VDP_SetColor
+	call Synthesix_StartSpeedMeasurement
 
 	ld ix,MSXMidi_instance
 	call MSXMidi_CheckOverrun
@@ -113,6 +112,15 @@ Synthesix_Interrupt:
 	ld ix,Updater_60HzLate
 	call Updater_Update
 
+	call Synthesix_EndSpeedMeasurement
+	ret
+
+Synthesix_StartSpeedMeasurement:
+	ld a,0F5H
+	call VDP_SetColor
+	ret
+
+Synthesix_EndSpeedMeasurement:
 	ld a,0F4H
 	call VDP_SetColor
 	ret
