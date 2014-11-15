@@ -128,7 +128,7 @@ Loop:
 	ld b,0
 	ldir
 	ld c,a
-	ld a,80
+	ld a,UIBuffer.WIDTH
 	sub c
 	jr z,NoAdd
 	ld c,a
