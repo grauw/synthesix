@@ -1,6 +1,8 @@
 ;
 ; Display a module
 ;
+ModuleView_WIDTH: equ 16
+
 ; b = number of ports to show
 ; c = first port
 ; de = module

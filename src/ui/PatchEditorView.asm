@@ -3,6 +3,8 @@
 ;
 PatchEditorView_MODULES: equ 5
 PatchEditorView_PORTS: equ 14
+PatchEditorView_WIDTH: equ ModuleView_WIDTH * PatchEditorView_MODULES
+PatchEditorView_HEIGHT: equ PatchEditorView_PORTS + 2
 PatchEditorView_SELECTCOLOR: equ 0F8H
 PatchEditorView_ASSIGNCOLOR: equ 0F2H
 PatchEditorView_INVALIDCOLOR: equ 0FEH
@@ -62,10 +64,10 @@ PatchEditorView_PaintProgressBar: PROC
 NonNegative:
 	ex de,hl
 	pop hl
-	ld bc,16 * UIBuffer.WIDTH
+	ld bc,PatchEditorView_HEIGHT * UIBuffer.WIDTH
 	add hl,bc
 	pop bc
-	ld a,UIBuffer.WIDTH
+	ld a,PatchEditorView_WIDTH
 	call HorizontalScrollBarView_Paint
 	pop ix
 	ret
@@ -130,7 +132,7 @@ PatchEditorView_ClearBackground:
 	ld d,h
 	inc de
 	ld (hl)," "
-	ld bc,UIBuffer.WIDTH * 16 - 1
+	ld bc,UIBuffer.WIDTH * PatchEditorView_HEIGHT - 1
 	call System_LDIR
 	ret
 
@@ -173,7 +175,7 @@ NotThisModule:
 	call ModuleView_Paint
 	pop ix
 	pop hl
-	ld bc,16
+	ld bc,ModuleView_WIDTH
 	add hl,bc
 	pop de
 	pop bc
