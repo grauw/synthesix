@@ -1,8 +1,7 @@
 ;
 ; Display a module
 ;
-ModuleView_PORTS: equ 14
-
+; b = number of ports to show
 ; c = first port
 ; de = module
 ; ix = module type
@@ -19,6 +18,7 @@ ModuleView_Paint:
 	call ModuleView_PaintUpdate
 	ret
 
+; b = number of ports to show
 ; c = first port
 ; de = module
 ; ix = module type
@@ -34,6 +34,7 @@ ModuleView_PaintBackground:
 	pop bc
 	ret
 
+; b = number of ports to show
 ; c = first port
 ; de = module
 ; ix = module type
@@ -46,7 +47,6 @@ ModuleView_PaintUpdate: PROC
 	pop bc
 	ld a,(ix + ModuleType.outputCount)
 	add a,(ix + ModuleType.inputCount)
-	ld b,ModuleView_PORTS
 Loop:
 	push af
 	push bc
@@ -105,6 +105,7 @@ Input:
 	jp ValueView_Paint
 	ENDP
 
+; b = number of ports to show
 ; c = first port
 ; ix = module type
 ; iy = buffer
@@ -174,6 +175,7 @@ ModuleView_PaintBottom:
 	pop de
 	ret
 
+; b = number of ports to show
 ; c = first port
 ; de = labels
 ; ix = module type
@@ -186,7 +188,6 @@ ModuleView_PaintPorts: PROC
 	pop bc
 	ld a,(ix + ModuleType.outputCount)
 	add a,(ix + ModuleType.inputCount)
-	ld b,ModuleView_PORTS
 Loop:
 	push af
 	push bc

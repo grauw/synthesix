@@ -2,6 +2,7 @@
 ; Display a patch editor
 ;
 PatchEditorView_MODULES: equ 5
+PatchEditorView_PORTS: equ 14
 PatchEditorView_SELECTCOLOR: equ 0F8H
 PatchEditorView_ASSIGNCOLOR: equ 0F2H
 PatchEditorView_INVALIDCOLOR: equ 0FEH
@@ -12,7 +13,7 @@ PatchEditorView_INVALIDCOLOR: equ 0FEH
 PatchEditorView_Paint: PROC
 	ld a,(iy + UIBuffer.repaint)
 	push af
-	ld bc,PatchEditorView_MODULES << 8 | ModuleView_PORTS
+	ld bc,PatchEditorView_MODULES << 8 | PatchEditorView_PORTS
 	call PatchEditor_UpdateScrollPosition
 	ld c,(ix + PatchEditor.moduleScrollPosition)
 	ld b,0
@@ -117,7 +118,7 @@ PatchEditorView_PaintFocus: PROC
 	ld a,(ix + PatchEditor.port)
 	sub (ix + PatchEditor.portScrollPosition)
 	call c,System_ThrowException  ; port should be within scroll position bounds
-	cp ModuleView_PORTS
+	cp PatchEditorView_PORTS
 	call nc,System_ThrowException
 	inc a
 	ld d,a
@@ -188,7 +189,7 @@ Loop:
 	ex (sp),ix
 	ld a,(ix + PatchEditor.module)
 	cp c
-	ld c,0
+	ld bc,PatchEditorView_PORTS << 8 | 0
 	jr nz,NotThisModule
 	ld c,(ix + PatchEditor.portScrollPosition)
 NotThisModule:
