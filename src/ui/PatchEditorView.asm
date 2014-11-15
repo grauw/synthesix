@@ -188,9 +188,9 @@ Loop:
 	ex (sp),ix
 	ld a,(ix + PatchEditor.module)
 	cp c
-	ld a,0
+	ld c,0
 	jr nz,NotThisModule
-	ld a,(ix + PatchEditor.portScrollPosition)
+	ld c,(ix + PatchEditor.portScrollPosition)
 NotThisModule:
 	ex (sp),ix
 	call ModuleView_Paint

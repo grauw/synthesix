@@ -108,7 +108,7 @@ UISynthesix_Paint:
 	ld a,0
 	ld ix,(Synthesix_instance.scc)
 	call SCC_GetVoice
-	ld a,0
+	ld c,0
 	ld ix,ModuleType_sccVoice
 	call ModuleView_Paint
 	pop hl
@@ -119,7 +119,7 @@ UISynthesix_Paint:
 	ld a,1
 	ld ix,(Synthesix_instance.scc)
 	call SCC_GetVoice
-	ld a,0
+	ld c,0
 	ld ix,ModuleType_sccVoice
 	call ModuleView_Paint
 	pop hl
@@ -130,7 +130,7 @@ UISynthesix_Paint:
 	ld a,2
 	ld ix,(Synthesix_instance.scc)
 	call SCC_GetVoice
-	ld a,0
+	ld c,0
 	ld ix,ModuleType_sccVoice
 	call ModuleView_Paint
 	pop hl
@@ -141,7 +141,7 @@ UISynthesix_Paint:
 	ld a,3
 	ld ix,(Synthesix_instance.scc)
 	call SCC_GetVoice
-	ld a,0
+	ld c,0
 	ld ix,ModuleType_sccVoice
 	call ModuleView_Paint
 	pop hl

@@ -3,59 +3,56 @@
 ;
 ModuleView_PORTS: equ 14
 
-; a = first port
+; c = first port
 ; de = module
 ; ix = module type
 ; iy = buffer
 ; hl = buffer address
 ModuleView_Paint:
-	ld c,a
 	ld a,(ix + ModuleType.outputCount)
 	add a,(ix + ModuleType.inputCount)
 	dec a
 	cp c
 	call c,System_ThrowException  ; scroll position exceeds port count
-	ld a,c
 	bit 0,(iy + UIBuffer.repaint)
 	call nz,ModuleView_PaintBackground
 	call ModuleView_PaintUpdate
 	ret
 
-; a = first port
+; c = first port
 ; de = module
 ; ix = module type
 ; iy = buffer
 ; hl = buffer address
 ModuleView_PaintBackground:
-	push af
+	push bc
 	push de
 	push hl
-	ld a,c
 	call ModuleView_PaintModuleType
 	pop hl
 	pop de
-	pop af
+	pop bc
 	ret
 
-; a = first port
+; c = first port
 ; de = module
 ; ix = module type
 ; iy = buffer
 ; hl = buffer address
 ModuleView_PaintUpdate: PROC
-	push af
+	push bc
 	ld bc,UIBuffer.WIDTH * 1 + 10
 	add hl,bc
+	pop bc
 	ld a,(ix + ModuleType.outputCount)
 	add a,(ix + ModuleType.inputCount)
-	ld c,a
-	pop af
 	ld b,ModuleView_PORTS
 Loop:
 	push af
 	push bc
 	push de
 	push hl
+	ld a,c
 	call ModuleView_PaintUpdatePort
 	pop hl
 	pop de
@@ -63,7 +60,7 @@ Loop:
 	add hl,bc
 	pop bc
 	pop af
-	inc a
+	inc c
 	cp c
 	ret z
 	djnz Loop
@@ -108,16 +105,16 @@ Input:
 	jp ValueView_Paint
 	ENDP
 
-; a = first port
+; c = first port
 ; ix = module type
 ; iy = buffer
 ; hl = buffer address
 ModuleView_PaintModuleType:
-	push af
+	push bc
 	ld e,(ix + ModuleType.labels)
 	ld d,(ix + ModuleType.labels + 1)
 	call ModuleView_PaintTop
-	pop af
+	pop bc
 	call ModuleView_PaintPorts
 	call ModuleView_PaintBottom
 	ret
@@ -177,30 +174,31 @@ ModuleView_PaintBottom:
 	pop de
 	ret
 
-; a = first port
+; c = first port
 ; de = labels
 ; ix = module type
 ; iy = buffer
 ; hl = buffer address
 ModuleView_PaintPorts: PROC
-	push af
+	push bc
+	ld a,c
 	call ModuleView_GetPortLabel
+	pop bc
 	ld a,(ix + ModuleType.outputCount)
 	add a,(ix + ModuleType.inputCount)
-	ld c,a
-	pop af
 	ld b,ModuleView_PORTS
 Loop:
 	push af
 	push bc
 	push hl
+	ld a,c
 	call ModuleView_PaintPort
 	pop hl
 	ld bc,UIBuffer.WIDTH
 	add hl,bc
 	pop bc
 	pop af
-	inc a
+	inc c
 	cp c
 	ret z
 	djnz Loop
