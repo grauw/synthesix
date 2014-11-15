@@ -49,51 +49,27 @@ PatchEditorView_PaintBackground:
 ; ix = patch editor
 ; iy = buffer
 ; hl = buffer address
-PatchEditorView_PaintProgressBar:
+PatchEditorView_PaintProgressBar: PROC
+	push ix
 	push bc
 	push hl
-	ld bc,16 * UIBuffer.WIDTH
-	add hl,bc
-	ld (hl),140
-	ld e,l
-	ld d,h
-	inc de
-	ld bc,UIBuffer.WIDTH - 1
-	call System_LDIR
-	pop hl
-	pop bc
-
-	push hl
-	ld a,79
-	call Math_Multiply8x16
-	push hl
-	push ix
 	call PatchEditor_GetPatch
 	call Patch_GetModuleCount
-	ld e,c
-	ld d,b
-	pop ix
-	pop bc
 	ld hl,-PatchEditorView_MODULES
-	add hl,de
+	add hl,bc
+	jr c,NonNegative
+	ld hl,0
+NonNegative:
 	ex de,hl
 	pop hl
-	ret nc
-	ld a,d
-	or e
-	ret z
-
-	push hl
-	call Math_Divide16
-	pop hl
-
-	push hl
-	add hl,bc
 	ld bc,16 * UIBuffer.WIDTH
 	add hl,bc
-	ld (hl),141
-	pop hl
+	pop bc
+	ld a,UIBuffer.WIDTH
+	call HorizontalScrollBarView_Paint
+	pop ix
 	ret
+	ENDP
 
 ; c = position
 ; ix = patch editor

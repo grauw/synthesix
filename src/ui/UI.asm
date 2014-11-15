@@ -12,6 +12,7 @@
 	INCLUDE "OutputView.asm"
 	INCLUDE "PatchEditorView.asm"
 	INCLUDE "ModuleView.asm"
+	INCLUDE "HorizontalScrollBarView.asm"
 
 UI_Init:
 	call VDP_InitScreen0
