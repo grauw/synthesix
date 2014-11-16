@@ -158,6 +158,6 @@ UISynthesix_Paint:
 ;
 UISynthesix_template:
 	ds 31,23
-	db " S y n t h e s i x "
+	db 32,160,32,161,32,162,32,163,32,164,32,165,32,160,32,166,32,167,32
 	ds 25,23
 	db " ----"
