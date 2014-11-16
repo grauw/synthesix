@@ -86,6 +86,7 @@ UISynthesix_Paint:
 	pop hl
 
 	push hl
+	push ix
 	ld e,(ix + UISynthesix.patchEditor)
 	ld d,(ix + UISynthesix.patchEditor + 1)
 	ld ixl,e
@@ -93,6 +94,7 @@ UISynthesix_Paint:
 	ld de,0100H
 	call UIBuffer_GetRelativePosition
 	call PatchEditorView_Paint
+	pop ix
 	pop hl
 
 	push hl
