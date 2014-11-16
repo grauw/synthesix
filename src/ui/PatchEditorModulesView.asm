@@ -40,7 +40,7 @@ PatchEditorModulesView_ClearBackground:
 	call UIBuffer_Fill
 	ret
 
-; ix = patch
+; ix = patch editor
 ; iy = buffer
 ; hl = buffer address
 PatchEditorModulesView_PaintPatch: PROC

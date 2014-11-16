@@ -83,7 +83,7 @@ PatchEditorView_PaintUpdate:
 	ret
 
 ; c = scroll position
-; ix = this
+; ix = patch editor
 ; iy = buffer
 PatchEditorView_PaintFocus: PROC
 	ld a,(ix + PatchEditor.module)
@@ -134,7 +134,7 @@ PatchEditorView_ClearBackground:
 	ret
 
 ; c = scroll position
-; ix = patch
+; ix = patch editor
 ; iy = buffer
 ; hl = buffer address
 PatchEditorView_PaintPatch: PROC
