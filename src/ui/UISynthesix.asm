@@ -80,12 +80,6 @@ UISynthesix_Paint:
 	pop hl
 
 	push hl
-	ld de,0030H
-	call UIBuffer_GetRelativePosition
-	call UISynthesix_PaintLiveIndicator
-	pop hl
-
-	push hl
 	push ix
 	ld e,(ix + UISynthesix.patchEditor)
 	ld d,(ix + UISynthesix.patchEditor + 1)
@@ -159,14 +153,6 @@ UISynthesix_Paint:
 	ld ix,ModuleType_sccVoice
 	call ModuleView_Paint
 	pop hl
-	ret
-
-UISynthesix_PaintLiveIndicator:
-	ld a,(JIFFY)
-	bit 5,a
-	ld (hl),'x'
-	ret z
-	ld (hl),'X'
 	ret
 
 ;
