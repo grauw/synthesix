@@ -11,6 +11,7 @@
 	INCLUDE "InputView.asm"
 	INCLUDE "OutputView.asm"
 	INCLUDE "PatchEditorView.asm"
+	INCLUDE "PatchEditorModulesView.asm"
 	INCLUDE "ModuleView.asm"
 	INCLUDE "HorizontalScrollBarView.asm"
 

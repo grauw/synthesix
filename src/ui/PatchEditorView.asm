@@ -1,7 +1,7 @@
 ;
 ; Display a patch editor
 ;
-PatchEditorView_MODULES: equ 5
+PatchEditorView_MODULES: equ 1
 PatchEditorView_PORTS: equ 14
 PatchEditorView_WIDTH: equ ModuleView_WIDTH * PatchEditorView_MODULES
 PatchEditorView_HEIGHT: equ PatchEditorView_PORTS + 2
