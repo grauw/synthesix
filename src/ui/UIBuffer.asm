@@ -101,20 +101,17 @@ UIBuffer_GetPosition:
 ; hl <- buffer
 ; Modifies: af, de
 UIBuffer_GetRelativePosition:
-	ld a,d  ; hl = d * 80
-	ld d,0  ; de = hl + e
 	add hl,de
 	ex de,hl
+	ld a,h
+	add a,a
+	add a,UIBuffer_rowOffsetLUT & 0FFH
 	ld l,a
-	add a,a
-	add a,a
-	add a,l
-	add a,a
+	ld h,UIBuffer_rowOffsetLUT >> 8
+	ld a,(hl)
+	inc l
+	ld h,(hl)
 	ld l,a
-	rl h
-	add hl,hl
-	add hl,hl
-	add hl,hl
 	add hl,de
 	ret
 
@@ -254,6 +251,7 @@ UIBuffer_Draw:
 	ld (iy + UIBuffer.repaint),0
 	ret
 
+;
 	ALIGN 8
 UIBuffer_blinkBits:
 	db 10000000B
@@ -265,3 +263,8 @@ UIBuffer_blinkBits:
 	db 00000010B
 	db 00000001B
 
+	ALIGN_FIT8 UIBuffer.HEIGHT * 2
+UIBuffer_rowOffsetLUT:
+	REPT UIBuffer.HEIGHT, ?row
+	dw ?row * -(100H - UIBuffer.WIDTH)
+	ENDM
