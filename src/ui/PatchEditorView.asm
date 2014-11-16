@@ -128,12 +128,9 @@ Invalid:
 
 ; hl = buffer position
 PatchEditorView_ClearBackground:
-	ld e,l
-	ld d,h
-	inc de
-	ld (hl)," "
-	ld bc,UIBuffer.WIDTH * PatchEditorView_HEIGHT - 1
-	call System_LDIR
+	ld a," "
+	ld bc,PatchEditorView_HEIGHT << 8 | PatchEditorView_WIDTH
+	call UIBuffer_Fill
 	ret
 
 ; c = scroll position

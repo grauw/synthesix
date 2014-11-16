@@ -134,6 +134,33 @@ Loop:
 	ret
 	ENDP
 
+; a = fill value
+; bc = height / width
+; hl = buffer address
+UIBuffer_Fill: PROC
+	ld e,a
+	ld a,UIBuffer.WIDTH + 1
+	sub c
+Loop:
+	ld (hl),e
+	push bc
+	push de
+	dec c
+	jr z,SkipLDIR
+	ld b,0
+	ld e,l
+	ld d,h
+	inc de
+	ldir
+SkipLDIR:
+	ld c,a
+	add hl,bc
+	pop de
+	pop bc
+	djnz Loop
+	ret
+	ENDP
+
 ; iy = this
 ; hl = buffer address
 ; Modifies: af, de, hl
