@@ -116,6 +116,24 @@ UIBuffer_GetRelativePosition:
 	ret
 
 ; bc = height / width
+; bc <- size
+; Modifies: af, bc, de
+UIBuffer_GetRelativeSize:
+	ld a,b
+	add a,a
+	add a,UIBuffer_rowOffsetLUT & 0FFH
+	ld e,a
+	ld d,UIBuffer_rowOffsetLUT >> 8
+	ld a,(de)
+	add a,c
+	ld c,a
+	inc de
+	ld a,(de)
+	adc a,b
+	ld b,a
+	ret
+
+; bc = height / width
 ; de = destination buffer
 ; hl = source buffer
 UIBuffer_CopyToBuffer: PROC
@@ -139,8 +157,10 @@ Loop:
 ; hl = buffer address
 UIBuffer_Fill: PROC
 	ld e,a
-	ld a,UIBuffer.WIDTH + 1
+	ld a,UIBuffer.WIDTH
 	sub c
+	jr z,FastPath
+	inc a
 Loop:
 	ld (hl),e
 	push bc
@@ -158,6 +178,15 @@ SkipLDIR:
 	pop de
 	pop bc
 	djnz Loop
+	ret
+FastPath:
+	ld (hl),e
+	call UIBuffer_GetRelativeSize
+	ld e,l
+	ld d,h
+	inc de
+	dec bc
+	call System_LDIR
 	ret
 	ENDP
 
