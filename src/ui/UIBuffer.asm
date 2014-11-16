@@ -119,20 +119,16 @@ UIBuffer_GetRelativePosition:
 ; de = destination buffer
 ; hl = source buffer
 UIBuffer_CopyToBuffer: PROC
-Loop:
-	push bc
-	ld a,c
-	ld b,0
-	ldir
-	ld c,a
 	ld a,UIBuffer.WIDTH
 	sub c
-	jr z,NoAdd
+Loop:
+	push bc
+	ld b,0
+	ldir
 	ld c,a
 	ex de,hl
 	add hl,bc
 	ex de,hl
-NoAdd:
 	pop bc
 	djnz Loop
 	ret
