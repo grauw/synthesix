@@ -39,9 +39,11 @@ NoRepaint:
 ; iy = buffer
 ; hl = buffer address
 PatchEditorView_PaintBackground:
+	IF PatchEditorView_MODULES > 1
 	push hl
 	call PatchEditorView_PaintProgressBar
 	pop hl
+	ENDIF
 	push hl
 	call PatchEditorView_ClearBackground
 	pop hl
