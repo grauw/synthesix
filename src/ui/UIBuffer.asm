@@ -263,21 +263,10 @@ UIBuffer_PrintHexA:
 ; Modifies: hl
 UIBuffer_PrintHex:
 	push af
-	call UIBuffer_NibbleToHexNumber
+	call System_NibbleToHexDigit
 	ld (hl),a
 	inc hl
 	pop af
-	ret
-
-; a = value (0 - 15)
-; a <- hexadecimal character
-; Modifies: a
-UIBuffer_NibbleToHexNumber:
-	and 0FH
-	add a,"0"
-	cp ":"
-	ret c
-	add a,"A" - ":"
 	ret
 
 ; iy = this
