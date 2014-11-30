@@ -10,6 +10,7 @@
 	INCLUDE "ValueView.asm"
 	INCLUDE "InputView.asm"
 	INCLUDE "OutputView.asm"
+	INCLUDE "PatchEditorView.asm"
 	INCLUDE "PatchEditorModuleView.asm"
 	INCLUDE "PatchEditorGridView.asm"
 	INCLUDE "ModuleView.asm"
