@@ -63,9 +63,10 @@ ValueView_FormatBar: PROC
 	ld b,a
 	srl a
 	add a,b
-	srl a
-	srl a
-	srl a
+	and 11111000B
+	rrca
+	rrca
+	rrca
 	call WriteSegmentNoInc
 	call WriteSegment
 	call WriteSegment
