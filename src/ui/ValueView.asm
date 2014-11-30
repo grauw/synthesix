@@ -14,8 +14,8 @@ ValueView_Paint:
 ; a = number
 ; hl = string buffer (4 characters)
 ValueView_FormatNumber: PROC
-	bit 7,a
-	jr nz,NegativeSign
+	and a
+	jp m,NegativeSign
 	ld (hl)," "
 	jp ContinueSign
 NegativeSign:
