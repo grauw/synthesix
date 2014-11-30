@@ -1,21 +1,21 @@
 ;
-; Display a patch editor
+; Display a patch editor’s selected module
 ;
-PatchEditorView_MODULES: equ 1
-PatchEditorView_PORTS: equ 14
-PatchEditorView_WIDTH: equ ModuleView_WIDTH * PatchEditorView_MODULES
-PatchEditorView_HEIGHT: equ PatchEditorView_PORTS + 2
-PatchEditorView_SELECTCOLOR: equ 0F8H
-PatchEditorView_ASSIGNCOLOR: equ 0F2H
-PatchEditorView_INVALIDCOLOR: equ 0FEH
+PatchEditorModuleView_MODULES: equ 1
+PatchEditorModuleView_PORTS: equ 14
+PatchEditorModuleView_WIDTH: equ ModuleView_WIDTH * PatchEditorModuleView_MODULES
+PatchEditorModuleView_HEIGHT: equ PatchEditorModuleView_PORTS + 2
+PatchEditorModuleView_SELECTCOLOR: equ 0F8H
+PatchEditorModuleView_ASSIGNCOLOR: equ 0F2H
+PatchEditorModuleView_INVALIDCOLOR: equ 0FEH
 
 ; ix = patch editor
 ; iy = buffer
 ; hl = buffer address
-PatchEditorView_Paint: PROC
+PatchEditorModuleView_Paint: PROC
 	ld a,(iy + UIBuffer.repaint)
 	push af
-	ld bc,PatchEditorView_MODULES << 8 | PatchEditorView_PORTS
+	ld bc,PatchEditorModuleView_MODULES << 8 | PatchEditorModuleView_PORTS
 	call PatchEditor_UpdateScrollPosition
 	ld c,(ix + PatchEditor.moduleScrollPosition)
 	ld b,0
@@ -26,9 +26,9 @@ PatchEditorView_Paint: PROC
 NoRepaint:
 	bit 0,(iy + UIBuffer.repaint)
 	push bc
-	call nz,PatchEditorView_PaintBackground
+	call nz,PatchEditorModuleView_PaintBackground
 	pop bc
-	call PatchEditorView_PaintUpdate
+	call PatchEditorModuleView_PaintUpdate
 	pop af
 	ld (iy + UIBuffer.repaint),a
 	ret
@@ -38,14 +38,14 @@ NoRepaint:
 ; ix = patch editor
 ; iy = buffer
 ; hl = buffer address
-PatchEditorView_PaintBackground:
-	IF PatchEditorView_MODULES > 1
+PatchEditorModuleView_PaintBackground:
+	IF PatchEditorModuleView_MODULES > 1
 	push hl
-	call PatchEditorView_PaintProgressBar
+	call PatchEditorModuleView_PaintProgressBar
 	pop hl
 	ENDIF
 	push hl
-	call PatchEditorView_ClearBackground
+	call PatchEditorModuleView_ClearBackground
 	pop hl
 	ret
 
@@ -53,23 +53,23 @@ PatchEditorView_PaintBackground:
 ; ix = patch editor
 ; iy = buffer
 ; hl = buffer address
-PatchEditorView_PaintProgressBar: PROC
+PatchEditorModuleView_PaintProgressBar: PROC
 	push ix
 	push bc
 	push hl
 	call PatchEditor_GetPatch
 	call Patch_GetModuleCount
-	ld hl,-PatchEditorView_MODULES
+	ld hl,-PatchEditorModuleView_MODULES
 	add hl,bc
 	jr c,NonNegative
 	ld hl,0
 NonNegative:
 	ex de,hl
 	pop hl
-	ld bc,PatchEditorView_HEIGHT * UIBuffer.WIDTH
+	ld bc,PatchEditorModuleView_HEIGHT * UIBuffer.WIDTH
 	add hl,bc
 	pop bc
-	ld a,PatchEditorView_WIDTH
+	ld a,PatchEditorModuleView_WIDTH
 	call HorizontalScrollBarView_Paint
 	pop ix
 	ret
@@ -79,15 +79,15 @@ NonNegative:
 ; ix = patch editor
 ; iy = buffer
 ; hl = buffer address
-PatchEditorView_PaintUpdate:
-	call PatchEditorView_PaintFocus
-	call PatchEditorView_PaintPatch
+PatchEditorModuleView_PaintUpdate:
+	call PatchEditorModuleView_PaintFocus
+	call PatchEditorModuleView_PaintPatch
 	ret
 
 ; c = scroll position
 ; ix = patch editor
 ; iy = buffer
-PatchEditorView_PaintFocus: PROC
+PatchEditorModuleView_PaintFocus: PROC
 	ld a,(ix + PatchEditor.module)
 	sub c
 	add a,a
@@ -98,7 +98,7 @@ PatchEditorView_PaintFocus: PROC
 	ld a,(ix + PatchEditor.port)
 	sub (ix + PatchEditor.portScrollPosition)
 	call c,System_ThrowException  ; port should be within scroll position bounds
-	cp PatchEditorView_PORTS
+	cp PatchEditorModuleView_PORTS
 	call nc,System_ThrowException
 	inc a
 	ld d,a
@@ -113,7 +113,7 @@ PatchEditorView_PaintFocus: PROC
 	pop bc
 	ld a,(ix + PatchEditor.mode)
 	and a
-	ld (iy + UIBuffer.blinkColor),PatchEditorView_SELECTCOLOR
+	ld (iy + UIBuffer.blinkColor),PatchEditorModuleView_SELECTCOLOR
 	ret z
 	push bc
 	push hl
@@ -121,17 +121,17 @@ PatchEditorView_PaintFocus: PROC
 	pop hl
 	pop bc
 	jr c,Invalid
-	ld (iy + UIBuffer.blinkColor),PatchEditorView_ASSIGNCOLOR
+	ld (iy + UIBuffer.blinkColor),PatchEditorModuleView_ASSIGNCOLOR
 	ret
 Invalid:
-	ld (iy + UIBuffer.blinkColor),PatchEditorView_INVALIDCOLOR
+	ld (iy + UIBuffer.blinkColor),PatchEditorModuleView_INVALIDCOLOR
 	ret
 	ENDP
 
 ; hl = buffer position
-PatchEditorView_ClearBackground:
+PatchEditorModuleView_ClearBackground:
 	ld a," "
-	ld bc,PatchEditorView_HEIGHT << 8 | PatchEditorView_WIDTH
+	ld bc,PatchEditorModuleView_HEIGHT << 8 | PatchEditorModuleView_WIDTH
 	call UIBuffer_Fill
 	ret
 
@@ -139,7 +139,7 @@ PatchEditorView_ClearBackground:
 ; ix = patch editor
 ; iy = buffer
 ; hl = buffer address
-PatchEditorView_PaintPatch: PROC
+PatchEditorModuleView_PaintPatch: PROC
 	push bc
 	push ix
 	call PatchEditor_GetPatch
@@ -147,9 +147,9 @@ PatchEditorView_PaintPatch: PROC
 	pop ix
 	ld a,c
 	pop bc
-	cp PatchEditorView_MODULES
+	cp PatchEditorModuleView_MODULES
 	jr c,Loop
-	ld a,PatchEditorView_MODULES
+	ld a,PatchEditorModuleView_MODULES
 Loop:
 	push af
 	push bc
@@ -166,7 +166,7 @@ Loop:
 	ex (sp),ix
 	ld a,(ix + PatchEditor.module)
 	cp c
-	ld bc,PatchEditorView_PORTS << 8 | 0
+	ld bc,PatchEditorModuleView_PORTS << 8 | 0
 	jr nz,NotThisModule
 	ld c,(ix + PatchEditor.portScrollPosition)
 NotThisModule:
@@ -189,7 +189,7 @@ NotThisModule:
 ; de = module type
 ; f <- z: match
 ; Modifies: af
-PatchEditorView_CheckType:
+PatchEditorModuleView_CheckType:
 	ld a,e
 	cp c
 	ret nz

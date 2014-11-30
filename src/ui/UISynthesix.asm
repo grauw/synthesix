@@ -99,7 +99,7 @@ UISynthesix_Paint:
 	ld ixh,d
 	ld de,0100H + PatchEditorGridView_WIDTH
 	call UIBuffer_GetRelativePosition
-	call PatchEditorView_Paint
+	call PatchEditorModuleView_Paint
 	pop ix
 	pop hl
 
