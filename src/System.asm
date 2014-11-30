@@ -76,8 +76,10 @@ System_PrintHexA:
 	rrca
 	rrca
 	rrca
+	and 0FH
 	call System_PrintHex
 	pop af
+	and 0FH
 	call System_PrintHex
 	ret
 
@@ -94,7 +96,6 @@ System_PrintHex:
 ; a <- hexadecimal character
 ; Modifies: a
 System_NibbleToHexDigit:
-	and 0FH
 	cp 10
 	ccf
 	adc a,"0"

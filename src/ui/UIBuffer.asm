@@ -252,8 +252,10 @@ UIBuffer_PrintHexA:
 	rrca
 	rrca
 	rrca
+	and 0FH
 	call UIBuffer_PrintHex
 	pop af
+	and 0FH
 	call UIBuffer_PrintHex
 	ret
 
