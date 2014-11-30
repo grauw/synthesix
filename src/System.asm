@@ -103,7 +103,7 @@ System_NibbleToHexDigit:
 
 	SECTION RAM
 
-; About 21% faster alternative for large LDIRs (break-even at 20 loops)
+; Up to 19% faster alternative for large LDIRs (break-even at 21 loops)
 ; hl = source
 ; de = destination
 ; bc = byte count
