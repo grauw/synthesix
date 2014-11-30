@@ -2,7 +2,7 @@
 ; Display a patch editor’s selected module
 ;
 PatchEditorModuleView_MODULES: equ 1
-PatchEditorModuleView_PORTS: equ 14
+PatchEditorModuleView_PORTS: equ 16
 PatchEditorModuleView_WIDTH: equ ModuleView_WIDTH * PatchEditorModuleView_MODULES
 PatchEditorModuleView_HEIGHT: equ PatchEditorModuleView_PORTS + 2
 PatchEditorModuleView_SELECTCOLOR: equ 0F8H
