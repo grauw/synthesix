@@ -272,6 +272,41 @@ Loop:
 	ret
 	ENDP
 
+; ix = module type
+; iy = buffer
+; hl = buffer address
+; Modifies: af, bc, de
+ModuleView_PaintFocus: PROC
+	push hl
+	push de
+	call UIBuffer_GetBlinkByBuffer
+	push hl
+	ld e,(ix + ModuleType.labels)
+	ld d,(ix + ModuleType.labels + 1)
+	call System_GetStringLength
+	pop hl
+	cp 12
+	jr c,NotMaxed
+	ld a,12
+NotMaxed:
+	add a,a
+	push hl
+	ld hl,ModuleView_labelFocusLUT
+	ld c,a
+	ld b,0
+	add hl,bc
+	ld b,(hl)
+	inc hl
+	ld c,(hl)
+	pop hl
+	ld (hl),b
+	inc hl
+	ld (hl),c
+	pop de
+	pop hl
+	ret
+	ENDP
+
 ;
 ModuleView_top:
 	db 24,23,23,23,23,23,23,23,23,23,23,23,23,23,23,25
@@ -284,3 +319,18 @@ ModuleView_output:
 
 ModuleView_input:
 	db 29,"         ---- ",22
+
+ModuleView_labelFocusLUT:
+	db 00000001B, 10000000B  ; 0
+	db 00000001B, 11000000B  ; 1
+	db 00000011B, 11000000B  ; 2
+	db 00000011B, 11100000B  ; 3
+	db 00000111B, 11100000B  ; 4
+	db 00000111B, 11110000B  ; 5
+	db 00001111B, 11110000B  ; 6
+	db 00001111B, 11111000B  ; 7
+	db 00011111B, 11111000B  ; 8
+	db 00011111B, 11111100B  ; 9
+	db 00111111B, 11111100B  ; 10
+	db 00111111B, 11111110B  ; 11
+	db 01111111B, 11111110B  ; 12

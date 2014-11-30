@@ -60,11 +60,13 @@ Loop:
 	push hl
 	ld a,(ix + PatchEditor.module)
 	cp c
-	call z,PatchEditorModulesView_PaintFocus
+	push af
 	ld a,0
 	call PatchEditor_GetPatch
 	call Patch_GetModule
+	pop af
 	pop hl
+	call z,ModuleView_PaintFocus
 	ld bc,PatchEditorModulesView_PORTS << 8 | 0
 	call ModuleView_Paint
 	pop ix
@@ -85,24 +87,3 @@ NoNewRow:
 	jp nz,Loop
 	ret
 	ENDP
-
-; iy = buffer
-; hl = buffer address
-; Modifies: af, de, hl
-PatchEditorModulesView_PaintFocus:
-	push bc
-	call UIBuffer_GetBlinkByBuffer
-	ld bc,UIBuffer.WIDTH / 8 - 1
-	ld (hl),11111111B
-	inc hl
-	ld (hl),11111111B
-	add hl,bc
-	ld (hl),10000000B
-	inc hl
-	ld (hl),00000001B
-	add hl,bc
-	ld (hl),11111111B
-	inc hl
-	ld (hl),11111111B
-	pop bc
-	ret
