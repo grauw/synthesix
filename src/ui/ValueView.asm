@@ -23,35 +23,16 @@ NegativeSign:
 	cpl
 ContinueSign:
 	inc hl
-	sub 100
-	jp c,NoDigit100
-	ld (hl),"1"
-	jp Continue100
-NoDigit100:
-	ld (hl)," "
-	add a,100
-	cp 10
-	jp nc,Continue100
-	inc hl
-	ld (hl)," "
-	jp Continue10
-Continue100:
-	inc hl
-	ld b,-1
-Loop10:
-	inc b
-	sub 10
-	jp nc,Loop10
-	add a,10
-	push af
-	ld a,b
-	add a,"0"
-	ld (hl),a
-	pop af
-Continue10:
-	inc hl
-	add a,"0"
-	ld (hl),a
+	ex de,hl
+	ld c,a
+	ld b,0
+	ld hl,ValueView_NumberLUT
+	add hl,bc
+	add hl,bc
+	add hl,bc
+	ldi
+	ldi
+	ldi
 	ret
 	ENDP
 
@@ -77,6 +58,21 @@ ValueView_FormatBar: PROC
 	ENDP
 
 ;
+ValueView_NumberLUT:
+	REPT 128, ?value
+	IF ?value >= 100
+	db "0" + ?value / 100
+	ELSE
+	db " "
+	ENDIF
+	IF ?value >= 10
+	db "0" + ?value / 10 % 10
+	ELSE
+	db " "
+	ENDIF
+	db "0" + ?value % 10
+	ENDM
+
 ValueView_barLUT:
 	db 23,23,1,23
 	db 23,23,2,23
