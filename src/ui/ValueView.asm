@@ -58,30 +58,47 @@ Continue10:
 ; a = number
 ; hl = string buffer (4 characters)
 ValueView_FormatBar: PROC
-	add a,128
-	srl a  ; covert 0-255 to 0-23
+	srl a  ; covert 0-255 to 0-23 * 4
 	ld b,a
 	srl a
 	add a,b
 	and 11111000B
 	rrca
-	rrca
-	rrca
-	call WriteSegmentNoInc
-	call WriteSegment
-	call WriteSegment
-WriteSegment:
-	inc hl
-WriteSegmentNoInc:
-	sub 6
-	jp nc,EmptySegment
-	cp 256 - 6
-	jp c,EmptySegment
-	add a,6 + 1  ; + character offset
-	ld (hl),a
-	sub 6 + 1
-	ret
-EmptySegment:
-	ld (hl),23
+	ex de,hl
+	ld c,a
+	ld b,0
+	ld hl,ValueView_barLUT
+	add hl,bc
+	ldi
+	ldi
+	ldi
+	ldi
 	ret
 	ENDP
+
+;
+ValueView_barLUT:
+	db 23,23,1,23
+	db 23,23,2,23
+	db 23,23,3,23
+	db 23,23,4,23
+	db 23,23,5,23
+	db 23,23,6,23
+	db 23,23,23,1
+	db 23,23,23,2
+	db 23,23,23,3
+	db 23,23,23,4
+	db 23,23,23,5
+	db 23,23,23,6
+	db 1,23,23,23
+	db 2,23,23,23
+	db 3,23,23,23
+	db 4,23,23,23
+	db 5,23,23,23
+	db 6,23,23,23
+	db 23,1,23,23
+	db 23,2,23,23
+	db 23,3,23,23
+	db 23,4,23,23
+	db 23,5,23,23
+	db 23,6,23,23
