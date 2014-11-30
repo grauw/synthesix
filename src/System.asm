@@ -95,10 +95,10 @@ System_PrintHex:
 ; Modifies: a
 System_NibbleToHexDigit:
 	and 0FH
-	add a,"0"
-	cp ":"
-	ret c
-	add a,"A" - ":"
+	cp 10
+	ccf
+	adc a,"0"
+	daa
 	ret
 
 ; de = ASCIIZ string
