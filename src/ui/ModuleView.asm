@@ -137,7 +137,7 @@ ModuleView_PaintTop: PROC
 	pop de
 	push hl
 	push hl
-	call ModuleView_GetStringLength
+	call System_GetStringLength
 	ex (sp),hl
 	cp 13
 	jr c,NotTooLong
@@ -271,24 +271,6 @@ Loop:
 	ex de,hl
 	ret
 	ENDP
-
-; de = ASCIIZ string
-; a <- length, excluding the terminator
-; bc <- 0 - length, excluding the terminator
-; hl <- end of ASCIIZ string + 1
-; Modifies: af, bc, hl
-ModuleView_GetStringLength:
-	ex de,hl
-	ld e,l
-	ld d,h
-	xor a
-	ld b,a
-	ld c,a
-	cpir
-	ld a,c
-	inc bc
-	cpl
-	ret
 
 ;
 ModuleView_top:

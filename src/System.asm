@@ -101,6 +101,24 @@ System_NibbleToHexDigit:
 	add a,"A" - ":"
 	ret
 
+; de = ASCIIZ string
+; a <- length, excluding the terminator
+; bc <- 0 - length, excluding the terminator
+; hl <- end of ASCIIZ string + 1
+; Modifies: af, bc, hl
+System_GetStringLength:
+	ex de,hl
+	ld e,l
+	ld d,h
+	xor a
+	ld b,a
+	ld c,a
+	cpir
+	ld a,c
+	inc bc
+	cpl
+	ret
+
 	SECTION RAM
 
 ; Up to 19% faster alternative for large LDIRs (break-even at 21 loops)
