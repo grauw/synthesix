@@ -186,7 +186,7 @@ FastPath:
 	ld d,h
 	inc de
 	dec bc
-	call System_LDIR
+	call System_FastLDIR
 	ret
 	ENDP
 
@@ -226,7 +226,7 @@ UIBuffer_ClearBlinkBuffer:
 	ld (hl),0
 	inc de
 	ld bc,(UIBuffer.WIDTH * UIBuffer.HEIGHT) / 8 - 1
-	call System_LDIR
+	call System_FastLDIR
 	ret
 
 ; de = value

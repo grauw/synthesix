@@ -22,7 +22,7 @@ HorizontalScrollBarView_Paint: PROC
 	inc de
 	ld c,a
 	ld b,0
-	call System_LDIR
+	call System_FastLDIR
 	pop de
 	pop bc
 	pop af

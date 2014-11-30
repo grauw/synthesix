@@ -107,7 +107,7 @@ System_NibbleToHexDigit:
 ; hl = source
 ; de = destination
 ; bc = byte count
-System_LDIR: PROC
+System_FastLDIR: PROC
 	xor a
 	sub c
 	and 16-1
