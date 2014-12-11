@@ -517,6 +517,8 @@ Memory_CallSlot: PROC
 	ld a,ixh
 	ld h,a
 	ld a,iyh
+	bit 6,h
+	jp nz,Page1
 	call Memory_PrepareSlot
 	call Memory_SetPreparedSlot
 	push bc
@@ -529,6 +531,22 @@ Memory_CallSlot: PROC
 	pop de
 	pop bc
 	call Memory_SetPreparedSlot
+	exx
+	ex af,af'
+	ret
+Page1:
+	call Memory_PrepareSlot
+	call Memory_SetPreparedSlotPage1
+	push bc
+	push de
+	exx
+	ex af,af'
+	call CallIX
+	ex af,af'
+	exx
+	pop de
+	pop bc
+	call Memory_SetPreparedSlotPage1
 	exx
 	ex af,af'
 	ret
