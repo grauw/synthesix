@@ -13,3 +13,6 @@ proc dumpwave {nr} {
 	puts $fileId $hex
 	close $fileId
 }
+
+set throttle off
+after time 5 "set throttle on"
