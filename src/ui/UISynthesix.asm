@@ -102,10 +102,9 @@ UISynthesix_Paint:
 	ld de,1300H
 	call UIBuffer_GetRelativePosition
 	ld a,0
-	ld ix,(Synthesix_instance.scc)
-	call SCC_GetVoice
+	ld ix,(Synthesix_instance.sccVoiceBank)
+	call ModuleBank_GetModule
 	ld bc,4 << 8 | 0
-	ld ix,ModuleType_sccVoice
 	call ModuleView_Paint
 	pop hl
 
@@ -113,10 +112,9 @@ UISynthesix_Paint:
 	ld de,1310H
 	call UIBuffer_GetRelativePosition
 	ld a,1
-	ld ix,(Synthesix_instance.scc)
-	call SCC_GetVoice
+	ld ix,(Synthesix_instance.sccVoiceBank)
+	call ModuleBank_GetModule
 	ld bc,4 << 8 | 0
-	ld ix,ModuleType_sccVoice
 	call ModuleView_Paint
 	pop hl
 
@@ -124,10 +122,9 @@ UISynthesix_Paint:
 	ld de,1320H
 	call UIBuffer_GetRelativePosition
 	ld a,2
-	ld ix,(Synthesix_instance.scc)
-	call SCC_GetVoice
+	ld ix,(Synthesix_instance.sccVoiceBank)
+	call ModuleBank_GetModule
 	ld bc,4 << 8 | 0
-	ld ix,ModuleType_sccVoice
 	call ModuleView_Paint
 	pop hl
 
@@ -135,10 +132,9 @@ UISynthesix_Paint:
 	ld de,1330H
 	call UIBuffer_GetRelativePosition
 	ld a,3
-	ld ix,(Synthesix_instance.scc)
-	call SCC_GetVoice
+	ld ix,(Synthesix_instance.sccVoiceBank)
+	call ModuleBank_GetModule
 	ld bc,4 << 8 | 0
-	ld ix,ModuleType_sccVoice
 	call ModuleView_Paint
 	pop hl
 	ret

@@ -6,6 +6,8 @@
 Synthesix: MACRO
 	scc:
 		dw 0
+	sccVoiceBank:
+		dw 0
 	program:
 		dw 0
 	lastSpeedMeasurementStart:
