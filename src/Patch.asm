@@ -7,11 +7,7 @@ Patch: MACRO
 		db 4
 	notePool:
 		dw 0
-	moduleLists:
-		REPT NotePool.MAX_NOTES
-		dw 0
-		ENDM
-	modules:
+	moduleBanks:
 		dw 0
 	_size:
 	ENDM
@@ -32,23 +28,8 @@ Patch_Constructor: PROC
 	push ix
 	call ArrayList_New
 	pop ix
-	ld (ix + Patch.modules),e
-	ld (ix + Patch.modules + 1),d
-	push ix
-	ld b,(ix + Patch.polyphony)
-Loop:
-	push bc
-	push ix
-	ld bc,Patch.MAX_MODULES
-	call ArrayList_New
-	pop ix
-	ld (ix + Patch.moduleLists),e
-	ld (ix + Patch.moduleLists + 1),d
-	inc ix
-	inc ix
-	pop bc
-	djnz Loop
-	pop ix
+	ld (ix + Patch.moduleBanks),e
+	ld (ix + Patch.moduleBanks + 1),d
 	call Patch_Load
 	ret
 	ENDP
@@ -256,54 +237,41 @@ Patch_GetNotePool:
 	ld ixh,d
 	ret
 
-; a = note index
-; ix = this
-; ix <- module list
-; Modifies: af, bc, ix
-Patch_GetModuleList:
-	cp (ix + Patch.polyphony)
-	call nc,System_ThrowException
-	add a,a
-	ld c,a
-	ld b,0
-	add ix,bc
-	ld c,(ix + Patch.moduleLists)
-	ld b,(ix + Patch.moduleLists + 1)
-	ld ixl,c
-	ld ixh,b
-	ret
-
 ; ix = this
 ; bc <- module count
 ; Modifies: bc, de, ix
 Patch_GetModuleCount:
-	ld e,(ix + Patch.modules)
-	ld d,(ix + Patch.modules + 1)
+	ld e,(ix + Patch.moduleBanks)
+	ld d,(ix + Patch.moduleBanks + 1)
 	ld ixl,e
 	ld ixh,d
 	call ArrayList_GetSize
 	ret
 
-; a = note index
+; bc = module index
+; ix = this
+; ix <- module bank
+Patch_GetModuleBank:
+	ld e,(ix + Patch.moduleBanks)
+	ld d,(ix + Patch.moduleBanks + 1)
+	ld ixl,e
+	ld ixh,d
+	call ArrayList_Get
+	ld ixl,e
+	ld ixh,d
+	ret
+
+; a = polyphony index
 ; bc = module index
 ; ix = this
 ; de <- module
 ; ix <- module type
 ; Modifies: af, bc, de, hl, ix
 Patch_GetModule:
-	push ix
-	ld e,(ix + Patch.modules)
-	ld d,(ix + Patch.modules + 1)
-	ld ixl,e
-	ld ixh,d
-	call ArrayList_Get
-	pop ix
-	push de
-	push bc
-	call Patch_GetModuleList
-	pop bc
-	call ArrayList_Get
-	pop ix
+	push af
+	call Patch_GetModuleBank
+	pop af
+	call ModuleBank_GetModule
 	ret
 
 ; bc = module index
@@ -311,64 +279,37 @@ Patch_GetModule:
 ; ix <- module type
 ; Modifies: f, de, hl
 Patch_GetModuleType:
-	ld e,(ix + Patch.modules)
-	ld d,(ix + Patch.modules + 1)
-	ld ixl,e
-	ld ixh,d
-	call ArrayList_Get
+	call Patch_GetModuleBank
+	call ModuleBank_GetModuleType
 	ld ixl,e
 	ld ixh,d
 	ret
 
 ; ix = this
 ; hl = module type
-Patch_AddModule: PROC
-	push ix
-	ld e,(ix + Patch.modules)
-	ld d,(ix + Patch.modules + 1)
-	ld ixl,e
-	ld ixh,d
-	ex de,hl
-	call ArrayList_Add
-	ex de,hl
-	pop ix
-	ld a,0
-Loop:
-	push af
-	push hl
+Patch_AddModule:
 	push ix
 	push ix
-	call Patch_GetModuleList
+	ld e,(ix + Patch.moduleBanks)
+	ld d,(ix + Patch.moduleBanks + 1)
+	push de
+	ld a,(ix + Patch.polyphony)
+	call ModuleBank_New
+	ex (sp),ix
+	pop de
 	pop iy
-	push ix
-	call ModuleType_Acquire_HL
-	ld e,ixl
-	ld d,ixh
-	pop ix
 	call ArrayList_Add
 	pop ix
-	pop hl
-	pop af
-	inc a
-	cp (ix + Patch.polyphony)
-	jp nz,Loop
 	ret
-	ENDP
 
 ;
 ; Link an input port of the source module to an output port of the destination
 ;
-; ix = this
 ; hl = link source (h: module, l: input port)
 ; de = link destination (d: module, e: output port)
-Patch_AddLink: PROC
-	ld a,0
-Loop:
-	cp (ix + Patch.polyphony)
-	ret z
-	push af
-	push de
-	push hl
+; ix = this
+; ix <- this
+Patch_AddLink:
 	push ix
 	ld c,e
 	ld b,l
@@ -377,47 +318,19 @@ Loop:
 	push hl
 	ld b,0
 	ld c,d
-	push af
-	call Patch_GetModule
-	pop af
+	call Patch_GetModuleBank
 	pop hl
 	ex (sp),ix
-	push de
 	ld b,0
 	ld c,h
-	call Patch_GetModule
-	pop hl
+	call Patch_GetModuleBank
 	pop iy
 	pop bc
-	call ModuleType_Link
+	call ModuleBank_Link
 	pop ix
-	pop hl
-	pop de
-	pop af
-	inc a
-	jp Loop
-	ENDP
-
-; a = note index
-; de = address somewhere inside the module
-; ix = this
-; bc <- module index
-; de <- module core
-; ix <- module type
-; Modifies: all
-Patch_FindModule:
-	push ix
-	call Patch_GetModuleList
-	call ArrayList_FindNearestBelow
-	pop ix
-	push bc
-	push de
-	call Patch_GetModuleType
-	pop de
-	pop bc
 	ret
 
-; a = note index
+; a = polyphony index
 ; de = address somewhere inside the module
 ; ix = this
 ; a <- output port index
@@ -425,11 +338,7 @@ Patch_FindModule:
 ; ix <- module type
 ; Modifies: all
 Patch_FindModuleOutputPort:
-	push de
 	call Patch_FindModule
-	pop hl
-	and a
-	sbc hl,de
 	ld e,(ix + ModuleType.outputs)
 	ld d,0
 	and a
@@ -441,3 +350,36 @@ Patch_FindModuleOutputPort:
 	cp (ix + ModuleType.outputCount)
 	call nc,System_ThrowException  ; de is not an output
 	ret
+
+; a = polyphony index
+; de = address somewhere inside the module
+; ix = this
+; f <- c: found
+; bc <- module index
+; hl <- module offset (if found)
+; ix <- module type
+; Modifies: all
+Patch_FindModule: PROC
+	ld c,(ix + Patch.moduleBanks)
+	ld b,(ix + Patch.moduleBanks + 1)
+	ld ixl,c
+	ld ixh,b
+	ld bc,0
+Loop:
+	push ix
+	push de
+	call ArrayList_Get
+	ld ixl,e
+	ld ixh,d
+	pop de
+	push de
+	call ModuleBank_IsInModule
+	pop de
+	jr c,Found
+	pop ix
+	inc bc
+	jp Loop
+Found:
+	pop de
+	ret
+	ENDP

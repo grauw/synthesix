@@ -5,7 +5,7 @@ ModuleType: MACRO ?core, ?acquirer
 	acquirer:
 		dw ?acquirer
 	size:
-		db ?core._size
+		dw ?core._size
 	outputs:
 		db ?core.outputs
 	outputCount:
