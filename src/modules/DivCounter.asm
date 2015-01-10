@@ -7,7 +7,7 @@ DivCounter: MACRO
 		Value 0
 	tally:
 		Value 0
-	overflow:
+	carry:
 		Value 0
 	outputsEnd:
 	inputs:
@@ -62,17 +62,17 @@ DivCounter_Update: PROC
 	sub (hl)
 	jr c,NoOverflow
 	ld (ix + DivCounter.counter),a
-	ld (ix + DivCounter.overflow),127
+	ld (ix + DivCounter.carry),127
 	inc (ix + DivCounter.tally)
 	ret
 NoOverflow:
 	add a,(hl)
 	ld (ix + DivCounter.counter),a
-	ld (ix + DivCounter.overflow),0
+	ld (ix + DivCounter.carry),0
 	ret
 IncrementOverflow:
 	ld (ix + DivCounter.counter),a
-	ld (ix + DivCounter.overflow),127
+	ld (ix + DivCounter.carry),127
 	inc (ix + DivCounter.tally)
 	ret
 Reset:
@@ -86,7 +86,7 @@ DivCounter_labels:
 	db "Div counter",0
 	db "Counter",0
 	db "Tally",0
-	db "Overflow",0
+	db "Carry",0
 	db "Trigger",0
 	db "Maximum",0
 	db "Reset",0

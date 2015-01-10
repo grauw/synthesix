@@ -7,7 +7,7 @@ MultCounter: MACRO
 		Value 0
 	tally:
 		Value 0
-	overflow:
+	carry:
 		Value 0
 	outputsEnd:
 	inputs:
@@ -60,11 +60,11 @@ MultCounter_Update: PROC
 	add a,(hl)
 	ld (ix + MultCounter.counter),a
 	jr nc,NoOverflow
-	ld (ix + MultCounter.overflow),127
+	ld (ix + MultCounter.carry),127
 	inc (ix + MultCounter.tally)
 	ret
 NoOverflow:
-	ld (ix + MultCounter.overflow),0
+	ld (ix + MultCounter.carry),0
 	ret
 Reset:
 	ld (ix + MultCounter.counter),0
@@ -77,7 +77,7 @@ MultCounter_labels:
 	db "Mult counter",0
 	db "Counter",0
 	db "Tally",0
-	db "Overflow",0
+	db "Carry",0
 	db "Trigger",0
 	db "Increment",0
 	db "Reset",0
