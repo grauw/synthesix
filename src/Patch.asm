@@ -376,14 +376,17 @@ Loop:
 	ld ixl,e
 	ld ixh,d
 	pop de
+	push af
 	push de
 	call ModuleBank_IsInModule
 	pop de
 	jr c,Found
+	pop af
 	pop ix
 	inc bc
 	jp Loop
 Found:
+	pop af
 	pop de
 	ret
 	ENDP

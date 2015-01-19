@@ -392,6 +392,7 @@ PatchEditor_GetInputTarget:
 	ld e,(hl)
 	inc hl
 	ld d,(hl)
+	ld a,0
 	call Patch_FindModuleOutputPort
 	pop ix
 	ret
