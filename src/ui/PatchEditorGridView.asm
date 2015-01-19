@@ -57,18 +57,7 @@ Loop:
 	push de
 	push hl
 	push ix
-	push hl
-	ld a,(ix + PatchEditor.module)
-	cp c
-	push af
-	ld a,0
-	call PatchEditor_GetPatch
-	call Patch_GetModule
-	pop af
-	pop hl
-	call z,ModuleView_PaintFocus
-	ld bc,PatchEditorGridView_PORTS << 8 | 0
-	call ModuleView_Paint
+	call PatchEditorGridView_PaintModule
 	pop ix
 	pop hl
 	pop de
@@ -87,3 +76,22 @@ NoNewRow:
 	jp nz,Loop
 	ret
 	ENDP
+
+; bc = module index
+; ix = patch editor
+; iy = buffer
+; hl = buffer address
+PatchEditorGridView_PaintModule:
+	push hl
+	ld a,(ix + PatchEditor.module)
+	cp c
+	push af
+	ld a,0
+	call PatchEditor_GetPatch
+	call Patch_GetModule
+	pop af
+	pop hl
+	call z,ModuleView_PaintFocus
+	ld bc,PatchEditorGridView_PORTS << 8 | 0
+	call ModuleView_Paint
+	ret
