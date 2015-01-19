@@ -142,10 +142,9 @@ MoveUp:
 	ENDP
 
 ; ix = this
-PatchEditor_Update: PROC
+PatchEditor_Update:
 	call PatchEditor_UpdateSelection
 	ret
-	ENDP
 
 ; ix = this
 PatchEditor_UpdateSelection: PROC
