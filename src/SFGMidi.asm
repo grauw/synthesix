@@ -4,12 +4,11 @@
 ; The SFG modules uses the YM2148.
 ; See http://map.grauw.nl/resources/midi/ym2148.php for documentation.
 ;
-SFGMidi_DATA: equ 3FF5H
-SFGMidi_STATUS: equ 3FF6H
-SFGMidi_COMMAND: equ 3FF6H
-SFGMidi_ID_ADDRESS: equ 80H
-
 SFGMidi: MACRO
+	UART_DATA: equ 3FF5H
+	UART_STATUS: equ 3FF6H
+	UART_COMMAND: equ 3FF6H
+	ID_ADDRESS: equ 80H
 	super: MidiIn MidiIn_buffer4
 	found:
 		db 0
@@ -86,7 +85,7 @@ SFGMidi_Configure:
 	ld (ix + SFGMidi.commandSave),c
 	ld e,(ix + SFGMidi.preparedSlot)
 	ld d,(ix + SFGMidi.preparedSlot + 1)
-	ld hl,SFGMidi_COMMAND
+	ld hl,SFGMidi.UART_COMMAND
 	call Memory_WritePreparedSlot
 
 	; YM2148 UART: set command
@@ -94,13 +93,13 @@ SFGMidi_Configure:
 	ld (ix + SFGMidi.commandSave),c
 	ld e,(ix + SFGMidi.preparedSlot)
 	ld d,(ix + SFGMidi.preparedSlot + 1)
-	ld hl,SFGMidi_COMMAND
+	ld hl,SFGMidi.UART_COMMAND
 	call Memory_WritePreparedSlot
 
 	; YM2148 UART: reset interrupt flag
 	ld e,(ix + SFGMidi.preparedSlot)
 	ld d,(ix + SFGMidi.preparedSlot + 1)
-	ld hl,SFGMidi_DATA
+	ld hl,SFGMidi.UART_DATA
 	call Memory_ReadPreparedSlot
 	ret
 
@@ -113,7 +112,7 @@ SFGMidi_Reset:
 	ld (ix + SFGMidi.commandSave),c
 	ld e,(ix + SFGMidi.preparedSlot)
 	ld d,(ix + SFGMidi.preparedSlot + 1)
-	ld hl,SFGMidi_COMMAND
+	ld hl,SFGMidi.UART_COMMAND
 	call Memory_WritePreparedSlot
 	ret
 
@@ -128,7 +127,7 @@ SFGMidi_CheckOverrun: PROC
 	ret z
 	ld e,(ix + SFGMidi.preparedSlot)
 	ld d,(ix + SFGMidi.preparedSlot + 1)
-	ld hl,SFGMidi_STATUS
+	ld hl,SFGMidi.UART_STATUS
 	call Memory_ReadPreparedSlot
 	ei
 	and 00110000B
@@ -139,7 +138,7 @@ SFGMidi_CheckOverrun: PROC
 	ld c,a
 	ld e,(ix + SFGMidi.preparedSlot)
 	ld d,(ix + SFGMidi.preparedSlot + 1)
-	ld hl,SFGMidi_COMMAND
+	ld hl,SFGMidi.UART_COMMAND
 	call Memory_WritePreparedSlot
 	ei
 	pop af
@@ -203,10 +202,10 @@ SFGMidi_ReadStatusData: PROC
 	ld a,(hl)
 	ld (hl),e
 	ld e,a
-	ld a,(SFGMidi_STATUS)
+	ld a,(SFGMidi.UART_STATUS)
 	and 00000010B
 	jr z,NotSFGMidi
-	ld a,(SFGMidi_DATA)
+	ld a,(SFGMidi.UART_DATA)
 NotSFGMidi:
 	ld (hl),e
 	out (c),b
@@ -236,7 +235,7 @@ SFGMidi_Detect:
 ;
 SFGMidi_MatchID:
 	ld de,SFGMidi_id
-	ld hl,SFGMidi_ID_ADDRESS
+	ld hl,SFGMidi.ID_ADDRESS
 	ld bc,6
 	call Memory_MatchSlotString
 	ret
