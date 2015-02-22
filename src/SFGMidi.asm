@@ -223,7 +223,7 @@ NotSFGMidi:
 ; a <- slot
 ;
 SFGMidi_Detect:
-	ld hl,MSXMidi_MatchID
+	ld hl,SFGMidi_MatchID
 	call Memory_SearchSlots
 	ret
 
@@ -234,7 +234,7 @@ SFGMidi_Detect:
 ; a = slot id
 ; f <- c: found
 ;
-MSXMidi_MatchID:
+SFGMidi_MatchID:
 	ld de,SFGMidi_id
 	ld hl,SFGMidi_ID_ADDRESS
 	ld bc,6
