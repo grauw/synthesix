@@ -17,6 +17,7 @@
 	INCLUDE "HorizontalScrollBarView.asm"
 
 UI_Init:
+	call VDP_InitMirrorsOnVDPUpgrades
 	call VDP_InitScreen0
 	call VDP_Enable212Lines
 	call VDP_Enable60Hz

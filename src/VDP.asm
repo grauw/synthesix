@@ -11,6 +11,45 @@ VDP_MIRROR_0: equ 0F3DFH
 VDP_MIRROR_8: equ 0FFE7H - 8
 VDP_MIRROR_25: equ 0FFFAH - 25
 
+;
+VDP_InitMirrorsOnVDPUpgrades: PROC
+	ld a,(EXPTBL)
+	ld hl,IDBYT2
+	call RDSLT
+	ei
+	and a
+	cp 1
+	jr c,MSX1
+	jr z,MSX2
+	ret
+MSX1:
+	ld hl,VDP_initR8ToR23
+	ld de,VDP_MIRROR_8 + 8
+	ld bc,16
+	ldir
+	ld hl,VDP_initR25ToR27
+	ld de,VDP_MIRROR_25 + 25
+	ld bc,3
+	ldir
+	ld a,(EXPTBL)
+	ld hl,IDBYT0
+	call RDSLT
+	ei
+	and 10000000B
+	ret z
+	ld a,(VDP_MIRROR_8 + 9)  ; set PAL bit
+	or 00000010B
+	ld (VDP_MIRROR_8 + 9),a
+	ret
+MSX2:
+	ld hl,VDP_initR25ToR27
+	ld de,VDP_MIRROR_25 + 25
+	ld bc,3
+	ldir
+	ret
+	ENDP
+
+;
 VDP_InitScreen0: PROC
 	xor a
 	ld hl,0
@@ -46,14 +85,6 @@ MSX1: ; complicated dance to enable TEXT 2 mode on MSX1 computers with v9938
 	ld (VDP_MIRROR_0 + 2),a
 	ld b,2
 	call VDP_SetRegister
-	ld a,(EXPTBL)
-	ld hl,IDBYT0
-	call RDSLT
-	ei
-	and 10000000B
-	rlca
-	rlca
-	ld (VDP_MIRROR_8 + 9),a  ; Initialise MSX2 register mirror
 	ret
 	ENDP
 
@@ -330,3 +361,9 @@ Loop:
 	jp nz,Loop
 	ret
 	ENDP
+
+;
+VDP_initR8ToR23:  ; for NTSC
+	db 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 59, 5, 0
+VDP_initR25ToR27:
+	db 0, 0, 0
