@@ -159,6 +159,21 @@ System_EnableTurbo:
 	call CALSLT
 	ret
 
+; hl <- current timer value, in 14 cycle increments
+; Modifies: af, hl
+System_GetHighResTimerValue:
+	in a,(0E7H)
+	ld h,a
+	in a,(0E6H)
+	ld l,a
+	in a,(0E7H)
+	cp h
+	ret z
+	bit 7,l
+	ret nz
+	ld h,a
+	ret
+
 System_Stop:
 	di
 	halt

@@ -124,33 +124,18 @@ Synthesix_Interrupt:
 Synthesix_StartSpeedMeasurement:
 	ld a,0F5H
 	call VDP_SetColor
-	call Synthesix_GetHighResTimerValue
+	call System_GetHighResTimerValue
 	ld (Synthesix_instance.lastSpeedMeasurementStart),hl
 	ret
 
 Synthesix_EndSpeedMeasurement:
-	call Synthesix_GetHighResTimerValue
+	call System_GetHighResTimerValue
 	ld de,(Synthesix_instance.lastSpeedMeasurementStart)
 	and a
 	sbc hl,de
 	ld (Synthesix_instance.lastSpeedMeasurement),hl
 	ld a,0F4H
 	call VDP_SetColor
-	ret
-
-; hl <- current timer value, in 14 cycle increments
-; Modifies: af, hl
-Synthesix_GetHighResTimerValue:
-	in a,(0E7H)
-	ld h,a
-	in a,(0E6H)
-	ld l,a
-	in a,(0E7H)
-	cp h
-	ret z
-	bit 7,l
-	ret nz
-	ld h,a
 	ret
 
 ;
