@@ -166,11 +166,9 @@ System_GetHighResTimerValue:
 	ld h,a
 	in a,(0E6H)
 	ld l,a
+	and a
+	ret m
 	in a,(0E7H)
-	cp h
-	ret z
-	bit 7,l
-	ret nz
 	ld h,a
 	ret
 
