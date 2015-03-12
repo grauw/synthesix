@@ -3,7 +3,7 @@ all:
 	node tools/genmulttable.js > gen/multtable.asm
 	java -jar tools/glass.jar -I gen src/ROM.asm bin/synthe6.rom bin/synthe6.sym
 
-package: all
+dist: all
 	cp README.md LICENSE bin/
 	rm -f bin/synthesix.zip
 	cd bin && zip synthesix.zip synthe6.rom README.md LICENSE
