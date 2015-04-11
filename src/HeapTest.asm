@@ -2,38 +2,39 @@
 ; Heap unit tests
 ;
 HeapTest_Test:
+	ld ix,HeapTest_heap
+	call Heap_Constructor
 	call HeapTest_TestCanAllocate
 	call HeapTest_TestAllocationSimple
 	call HeapTest_TestAllocationRounding
 	call HeapTest_TestAllocationFragmented
-	call HeapTest_TestAllocationLowerHeap
 	ret
 
 HeapTest_TestCanAllocate:
 	; check available space
-	ld bc,(Heap_heapUpper + Heap.capacity)
-	ld ix,Heap_heapUpper
+	ld bc,(HeapTest_heap + Heap.capacity)
+	ld ix,HeapTest_heap
 	call Heap_CanAllocate
 	call nc,System_ThrowException
-	ld bc,(Heap_heapUpper + Heap.capacity)
+	ld bc,(HeapTest_heap + Heap.capacity)
 	inc bc
-	ld ix,Heap_heapUpper
+	ld ix,HeapTest_heap
 	call Heap_CanAllocate
 	call c,System_ThrowException
 	ret
 
 HeapTest_TestAllocationSimple:
 	; allocate entire heap
-	ld bc,(Heap_heapUpper + Heap.capacity)
-	ld ix,Heap_heapUpper
+	ld bc,(HeapTest_heap + Heap.capacity)
+	ld ix,HeapTest_heap
 	call Heap_Allocate
-	ld hl,Heap_heapUpperSpace
+	ld hl,HeapTest_heapSpace
 	and a
 	sbc hl,de
 	call nz,System_ThrowException
 	push bc
 	push de
-	ld ix,Heap_heapUpper
+	ld ix,HeapTest_heap
 	call Heap_GetFreeSpace
 	ld a,b
 	or c
@@ -42,23 +43,23 @@ HeapTest_TestAllocationSimple:
 	pop bc
 
 	; free allocated space
-	ld ix,Heap_heapUpper
+	ld ix,HeapTest_heap
 	call Heap_Free
-	ld ix,Heap_heapUpper
+	ld ix,HeapTest_heap
 	call Heap_GetFreeSpace
 	and a
-	ld hl,(Heap_heapUpper + Heap.capacity)
+	ld hl,(HeapTest_heap + Heap.capacity)
 	sbc hl,bc
 	call nz,System_ThrowException
-	ld bc,(Heap_heapUpper + Heap.capacity)
-	ld ix,Heap_heapUpper
+	ld bc,(HeapTest_heap + Heap.capacity)
+	ld ix,HeapTest_heap
 	call Heap_CanAllocate
 	call nc,System_ThrowException
 	ret
 
 HeapTest_TestAllocationRounding:
 	ld bc,1
-	ld ix,Heap_heapUpper
+	ld ix,HeapTest_heap
 	call Heap_Allocate
 	push bc
 	push de
@@ -66,22 +67,22 @@ HeapTest_TestAllocationRounding:
 	ld hl,4
 	sbc hl,bc
 	call nz,System_ThrowException
-	ld ix,Heap_heapUpper
+	ld ix,HeapTest_heap
 	call Heap_GetFreeSpace
 	and a
-	ld hl,(Heap_heapUpper + Heap.capacity)
+	ld hl,(HeapTest_heap + Heap.capacity)
 	ld de,4
 	sbc hl,de
 	sbc hl,bc
 	call nz,System_ThrowException
 	pop de
 	pop bc
-	ld ix,Heap_heapUpper
+	ld ix,HeapTest_heap
 	call Heap_Free
-	ld ix,Heap_heapUpper
+	ld ix,HeapTest_heap
 	call Heap_GetFreeSpace
 	and a
-	ld hl,(Heap_heapUpper + Heap.capacity)
+	ld hl,(HeapTest_heap + Heap.capacity)
 	sbc hl,bc
 	call nz,System_ThrowException
 	ret
@@ -89,21 +90,21 @@ HeapTest_TestAllocationRounding:
 HeapTest_TestAllocationFragmented:
 	; allocate two objects and then free the first
 	ld bc,8
-	ld ix,Heap_heapUpper
+	ld ix,HeapTest_heap
 	call Heap_Allocate
 	exx
 	ld bc,8
-	ld ix,Heap_heapUpper
+	ld ix,HeapTest_heap
 	call Heap_Allocate
 	push bc
 	push de
 	exx
-	ld ix,Heap_heapUpper
+	ld ix,HeapTest_heap
 	call Heap_Free
-	ld ix,Heap_heapUpper
+	ld ix,HeapTest_heap
 	call Heap_GetFreeSpace
 	and a
-	ld hl,(Heap_heapUpper + Heap.capacity)
+	ld hl,(HeapTest_heap + Heap.capacity)
 	ld de,8
 	sbc hl,de
 	sbc hl,bc
@@ -114,11 +115,11 @@ HeapTest_TestAllocationFragmented:
 	add hl,bc
 	ld c,l
 	ld b,h
-	ld ix,Heap_heapUpper
+	ld ix,HeapTest_heap
 	call Heap_Allocate
 	push bc
 	push de
-	ld ix,Heap_heapUpper
+	ld ix,HeapTest_heap
 	call Heap_GetFreeSpace
 	and a
 	ld hl,8
@@ -126,24 +127,28 @@ HeapTest_TestAllocationFragmented:
 	call nz,System_ThrowException
 	pop de
 	pop bc
-	ld ix,Heap_heapUpper
+	ld ix,HeapTest_heap
 	call Heap_Free
 
 	; free the last object
 	pop de
 	pop bc
-	ld ix,Heap_heapUpper
+	ld ix,HeapTest_heap
 	call Heap_Free
-	ld bc,(Heap_heapUpper + Heap.capacity)
-	ld ix,Heap_heapUpper
+	ld bc,(HeapTest_heap + Heap.capacity)
+	ld ix,HeapTest_heap
 	call Heap_CanAllocate
 	call nc,System_ThrowException
 	ret
 
-HeapTest_TestAllocationLowerHeap:
-	ld bc,8
-	ld ix,Heap_heap
-	call Heap_Allocate
-	ld ix,Heap_heap
-	call Heap_Free
-	ret
+;
+	SECTION RAM
+
+HeapTest_heap:
+	Heap HeapTest_heapSpace, 20H
+
+	ALIGN 4
+HeapTest_heapSpace:
+	ds 20H
+
+	ENDS
