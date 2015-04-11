@@ -24,9 +24,9 @@ Synthesix_Main:
 
 ;	call System_EnableTurbo
 
-	ld ix,Heap_heap
+	ld ix,Heap_main
 	call Heap_Constructor
-	ld ix,Heap_heapUpper
+	ld ix,Heap_upper
 	call Heap_Constructor
 
 	call MemoryTest_Test

@@ -32,7 +32,7 @@ ArrayList_Constructor:
 	sla c
 	rl b
 	push ix
-	ld ix,Heap_heap
+	ld ix,Heap_main
 	call Heap_Allocate
 	pop ix
 	ld (ix + ArrayList.buffer),e
@@ -58,7 +58,7 @@ ArrayList_Destructor:
 	sla c
 	rl b
 	push ix
-	ld ix,Heap_heap
+	ld ix,Heap_main
 	call Heap_Free
 	pop ix
 	ret

@@ -31,13 +31,13 @@ UIBuffer_New:
 UIBuffer_Constructor:
 	ld a," "
 	ld bc,UIBuffer.HEIGHT * UIBuffer.WIDTH
-	ld ix,Heap_heap
+	ld ix,Heap_main
 	call Heap_AllocateClear
 	ld (iy + UIBuffer.buffer),e
 	ld (iy + UIBuffer.buffer + 1),d
 	ld a,0
 	ld bc,UIBuffer.HEIGHT * UIBuffer.WIDTH / 8
-	ld ix,Heap_heap
+	ld ix,Heap_main
 	call Heap_AllocateClear
 	ld (iy + UIBuffer.blinkBuffer),e
 	ld (iy + UIBuffer.blinkBuffer + 1),d

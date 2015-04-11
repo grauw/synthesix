@@ -47,7 +47,7 @@ Channel_Constructor: PROC
 	push ix
 	xor a
 	ld bc,128
-	ld ix,Heap_heap
+	ld ix,Heap_main
 	call Heap_AllocateClear
 	pop ix
 	ld (ix + Channel.keys),e
