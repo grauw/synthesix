@@ -60,7 +60,7 @@ ROM_BANK_6000_CHANGE: equ 7000H
 	SECTION ROM
 
 	INCLUDE "RAM.asm"
-	INCLUDE "Synthesix.asm"
+	INCLUDE "Application.asm"
 	INCLUDE "BIOS.asm"
 	INCLUDE "System.asm"
 	INCLUDE "Memory.asm"
@@ -113,7 +113,7 @@ ROM_Main:
 
 	call RAM_Init
 
-	call Synthesix_Main
+	call Application_Main
 
 	call RAM_RestorePage0
 	ret

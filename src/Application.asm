@@ -1,9 +1,9 @@
 ;
-; Top-level Synthesix program class
+; Top-level application program class
 ;
 ; Contains references to top-level objects, the main loop and the core ISR.
 ;
-Synthesix: MACRO
+Application: MACRO
 	scc:
 		dw 0
 	sccVoiceBank:
@@ -17,7 +17,7 @@ Synthesix: MACRO
 	ENDM
 
 ;
-Synthesix_Main:
+Application_Main:
 	call VDP_GetVersion
 	cp 1
 	ret c
@@ -34,9 +34,9 @@ Synthesix_Main:
 	call MathTest_Test
 	call ArrayListTest_Test
 
-	ld ix,Synthesix_instance
-	call Synthesix_Constructor
-	call Synthesix_EnterMainLoop
+	ld ix,Application_instance
+	call Application_Constructor
+	call Application_EnterMainLoop
 
 	ld iy,(EXPTBL-1)
 	ld ix,KILBUF
@@ -45,17 +45,17 @@ Synthesix_Main:
 
 ; ix = this
 ; ix <- this
-Synthesix_Constructor:
+Application_Constructor:
 	push ix
 	ld ix,KeyMidi_instance
 	call KeyMidi_Constructor
 	call Channels_Init
 	call PSG_Init
 	call SCC_New
-	ld (Synthesix_instance.scc),ix
+	ld (Application_instance.scc),ix
 	ld hl,Channel_channels.0
 	call Program_New
-	ld (Synthesix_instance.program),ix
+	ld (Application_instance.program),ix
 
 	call UI_Init
 
@@ -64,7 +64,7 @@ Synthesix_Constructor:
 	ret
 
 ; ix = this
-Synthesix_EnterMainLoop:
+Application_EnterMainLoop:
 	call Interrupt_EnableInterruptHandler
 	ld ix,PhilipsMidi_instance
 	call PhilipsMidi_Install
@@ -72,10 +72,10 @@ Synthesix_EnterMainLoop:
 	call MSXMidi_Install
 	ld ix,SFGMidi_instance
 	call SFGMidi_Install
-	ld hl,Synthesix_Interrupt
+	ld hl,Application_Interrupt
 	call Interrupt_InstallTIMIHook
 
-	call Synthesix_MainLoop
+	call Application_MainLoop
 
 	ld ix,SFGMidi_instance
 	call SFGMidi_Uninstall
@@ -87,15 +87,15 @@ Synthesix_EnterMainLoop:
 	call Interrupt_DisableInterruptHandler
 	ret
 
-Synthesix_MainLoop:
+Application_MainLoop:
 	call UI_Update
 	ld ix,KeyMidi_instance
 	bit 0,(ix + KeyMidi.quit)
-	jp z,Synthesix_MainLoop
+	jp z,Application_MainLoop
 	ret
 
-Synthesix_Interrupt:
-	call Synthesix_StartSpeedMeasurement
+Application_Interrupt:
+	call Application_StartSpeedMeasurement
 
 	ld ix,MSXMidi_instance
 	call MSXMidi_CheckOverrun
@@ -118,22 +118,22 @@ Synthesix_Interrupt:
 	ld ix,Updater_60HzLate
 	call Updater_Update
 
-	call Synthesix_EndSpeedMeasurement
+	call Application_EndSpeedMeasurement
 	ret
 
-Synthesix_StartSpeedMeasurement:
+Application_StartSpeedMeasurement:
 	ld a,0F5H
 	call VDP_SetColor
 	call System_GetHighResTimerValue
-	ld (Synthesix_instance.lastSpeedMeasurementStart),hl
+	ld (Application_instance.lastSpeedMeasurementStart),hl
 	ret
 
-Synthesix_EndSpeedMeasurement:
+Application_EndSpeedMeasurement:
 	call System_GetHighResTimerValue
-	ld de,(Synthesix_instance.lastSpeedMeasurementStart)
+	ld de,(Application_instance.lastSpeedMeasurementStart)
 	and a
 	sbc hl,de
-	ld (Synthesix_instance.lastSpeedMeasurement),hl
+	ld (Application_instance.lastSpeedMeasurement),hl
 	ld a,0F4H
 	call VDP_SetColor
 	ret
@@ -141,6 +141,6 @@ Synthesix_EndSpeedMeasurement:
 ;
 	SECTION RAM
 
-Synthesix_instance: Synthesix
+Application_instance: Application
 
 	ENDS

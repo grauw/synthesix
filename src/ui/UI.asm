@@ -4,7 +4,7 @@
 
 	INCLUDE "Font.asm"
 	INCLUDE "UIBuffer.asm"
-	INCLUDE "UISynthesix.asm"
+	INCLUDE "UIApplication.asm"
 	INCLUDE "UIKeyboard.asm"
 	INCLUDE "PatchEditor.asm"
 	INCLUDE "ValueView.asm"
@@ -25,14 +25,14 @@ UI_Init:
 	ld hl,UI_palette
 	call VDP_SetPalette
 	call Font_Install
-	call UISynthesix_New
+	call UIApplication_New
 	ld (UI_root),ix
-	call UISynthesix_Update
+	call UIApplication_Update
 	ret
 
 UI_Update:
 	ld ix,(UI_root)
-	call UISynthesix_Update
+	call UIApplication_Update
 	ret
 
 ;

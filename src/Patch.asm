@@ -80,7 +80,7 @@ Patch_Load: PROC
 	call Patch_AddModule                ; module 17
 	ld hl,ModuleType_sccVoice
 	call Patch_AddModule                ; module 18
-	ld (Synthesix_instance.sccVoiceBank),de
+	ld (Application_instance.sccVoiceBank),de
 	ld hl,18 << 8 | 0  ; SCCVoice.note
 	ld de,3  << 8 | 0  ; Note.key
 	call Patch_AddLink
