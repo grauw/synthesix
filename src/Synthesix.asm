@@ -29,10 +29,10 @@ Synthesix_Main:
 	ld ix,Heap_heapUpper
 	call Heap_Constructor
 
-	call Memory_UnitTest
-	call Heap_UnitTest
-	call Math_UnitTest
-	call ArrayList_UnitTest
+	call MemoryTest_Test
+	call HeapTest_Test
+	call MathTest_Test
+	call ArrayListTest_Test
 
 	ld ix,Synthesix_instance
 	call Synthesix_Constructor
