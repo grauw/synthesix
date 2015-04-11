@@ -409,18 +409,3 @@ Heap_RoundBC:
 	ld c,a
 	inc bc
 	ret
-
-;
-	SECTION RAM
-
-Heap_heap:
-	Heap 8000H, 3000H
-
-Heap_heapUpper:
-	Heap Heap_heapUpperSpace, 100H
-
-	ALIGN 4
-Heap_heapUpperSpace:
-	ds 100H
-
-	ENDS

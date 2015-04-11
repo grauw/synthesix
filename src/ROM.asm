@@ -151,4 +151,14 @@ ROM_bank4000:
 ROM_bank6000:
 	dw ROM_BANK_6000_CHANGE | ROM_CodeBank2
 
+Heap_heap:
+	Heap 8000H, 3000H
+
+Heap_heapUpper:
+	Heap Heap_heapUpperSpace, 100H
+
+	ALIGN 4
+Heap_heapUpperSpace:
+	ds 100H
+
 	ENDS
