@@ -25,9 +25,9 @@ System Requirements
 -------------------
 
   * MSX2, MSX2+, MSX turboR or MSX1 models with V9938 VDP
-  * 16kB video RAM
-  * 64kB main RAM
-  * 64kB Konami 4/5 ROM
+  * 16K video RAM
+  * 64K main RAM
+  * 64K Konami 4/5 ROM
 
 
 Supported output devices
