@@ -1,4 +1,5 @@
 all:
+	mkdir -p gen bin
 	node tools/genftable.js > gen/psgftable.asm
 	node tools/genmulttable.js > gen/multtable.asm
 	java -jar tools/glass.jar -I gen src/ROM.asm bin/synthe6.rom bin/synthe6.sym
