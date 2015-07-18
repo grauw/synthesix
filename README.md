@@ -17,6 +17,7 @@ control over the sound that is played.
 Author: Laurens Holst <laurens.nospam@grauw.nl>  
 Site: <https://bitbucket.org/grauw/synthesix>  
 Downloads: <https://bitbucket.org/grauw/synthesix/downloads>  
+History: <https://bitbucket.org/grauw/synthesix/src/default/CHANGES.md>  
 Issues: <https://bitbucket.org/grauw/synthesix/issues>  
 Support: <http://www.msx.org/forum/msx-talk/software/synthesix>  
 License: Simplified BSD License
