@@ -6,12 +6,6 @@ Copyright 2013 Laurens Holst
 Project information
 -------------------
 
-Author: Laurens Holst <laurens.nospam@grauw.nl>  
-Site: <https://bitbucket.org/grauw/synthesix>  
-Issues: <https://bitbucket.org/grauw/synthesix/issues>  
-Support: <http://www.msx.org/forum/msx-talk/software/synthesix>  
-License: Simplified BSD License
-
 Synthesix is synthesizer for MSX sound chips. It lets you play and tweak your
 MSX sound chips in real-time, using external MIDI controllers and DAW software.
 
@@ -19,6 +13,12 @@ Patches are edited in a modular sound design paradigm. This architecture lets
 you insert modules which perform various functions into the control chain
 between your MIDI keyboard and the sound chip. This gives you great and flexible
 control over the sound that is played.
+
+Author: Laurens Holst <laurens.nospam@grauw.nl>  
+Site: <https://bitbucket.org/grauw/synthesix>  
+Issues: <https://bitbucket.org/grauw/synthesix/issues>  
+Support: <http://www.msx.org/forum/msx-talk/software/synthesix>  
+License: Simplified BSD License
 
 
 System Requirements
