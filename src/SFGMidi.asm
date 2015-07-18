@@ -196,6 +196,7 @@ SFGMidi_ReadStatusData: PROC
 	out (c),d
 	ld a,(hl)
 	ld (hl),e
+	cpl
 	ld e,a
 	ld a,(SFGMidi.UART_STATUS)
 	and 00000010B
