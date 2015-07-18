@@ -4,6 +4,14 @@ Synthesix change log
 For the complete list of changes please refer to the
 [revision history](https://bitbucket.org/grauw/synthesix/commits/all).
 
+[0.2.1] — 2015-07-19
+--------------------
+
+Bugfix release.
+
+  * Fixed crash when Yamaha SFG is in the same slot as the main RAM.
+  * Fixed speed meter sometimes showing an incorrect value.
+
 [0.2] — 2015-03-06
 ------------------
 
@@ -41,6 +49,7 @@ Bugfix release.
 Preview release.
 
 
+[0.2.1]: https://bitbucket.org/grauw/synthesix/commits/tag/release-0.2.1
 [0.2]: https://bitbucket.org/grauw/synthesix/commits/tag/release-0.2
 [0.1.3]: https://bitbucket.org/grauw/synthesix/commits/tag/release-0.1.3
 [0.1.2]: https://bitbucket.org/grauw/synthesix/commits/tag/release-0.1.2
