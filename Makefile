@@ -1,3 +1,5 @@
+COPY_TARGET = /Volumes/MSXDOS2
+
 all:
 	mkdir -p gen bin
 	node tools/genftable.js > gen/psgftable.asm
@@ -8,6 +10,10 @@ dist: all
 	cp README.md LICENSE bin/
 	rm -f bin/synthesix.zip
 	cd bin && zip synthesix.zip synthe6.rom README.md LICENSE
+
+copy: all
+	cp bin/synthe6.rom $(COPY_TARGET)/
+	diskutil umountDisk `mount | grep $(COPY_TARGET) | cut -d" " -f 1`
 
 run: all
 	openmsx -cart bin/synthe6.rom -romtype KonamiSCC -machine Panasonic_FS-A1GT -script openmsx.tcl
