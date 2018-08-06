@@ -137,10 +137,10 @@ SFGMidi_CheckOverrun: PROC
 	call Memory_WriteSlot
 	ei
 	pop af
-	and 00010000B
+	bit 4,a
 	ld hl,MidiIn_overrunErrorMessage
 	call nz,System_ThrowExceptionWithMessage
-	and 00100000B
+	bit 5,a
 	ld hl,MidiIn_framingErrorMessage
 	call nz,System_ThrowExceptionWithMessage
 	ret

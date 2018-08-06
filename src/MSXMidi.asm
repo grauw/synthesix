@@ -146,13 +146,13 @@ MSXMidi_CheckOverrun: PROC
 	or 00010000B
 	out (MSXMidi_UART_COMMAND),a
 	pop af
-	and 00001000B
+	bit 3,a
 	ld hl,MidiIn_parityErrorMessage
 	call nz,System_ThrowExceptionWithMessage
-	and 00010000B
+	bit 4,a
 	ld hl,MidiIn_overrunErrorMessage
 	call nz,System_ThrowExceptionWithMessage
-	and 00100000B
+	bit 5,a
 	ld hl,MidiIn_framingErrorMessage
 	call nz,System_ThrowExceptionWithMessage
 	ret
