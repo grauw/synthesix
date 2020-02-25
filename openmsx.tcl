@@ -14,5 +14,6 @@ proc dumpwave {nr} {
 	close $fileId
 }
 
+set maxframeskip 100
 set throttle off
 after time 5 "set throttle on"
