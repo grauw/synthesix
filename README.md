@@ -14,16 +14,14 @@ you insert modules which perform various functions into the control chain
 between your MIDI keyboard and the sound chip. This gives you great and flexible
 control over the sound that is played.
 
-Author: Laurens Holst <laurens.nospam@grauw.nl>  
-Site: <https://bitbucket.org/grauw/synthesix>  
-Downloads: <https://bitbucket.org/grauw/synthesix/downloads>  
-History: <https://bitbucket.org/grauw/synthesix/src/default/CHANGES.md>  
-Issues: <https://bitbucket.org/grauw/synthesix/issues>  
-Support: <http://www.msx.org/forum/msx-talk/software/synthesix>  
-License: Simplified BSD License
+  * Author: Laurens Holst <laurens@grauw.nl>
+  * Site: <http://www.grauw.nl/projects/synthesix/>
+  * Source: <https://hg.sr.ht/~grauw/synthesix>
+  * Support: <http://www.msx.org/forum/msx-talk/software/synthesix>
+  * License: Simplified BSD License
 
 
-System Requirements
+System requirements
 -------------------
 
   * MSX2, MSX2+, MSX turboR or MSX1 models with V9938 VDP
