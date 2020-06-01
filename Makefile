@@ -7,9 +7,8 @@ all:
 	java -jar tools/glass.jar -I gen src/ROM.asm bin/synthe6.rom bin/synthe6.sym
 
 dist: all
-	cp README.md CHANGES.md LICENSE bin/
 	rm -f bin/synthesix.zip
-	cd bin && zip synthesix.zip synthe6.rom README.md CHANGES.md LICENSE
+	zip -j bin/synthesix.zip bin/synthe6.rom README.md CHANGES.md LICENSE
 
 copy: all
 	cp bin/synthe6.rom $(COPY_TARGET)/
