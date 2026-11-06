@@ -16,7 +16,7 @@ control over the sound that is played.
 
   * Author: Laurens Holst <laurens@grauw.nl>
   * Site: <http://www.grauw.nl/projects/synthesix/>
-  * Source: <https://hg.sr.ht/~grauw/synthesix>
+  * Source: <https://github.com/grauw/synthesix>
   * Support: <http://www.msx.org/forum/msx-talk/software/synthesix>
   * License: Simplified BSD License
 

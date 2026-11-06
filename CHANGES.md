@@ -2,7 +2,7 @@ Synthesix change log
 ====================
 
 For the complete list of changes please refer to the
-[revision history](https://bitbucket.org/grauw/synthesix/commits/all).
+[revision history](https://github.com/grauw/synthesix/commits).
 
 [0.2.1] — 2015-07-19
 --------------------
@@ -49,9 +49,9 @@ Bugfix release.
 Preview release.
 
 
-[0.2.1]: https://bitbucket.org/grauw/synthesix/commits/tag/release-0.2.1
-[0.2]: https://bitbucket.org/grauw/synthesix/commits/tag/release-0.2
-[0.1.3]: https://bitbucket.org/grauw/synthesix/commits/tag/release-0.1.3
-[0.1.2]: https://bitbucket.org/grauw/synthesix/commits/tag/release-0.1.2
-[0.1.1]: https://bitbucket.org/grauw/synthesix/commits/tag/release-0.1.1
-[0.1]: https://bitbucket.org/grauw/synthesix/commits/tag/release-0.1
+[0.2.1]: https://github.com/grauw/synthesix/commits/release-0.2.1
+[0.2]: https://github.com/grauw/synthesix/commits/release-0.2
+[0.1.3]: https://github.com/grauw/synthesix/commits/release-0.1.3
+[0.1.2]: https://github.com/grauw/synthesix/commits/release-0.1.2
+[0.1.1]: https://github.com/grauw/synthesix/commits/release-0.1.1
+[0.1]: https://github.com/grauw/synthesix/commits/release-0.1
